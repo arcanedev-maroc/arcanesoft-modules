@@ -1,0 +1,32 @@
+{
+    "name":        "arcanesoft/blog",
+    "description": "Blog module for ARCANESOFT.",
+    "keywords":    ["arcanedev", "arcanesoft", "blog", "framework", "laravel"],
+    "license":     "MIT",
+    "type":        "project",
+    "authors":     [
+        {
+            "name":     "ARCANEDEV",
+            "email":    "arcanedev.maroc@gmail.com",
+            "homepage": "https://github.com/arcanedev-maroc",
+            "role":     "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~8.0",
+        "phpunit/phpcov":  "~6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Arcanesoft\\Blog\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Arcanesoft\\Blog\\Tests\\": "tests/"
+        }
+    }
+}

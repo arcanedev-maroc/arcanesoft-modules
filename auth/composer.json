@@ -1,0 +1,35 @@
+{
+    "name":        "arcanesoft/auth",
+    "description": "Auth module for ARCANESOFT.",
+    "keywords":    ["arcanedev", "arcanesoft", "auth", "framework", "laravel"],
+    "license":     "MIT",
+    "type":        "project",
+    "authors":     [
+        {
+            "name":     "ARCANEDEV",
+            "email":    "arcanedev.maroc@gmail.com",
+            "homepage": "https://github.com/arcanedev-maroc",
+            "role":     "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.0",
+        "arcanedev/gravatar": "~3.0.0",
+        "arcanedev/laravel-impersonator": "~2.0.0",
+        "yajra/laravel-datatables": "^1.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~8.0",
+        "phpunit/phpcov":  "~6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Arcanesoft\\Auth\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Arcanesoft\\Auth\\Tests\\": "tests/"
+        }
+    }
+}

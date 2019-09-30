@@ -1,0 +1,36 @@
+{
+    "name":        "arcanesoft/foundation",
+    "description": "ARCANESOFT - CMS built with Laravel Framework.",
+    "keywords":    ["arcanedev", "arcanesoft", "cms", "framework", "laravel"],
+    "license":     "MIT",
+    "type":        "project",
+    "authors":     [
+        {
+            "name":     "ARCANEDEV",
+            "email":    "arcanedev.maroc@gmail.com",
+            "homepage": "https://github.com/arcanedev-maroc",
+            "role":     "Developer"
+        }
+    ],
+    "require": {
+        "php":                    ">=7.2.0",
+        "arcanedev/route-viewer": "~2.0.0",
+        "arcanedev/log-viewer":   "~5.0.0",
+        "arcanedev/notify":       "~5.0.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~8.0",
+        "phpunit/phpcov":  "~6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Arcanesoft\\Foundation\\": "src/"
+        },
+        "files": ["helpers.php", "helpers/ui.php"]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Arcanesoft\\Foundation\\Tests\\": "tests/"
+        }
+    }
+}

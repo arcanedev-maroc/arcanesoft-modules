@@ -1,0 +1,25 @@
+{
+    "Dashboard": "Tableau de bord",
+    "Statistics": "Statistiques",
+    "Metrics": "Métriques",
+
+    "All": "Tous",
+    "Trash": "Corbeille",
+    "Page :current of :last": "Page :current sur :last",
+
+    "Created at": "Date création",
+    "Updated at": "Date modification",
+    "Deleted at": "Date suppression",
+
+    "Add": "Ajouter",
+    "Create": "Créer",
+    "Show": "Afficher",
+    "Edit": "Modifier",
+    "Update": "Mettre à jour",
+    "Delete": "Supprimer",
+    "Restore": "Restaurer",
+    "Activate": "Activer",
+    "Deactivate": "Désactiver",
+    "Cancel": "Annuler",
+    "Download": "Télécharger"
+}
