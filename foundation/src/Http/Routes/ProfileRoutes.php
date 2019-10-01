@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Foundation\Http\Routes;
+<?php
+
+namespace Arcanesoft\Foundation\Http\Routes;
 
 use Arcanesoft\Foundation\Http\Controllers\ProfileController;
 
@@ -17,8 +19,6 @@ class ProfileRoutes extends RouteRegistrar
 
     /**
      * Map the routes.
-     *
-     * @return void
      */
     public function map(): void
     {

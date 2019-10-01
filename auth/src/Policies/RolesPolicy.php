@@ -1,8 +1,9 @@
-<?php namespace Arcanesoft\Auth\Policies;
+<?php
+
+namespace Arcanesoft\Auth\Policies;
 
 use App\Models\User as AuthenticatedUser;
 use Arcanesoft\Auth\Models\Role;
-use Arcanesoft\Support\Policies\Policy;
 
 /**
  * Class     RolesPolicy
@@ -10,7 +11,7 @@ use Arcanesoft\Support\Policies\Policy;
  * @package  Arcanesoft\Auth\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class RolesPolicy extends Policy
+class RolesPolicy extends AbstractPolicy
 {
     /* -----------------------------------------------------------------
      |  Main Methods

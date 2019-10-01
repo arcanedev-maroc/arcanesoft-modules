@@ -1,6 +1,7 @@
-<?php namespace Arcanesoft\Blog\Http\Routes;
+<?php
 
-use Arcanesoft\Blog\Base\RouteRegistrar;
+namespace Arcanesoft\Blog\Http\Routes;
+
 use Arcanesoft\Blog\Blog;
 use Arcanesoft\Blog\Http\Controllers\AuthorsController;
 use Arcanesoft\Blog\Http\Controllers\Datatables\AuthorsController as AuthorsDataTablesController;
@@ -27,8 +28,6 @@ class AuthorsRoutes extends RouteRegistrar
 
     /**
      * Map the routes.
-     *
-     * @return void
      */
     public function map(): void
     {
@@ -79,8 +78,6 @@ class AuthorsRoutes extends RouteRegistrar
 
     /**
      * Register the bindings.
-     *
-     * @return void
      */
     public function bindings(): void
     {

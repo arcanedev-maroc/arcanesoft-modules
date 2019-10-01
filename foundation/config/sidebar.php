@@ -24,6 +24,8 @@ return [
         'arcanesoft.blog.sidebar.items',
         'arcanesoft.auth.sidebar.items',
         'arcanesoft.media.sidebar.items',
+        'arcanesoft.passport.sidebar.items',
+        'arcanesoft.backups.sidebar.items',
 
         // System
         [

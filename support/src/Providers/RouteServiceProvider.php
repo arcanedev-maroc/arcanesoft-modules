@@ -1,6 +1,8 @@
-<?php namespace Arcanesoft\Support\Providers;
+<?php
 
-use Arcanesoft\Support\Concerns\HasRouteClasses;
+namespace Arcanesoft\Support\Providers;
+
+use Arcanesoft\Support\Routing\Concerns\HasRouteClasses;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 /**
@@ -24,16 +26,13 @@ abstract class RouteServiceProvider extends ServiceProvider
      */
 
     /**
-     * Get the routes.
+     * The routes list.
      *
-     * @return array
+     * @var array
      */
-    public function routes(): array
-    {
-        return [
-            //
-        ];
-    }
+    protected $routes = [
+        //
+    ];
 
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -42,24 +41,20 @@ abstract class RouteServiceProvider extends ServiceProvider
 
     /**
      * Define your route model bindings, pattern filters, etc.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        static::bindRoutes($this->routes());
+        static::bindRouteClasses($this->routes);
 
         parent::boot();
     }
 
     /**
      * Define the routes for the application.
-     *
-     * @return void
      */
-    public function map()
+    public function map(): void
     {
-        static::mapRoutes($this->routes());
+        static::mapRouteClasses($this->routes);
 
         //
     }

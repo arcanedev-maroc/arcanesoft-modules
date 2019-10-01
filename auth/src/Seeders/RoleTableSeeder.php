@@ -1,7 +1,9 @@
-<?php namespace Arcanesoft\Auth\Seeders;
+<?php
+
+namespace Arcanesoft\Auth\Seeders;
 
 use Arcanesoft\Auth\Models\Role;
-use Arcanesoft\Auth\Base\Seeders\RolesSeeder;
+use Arcanesoft\Auth\Database\Seeders\RolesSeeder;
 
 /**
  * Class     RoleTableSeeder
@@ -19,7 +21,7 @@ class RoleTableSeeder extends RolesSeeder
     /**
      * Run the database seeds.
      */
-    public function run()
+    public function run(): void 
     {
         $this->seed([
             [

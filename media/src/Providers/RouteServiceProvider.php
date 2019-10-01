@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Media\Providers;
+<?php
+
+namespace Arcanesoft\Media\Providers;
 
 use Arcanesoft\Media\Http\Routes;
 use Arcanesoft\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -12,19 +14,16 @@ use Arcanesoft\Support\Providers\RouteServiceProvider as ServiceProvider;
 class RouteServiceProvider extends ServiceProvider
 {
     /* -----------------------------------------------------------------
-     |  Main Methods
+     |  Properties
      | -----------------------------------------------------------------
      */
 
     /**
-     * Get the routes.
+     * The routes list.
      *
-     * @return array
+     * @var array
      */
-    public function routes(): array
-    {
-        return [
-            Routes\MediaRoutes::class,
-        ];
-    }
+    protected $routes = [
+        Routes\MediaRoutes::class,
+    ];
 }

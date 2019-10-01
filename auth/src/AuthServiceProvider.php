@@ -1,6 +1,9 @@
-<?php namespace Arcanesoft\Auth;
+<?php
 
-use Arcanesoft\Support\PackageServiceProvider;
+namespace Arcanesoft\Auth;
+
+use Arcanesoft\Auth\Console\{InstallCommand, MakeUser};
+use Arcanesoft\Support\Providers\PackageServiceProvider;
 
 /**
  * Class     AuthServiceProvider
@@ -29,12 +32,10 @@ class AuthServiceProvider extends PackageServiceProvider
 
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
-        $this->registerConfig(true);
+        $this->registerMultipleConfig();
 
         $this->registerProviders([
             Providers\AuthServiceProvider::class,
@@ -45,19 +46,16 @@ class AuthServiceProvider extends PackageServiceProvider
         ]);
 
         $this->registerCommands([
-            Console\InstallCommand::class,
-            Console\MakeUser::class,
+            MakeUser::class,
         ]);
     }
 
     /**
      * Boot the service provider.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        $this->publishConfig(true);
+        $this->publishMultipleConfig();
         $this->publishViews();
         $this->publishTranslations();
 

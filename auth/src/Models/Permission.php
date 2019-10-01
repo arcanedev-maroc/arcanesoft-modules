@@ -1,12 +1,27 @@
-<?php namespace Arcanesoft\Auth\Models;
+<?php
+
+namespace Arcanesoft\Auth\Models;
 
 use Arcanesoft\Auth\Auth;
-use Arcanesoft\Auth\Base\Model;
-use Arcanesoft\Auth\Events\Permissions\{AttachedRoleToPermission, AttachingRoleToPermission, CreatedPermission,
-    CreatingPermission, DeletedPermission, DeletingPermission, DetachedAllRolesFromPermission,
-    DetachedRoleFromPermission, DetachingAllRolesFromPermission, DetachingRoleFromPermission, RetrievedPermission,
-    SavedPermission, SavingPermission, SyncedRolesToPermission, SyncingRolesToPermission, UpdatedPermission,
-    UpdatingPermission};
+use Arcanesoft\Auth\Events\Permissions\{
+    AttachedRoleToPermission,
+    AttachingRoleToPermission,
+    CreatedPermission,
+    CreatingPermission,
+    DeletedPermission,
+    DeletingPermission,
+    DetachedAllRolesFromPermission,
+    DetachedRoleFromPermission,
+    DetachingAllRolesFromPermission,
+    DetachingRoleFromPermission,
+    RetrievedPermission,
+    SavedPermission,
+    SavingPermission,
+    SyncedRolesToPermission,
+    SyncingRolesToPermission,
+    UpdatedPermission,
+    UpdatingPermission
+};
 use Arcanesoft\Auth\Models\Concerns\HasRoles;
 use Arcanesoft\Auth\Models\Presenters\PermissionPresenter;
 use Illuminate\Support\Str;

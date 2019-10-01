@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Support\Policies;
+<?php
+
+namespace Arcanesoft\Support\Policies;
 
 use Illuminate\Contracts\Support\Arrayable;
 

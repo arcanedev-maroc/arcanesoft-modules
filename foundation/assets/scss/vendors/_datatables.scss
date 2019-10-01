@@ -1,0 +1,142 @@
+/**
+ * DataTables
+ *
+ * Website: https://datatables.net
+ * Repo:    https://github.com/DataTables/DataTables
+ */
+
+.dataTables_wrapper {
+    thead {
+        .sorting {
+            position: relative;
+
+            &:before, &:after {
+                position: absolute;
+                right: 0;
+
+                @extend %fa-icon, .fas;
+            }
+
+            &:before {
+                top: 5px;
+                content: fa-content($fa-var-angle-up);
+            }
+
+            &:after {
+                bottom: 5px;
+                content: fa-content($fa-var-angle-down);
+            }
+        }
+
+        .sorting_asc,
+        .sorting_desc {
+            position: relative;
+
+            &:after {
+                position: absolute;
+                right: 0;
+                @extend %fa-icon, .fas;
+            }
+        }
+
+        .sorting_asc {
+            &:after {
+                top: 5px;
+                content: fa-content($fa-var-angle-up);
+            }
+        }
+
+        .sorting_desc {
+            &:after {
+                bottom: 5px;
+                content: fa-content($fa-var-angle-down);
+            }
+        }
+    }
+
+    .table {
+        width: 100% !important;
+        border-top: $card-border-width solid $card-border-color;
+        border-bottom: $card-border-width solid $card-border-color;
+    }
+
+    .dataTables_length,
+    .dataTables_filter,
+    .dataTables_info,
+    .dataTables_paginate {
+        margin: 1rem;
+    }
+
+    .dataTables_length,
+    .dataTables_filter {
+        label {
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+    }
+
+    .dataTables_length {
+        float: left;
+
+        select {
+            @extend .form-control, .custom-select;
+            margin: 0 0.2rem;
+            width: auto;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+    }
+
+    .dataTables_filter {
+        float: right;
+        text-align: right;
+
+        input {
+            @extend .form-control;
+            margin-left: 0.2rem;
+            width: auto;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+    }
+
+    .dataTables_empty {
+        text-align: center;
+    }
+
+    .dataTables_info {
+        clear: both;
+        float: left;
+        font-size: 0.9rem;
+        line-height: 2.4rem;
+    }
+
+    .dataTables_paginate {
+        float: right;
+        text-align: right;
+
+        .paginate_button {
+            margin: 0 0.2rem;
+            @extend .btn, .btn-light;
+
+            &.current {
+                @extend .btn-primary;
+            }
+
+            &:not(.disabled) {
+                cursor: pointer;
+            }
+        }
+    }
+
+    .dataTables_processing {
+        position: absolute;
+        top: 4.5rem;
+        bottom: 0;
+        padding: 2rem 1rem;
+        width: 100%;
+        z-index: 1;
+        text-align: center;
+        text-transform: uppercase;
+    }
+}

@@ -1,5 +1,8 @@
-<?php namespace Arcanesoft\Support\Policies;
+<?php
 
+namespace Arcanesoft\Support\Policies;
+
+use Arcanesoft\Support\Policies\Concerns\HasAbilities;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 /**

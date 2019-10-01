@@ -1,6 +1,8 @@
-<?php namespace Arcanesoft\Foundation;
+<?php
 
-use Arcanesoft\Support\PackageServiceProvider;
+namespace Arcanesoft\Foundation;
+
+use Arcanesoft\Support\Providers\PackageServiceProvider;
 
 /**
  * Class     FoundationServiceProvider
@@ -29,12 +31,10 @@ class FoundationServiceProvider extends PackageServiceProvider
 
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
-        $this->registerConfig(true);
+        $this->registerMultipleConfig();
 
         $this->registerProviders([
             Providers\PackageServiceProvider::class,
@@ -45,20 +45,20 @@ class FoundationServiceProvider extends PackageServiceProvider
         ]);
 
         $this->registerCommands([
-            Console\InstallCommand::class,
+            Console\SetupCommand::class,
+            Console\PublishCommand::class,
         ]);
     }
 
     /**
      * Boot the service provider.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        $this->publishConfig(true);
+        $this->publishMultipleConfig();
         $this->publishViews();
         $this->publishTranslations();
+        $this->publishAssets();
 
         Foundation::$runsMigrations ? $this->loadMigrations() : $this->publishMigrations();
     }

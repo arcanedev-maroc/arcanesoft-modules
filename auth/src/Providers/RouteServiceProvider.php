@@ -12,23 +12,20 @@ use Arcanesoft\Support\Providers\RouteServiceProvider as ServiceProvider;
 class RouteServiceProvider extends ServiceProvider
 {
     /* -----------------------------------------------------------------
-     |  Main Methods
+     |  Properties
      | -----------------------------------------------------------------
      */
 
     /**
-     * Get the routes.
+     * The routes list.
      *
-     * @return array
+     * @var array
      */
-    public function routes(): array
-    {
-        return [
-            Routes\DashboardRoutes::class,
-            Routes\UsersRoutes::class,
-            Routes\RolesRoutes::class,
-            Routes\PermissionsRoutes::class,
-            Routes\PasswordResetsRoutes::class,
-        ];
-    }
+    protected $routes = [
+        Routes\DashboardRoutes::class,
+        Routes\UsersRoutes::class,
+        Routes\RolesRoutes::class,
+        Routes\PermissionsRoutes::class,
+        Routes\PasswordResetsRoutes::class,
+    ];
 }

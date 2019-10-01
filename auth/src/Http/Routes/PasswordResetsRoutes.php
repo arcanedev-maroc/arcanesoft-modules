@@ -1,8 +1,9 @@
-<?php namespace Arcanesoft\Auth\Http\Routes;
+<?php
 
-use Arcanesoft\Auth\Base\RouteRegistrar;
-use Arcanesoft\Auth\Http\Controllers\PasswordResetsController;
+namespace Arcanesoft\Auth\Http\Routes;
+
 use Arcanesoft\Auth\Http\Controllers\Datatables\PasswordResetsController as PasswordResetsDataTablesController;
+use Arcanesoft\Auth\Http\Controllers\PasswordResetsController;
 
 /**
  * Class     PasswordResetsRoutes
@@ -19,8 +20,6 @@ class PasswordResetsRoutes extends RouteRegistrar
 
     /**
      * Map the routes.
-     *
-     * @return void
      */
     public function map(): void
     {

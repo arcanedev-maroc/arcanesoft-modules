@@ -1,8 +1,8 @@
-<?php namespace Arcanesoft\Auth\Seeders;
+<?php
 
-use Arcanedev\Support\Database\Seeder;
-use Arcanesoft\Auth\Models\Role;
-use Arcanesoft\Auth\Models\User;
+namespace Arcanesoft\Auth\Seeders;
+
+use Arcanesoft\Support\Database\Seeder;
 
 /**
  * Class     UserTableSeeder
@@ -20,7 +20,7 @@ class UserTableSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run()
+    public function run(): void
     {
         //
     }

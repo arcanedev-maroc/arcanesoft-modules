@@ -1,8 +1,9 @@
-<?php namespace Arcanesoft\Auth\Policies;
+<?php
+
+namespace Arcanesoft\Auth\Policies;
 
 use App\Models\User as AuthenticatedUser;
 use Arcanesoft\Auth\Models\User;
-use Arcanesoft\Support\Policies\Policy;
 
 /**
  * Class     UsersPolicy
@@ -12,7 +13,7 @@ use Arcanesoft\Support\Policies\Policy;
  *
  * TODO: Check the abilities
  */
-class UsersPolicy extends Policy
+class UsersPolicy extends AbstractPolicy
 {
     /* -----------------------------------------------------------------
      |  Main Methods

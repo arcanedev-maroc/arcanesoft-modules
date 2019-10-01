@@ -1,7 +1,8 @@
-<?php namespace Arcanesoft\Auth\Http\Routes;
+<?php
+
+namespace Arcanesoft\Auth\Http\Routes;
 
 use Arcanesoft\Auth\Http\Controllers\DashboardController;
-use Arcanesoft\Auth\Base\RouteRegistrar;
 
 /**
  * Class     DashboardRoutes
@@ -18,8 +19,6 @@ class DashboardRoutes extends RouteRegistrar
 
     /**
      * Map the routes.
-     *
-     * @return void
      */
     public function map(): void
     {

@@ -1,6 +1,8 @@
-<?php namespace Arcanesoft\Foundation\Http\Routes;
+<?php
 
-use Arcanesoft\Core\Http\RouteRegistrar as CoreRouteRegistrar;
+namespace Arcanesoft\Foundation\Http\Routes;
+
+use Arcanesoft\Foundation\Core\Http\RouteRegistrar as BaseRouteRegistrar;
 
 /**
  * Class     RouteRegistrar
@@ -8,7 +10,7 @@ use Arcanesoft\Core\Http\RouteRegistrar as CoreRouteRegistrar;
  * @package  Arcanesoft\Foundation\Http\Routes
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-abstract class RouteRegistrar extends CoreRouteRegistrar
+abstract class RouteRegistrar extends BaseRouteRegistrar
 {
     //
 }

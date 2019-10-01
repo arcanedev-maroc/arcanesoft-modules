@@ -1,0 +1,22 @@
+{
+    "name": "@arcanesoft/media",
+    "private": true,
+    "version": "1.0.0",
+    "main": "js/index.ts",
+    "dependencies": {
+        "@arcanesoft/helpers": "^1.0.0",
+        "file-saver": "^2.0.2",
+        "uppy": "^1.4.0",
+        "vue": "^2.6.10"
+    },
+    "devDependencies": {
+        "@types/node": "^12.7.5",
+        "laravel-mix": "^5.0.0",
+        "resolve-url-loader": "^3.1.0",
+        "sass": "^1.22.12",
+        "sass-loader": "^8.0.0",
+        "ts-loader": "^6.1.2",
+        "typescript": "^3.6.3",
+        "vue-template-compiler": "^2.6.10"
+    }
+}

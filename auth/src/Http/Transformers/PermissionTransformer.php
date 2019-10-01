@@ -1,7 +1,9 @@
-<?php namespace Arcanesoft\Auth\Http\Transformers;
+<?php
+
+namespace Arcanesoft\Auth\Http\Transformers;
 
 use Arcanesoft\Auth\Models\Permission;
-use function ui\action_link_icon;
+use Arcanesoft\Foundation\Helpers\UI\Actions\LinkAction;
 
 /**
  * Class     PermissionTransformer
@@ -27,7 +29,7 @@ class PermissionTransformer extends AbstractTransformer
             'description' => '<small>'.$permission->description.'</small>',
             'roles_count' => '<span class="badge badge-pill '.($rolesCount > 0 ? 'badge-info' : 'badge-light').'">'.$rolesCount.'</span>',
             'actions'     => static::renderActions([
-                action_link_icon('show', route('admin::auth.permissions.show', [$permission]))->size('sm'),
+                LinkAction::action('show', route('admin::auth.permissions.show', [$permission]), false)->size('sm'),
             ]),
         ];
     }

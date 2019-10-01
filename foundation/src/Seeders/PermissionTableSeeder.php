@@ -1,7 +1,8 @@
-<?php namespace Arcanesoft\Foundation\Seeders;
+<?php
 
-use Arcanesoft\Foundation\Policies;
-use Arcanesoft\Auth\Base\Seeders\PermissionsSeeder;
+namespace Arcanesoft\Foundation\Seeders;
+
+use Arcanesoft\Auth\Database\Seeders\PermissionsSeeder;
 
 /**
  * Class     PermissionTableSeeder
@@ -19,7 +20,7 @@ class PermissionTableSeeder extends PermissionsSeeder
     /**
      * Run the database seeds.
      */
-    public function run()
+    public function run(): void
     {
         $this->seedOne([
             'group'       => [

@@ -1,6 +1,8 @@
-<?php namespace Arcanesoft\Backups\Http\Routes;
+<?php
 
-use Arcanedev\Support\Routing\RouteRegistrar;
+namespace Arcanesoft\Backups\Http\Routes;
+
+use Arcanesoft\Backups\Http\Controllers\StatusesController;
 
 /**
  * Class     StatusesRoutes
@@ -20,20 +22,22 @@ class StatusesRoutes extends RouteRegistrar
      */
     public function map()
     {
-        $this->prefix('statuses')->as('statuses.')->group(function () {
-            $this->get('/', 'StatusesController@index')
-                 ->name('index');  // admin::backups.statuses.index
+        $this->adminGroup(function () {
+            $this->prefix('statuses')->as('statuses.')->group(function () {
+                $this->get('/', [StatusesController::class, 'index'])
+                     ->name('index');  // admin::backups.statuses.index
 
-            $this->post('backup', 'StatusesController@backup')
-                 ->middleware('ajax')
-                 ->name('backup'); // admin::backups.statuses.backup
+                $this->post('backup', [StatusesController::class, 'backup'])
+                     ->middleware(['ajax'])
+                     ->name('backup'); // admin::backups.statuses.backup
 
-            $this->post('clear', 'StatusesController@clear')
-                 ->middleware('ajax')
-                 ->name('clear');  // admin::backups.statuses.clear
+                $this->post('clear', [StatusesController::class, 'clear'])
+                     ->middleware(['ajax'])
+                     ->name('clear');  // admin::backups.statuses.clear
 
-            $this->get('{index}', 'StatusesController@show')
-                 ->name('show');   // admin::backups.statuses.clear
+                $this->get('{index}', [StatusesController::class, 'show'])
+                     ->name('show');   // admin::backups.statuses.clear
+            });
         });
     }
 }

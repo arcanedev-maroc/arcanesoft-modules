@@ -1,32 +1,16 @@
 <?php
 
-use Arcanesoft\Foundation\Policies;
+/* -----------------------------------------------------------------
+ |  Policies
+ | -----------------------------------------------------------------
+ */
 
 return [
 
-    /* -----------------------------------------------------------------
-     |  Policies
-     | -----------------------------------------------------------------
-     */
-
-    Policies\DashboardPolicy::class => [
-        'category' => 'Dashboard',
-    ],
-
-    Policies\System\InformationPolicy::class => [
-        'category' => 'Information',
-    ],
-
-    Policies\System\MaintenancePolicy::class => [
-        'category' => 'Maintenance',
-    ],
-
-    Policies\System\LogViewerPolicy::class => [
-        'category' => 'LogViewer',
-    ],
-
-    Policies\System\RouteViewerPolicy::class => [
-        'category' => 'RouteViewer',
-    ],
+    Arcanesoft\Foundation\Policies\DashboardPolicy::class,
+    Arcanesoft\Foundation\Policies\System\InformationPolicy::class,
+    Arcanesoft\Foundation\Policies\System\MaintenancePolicy::class,
+    Arcanesoft\Foundation\Policies\System\LogViewerPolicy::class,
+    Arcanesoft\Foundation\Policies\System\RouteViewerPolicy::class,
 
 ];

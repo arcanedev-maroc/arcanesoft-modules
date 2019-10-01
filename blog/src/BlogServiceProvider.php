@@ -1,6 +1,8 @@
-<?php namespace Arcanesoft\Blog;
+<?php
 
-use Arcanesoft\Support\PackageServiceProvider;
+namespace Arcanesoft\Blog;
+
+use Arcanesoft\Support\Providers\PackageServiceProvider;
 
 /**
  * Class     BlogServiceProvider
@@ -29,12 +31,10 @@ class BlogServiceProvider extends PackageServiceProvider
 
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
-        $this->registerConfig(true);
+        $this->registerMultipleConfig();
 
         $this->registerProviders([
             Providers\AuthServiceProvider::class,
@@ -51,12 +51,10 @@ class BlogServiceProvider extends PackageServiceProvider
 
     /**
      * Boot the service provider.
-     *
-     * @return void
      */
     public function boot()
     {
-        $this->publishConfig(true);
+        $this->publishMultipleConfig();
         $this->publishViews();
         $this->publishTranslations();
 

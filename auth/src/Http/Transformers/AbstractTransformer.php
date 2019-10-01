@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Auth\Http\Transformers;
+<?php
+
+namespace Arcanesoft\Auth\Http\Transformers;
 
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Gate;

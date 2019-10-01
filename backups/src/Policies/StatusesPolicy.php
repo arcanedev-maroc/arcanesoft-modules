@@ -1,7 +1,9 @@
-<?php namespace Arcanesoft\Backups\Policies;
+<?php
 
-use Arcanesoft\Core\Bases\Policy;
-use Arcanesoft\Contracts\Auth\Models\User;
+namespace Arcanesoft\Backups\Policies;
+
+use Arcanesoft\Support\Policies\Policy;
+use App\Models\User as AuthenticatedUser;
 
 /**
  * Class     StatusesPolicy
@@ -12,14 +14,45 @@ use Arcanesoft\Contracts\Auth\Models\User;
 class StatusesPolicy extends Policy
 {
     /* -----------------------------------------------------------------
-     |  Constants
+     |  Main Methods
      | -----------------------------------------------------------------
      */
 
-    const PERMISSION_LIST     = 'backups.statuses.list';
-    const PERMISSION_SHOW     = 'backups.statuses.show';
-    const PERMISSION_CREATE   = 'backups.statuses.create';
-    const PERMISSION_DELETE   = 'backups.statuses.delete';
+    /**
+     * Get the policy's prefix.
+     *
+     * @return string
+     */
+    public static function prefix(): string
+    {
+        return 'admin::backups.statuses';
+    }
+
+    /**
+     * Get the policy metas.
+     *
+     * @return array
+     */
+    public static function metas(): array
+    {
+        return [
+            static::meta('index') // admin::backups.statuses.index
+                  ->name('Show all backup statuses')
+                  ->description('Ability to list all backup statuses'),
+
+            static::meta('show') // admin::backups.statuses.show
+                  ->name('Show a backup status')
+                  ->description('Ability to show a backup status'),
+
+            static::meta('create') // admin::backups.statuses.create
+                  ->name('Create a backup')
+                  ->description('Ability to create a backup'),
+
+            static::meta('clean') // admin::backups.statuses.clean
+                  ->name('Clean backups')
+                  ->description('Ability to clean old backups'),
+        ];
+    }
 
     /* -----------------------------------------------------------------
      |  Abilities
@@ -29,48 +62,48 @@ class StatusesPolicy extends Policy
     /**
      * Allow to list all the backups.
      *
-     * @param  \Arcanesoft\Contracts\Auth\Models\User  $user
+     * @param  \App\Models\User  $user
      *
-     * @return bool
+     * @return bool|void
      */
-    public function listPolicy(User $user)
+    public function index(AuthenticatedUser $user)
     {
-        return $user->may(static::PERMISSION_LIST);
+        //
     }
 
     /**
      * Allow to display a backup.
      *
-     * @param  \Arcanesoft\Contracts\Auth\Models\User  $user
+     * @param  \App\Models\User  $user
      *
-     * @return bool
+     * @return bool|void
      */
-    public function showPolicy(User $user)
+    public function show(AuthenticatedUser $user)
     {
-        return $user->may(static::PERMISSION_SHOW);
+        //
     }
 
     /**
      * Allow to create a backup.
      *
-     * @param  \Arcanesoft\Contracts\Auth\Models\User  $user
+     * @param  \App\Models\User  $user
      *
-     * @return bool
+     * @return bool|void
      */
-    public function createPolicy(User $user)
+    public function create(AuthenticatedUser $user)
     {
-        return $user->may(static::PERMISSION_CREATE);
+        //
     }
 
     /**
-     * Allow to delete a backup.
+     * Allow to clean backups.
      *
-     * @param  \Arcanesoft\Contracts\Auth\Models\User  $user
+     * @param  \App\Models\User  $user
      *
-     * @return bool
+     * @return bool|void
      */
-    public function deletePolicy(User $user)
+    public function clean(AuthenticatedUser $user)
     {
-        return $user->may(static::PERMISSION_DELETE);
+        //
     }
 }

@@ -1,6 +1,8 @@
-<?php namespace Arcanesoft\Foundation\Http\Controllers;
+<?php
 
-use Arcanesoft\Core\Http\Controller as BaseController;
+namespace Arcanesoft\Foundation\Http\Controllers;
+
+use Arcanesoft\Foundation\Core\Http\Controller as BaseController;
 
 /**
  * Class     Controller

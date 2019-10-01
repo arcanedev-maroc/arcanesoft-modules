@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Foundation\Providers;
+<?php
+
+namespace Arcanesoft\Foundation\Providers;
 
 use Arcanesoft\Foundation\Http\Routes;
 use Arcanesoft\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -12,24 +14,21 @@ use Arcanesoft\Support\Providers\RouteServiceProvider as ServiceProvider;
 class RouteServiceProvider extends ServiceProvider
 {
     /* -----------------------------------------------------------------
-     |  Main Methods
+     |  Properties
      | -----------------------------------------------------------------
      */
 
     /**
-     * Get the routes.
+     * The routes list.
      *
-     * @return array
+     * @var array
      */
-    public function routes(): array
-    {
-        return [
-            Routes\DashboardRoutes::class,
-            Routes\SystemRoutes::class,
-            Routes\MetricsRoutes::class,
-            Routes\ProfileRoutes::class,
+    protected $routes = [
+        Routes\DashboardRoutes::class,
+        Routes\SystemRoutes::class,
+        Routes\MetricsRoutes::class,
+        Routes\ProfileRoutes::class,
 
-            Routes\ApiRoutes::class,
-        ];
-    }
+        Routes\ApiRoutes::class,
+    ];
 }

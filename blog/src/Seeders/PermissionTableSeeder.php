@@ -1,6 +1,8 @@
-<?php namespace Arcanesoft\Blog\Seeders;
+<?php
 
-use Arcanesoft\Auth\Base\Seeders\PermissionsSeeder;
+namespace Arcanesoft\Blog\Seeders;
+
+use Arcanesoft\Auth\Database\Seeders\PermissionsSeeder;
 
 /**
  * Class     PermissionTableSeeder
@@ -18,17 +20,17 @@ class PermissionTableSeeder extends PermissionsSeeder
     /**
      * Run the database seeds.
      */
-    public function run()
+    public function run(): void
     {
+        $policies = config()->get('arcanesoft.blog.policies', []);
+
         $this->seedOne([
             'group'       => [
                 'name'        => 'Blog',
                 'slug'        => 'blog',
                 'description' => 'Blog permissions group',
             ],
-            'permissions' => static::getPermissionsFromPolicies(
-                config()->get('arcanesoft.blog.policies', [])
-            ),
+            'permissions' => static::getPermissionsFromPolicies($policies),
         ]);
     }
 }

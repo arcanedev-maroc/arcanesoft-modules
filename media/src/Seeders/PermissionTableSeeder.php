@@ -1,7 +1,6 @@
 <?php namespace Arcanesoft\Media\Seeders;
 
-use Arcanesoft\Foundation\Policies;
-use Arcanesoft\Auth\Base\Seeders\PermissionsSeeder;
+use Arcanesoft\Auth\Database\Seeders\PermissionsSeeder;
 
 /**
  * Class     PermissionTableSeeder
@@ -19,17 +18,17 @@ class PermissionTableSeeder extends PermissionsSeeder
     /**
      * Run the database seeds.
      */
-    public function run()
+    public function run(): void
     {
+        $policies = config()->get('arcanesoft.media.policies', []);
+
         $this->seedOne([
             'group'       => [
                 'name'        => 'Media',
                 'slug'        => 'media',
                 'description' => 'Media permissions group',
             ],
-            'permissions' => static::getPermissionsFromPolicies(
-                config()->get('arcanesoft.media.policies', [])
-            ),
+            'permissions' => static::getPermissionsFromPolicies($policies),
         ]);
     }
 }

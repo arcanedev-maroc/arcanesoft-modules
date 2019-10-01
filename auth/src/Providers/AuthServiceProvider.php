@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Auth\Providers;
+<?php
+
+namespace Arcanesoft\Auth\Providers;
 
 use Arcanesoft\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -18,8 +20,6 @@ class AuthServiceProvider extends ServiceProvider
 
     /**
      * Register any authentication / authorization services.
-     *
-     * @return void
      */
     public function boot()
     {
@@ -30,8 +30,8 @@ class AuthServiceProvider extends ServiceProvider
                 || $user->may($ability);
         });
 
-        $this->registerDefinitions(
-            array_keys(config()->get('arcanesoft.auth.policies', []))
-        );
+        $policies = $this->app->get('config')->get('arcanesoft.auth.policies', []);
+
+        $this->registerDefinitions($policies);
     }
 }

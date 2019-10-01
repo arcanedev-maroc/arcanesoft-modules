@@ -1,7 +1,8 @@
-<?php namespace Arcanesoft\Auth\Models;
+<?php
+
+namespace Arcanesoft\Auth\Models;
 
 use Arcanesoft\Auth\Auth;
-use Arcanesoft\Auth\Base\Model;
 
 /**
  * Class     PasswordReset

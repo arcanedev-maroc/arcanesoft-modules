@@ -13,10 +13,15 @@
         }
     ],
     "require": {
-        "php":                    ">=7.2.0",
-        "arcanedev/route-viewer": "~2.0.0",
-        "arcanedev/log-viewer":   "~5.0.0",
-        "arcanedev/notify":       "~5.0.0"
+        "php":                       ">=7.2.0",
+        "arcanedev/breadcrumbs":     "~4.0.0",
+        "arcanedev/laravel-active":  "~2.0.0",
+        "arcanedev/laravel-html":    "~6.0.0",
+        "arcanedev/laravel-metrics": "*",
+        "arcanedev/log-viewer":      "~5.0.0",
+        "arcanedev/notify":          "~5.0.0",
+        "arcanedev/route-viewer":    "~2.0.0",
+        "arcanesoft/support":        "@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "~8.0",
@@ -26,11 +31,18 @@
         "psr-4": {
             "Arcanesoft\\Foundation\\": "src/"
         },
-        "files": ["helpers.php", "helpers/ui.php"]
+        "files": ["helpers.php"]
     },
     "autoload-dev": {
         "psr-4": {
             "Arcanesoft\\Foundation\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Arcanesoft\\Foundation\\FoundationServiceProvider"
+            ]
         }
     }
 }

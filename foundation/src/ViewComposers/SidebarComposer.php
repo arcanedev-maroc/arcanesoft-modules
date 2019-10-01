@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Foundation\ViewComposers;
+<?php
+
+namespace Arcanesoft\Foundation\ViewComposers;
 
 use Arcanesoft\Foundation\Helpers\Sidebar\Manager;
 use Illuminate\View\View;

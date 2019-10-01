@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Support\Providers;
+<?php
+
+namespace Arcanesoft\Support\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -23,8 +25,8 @@ abstract class AuthServiceProvider extends ServiceProvider
      */
     protected function registerDefinitions(array $policies)
     {
-        foreach ($policies as $policy) {
-            foreach ($policy::definitions() as $ability => $method) {
+        foreach ($policies as $class) {
+            foreach ($this->app->call([$class, 'definitions']) as $ability => $method) {
                 Gate::define($ability, $method);
             }
         }

@@ -1,0 +1,121 @@
+// Sizes
+
+.form-control-xs {
+    height: calc(1.5em + 0.25rem + 2px);
+    padding: 0.15rem;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+}
+
+// File input
+
+.custom-file .custom-file-label {
+    color: $input-placeholder-color;
+}
+
+// Custom Checkboxes
+
+@each $color, $value in $theme-colors {
+    .custom-checkbox.custom-checkbox-#{$color} {
+        .custom-control-input:checked ~ .custom-control-label::before {
+            background-color: if($color == 'light', darken($value, 15%), $value);
+        }
+
+        .custom-control-input:focus ~ .custom-control-label::before {
+            box-shadow: 0 0 0 1px #E9ECEF,
+            0 0 0 0.2rem rgba($value, 0.25);
+        }
+    }
+}
+
+// Custom Radios
+
+@each $color, $value in $theme-colors {
+    .custom-radio.custom-radio-#{$color} {
+        .custom-control-input:checked ~ .custom-control-label::before {
+            background-color: if($color == 'light', darken($value, 15%), $value);
+        }
+
+        .custom-control-input:focus ~ .custom-control-label::before {
+            box-shadow: 0 0 0 1px #E9ECEF,
+            0 0 0 0.2rem rgba($value, 0.25);
+        }
+    }
+}
+
+// Custom Range
+
+@each $color, $value in $theme-colors {
+    .custom-range.custom-range-#{$color} {
+        &:focus {
+            &::-webkit-slider-thumb {
+                box-shadow: 0 0 0 1px $body-bg,
+                0 0 0 $input-btn-focus-width rgba($value, .25);
+            }
+
+            &::-moz-range-thumb {
+                box-shadow: 0 0 0 1px $body-bg,
+                0 0 0 $input-btn-focus-width rgba($value, .25);
+            }
+
+            &::-ms-thumb {
+                box-shadow: 0 0 0 1px $body-bg,
+                0 0 0 $input-btn-focus-width rgba($value, .25);
+            }
+        }
+
+        &::-webkit-slider-thumb {
+            background-color: $value;
+
+            &:active {
+                background-color: $value;
+            }
+        }
+    }
+}
+
+// Switches
+
+.custom-switch {
+    &.custom-switch-lg {
+        padding-left: 3.5rem;
+
+        .custom-control-label {
+            line-height: 1.9rem;
+
+            &::before {
+                left: -3.5rem;
+                width: 3rem;
+                height: 1.5rem;
+                border-radius: 1rem;
+            }
+
+            &::after {
+                left: calc(-3.5rem + 2px);
+                width: calc(1.5rem - 4px);
+                height: calc(1.5rem - 4px);
+                border-radius: 1rem;
+            }
+        }
+
+        .custom-control-input:checked ~ .custom-control-label::after {
+            transform: translateX(1.5rem);
+        }
+    }
+
+    @each $color, $value in $theme-colors {
+        &.custom-switch-#{$color} {
+            .custom-control-input {
+                &:checked ~ .custom-control-label::before {
+                    border-color: if($color == 'light', darken($value, 15%), $value);
+                    background-color: if($color == 'light', darken($value, 15%), $value);
+                }
+
+                &:focus ~ .custom-control-label::before {
+                    box-shadow: 0 0 0 0.2rem rgba($value, 0.25);
+                }
+            }
+        }
+    }
+}

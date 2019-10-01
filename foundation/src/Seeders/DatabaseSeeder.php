@@ -1,6 +1,8 @@
-<?php namespace Arcanesoft\Foundation\Seeders;
+<?php
 
-use Arcanedev\Support\Database\Seeder;
+namespace Arcanesoft\Foundation\Seeders;
+
+use Arcanesoft\Support\Database\Seeder;
 
 /**
  * Class     DatabaseSeeder
@@ -20,7 +22,7 @@ class DatabaseSeeder extends Seeder
      *
      * @var array
      */
-    protected $seeds = [
+    protected $seeders = [
         PermissionTableSeeder::class,
         RoleTableSeeder::class,
     ];

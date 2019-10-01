@@ -1,12 +1,33 @@
-<?php namespace Arcanesoft\Auth\Models;
+<?php
+
+namespace Arcanesoft\Auth\Models;
 
 use Arcanesoft\Auth\Auth;
-use Arcanesoft\Auth\Base\Model;
-use Arcanesoft\Auth\Events\Roles\{AttachedPermissionToRole, AttachedUserToRole, AttachingPermissionToRole,
-    AttachingUserToRole, CreatedRole, CreatingRole, DeletedRole, DeletingRole, DetachedAllPermissionsFromRole,
-    DetachedAllUsersFromRole, DetachedPermissionFromRole, DetachedUserFromRole, DetachingAllPermissionsFromRole,
-    DetachingAllUsersFromRole, DetachingPermissionFromRole, DetachingUserFromRole, RetrievedRole, SavedRole, SavingRole,
-    SyncedPermissionsToRole, SyncingPermissionsToRole, UpdatedRole, UpdatingRole};
+use Arcanesoft\Auth\Events\Roles\{
+    AttachedPermissionToRole,
+    AttachedUserToRole,
+    AttachingPermissionToRole,
+    AttachingUserToRole,
+    CreatedRole,
+    CreatingRole,
+    DeletedRole,
+    DeletingRole,
+    DetachedAllPermissionsFromRole,
+    DetachedAllUsersFromRole,
+    DetachedPermissionFromRole,
+    DetachedUserFromRole,
+    DetachingAllPermissionsFromRole,
+    DetachingAllUsersFromRole,
+    DetachingPermissionFromRole,
+    DetachingUserFromRole,
+    RetrievedRole,
+    SavedRole,
+    SavingRole,
+    SyncedPermissionsToRole,
+    SyncingPermissionsToRole,
+    UpdatedRole,
+    UpdatingRole
+};
 use Arcanesoft\Auth\Models\Concerns\Activatable;
 use Illuminate\Database\Eloquent\Builder;
 

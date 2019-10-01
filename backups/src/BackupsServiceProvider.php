@@ -1,6 +1,9 @@
-<?php namespace Arcanesoft\Backups;
+<?php
 
-use Arcanesoft\Core\Bases\PackageServiceProvider;
+namespace Arcanesoft\Backups;
+
+use Arcanesoft\Backups\Console\{InstallCommand, PublishCommand};
+use Arcanesoft\Support\Providers\PackageServiceProvider;
 
 /**
  * Class     BackupsServiceProvider
@@ -30,33 +33,31 @@ class BackupsServiceProvider extends PackageServiceProvider
     /**
      * Register the service provider.
      */
-    public function register()
+    public function register(): void
     {
         parent::register();
 
-        $this->registerConfig();
-        $this->registerSidebarItems();
+        $this->registerMultipleConfig();
 
         $this->registerProviders([
-            Providers\PackagesServiceProvider::class,
-            Providers\AuthorizationServiceProvider::class,
+            Providers\AuthServiceProvider::class,
             Providers\RouteServiceProvider::class,
         ]);
-        $this->registerConsoleServiceProvider(Providers\CommandServiceProvider::class);
+
+        $this->registerCommands([
+            InstallCommand::class,
+            PublishCommand::class,
+        ]);
     }
 
     /**
      * Boot the service provider.
      */
-    public function boot()
+    public function boot(): void
     {
-        parent::boot();
-
-        // Publishes
-        $this->publishConfig();
+        $this->publishMultipleConfig();
         $this->publishViews();
         $this->publishTranslations();
-        $this->publishSidebarItems();
     }
 
     /**

@@ -1,7 +1,8 @@
-<?php namespace Arcanesoft\Auth\Policies;
+<?php
+
+namespace Arcanesoft\Auth\Policies;
 
 use App\Models\User as AuthenticatedUser;
-use Arcanesoft\Support\Policies\Policy;
 
 /**
  * Class     PermissionsPolicy
@@ -9,7 +10,7 @@ use Arcanesoft\Support\Policies\Policy;
  * @package  Arcanesoft\Auth\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class PermissionsPolicy extends Policy
+class PermissionsPolicy extends AbstractPolicy
 {
     /* -----------------------------------------------------------------
      |  Policies

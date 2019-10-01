@@ -1,6 +1,8 @@
-<?php namespace Arcanesoft\Auth\Seeders;
+<?php
 
-use Arcanesoft\Auth\Base\Seeders\PermissionsSeeder;
+namespace Arcanesoft\Auth\Seeders;
+
+use Arcanesoft\Auth\Database\Seeders\PermissionsSeeder;
 
 /**
  * Class     PermissionTableSeeder
@@ -18,17 +20,17 @@ class PermissionTableSeeder extends PermissionsSeeder
     /**
      * Run the database seeds.
      */
-    public function run()
+    public function run(): void
     {
+        $policies = config()->get('arcanesoft.auth.policies', []);
+
         $this->seedOne([
             'group'       => [
                 'name'        => 'Auth',
                 'slug'        => 'auth',
                 'description' => 'Auth permissions group',
             ],
-            'permissions' => static::getPermissionsFromPolicies(
-                config()->get('arcanesoft.auth.policies', [])
-            ),
+            'permissions' => static::getPermissionsFromPolicies($policies),
         ]);
     }
 }

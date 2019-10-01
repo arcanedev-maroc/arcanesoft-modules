@@ -1,7 +1,7 @@
 <?php
 
 use Arcanesoft\Auth\Auth;
-use Arcanesoft\Auth\Base\Migration;
+use Arcanesoft\Auth\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
 /**

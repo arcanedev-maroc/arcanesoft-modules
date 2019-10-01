@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Media\Policies;
+<?php
+
+namespace Arcanesoft\Media\Policies;
 
 use App\Models\User as AuthenticatedUser;
 use Arcanesoft\Support\Policies\Policy;

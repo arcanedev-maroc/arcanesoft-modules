@@ -1,6 +1,12 @@
-<?php namespace Arcanesoft\Foundation\Http\Routes;
+<?php
 
-use Arcanesoft\Foundation\Http\Controllers\System\{LogViewerController, MaintenanceController, RoutesViewerController};
+namespace Arcanesoft\Foundation\Http\Routes;
+
+use Arcanesoft\Foundation\Http\Controllers\System\{
+    LogViewerController,
+    MaintenanceController,
+    RoutesViewerController
+};
 use Arcanesoft\Foundation\Http\Controllers\SystemController;
 
 /**
@@ -18,8 +24,6 @@ class SystemRoutes extends RouteRegistrar
 
     /**
      * Map the routes.
-     *
-     * @return void
      */
     public function map(): void
     {
@@ -42,8 +46,6 @@ class SystemRoutes extends RouteRegistrar
 
     /**
      * Map Maintenance routes.
-     *
-     * @return void
      */
     private function mapMaintenanceRoutes(): void
     {
@@ -61,8 +63,6 @@ class SystemRoutes extends RouteRegistrar
 
     /**
      * Map LogViewer routes.
-     *
-     * @return void
      */
     protected function mapLogViewerRoutes(): void
     {
@@ -99,8 +99,6 @@ class SystemRoutes extends RouteRegistrar
 
     /**
      * Map RoutesViewer routes.
-     *
-     * @return void
      */
     private function mapRoutesViewerRoutes(): void
     {

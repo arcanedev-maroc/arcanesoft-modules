@@ -1,9 +1,10 @@
-<?php namespace Arcanesoft\Auth\Repositories;
+<?php
+
+namespace Arcanesoft\Auth\Repositories;
 
 use Arcanesoft\Auth\Auth;
 use Arcanesoft\Auth\Models\User;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
+use Illuminate\Support\{Arr, Str};
 
 /**
  * Class     UsersRepository
@@ -11,7 +12,7 @@ use Illuminate\Support\Str;
  * @package  Arcanesoft\Auth\Repositories
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class UsersRepository
+class UsersRepository extends Respository
 {
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -26,16 +27,6 @@ class UsersRepository
     public function model()
     {
         return Auth::makeModel('user');
-    }
-
-    /**
-     * Get the query builder.
-     *
-     * @return \Arcanesoft\Auth\Models\User|\Illuminate\Database\Eloquent\Builder
-     */
-    public function query()
-    {
-        return $this->model()->newQuery();
     }
 
     /**
@@ -150,16 +141,6 @@ class UsersRepository
      |  Count Methods
      | -----------------------------------------------------------------
      */
-
-    /**
-     * Get the all users count.
-     *
-     * @return int
-     */
-    public function count(): int
-    {
-        return $this->query()->count();
-    }
 
     /**
      * Get the active users count.

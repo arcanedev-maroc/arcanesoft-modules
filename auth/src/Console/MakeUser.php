@@ -1,8 +1,11 @@
-<?php namespace Arcanesoft\Auth\Console;
+<?php
+
+namespace Arcanesoft\Auth\Console;
 
 use Arcanesoft\Auth\Auth;
 use Arcanesoft\Auth\Models\Role;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 
 /**
  * Class     MakeUser
@@ -65,7 +68,7 @@ class MakeUser extends Command
     protected static function defaultCreateUserCallback()
     {
         return function (string $firstName, string $lastName, string $email, string $password, bool $isAdmin) {
-            $now = now();
+            $now = Carbon::now();
 
             /** @var  \App\Models\User  $model */
             $model = app(Auth::model('user'))->newQuery()->forceCreate([

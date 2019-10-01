@@ -1,28 +1,15 @@
 <?php
 
-use Arcanesoft\Blog\Policies;
+/* -----------------------------------------------------------------
+ |  Policies
+ | -----------------------------------------------------------------
+ */
 
 return [
 
-    /* -----------------------------------------------------------------
-     |  Policies
-     | -----------------------------------------------------------------
-     */
-
-    Policies\DashboardPolicy::class => [
-        'category' => 'Dashboard',
-    ],
-
-    Policies\AuthorsPolicy::class => [
-        'category' => 'Authors',
-    ],
-
-    Policies\PostsPolicy::class => [
-        'category' => 'Posts',
-    ],
-
-    Policies\TagsPolicy::class => [
-        'category' => 'Tags',
-    ],
+    Arcanesoft\Blog\Policies\DashboardPolicy::class,
+    Arcanesoft\Blog\Policies\AuthorsPolicy::class,
+    Arcanesoft\Blog\Policies\PostsPolicy::class,
+    Arcanesoft\Blog\Policies\TagsPolicy::class,
 
 ];

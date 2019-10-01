@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Auth\Repositories;
+<?php
+
+namespace Arcanesoft\Auth\Repositories;
 
 use Arcanesoft\Auth\Auth;
 
@@ -8,7 +10,7 @@ use Arcanesoft\Auth\Auth;
  * @package  Arcanesoft\Auth\Repositories
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class PermissionsRepository
+class PermissionsRepository extends Respository
 {
     /* -----------------------------------------------------------------
      |  Query Methods
@@ -23,25 +25,5 @@ class PermissionsRepository
     public function model()
     {
         return Auth::makeModel('permission');
-    }
-
-    /**
-     * Get the query builder.
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function query()
-    {
-        return $this->model()->newQuery();
-    }
-
-    /**
-     * Get all the permissions.
-     *
-     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
-     */
-    public function all()
-    {
-        return $this->query()->get();
     }
 }

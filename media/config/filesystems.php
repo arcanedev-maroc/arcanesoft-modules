@@ -19,7 +19,7 @@ return [
         'media' => [
             'driver' => 'local',
             'root'   => public_path('uploads'),
-            'url'    => asset('uploads'),
+            'url'    => env('APP_URL').'/uploads',
         ],
 
     ],

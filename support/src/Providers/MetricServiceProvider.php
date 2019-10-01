@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Support\Providers;
+<?php
+
+namespace Arcanesoft\Support\Providers;
 
 use Arcanedev\LaravelMetrics\Contracts\Manager;
 use Illuminate\Support\ServiceProvider;
@@ -30,10 +32,8 @@ abstract class MetricServiceProvider extends ServiceProvider
 
     /**
      * Register bindings in the container.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         foreach ($this->metrics as $metric) {
             $this->app->make(Manager::class)->register($metric);

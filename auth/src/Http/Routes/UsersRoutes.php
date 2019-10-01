@@ -1,9 +1,11 @@
-<?php namespace Arcanesoft\Auth\Http\Routes;
+<?php
+
+namespace Arcanesoft\Auth\Http\Routes;
 
 use Arcanesoft\Auth\Auth;
-use Arcanesoft\Auth\Base\RouteRegistrar;
 use Arcanesoft\Auth\Http\Controllers\Datatables\UsersController as UsersDatatablesController;
 use Arcanesoft\Auth\Http\Controllers\UsersController;
+use Arcanesoft\Auth\Repositories\UsersRepository;
 
 /**
  * Class     UsersRoutes
@@ -27,8 +29,6 @@ class UsersRoutes extends RouteRegistrar
 
     /**
      * Map the routes.
-     *
-     * @return void
      */
     public function map(): void
     {
@@ -84,8 +84,6 @@ class UsersRoutes extends RouteRegistrar
 
     /**
      * Map the datatables routes.
-     *
-     * @return void
      */
     protected function mapDataTablesRoutes(): void
     {
@@ -100,14 +98,11 @@ class UsersRoutes extends RouteRegistrar
 
     /**
      * Register the route bindings.
-     *
-     * @return void
      */
     public function bindings(): void
     {
-        $this->bind(static::USER_WILDCARD, function ($uuid) {
-            return Auth::makeModel('user')
-                ->newQuery()
+        $this->bind(static::USER_WILDCARD, function (UsersRepository $repo, string $uuid) {
+            return $repo->query()
                 ->where('uuid', '=', $uuid)
                 ->withTrashed()
                 ->firstOrFail();

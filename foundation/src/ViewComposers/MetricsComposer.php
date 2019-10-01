@@ -1,9 +1,10 @@
-<?php namespace Arcanesoft\Foundation\ViewComposers;
+<?php
+
+namespace Arcanesoft\Foundation\ViewComposers;
 
 use Arcanedev\Html\Elements\Element;
 use Arcanedev\LaravelMetrics\Contracts\Manager;
 use Arcanedev\LaravelMetrics\Metrics\Metric;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**

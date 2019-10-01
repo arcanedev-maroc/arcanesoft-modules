@@ -1,12 +1,10 @@
-<?php namespace Arcanesoft\Auth\Http\Transformers;
+<?php
+
+namespace Arcanesoft\Auth\Http\Transformers;
 
 use Arcanesoft\Auth\Models\User;
 use Arcanesoft\Auth\Policies\UsersPolicy;
-use Arcanesoft\Foundation\Helpers\UI\Actions\ButtonAction;
-use Arcanesoft\Foundation\Helpers\UI\Actions\LinkAction;
-use Illuminate\Support\Facades\Gate;
-use function ui\action_button_icon;
-use function ui\action_link_icon;
+use Arcanesoft\Foundation\Helpers\UI\Actions\{ButtonAction, LinkAction};
 
 /**
  * Class     UsersTable

@@ -1,10 +1,10 @@
-<?php namespace Arcanesoft\Auth\Http\Routes;
+<?php
 
-use Arcanesoft\Auth\Auth;
-use Arcanesoft\Auth\Http\Controllers\PermissionsController;
+namespace Arcanesoft\Auth\Http\Routes;
+
 use Arcanesoft\Auth\Http\Controllers\Datatables\PermissionsController as PermissionsDataTableController;
-use Arcanesoft\Auth\Base\RouteRegistrar;
-use Arcanesoft\Auth\Models\Permission;
+use Arcanesoft\Auth\Http\Controllers\PermissionsController;
+use Arcanesoft\Auth\Repositories\PermissionsRepository;
 
 /**
  * Class     PermissionsRoutes
@@ -28,8 +28,6 @@ class PermissionsRoutes extends RouteRegistrar
 
     /**
      * Map the routes.
-     *
-     * @return void
      */
     public function map(): void
     {
@@ -50,8 +48,6 @@ class PermissionsRoutes extends RouteRegistrar
 
     /**
      * Map datatable routes.
-     *
-     * @return void
      */
     protected function mapDataTableRoutes(): void
     {
@@ -63,14 +59,11 @@ class PermissionsRoutes extends RouteRegistrar
 
     /**
      * Register the route bindings.
-     *
-     * @return void
      */
     public function bindings(): void
     {
-        $this->bind(self::PERMISSION_WILDCARD, function ($uuid) {
-            return Auth::makeModel('permission')
-                ->newQuery()
+        $this->bind(self::PERMISSION_WILDCARD, function (PermissionsRepository $repo, string $uuid) {
+            return $repo->query()
                 ->where('uuid', '=', $uuid)
                 ->firstOrFail();
         });

@@ -1,9 +1,10 @@
-<?php namespace Arcanesoft\Auth\Http\Transformers;
+<?php
+
+namespace Arcanesoft\Auth\Http\Transformers;
 
 use Arcanesoft\Auth\Models\Role;
 use Arcanesoft\Auth\Policies\RolesPolicy;
-use function ui\action_button_icon;
-use function ui\action_link_icon;
+use Arcanesoft\Foundation\Helpers\UI\Actions\{ButtonAction, LinkAction};
 
 /**
  * Class     RoleTransformer
@@ -57,22 +58,22 @@ class RoleTransformer extends AbstractTransformer
         $actions = [];
 
         if (static::can(RolesPolicy::ability('show'), [$role]))
-            $actions[] = action_link_icon('show', route('admin::auth.roles.show', [$role]))
+            $actions[] = LinkAction::action('show', route('admin::auth.roles.show', [$role]), false)
                 ->size('sm');
 
         if (static::can(RolesPolicy::ability('update'), [$role]))
-            $actions[] = action_link_icon('edit', $role->isLocked() ? '#' : route('admin::auth.roles.edit', [$role]))
+            $actions[] = LinkAction::action('edit', $role->isLocked() ? '#' : route('admin::auth.roles.edit', [$role]), false)
                 ->size('sm')
                 ->setDisabled($role->isLocked());
 
         if (static::can(RolesPolicy::ability('activate'), [$role]))
-            $actions[] = action_button_icon($role->isActive() ? 'deactivate' : 'activate')
+            $actions[] = ButtonAction::action($role->isActive() ? 'deactivate' : 'activate', false)
                 ->size('sm')
                 ->attribute('onclick', "window.Foundation.\$emit('auth::roles.activate', ".json_encode(['id' => $role->getRouteKey(), 'status' => $role->isActive() ? 'activated' : 'deactivated']).")")
                 ->setDisabled($role->isLocked());
 
         if (static::can(RolesPolicy::ability('delete'), [$role]))
-            $actions[] = action_button_icon('delete')
+            $actions[] = ButtonAction::action('delete', false)
                 ->size('sm')
                 ->attributeIf($role->isDeletable(), 'onclick', "window.Foundation.\$emit('auth::roles.delete', ".json_encode(['id' => $role->getRouteKey()]).")")
                 ->setDisabled($role->isNotDeletable());

@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Foundation\Concerns;
+<?php
+
+namespace Arcanesoft\Foundation\Concerns;
 
 /**
  * Trait     HasNotifications

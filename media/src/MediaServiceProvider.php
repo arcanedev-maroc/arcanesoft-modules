@@ -1,6 +1,8 @@
-<?php namespace Arcanesoft\Media;
+<?php
 
-use Arcanesoft\Support\PackageServiceProvider;
+namespace Arcanesoft\Media;
+
+use Arcanesoft\Support\Providers\PackageServiceProvider;
 
 /**
  * Class     MediaServiceProvider
@@ -29,10 +31,8 @@ class MediaServiceProvider extends PackageServiceProvider
 
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->registerMultipleConfig();
 
@@ -41,7 +41,7 @@ class MediaServiceProvider extends PackageServiceProvider
             Providers\RouteServiceProvider::class,
         ]);
 
-        $this->commands([
+        $this->registerCommands([
             Console\InstallCommand::class,
         ]);
 
@@ -58,13 +58,12 @@ class MediaServiceProvider extends PackageServiceProvider
 
     /**
      * Boot the service provider.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        $this->publishConfig(true);
+        $this->publishMultipleConfig();
         $this->publishViews();
         $this->publishTranslations();
+        $this->publishAssets();
     }
 }

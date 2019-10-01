@@ -1,7 +1,9 @@
-<?php namespace Arcanesoft\Media\Http\Routes;
+<?php
 
+namespace Arcanesoft\Media\Http\Routes;
+
+use Arcanesoft\Foundation\Core\Http\RouteRegistrar as RouteRegistrar;
 use Arcanesoft\Media\Http\Controllers\{MediaApiController, MediaController};
-use Arcanesoft\Core\Http\RouteRegistrar as RouteRegistrar;
 
 /**
  * Class     MediaRoutes
@@ -18,8 +20,6 @@ class MediaRoutes extends RouteRegistrar
 
     /**
      * Map the routes.
-     *
-     * @return void
      */
     public function map(): void
     {
@@ -36,7 +36,7 @@ class MediaRoutes extends RouteRegistrar
     /**
      * Map Media API Routes.
      */
-    private function mapApiRoutes()
+    private function mapApiRoutes(): void
     {
         $this->prefix('api')->name('api.')->middleware(['ajax'])->group(function () {
             $this->get('items', [MediaApiController::class, 'all'])

@@ -1,6 +1,7 @@
-<?php namespace Arcanesoft\Blog\Http\Routes;
+<?php
 
-use Arcanesoft\Blog\Base\RouteRegistrar;
+namespace Arcanesoft\Blog\Http\Routes;
+
 use Arcanesoft\Blog\Blog;
 use Arcanesoft\Blog\Http\Controllers\Datatables\TagsController as TagsDatatablesController;
 use Arcanesoft\Blog\Http\Controllers\TagsController;
@@ -27,8 +28,6 @@ class TagsRoutes extends RouteRegistrar
 
     /**
      * Map the routes.
-     *
-     * @return void
      */
     public function map(): void
     {
@@ -67,8 +66,6 @@ class TagsRoutes extends RouteRegistrar
 
     /**
      * Map datatables routes.
-     *
-     * @return void
      */
     private function mapDataTablesRoutes(): void
     {
@@ -80,8 +77,6 @@ class TagsRoutes extends RouteRegistrar
 
     /**
      * Register the route bindings.
-     *
-     * @return void
      */
     public function bindings(): void
     {

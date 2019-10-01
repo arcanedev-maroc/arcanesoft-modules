@@ -1,10 +1,11 @@
-<?php namespace Arcanesoft\Auth\Http\Routes;
+<?php
+
+namespace Arcanesoft\Auth\Http\Routes;
 
 use Arcanesoft\Auth\Auth;
-use Arcanesoft\Auth\Http\Controllers\RolesController;
 use Arcanesoft\Auth\Http\Controllers\Datatables\RolesController as RolesDataTablesController;
-use Arcanesoft\Auth\Base\RouteRegistrar;
-use Arcanesoft\Auth\Models\Role;
+use Arcanesoft\Auth\Http\Controllers\RolesController;
+use Arcanesoft\Auth\Repositories\RolesRepository;
 
 /**
  * Class     RolesRoutes
@@ -28,8 +29,6 @@ class RolesRoutes extends RouteRegistrar
 
     /**
      * Map the routes.
-     *
-     * @return void
      */
     public function map(): void
     {
@@ -73,8 +72,6 @@ class RolesRoutes extends RouteRegistrar
 
     /**
      * Map datatables routes.
-     *
-     * @return void
      */
     protected function mapDataTablesRoutes(): void
     {
@@ -86,14 +83,11 @@ class RolesRoutes extends RouteRegistrar
 
     /**
      * Register the route bindings.
-     *
-     * @return void
      */
     public function bindings(): void
     {
-        $this->bind(self::ROLE_WILDCARD, function ($uuid) {
-            return Auth::makeModel('role')
-                ->newQuery()
+        $this->bind(self::ROLE_WILDCARD, function (RolesRepository $repo, string $uuid) {
+            return $repo->query()
                 ->where('uuid', '=', $uuid)
                 ->firstOrFail();
         });

@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Foundation\Http\Routes;
+<?php
+
+namespace Arcanesoft\Foundation\Http\Routes;
 
 use Arcanesoft\Foundation\Http\Controllers\Api\EventsController;
 
@@ -17,10 +19,8 @@ class ApiRoutes extends RouteRegistrar
 
     /**
      * Map the routes.
-     *
-     * @return void
      */
-    public function map()
+    public function map(): void
     {
         $this->adminGroup(function () {
             $this->prefix('api')->name('foundation.api.')->middleware(['ajax'])->group(function () {

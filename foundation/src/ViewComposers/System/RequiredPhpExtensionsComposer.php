@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Foundation\ViewComposers\System;
+<?php
+
+namespace Arcanesoft\Foundation\ViewComposers\System;
 
 use Illuminate\Contracts\View\View;
 

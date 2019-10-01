@@ -1,6 +1,7 @@
-<?php namespace Arcanesoft\Blog\Http\Routes;
+<?php
 
-use Arcanesoft\Blog\Base\RouteRegistrar;
+namespace Arcanesoft\Blog\Http\Routes;
+
 use Arcanesoft\Blog\Http\Controllers\PostsController;
 use Arcanesoft\Blog\Http\Controllers\Datatables\PostsController as PostsDataTablesController;
 
@@ -12,10 +13,13 @@ use Arcanesoft\Blog\Http\Controllers\Datatables\PostsController as PostsDataTabl
  */
 class PostsRoutes extends RouteRegistrar
 {
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
+     */
+
     /**
      * Map the routes.
-     *
-     * @return void
      */
     public function map(): void
     {
@@ -38,7 +42,10 @@ class PostsRoutes extends RouteRegistrar
         });
     }
 
-    private function mapDataTablesRoutes()
+    /**
+     * Map the datatable routes.
+     */
+    private function mapDataTablesRoutes(): void
     {
         $this->dataTableGroup(function () {
             $this->get('/', [PostsDataTablesController::class, 'index'])

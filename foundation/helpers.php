@@ -1,8 +1,10 @@
 <?php
 
+namespace arcanesoft;
+
 use Arcanesoft\Foundation\Foundation;
 
-if ( ! function_exists('foundation')) {
+if ( ! function_exists(__NAMESPACE__.'\foundation')) {
     /**
      * Get the foundation's class instance.
      *
@@ -13,13 +15,4 @@ if ( ! function_exists('foundation')) {
     }
 }
 
-if ( ! function_exists('auth_user')) {
-    /**
-     * Get the authenticated user.
-     *
-     * @return \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable|null
-     */
-    function auth_user() {
-        return auth()->user();
-    }
-}
+require_once __DIR__.'/helpers/ui.php';

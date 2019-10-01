@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Foundation\Providers;
+<?php
+
+namespace Arcanesoft\Foundation\Providers;
 
 use Arcanesoft\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -17,13 +19,11 @@ class AuthServiceProvider extends ServiceProvider
 
     /**
      * Register any authentication / authorization services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        $this->registerDefinitions(
-            array_keys(config()->get('arcanesoft.foundation.policies', []))
-        );
+        $policies = $this->app->get('config')->get('arcanesoft.foundation.policies', []);
+
+        $this->registerDefinitions($policies);
     }
 }
