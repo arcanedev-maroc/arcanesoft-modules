@@ -16,72 +16,89 @@ use Arcanesoft\Auth\Models\User;
 class UsersPolicy extends AbstractPolicy
 {
     /* -----------------------------------------------------------------
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    protected $prefix = 'admin::auth.users.';
+
+    /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
      */
 
     /**
-     * Get the policy's prefix.
+     * Get the policy's abilities.
      *
-     * @return string
+     * @return \Arcanesoft\Support\Policies\Ability[]|array
      */
-    public static function prefix(): string
-    {
-        return 'admin::auth.users';
-    }
-
-    /**
-     * Get the policy metas.
-     *
-     * @return array
-     */
-    public static function metas(): array
+    public function abilities(): array
     {
         return [
-            static::meta('index') // admin::auth.users.index
-                  ->name('List all the users')
-                  ->description('Ability to list all the users'),
+            // admin::auth.users.index
+            $this->makeAbility('index')->setMetas([
+                'name'        => 'List all the users',
+                'description' => 'Ability to list all the users'
+            ]),
 
-            static::meta('metrics') // admin::auth.users.metrics
-                  ->name("List all the users' metrics")
-                  ->description("Ability to list all the users' metrics"),
+            // admin::auth.users.metrics
+            $this->makeAbility('metrics')->setMetas([
+                'name'        => "List all the users' metrics",
+                'description' => "Ability to list all the users' metrics",
+            ]),
 
-            static::meta('show') // admin::auth.users.show
-                  ->name('Show a user')
-                  ->description("Ability to show the user's details"),
+            // admin::auth.users.show
+            $this->makeAbility('show')->setMetas([
+                'name'        => 'Show a user',
+                'description' => "Ability to show the user's details",
+            ]),
 
-            static::meta('create') // admin::auth.users.create
-                  ->name('Create a new user')
-                  ->description('Ability to create a new user'),
+            // admin::auth.users.create
+            $this->makeAbility('create')->setMetas([
+                'name'        => 'Create a new user',
+                'description' => 'Ability to create a new user',
+            ]),
 
-            static::meta('update') // admin::auth.users.update
-                  ->name('Update a user')
-                  ->description('Ability to update a user'),
+            // admin::auth.users.update
+            $this->makeAbility('update')->setMetas([
+                'name'        => 'Update a user',
+                'description' => 'Ability to update a user',
+            ]),
 
-            static::meta('activate') // admin::auth.users.activate
-                  ->name('Activate/Deactivate a user')
-                  ->description('Ability to activate/deactivate a user'),
+            // admin::auth.users.activate
+            $this->makeAbility('activate')->setMetas([
+                'name'        => 'Activate/Deactivate a user',
+                'description' => 'Ability to activate/deactivate a user',
+            ]),
 
-            static::meta('delete') // admin::auth.users.delete
-                  ->name('Delete a user')
-                  ->description('Ability to delete a user'),
+            // admin::auth.users.delete
+            $this->makeAbility('delete')->setMetas([
+                'name'        => 'Delete a user',
+                'description' => 'Ability to delete a user',
+            ]),
 
-            static::meta('force-delete', 'forceDelete') // admin::auth.users.force-delete
-                  ->name('Force Delete a user')
-                  ->description('Ability to force delete a user'),
+            // admin::auth.users.force-delete
+            $this->makeAbility('force-delete')->setMetas([
+                'name'        => 'Force Delete a user',
+                'description' => 'Ability to force delete a user',
+            ]),
 
-            static::meta('restore') // admin::auth.users.restore
-                  ->name('Restore a user')
-                  ->description('Ability to restore a user'),
+            // admin::auth.users.restore
+            $this->makeAbility('restore')->setMetas([
+                'name'        => 'Restore a user',
+                'description' => 'Ability to restore a user',
+            ]),
 
-            static::meta('impersonate') // admin::auth.users.impersonate
-                  ->name('Impersonate a user')
-                  ->description('Ability to impersonate a user'),
+            // admin::auth.users.impersonate
+            $this->makeAbility('impersonate')->setMetas([
+                'name'        => 'Impersonate a user',
+                'description' => 'Ability to impersonate a user',
+            ]),
         ];
     }
 
     /* -----------------------------------------------------------------
-     |  Policies
+     |  Abilities
      | -----------------------------------------------------------------
      */
 
@@ -141,7 +158,7 @@ class UsersPolicy extends AbstractPolicy
      *
      * @return bool|void
      */
-    public function update(AuthenticatedUser $user, User $model = null)
+    public function update(AuthenticatedUser $user, ?User $model)
     {
         //
     }
@@ -154,7 +171,7 @@ class UsersPolicy extends AbstractPolicy
      *
      * @return bool|void
      */
-    public function activate(AuthenticatedUser $user, User $model = null)
+    public function activate(AuthenticatedUser $user, ?User $model)
     {
         if ($user->is($model))
             return false;
@@ -171,7 +188,7 @@ class UsersPolicy extends AbstractPolicy
      *
      * @return bool|void
      */
-    public function delete(AuthenticatedUser $user, User $model = null)
+    public function delete(AuthenticatedUser $user, ?User $model)
     {
         if ($user->is($model))
             return false;
@@ -188,7 +205,7 @@ class UsersPolicy extends AbstractPolicy
      *
      * @return bool|void
      */
-    public function forceDelete(AuthenticatedUser $user, User $model = null)
+    public function forceDelete(AuthenticatedUser $user, ?User $model)
     {
         if ( ! is_null($model))
             return $model->isDeletable();
@@ -202,7 +219,7 @@ class UsersPolicy extends AbstractPolicy
      *
      * @return bool|void
      */
-    public function restore(AuthenticatedUser $user, User $model = null)
+    public function restore(AuthenticatedUser $user, ?User $model)
     {
         if ( ! is_null($model))
             return $model->trashed();
@@ -216,7 +233,7 @@ class UsersPolicy extends AbstractPolicy
      *
      * @return bool|void
      */
-    public function impersonate(AuthenticatedUser $user, User $model = null)
+    public function impersonate(AuthenticatedUser $user, ?User $model)
     {
         if ($model->isAdmin())
             return false;

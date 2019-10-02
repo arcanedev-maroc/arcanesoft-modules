@@ -2,7 +2,6 @@
 
 use App\Models\User as AuthenticatedUser;
 use Arcanesoft\Blog\Models\Post;
-use Arcanesoft\Support\Policies\Policy;
 
 /**
  * Class     PostsPolicy
@@ -10,54 +9,70 @@ use Arcanesoft\Support\Policies\Policy;
  * @package  Arcanesoft\Blog\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class PostsPolicy extends Policy
+class PostsPolicy extends AbstractPolicy
 {
+    /* -----------------------------------------------------------------
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Ability's prefix.
+     *
+     * @var string|null
+     */
+    protected $prefix = 'admin::blog.posts.';
+
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
      */
 
     /**
-     * Get the policy's prefix.
+     * Get the policy's abilities.
      *
-     * @return string
+     * @return \Arcanesoft\Support\Policies\Ability[]|array
      */
-    public static function prefix(): string
-    {
-        return 'admin::blog.posts';
-    }
-
-    /**
-     * Get the policy metas.
-     *
-     * @return array
-     */
-    public static function metas(): array
+    public function abilities(): array
     {
         return [
-            static::meta('index') // admin::blog.posts.index
-                  ->name('List all the posts')
-                  ->description('Ability to list all the posts'),
 
-            static::meta('metrics') // admin::blog.posts.metrics
-                  ->name("List all the posts' metrics")
-                  ->description("Ability to list all the posts' metrics"),
+            // admin::blog.posts.index
+            $this->makeAbility('index')->setMetas([
+                'name'        => 'List all the posts',
+                'description' => 'Ability to list all the posts',
+            ]),
 
-            static::meta('show') // admin::blog.posts.show
-                  ->name('Show a post')
-                  ->description("Ability to show the post's details"),
+            // admin::blog.posts.metrics
+            $this->makeAbility('metrics')->setMetas([
+                'name'        => "List all the posts' metrics",
+                'description' => "Ability to list all the posts' metrics",
+            ]),
 
-            static::meta('create') // admin::blog.posts.create
-                  ->name('Create a new post')
-                  ->description('Ability to create a new post'),
+            // admin::blog.posts.show
+            $this->makeAbility('show')->setMetas([
+                'name'        => 'Show a post',
+                'description' => "Ability to show the post's details",
+            ]),
 
-            static::meta('update') // admin::blog.posts.update
-                  ->name('Update a post')
-                  ->description('Ability to update a post'),
+            // admin::blog.posts.create
+            $this->makeAbility('create')->setMetas([
+                'name'        => 'Create a new post',
+                'description' => 'Ability to create a new post',
+            ]),
 
-            static::meta('delete') // admin::blog.posts.delete
-                  ->name('Delete a post')
-                  ->description('Ability to delete a post'),
+            // admin::blog.posts.update
+            $this->makeAbility('update')->setMetas([
+                'name'        => 'Update a post',
+                'description' => 'Ability to update a post',
+            ]),
+
+            // admin::blog.posts.delete
+            $this->makeAbility('delete')->setMetas([
+                'name'        => 'Delete a post',
+                'description' => 'Ability to delete a post',
+            ]),
+
         ];
     }
 
@@ -122,7 +137,7 @@ class PostsPolicy extends Policy
      *
      * @return bool|void
      */
-    public function update(AuthenticatedUser $user, Post $model = null)
+    public function update(AuthenticatedUser $user, ?Post $model)
     {
         //
     }
@@ -135,7 +150,7 @@ class PostsPolicy extends Policy
      *
      * @return bool|void
      */
-    public function delete(AuthenticatedUser $user, Post $model = null)
+    public function delete(AuthenticatedUser $user, ?Post $model)
     {
         if ( ! is_null($model))
             return $model->isDeletable();

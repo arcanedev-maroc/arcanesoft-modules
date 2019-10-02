@@ -13,7 +13,54 @@ use App\Models\User as AuthenticatedUser;
 class PasswordResetsPolicy extends AbstractPolicy
 {
     /* -----------------------------------------------------------------
-     |  Policies
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Ability's prefix.
+     *
+     * @var string
+     */
+    protected $prefix = 'admin::auth.password-resets.';
+
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Get the policy's abilities.
+     *
+     * @return \Arcanesoft\Support\Policies\Ability[]|array
+     */
+    public function abilities(): array
+    {
+        return [
+
+            // admin::auth.password-resets.index
+            $this->makeAbility('index')->setMetas([
+                'name'        => 'List all the password resets',
+                'description' => 'Ability to list all the password resets',
+            ]),
+
+            // admin::auth.password-resets.metrics
+            $this->makeAbility('metrics')->setMetas([
+                'name'        => "List all the password resets' metrics",
+                'description' => "Ability to list all the password resets' metrics",
+            ]),
+
+            // admin::auth.password-resets.delete
+            $this->makeAbility('delete')->setMetas([
+                'name'        => 'Delete a password reset',
+                'description' => 'Ability to delete a password reset',
+            ]),
+            
+        ];
+    }
+
+    /* -----------------------------------------------------------------
+     |  Abilities
      | -----------------------------------------------------------------
      */
 
@@ -51,42 +98,5 @@ class PasswordResetsPolicy extends AbstractPolicy
     public function delete(AuthenticatedUser $user)
     {
         //
-    }
-
-    /* -----------------------------------------------------------------
-     |  Other Methods
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Get the policy's prefix.
-     *
-     * @return string
-     */
-    public static function prefix(): string
-    {
-        return 'admin::auth.password-resets';
-    }
-
-    /**
-     * Get the policy metas.
-     *
-     * @return array
-     */
-    public static function metas(): array
-    {
-        return [
-            static::meta('index') // admin::auth.password-resets.index
-                  ->name('List all the password resets')
-                  ->description('Ability to list all the password resets'),
-
-            static::meta('metrics') // admin::auth.password-resets.metrics
-                  ->name("List all the password resets' metrics")
-                  ->description("Ability to list all the password resets' metrics"),
-
-            static::meta('delete') // admin::auth.password-resets.delete
-                  ->name('Delete a password reset')
-                  ->description('Ability to delete a password reset'),
-        ];
     }
 }

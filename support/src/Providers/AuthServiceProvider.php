@@ -26,8 +26,9 @@ abstract class AuthServiceProvider extends ServiceProvider
     protected function registerDefinitions(array $policies)
     {
         foreach ($policies as $class) {
-            foreach ($this->app->call([$class, 'definitions']) as $ability => $method) {
-                Gate::define($ability, $method);
+            foreach ($this->app->call("{$class}@abilities") as $ability) {
+                /** @var  \Arcanesoft\Support\Policies\Ability  $ability */
+                Gate::define($ability->key(), $ability->method());
             }
         }
     }

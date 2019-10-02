@@ -2,7 +2,6 @@
 
 use App\Models\User as AuthenticatedUser;
 use Arcanesoft\Blog\Models\Author;
-use Arcanesoft\Support\Policies\Policy;
 
 /**
  * Class     AuthorsPolicy
@@ -10,54 +9,70 @@ use Arcanesoft\Support\Policies\Policy;
  * @package  Arcanesoft\Blog\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class AuthorsPolicy extends Policy
+class AuthorsPolicy extends AbstractPolicy
 {
+    /* -----------------------------------------------------------------
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Ability's prefix.
+     *
+     * @var string|null
+     */
+    protected $prefix = 'admin::blog.authors.';
+
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
      */
 
     /**
-     * Get the policy's prefix.
+     * Get the policy's abilities.
      *
-     * @return string
+     * @return \Arcanesoft\Support\Policies\Ability[]|array
      */
-    public static function prefix(): string
-    {
-        return 'admin::blog.authors';
-    }
-
-    /**
-     * Get the policy metas.
-     *
-     * @return array
-     */
-    public static function metas(): array
+    public function abilities(): array
     {
         return [
-            static::meta('index') // admin::blog.authors.index
-                  ->name('List all the authors')
-                  ->description('Ability to list all the authors'),
 
-            static::meta('metrics') // admin::blog.authors.metrics
-                  ->name("List all the authors' metrics")
-                  ->description("Ability to list all the authors' metrics"),
+            // admin::blog.authors.index
+            $this->makeAbility('index')->setMetas([
+                'name'        => 'List all the authors',
+                'description' => 'Ability to list all the authors',
+            ]),
 
-            static::meta('show') // admin::blog.authors.show
-                  ->name('Show a author')
-                  ->description("Ability to show the author's details"),
+            // admin::blog.authors.metrics
+            $this->makeAbility('metrics')->setMetas([
+                'name'        => "List all the authors' metrics",
+                'description' => "Ability to list all the authors' metrics",
+            ]),
 
-            static::meta('create') // admin::blog.authors.create
-                  ->name('Create a new author')
-                  ->description('Ability to create a new author'),
+            // admin::blog.authors.show
+            $this->makeAbility('show')->setMetas([
+                'name'        => 'Show a author',
+                'description' => "Ability to show the author's details",
+            ]),
 
-            static::meta('update') // admin::blog.authors.update
-                  ->name('Update a author')
-                  ->description('Ability to update a author'),
+            // admin::blog.authors.create
+            $this->makeAbility('create')->setMetas([
+                'name'        => 'Create a new author',
+                'description' => 'Ability to create a new author',
+            ]),
 
-            static::meta('delete') // admin::blog.authors.delete
-                  ->name('Delete a author')
-                  ->description('Ability to delete a author'),
+            // admin::blog.authors.update
+            $this->makeAbility('update')->setMetas([
+                'name'        => 'Update a author',
+                'description' => 'Ability to update a author',
+            ]),
+
+            // admin::blog.authors.delete
+            $this->makeAbility('delete')->setMetas([
+                'name'        => 'Delete a author',
+                'description' => 'Ability to delete a author',
+            ]),
+
         ];
     }
 
@@ -117,12 +132,12 @@ class AuthorsPolicy extends Policy
     /**
      * Allow to update a author.
      *
-     * @param  \App\Models\User                   $user
+     * @param  \App\Models\User                     $user
      * @param  \Arcanesoft\Blog\Models\Author|null  $model
      *
      * @return bool|void
      */
-    public function update(AuthenticatedUser $user, Author $model = null)
+    public function update(AuthenticatedUser $user, ?Author $model)
     {
         //
     }
@@ -130,12 +145,12 @@ class AuthorsPolicy extends Policy
     /**
      * Allow to delete a author.
      *
-     * @param  \App\Models\User                   $user
+     * @param  \App\Models\User                     $user
      * @param  \Arcanesoft\Blog\Models\Author|null  $model
      *
      * @return bool|void
      */
-    public function delete(AuthenticatedUser $user, Author $model = null)
+    public function delete(AuthenticatedUser $user, ?Author $model)
     {
         if ( ! is_null($model))
             return $model->isDeletable();

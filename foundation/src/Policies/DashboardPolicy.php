@@ -1,7 +1,8 @@
-<?php namespace Arcanesoft\Foundation\Policies;
+<?php
+
+namespace Arcanesoft\Foundation\Policies;
 
 use App\Models\User as AuthenticatedUser;
-use Arcanesoft\Support\Policies\Policy;
 
 /**
  * Class     DashboardPolicy
@@ -9,34 +10,40 @@ use Arcanesoft\Support\Policies\Policy;
  * @package  Arcanesoft\Foundation\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class DashboardPolicy extends Policy
+class DashboardPolicy extends AbstractPolicy
 {
+    /* -----------------------------------------------------------------
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Ability's prefix.
+     *
+     * @var string|null
+     */
+    protected $prefix = 'admin::foundation.dashboard.';
+
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
      */
 
     /**
-     * Get the policy's prefix.
+     * Get the policy's abilities.
      *
-     * @return string
+     * @return \Arcanesoft\Support\Policies\Ability[]|array
      */
-    public static function prefix(): string
-    {
-        return 'admin::foundation.dashboard';
-    }
-
-    /**
-     * Get the policy metas.
-     *
-     * @return array
-     */
-    public static function metas(): array
+    public function abilities(): array
     {
         return [
-            static::meta('index') // admin::foundation.dashboard.index
-                  ->name('Access the main dashboard')
-                  ->description('Ability to access the main dashboard'),
+
+            // admin::foundation.dashboard.index
+            $this->makeAbility('index')->setMetas([
+                'name'        => 'Access the main dashboard',
+                'description' => 'Ability to access the main dashboard',
+            ]),
+
         ];
     }
 

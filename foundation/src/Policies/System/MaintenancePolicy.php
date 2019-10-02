@@ -1,7 +1,7 @@
 <?php namespace Arcanesoft\Foundation\Policies\System;
 
 use App\Models\User as AuthenticatedUser;
-use Arcanesoft\Support\Policies\Policy;
+use Arcanesoft\Foundation\Policies\AbstractPolicy;
 
 /**
  * Class     MaintenancePolicy
@@ -9,38 +9,46 @@ use Arcanesoft\Support\Policies\Policy;
  * @package  Arcanesoft\Foundation\Policies\System
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class MaintenancePolicy extends Policy
+class MaintenancePolicy extends AbstractPolicy
 {
+    /* -----------------------------------------------------------------
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Ability's prefix.
+     *
+     * @var string|null
+     */
+    protected $prefix = 'admin::foundation.system.maintenance.';
+
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
      */
 
     /**
-     * Get the policy's prefix.
+     * Get the policy's abilities.
      *
-     * @return string
+     * @return \Arcanesoft\Support\Policies\Ability[]|array
      */
-    public static function prefix(): string
-    {
-        return 'admin::foundation.system.maintenance';
-    }
-
-    /**
-     * Get the policy metas.
-     *
-     * @return array
-     */
-    public static function metas(): array
+    public function abilities(): array
     {
         return [
-            static::meta('index') // admin::foundation.system.maintenance.index
-                  ->name('Show the maintenance details')
-                  ->description('Ability to access the maintenance details'),
 
-            static::meta('toggle') // admin::foundation.system.maintenance.toggle
-                  ->name('Toggle the maintenance mode')
-                  ->description('Ability to toggle the maintenance mode'),
+            // admin::foundation.system.maintenance.index
+            $this->makeAbility('index')->setMetas([
+                'name'        => 'Show the maintenance details',
+                'description' => 'Ability to access the maintenance details',
+            ]),
+
+            // admin::foundation.system.maintenance.toggle
+            $this->makeAbility('toggle')->setMetas([
+                'name'        => 'Toggle the maintenance mode',
+                'description' => 'Ability to toggle the maintenance mode',
+            ]),
+
         ];
     }
 

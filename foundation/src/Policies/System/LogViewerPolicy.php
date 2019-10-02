@@ -1,7 +1,7 @@
 <?php namespace Arcanesoft\Foundation\Policies\System;
 
 use App\Models\User as AuthenticatedUser;
-use Arcanesoft\Support\Policies\Policy;
+use Arcanesoft\Foundation\Policies\AbstractPolicy;
 
 /**
  * Class     LogViewerPolicy
@@ -9,46 +9,58 @@ use Arcanesoft\Support\Policies\Policy;
  * @package  Arcanesoft\Foundation\Policies\System
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class LogViewerPolicy extends Policy
+class LogViewerPolicy extends AbstractPolicy
 {
+    /* -----------------------------------------------------------------
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Ability's prefix.
+     *
+     * @var string|null
+     */
+    protected $prefix = 'admin::foundation.system.log-viewer.';
+
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
      */
 
     /**
-     * Get the policy's prefix.
+     * Get the policy's abilities.
      *
-     * @return string
+     * @return \Arcanesoft\Support\Policies\Ability[]|array
      */
-    public static function prefix(): string
-    {
-        return 'admin::foundation.system.log-viewer';
-    }
-
-    /**
-     * Get the policy metas.
-     *
-     * @return array
-     */
-    public static function metas(): array
+    public function abilities(): array
     {
         return [
-            static::meta('index') // admin::foundation.system.log-viewer.index
-                  ->name('Show all the logs & metrics')
-                  ->description('Ability to show all the logs & metrics'),
 
-            static::meta('show') // admin::foundation.system.log-viewer.show
-                  ->name('Show the log details')
-                  ->description('Ability to show the log details'),
+            // admin::foundation.system.log-viewer.index
+            $this->makeAbility('index')->setMetas([
+                'name'        => 'Show all the logs & metrics',
+                'description' => 'Ability to show all the logs & metrics',
+            ]),
 
-            static::meta('download') // admin::foundation.system.log-viewer.download
-                  ->name('Download the log files')
-                  ->description('Ability to download the log files'),
+            // admin::foundation.system.log-viewer.show
+            $this->makeAbility('show')->setMetas([
+                'name'        => 'Show the log details',
+                'description' => 'Ability to show the log details',
+            ]),
 
-            static::meta('delete') // admin::foundation.system.log-viewer.delete
-                  ->name('Delete the log files')
-                  ->description('Ability to delete the log files'),
+            // admin::foundation.system.log-viewer.download
+            $this->makeAbility('download')->setMetas([
+                'name'        => 'Download the log files',
+                'description' => 'Ability to download the log files',
+            ]),
+
+            // admin::foundation.system.log-viewer.delete
+            $this->makeAbility('delete')->setMetas([
+                'name'        => 'Delete the log files',
+                'description' => 'Ability to delete the log files',
+            ]),
+
         ];
     }
 

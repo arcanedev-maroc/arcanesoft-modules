@@ -3,7 +3,6 @@
 namespace Arcanesoft\Media\Policies;
 
 use App\Models\User as AuthenticatedUser;
-use Arcanesoft\Support\Policies\Policy;
 
 /**
  * Class     MediaPolicy
@@ -11,34 +10,40 @@ use Arcanesoft\Support\Policies\Policy;
  * @package  Arcanesoft\Media\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class MediaPolicy extends Policy
+class MediaPolicy extends AbstractPolicy
 {
+    /* -----------------------------------------------------------------
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Ability's prefix.
+     *
+     * @var string|null
+     */
+    protected $prefix = 'admin::media.';
+
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
      */
 
     /**
-     * Get the policy's prefix.
+     * Get the policy's abilities.
      *
-     * @return string
+     * @return \Arcanesoft\Support\Policies\Ability[]|array
      */
-    public static function prefix(): string
-    {
-        return 'admin::media';
-    }
-
-    /**
-     * Get the policy metas.
-     *
-     * @return array
-     */
-    public static function metas(): array
+    public function abilities(): array
     {
         return [
-            static::meta('index') // admin::media.index
-                  ->name('Access the main media manager')
-                  ->description('Ability to access the main media manager'),
+
+            // admin::media.index
+            $this->makeAbility('index')->setMetas([
+                'name'        => 'Access the main media manager',
+                'description' => 'Ability to access the main media manager',
+            ]),
+
         ];
     }
 

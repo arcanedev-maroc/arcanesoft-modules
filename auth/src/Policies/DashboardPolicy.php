@@ -13,7 +13,42 @@ use App\Models\User as AuthenticatedUser;
 class DashboardPolicy extends AbstractPolicy
 {
     /* -----------------------------------------------------------------
-     |  Policies
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Ability's prefix.
+     *
+     * @var string
+     */
+    protected $prefix = 'admin::auth.statistics.';
+
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Get the policy's abilities.
+     *
+     * @return \Arcanesoft\Support\Policies\Ability[]|array
+     */
+    public function abilities(): array
+    {
+        return [
+
+            // admin::auth.statistics.index
+            $this->makeAbility('index')->setMetas([
+                'name'        => 'Show all the statistics',
+                'description' => 'Ability to show all the statistics',
+            ]),
+
+        ];
+    }
+
+    /* -----------------------------------------------------------------
+     |  Abilities
      | -----------------------------------------------------------------
      */
 
@@ -27,34 +62,5 @@ class DashboardPolicy extends AbstractPolicy
     public function index(AuthenticatedUser $user)
     {
         //
-    }
-
-    /* -----------------------------------------------------------------
-     |  Other Methods
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Get the policy's prefix.
-     *
-     * @return string
-     */
-    public static function prefix(): string
-    {
-        return 'admin::auth.statistics';
-    }
-
-    /**
-     * Get the policy metas.
-     *
-     * @return array
-     */
-    public static function metas(): array
-    {
-        return [
-            static::meta('index') // admin::auth.statistics.index
-                  ->name('Show all the statistics')
-                  ->description('Ability to show all the statistics'),
-        ];
     }
 }

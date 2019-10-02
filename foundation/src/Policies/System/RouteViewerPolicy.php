@@ -1,7 +1,9 @@
-<?php namespace Arcanesoft\Foundation\Policies\System;
+<?php
+
+namespace Arcanesoft\Foundation\Policies\System;
 
 use App\Models\User as AuthenticatedUser;
-use Arcanesoft\Support\Policies\Policy;
+use Arcanesoft\Foundation\Policies\AbstractPolicy;
 
 /**
  * Class     RouteViewerPolicy
@@ -9,34 +11,40 @@ use Arcanesoft\Support\Policies\Policy;
  * @package  Arcanesoft\Foundation\Policies\System
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class RouteViewerPolicy extends Policy
+class RouteViewerPolicy extends AbstractPolicy
 {
+    /* -----------------------------------------------------------------
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Ability's prefix.
+     *
+     * @var string|null
+     */
+    protected $prefix = 'admin::foundation.system.route-viewer';
+
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
      */
 
     /**
-     * Get the policy's prefix.
+     * Get the policy's abilities.
      *
-     * @return string
+     * @return \Arcanesoft\Support\Policies\Ability[]|array
      */
-    public static function prefix(): string
-    {
-        return 'admin::foundation.system.route-viewer';
-    }
-
-    /**
-     * Get the policy metas.
-     *
-     * @return array
-     */
-    public static function metas(): array
+    public function abilities(): array
     {
         return [
-            static::meta('index') // admin::foundation.system.route-viewer.index
-                  ->name('Show all the routes')
-                  ->description('Ability to show all the routes'),
+
+            // admin::foundation.system.route-viewer.index
+            $this->makeAbility('index')->setMetas([
+                'name'        => 'Show all the routes',
+                'description' => 'Ability to show all the routes',
+            ]),
+
         ];
     }
 

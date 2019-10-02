@@ -14,56 +14,70 @@ use Arcanesoft\Auth\Models\Role;
 class RolesPolicy extends AbstractPolicy
 {
     /* -----------------------------------------------------------------
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Ability's prefix.
+     *
+     * @var string
+     */
+    protected $prefix = 'admin::auth.roles.';
+
+    /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
      */
 
     /**
-     * Get the policy's prefix.
+     * Get the policy's abilities.
      *
-     * @return string
+     * @return \Arcanesoft\Support\Policies\Ability[]|array
      */
-    public static function prefix(): string
-    {
-        return 'admin::auth.roles';
-    }
-
-    /**
-     * Get the policy metas.
-     *
-     * @return array
-     */
-    public static function metas(): array
+    public function abilities(): array
     {
         return [
-            static::meta('index') // admin::auth.roles.index
-                  ->name('List all the roles')
-                  ->description('Ability to list all the roles'),
+            // admin::auth.roles.index
+            $this->makeAbility('index')->setMetas([
+                'name'        => 'List all the roles',
+                'description' => 'Ability to list all the roles',
+            ]),
 
-            static::meta('show') // admin::auth.roles.show
-                  ->name('Show a role')
-                  ->description("Ability to show the role's details"),
+            // admin::auth.roles.show
+            $this->makeAbility('show')->setMetas([
+                'name'        => 'Show a role',
+                'description' => "Ability to show the role's details",
+            ]),
 
-            static::meta('create') // admin::auth.roles.create
-                  ->name('Create a new role')
-                  ->description('Ability to create a new role'),
+            // admin::auth.roles.create
+            $this->makeAbility('create')->setMetas([
+                'name'        => 'Create a new role',
+                'description' => 'Ability to create a new role',
+            ]),
 
-            static::meta('update') // admin::auth.roles.update
-                  ->name('Update a role')
-                  ->description('Ability to update a role'),
+            // admin::auth.roles.update
+            $this->makeAbility('update')->setMetas([
+                'name'        => 'Update a role',
+                'description' => 'Ability to update a role',
+            ]),
 
-            static::meta('activate') // admin::auth.roles.activate
-                  ->name('Activate a role')
-                  ->description('Ability to activate a role'),
+            // admin::auth.roles.activate
+            $this->makeAbility('activate')->setMetas([
+                'name'        => 'Activate a role',
+                'description' => 'Ability to activate a role',
+            ]),
 
-            static::meta('delete') // admin::auth.roles.delete
-                  ->name('Delete a role')
-                  ->description('Ability to delete a role'),
+            // admin::auth.roles.delete
+            $this->makeAbility('delete')->setMetas([
+                'name'        => 'Delete a role',
+                'description' => 'Ability to delete a role',
+            ]),
         ];
     }
 
     /* -----------------------------------------------------------------
-     |  Policies
+     |  Abilities
      | -----------------------------------------------------------------
      */
 
@@ -111,7 +125,7 @@ class RolesPolicy extends AbstractPolicy
      *
      * @return bool|void
      */
-    public function update(AuthenticatedUser $user, Role $role = null)
+    public function update(AuthenticatedUser $user, ?Role $role)
     {
         //
     }
@@ -124,7 +138,7 @@ class RolesPolicy extends AbstractPolicy
      *
      * @return bool|void
      */
-    public function activate(AuthenticatedUser $user, Role $role = null)
+    public function activate(AuthenticatedUser $user, ?Role $role)
     {
         if ( ! is_null($role))
             return ! $role->isLocked();
@@ -138,7 +152,7 @@ class RolesPolicy extends AbstractPolicy
      *
      * @return bool|void
      */
-    public function delete(AuthenticatedUser $user, Role $role = null)
+    public function delete(AuthenticatedUser $user, ?Role $role)
     {
         if ( ! is_null($role))
             return $role->isDeletable();

@@ -2,7 +2,6 @@
 
 namespace Arcanesoft\Backups\Policies;
 
-use Arcanesoft\Support\Policies\Policy;
 use App\Models\User as AuthenticatedUser;
 
 /**
@@ -11,46 +10,58 @@ use App\Models\User as AuthenticatedUser;
  * @package  Arcanesoft\Backups\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class StatusesPolicy extends Policy
+class StatusesPolicy extends AbstractPolicy
 {
+    /* -----------------------------------------------------------------
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Ability's prefix.
+     *
+     * @var string|null
+     */
+    protected $prefix = 'admin::backups.statuses.';
+
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
      */
 
     /**
-     * Get the policy's prefix.
+     * Get the policy's abilities.
      *
-     * @return string
+     * @return \Arcanesoft\Support\Policies\Ability[]|array
      */
-    public static function prefix(): string
-    {
-        return 'admin::backups.statuses';
-    }
-
-    /**
-     * Get the policy metas.
-     *
-     * @return array
-     */
-    public static function metas(): array
+    public function abilities(): array
     {
         return [
-            static::meta('index') // admin::backups.statuses.index
-                  ->name('Show all backup statuses')
-                  ->description('Ability to list all backup statuses'),
 
-            static::meta('show') // admin::backups.statuses.show
-                  ->name('Show a backup status')
-                  ->description('Ability to show a backup status'),
+            // admin::backups.statuses.index
+            $this->makeAbility('index')->setMetas([
+                'name'        => 'Show all backup statuses',
+                'description' => 'Ability to list all backup statuses',
+            ]),
 
-            static::meta('create') // admin::backups.statuses.create
-                  ->name('Create a backup')
-                  ->description('Ability to create a backup'),
+            // admin::backups.statuses.show
+            $this->makeAbility('show')->setMetas([
+                'name'        => 'Show a backup status',
+                'description' => 'Ability to show a backup status',
+            ]),
 
-            static::meta('clean') // admin::backups.statuses.clean
-                  ->name('Clean backups')
-                  ->description('Ability to clean old backups'),
+            // admin::backups.statuses.create
+            $this->makeAbility('create')->setMetas([
+                'name'        => 'Create a backup',
+                'description' => 'Ability to create a backup',
+            ]),
+
+            // admin::backups.statuses.clean
+            $this->makeAbility('clean')->setMetas([
+                'name'        => 'Clean backups',
+                'description' => 'Ability to clean old backups',
+            ]),
+
         ];
     }
 

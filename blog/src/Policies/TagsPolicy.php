@@ -2,7 +2,6 @@
 
 use App\Models\User as AuthenticatedUser;
 use Arcanesoft\Blog\Models\Tag;
-use Arcanesoft\Support\Policies\Policy;
 
 /**
  * Class     TagsPolicy
@@ -10,59 +9,75 @@ use Arcanesoft\Support\Policies\Policy;
  * @package  Arcanesoft\Blog\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class TagsPolicy extends Policy
+class TagsPolicy extends AbstractPolicy
 {
+    /* -----------------------------------------------------------------
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Ability's prefix.
+     *
+     * @var string|null
+     */
+    protected $prefix = 'admin::blog.tags.';
+
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
      */
 
     /**
-     * Get the policy's prefix.
+     * Get the policy's abilities.
      *
-     * @return string
+     * @return \Arcanesoft\Support\Policies\Ability[]|array
      */
-    public static function prefix(): string
-    {
-        return 'admin::blog.tags';
-    }
-
-    /**
-     * Get the policy metas.
-     *
-     * @return array
-     */
-    public static function metas(): array
+    public function abilities(): array
     {
         return [
-            static::meta('index') // admin::blog.tags.index
-                  ->name('List all the tags')
-                  ->description('Ability to list all the tags'),
 
-            static::meta('metrics') // admin::blog.tags.metrics
-                  ->name("List all the tags' metrics")
-                  ->description("Ability to list all the tags' metrics"),
+            // admin::blog.tags.index
+            $this->makeAbility('index')->setMetas([
+                'name'        => 'List all the tags',
+                'description' => 'Ability to list all the tags',
+            ]),
 
-            static::meta('show') // admin::blog.tags.show
-                  ->name('Show a tag')
-                  ->description("Ability to show the tag's details"),
+            // admin::blog.tags.metrics
+            $this->makeAbility('metrics')->setMetas([
+                'name'        => "List all the tags' metrics",
+                'description' => "Ability to list all the tags' metrics",
+            ]),
 
-            static::meta('create') // admin::blog.tags.create
-                  ->name('Create a new tag')
-                  ->description('Ability to create a new tag'),
+            // admin::blog.tags.show
+            $this->makeAbility('show')->setMetas([
+                'name'        => 'Show a tag',
+                'description' => "Ability to show the tag's details",
+            ]),
 
-            static::meta('update') // admin::blog.tags.update
-                  ->name('Update a tag')
-                  ->description('Ability to update a tag'),
+            // admin::blog.tags.create
+            $this->makeAbility('create')->setMetas([
+                'name'        => 'Create a new tag',
+                'description' => 'Ability to create a new tag',
+            ]),
 
-            static::meta('delete') // admin::blog.tags.delete
-                  ->name('Delete a tag')
-                  ->description('Ability to delete a tag'),
+            // admin::blog.tags.update
+            $this->makeAbility('update')->setMetas([
+                'name'        => 'Update a tag',
+                'description' => 'Ability to update a tag',
+            ]),
+
+            // admin::blog.tags.delete
+            $this->makeAbility('delete')->setMetas([
+                'name'        => 'Delete a tag',
+                'description' => 'Ability to delete a tag',
+            ]),
+
         ];
     }
 
     /* -----------------------------------------------------------------
-     |  Policies
+     |  Abilities
      | -----------------------------------------------------------------
      */
 
@@ -122,7 +137,7 @@ class TagsPolicy extends Policy
      *
      * @return bool|void
      */
-    public function update(AuthenticatedUser $user, Tag $model = null)
+    public function update(AuthenticatedUser $user, ?Tag $model)
     {
         //
     }
@@ -135,7 +150,7 @@ class TagsPolicy extends Policy
      *
      * @return bool|void
      */
-    public function delete(AuthenticatedUser $user, Tag $model = null)
+    public function delete(AuthenticatedUser $user, ?Tag $model)
     {
         if ( ! is_null($model))
             return $model->isDeletable();

@@ -1,7 +1,6 @@
 <?php namespace Arcanesoft\Blog\Policies;
 
 use App\Models\User as AuthenticatedUser;
-use Arcanesoft\Support\Policies\Policy;
 
 /**
  * Class     DashboardPolicy
@@ -9,36 +8,43 @@ use Arcanesoft\Support\Policies\Policy;
  * @package  Arcanesoft\Blog\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class DashboardPolicy extends Policy
+class DashboardPolicy extends AbstractPolicy
 {
+    /* -----------------------------------------------------------------
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Ability's prefix.
+     *
+     * @var string|null
+     */
+    protected $prefix = 'admin::blog.statistics.';
+
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
      */
 
     /**
-     * Get the policy's prefix.
+     * Get the policy's abilities.
      *
-     * @return string
+     * @return \Arcanesoft\Support\Policies\Ability[]|array
      */
-    public static function prefix(): string
-    {
-        return 'admin::blog.statistics';
-    }
-
-    /**
-     * Get the policy metas.
-     *
-     * @return array
-     */
-    public static function metas(): array
+    public function abilities(): array
     {
         return [
-            static::meta('index') // admin::blog.statistics.index
-            ->name('Show all the statistics')
-                ->description('Ability to show all the statistics'),
+
+            // admin::blog.statistics.index
+            $this->makeAbility('index')->setMetas([
+                'name'        => 'Show all the statistics',
+                'description' => 'Ability to show all the statistics',
+            ]),
+
         ];
     }
+
 
     /* -----------------------------------------------------------------
      |  Policies

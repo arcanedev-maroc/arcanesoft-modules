@@ -13,7 +13,48 @@ use App\Models\User as AuthenticatedUser;
 class PermissionsPolicy extends AbstractPolicy
 {
     /* -----------------------------------------------------------------
-     |  Policies
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Ability's prefix.
+     *
+     * @var string
+     */
+    protected $prefix = 'admin::auth.permissions.';
+
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Get the policy's abilities.
+     *
+     * @return \Arcanesoft\Support\Policies\Ability[]|array
+     */
+    public function abilities(): array
+    {
+        return [
+
+            // auth.permissions.index
+            $this->makeAbility('index')->setMetas([
+                'name'        => 'List all the permissions',
+                'description' => 'Ability to list all the permissions',
+            ]),
+
+            // auth.permissions.show
+            $this->makeAbility('show')->setMetas([
+                'name'         => 'Show a permission',
+                'description'  => "Ability to show the permission's details",
+            ]),
+
+        ];
+    }
+
+    /* -----------------------------------------------------------------
+     |  Abilities
      | -----------------------------------------------------------------
      */
 
@@ -39,38 +80,5 @@ class PermissionsPolicy extends AbstractPolicy
     public function show(AuthenticatedUser $user)
     {
         //
-    }
-
-    /* -----------------------------------------------------------------
-     |  Other Methods
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Get the policy's prefix.
-     *
-     * @return string
-     */
-    public static function prefix(): string
-    {
-        return 'admin::auth.permissions';
-    }
-
-    /**
-     * Get the policy metas.
-     *
-     * @return array
-     */
-    public static function metas(): array
-    {
-        return [
-            static::meta('index') // auth.permissions.index
-                  ->name('List all the permissions')
-                  ->description('Ability to list all the permissions'),
-
-            static::meta('show') // auth.permissions.show
-                  ->name('Show a permission')
-                  ->description("Ability to show the permission's details"),
-        ];
     }
 }
