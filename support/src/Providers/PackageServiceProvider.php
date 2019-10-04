@@ -86,6 +86,19 @@ abstract class PackageServiceProvider extends ServiceProvider
      */
 
     /**
+     * Get the package name.
+     *
+     * @return string
+     */
+    public function packageName(): string
+    {
+        if (empty($this->package))
+            throw new Exception('The package name is required');
+
+        return Str::slug($this->package);
+    }
+
+    /**
      * Get the base path of the package.
      *
      * @param  string  $path
@@ -115,16 +128,6 @@ abstract class PackageServiceProvider extends ServiceProvider
      |  Other Methods
      | -----------------------------------------------------------------
      */
-
-    /**
-     * Check the package name.
-     */
-    private function checkPackageName(): void
-    {
-        if (empty($this->package)) {
-            throw new Exception('The package name is required');
-        }
-    }
 
     /**
      * Get the publish tag.

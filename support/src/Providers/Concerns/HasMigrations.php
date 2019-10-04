@@ -45,8 +45,6 @@ trait HasMigrations
      */
     protected function publishMigrations(): void
     {
-        $this->checkPackageName();
-
         $this->publishes([
             $this->migrationsPath() => $this->migrationsDestinationPath(),
         ], $this->getPublishTag('migrations'));

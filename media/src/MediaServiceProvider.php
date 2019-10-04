@@ -61,9 +61,14 @@ class MediaServiceProvider extends PackageServiceProvider
      */
     public function boot(): void
     {
-        $this->publishMultipleConfig();
-        $this->publishViews();
-        $this->publishTranslations();
-        $this->publishAssets();
+        $this->loadViews();
+        $this->loadTranslations();
+
+        if ($this->app->runningInConsole()) {
+            $this->publishMultipleConfig();
+            $this->publishViews();
+            $this->publishTranslations();
+            $this->publishAssets();
+        }
     }
 }

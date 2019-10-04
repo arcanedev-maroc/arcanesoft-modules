@@ -55,11 +55,16 @@ class FoundationServiceProvider extends PackageServiceProvider
      */
     public function boot(): void
     {
-        $this->publishMultipleConfig();
-        $this->publishViews();
-        $this->publishTranslations();
-        $this->publishAssets();
+        $this->loadViews();
+        $this->loadTranslations();
 
-        Foundation::$runsMigrations ? $this->loadMigrations() : $this->publishMigrations();
+        if ($this->app->runningInConsole()) {
+            $this->publishMultipleConfig();
+            $this->publishViews(false);
+            $this->publishTranslations(false);
+            $this->publishAssets();
+
+            Foundation::$runsMigrations ? $this->loadMigrations() : $this->publishMigrations();
+        }
     }
 }

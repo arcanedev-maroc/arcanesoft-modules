@@ -32,7 +32,7 @@ trait HasViews
      */
     protected function viewsDestinationPath(): string
     {
-        return $this->app['config']->get('view.paths.0').DS.'vendor'.DS.$this->package;
+        return $this->app['config']['view.paths'][0].DS.'vendor'.DS.$this->packageName();
     }
 
     /* -----------------------------------------------------------------
@@ -41,20 +41,13 @@ trait HasViews
      */
 
     /**
-     * Publish and load the views if $load argument is true.
-     *
-     * @param  bool  $load
+     * Publish the views files.
      */
-    protected function publishViews(bool $load = true): void
+    protected function publishViews(): void
     {
-        $this->checkPackageName();
-
         $this->publishes([
             $this->viewsPath() => $this->viewsDestinationPath(),
         ], $this->getPublishTag('views'));
-
-        if ($load)
-            $this->loadViews();
     }
 
     /**
@@ -62,8 +55,6 @@ trait HasViews
      */
     protected function loadViews(): void
     {
-        $this->checkPackageName();
-
-        $this->loadViewsFrom($this->viewsPath(), $this->package);
+        $this->loadViewsFrom($this->viewsPath(), $this->packageName());
     }
 }

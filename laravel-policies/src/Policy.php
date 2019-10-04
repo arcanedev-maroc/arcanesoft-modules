@@ -14,18 +14,6 @@ use Illuminate\Support\{Collection, Str};
 abstract class Policy implements PolicyContract
 {
     /* -----------------------------------------------------------------
-     |  Properties
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Use current class to define ability's method.
-     *
-     * @var bool
-     */
-    protected $useCurrentClass = true;
-
-    /* -----------------------------------------------------------------
      |  Getters
      | -----------------------------------------------------------------
      */
@@ -46,37 +34,15 @@ abstract class Policy implements PolicyContract
      */
 
     /**
-     * Get the FQN class.
-     *
-     * @return string
-     */
-    public static function class(): string
-    {
-        return static::class;
-    }
-
-    /**
-     * Get the ability key.
+     * Get the ability's key.
      *
      * @param  string  $key
      *
      * @return string
      */
-    public static function ability(string $key)
+    public static function ability(string $key): string
     {
         return static::prefixedKey($key);
-    }
-
-    /**
-     * Get all the abilities as collection.
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public function abilitiesAsCollection(): Collection
-    {
-        return new Collection(
-            app()->call([$this, 'abilities'])
-        );
     }
 
     /**
@@ -89,13 +55,10 @@ abstract class Policy implements PolicyContract
      */
     protected function makeAbility(string $key, $method = null): Ability
     {
-        if (is_null($method))
-            $method = Str::camel($key);
-
-        if (is_string($method) && $this->useCurrentClass)
-            $method = static::class().'@'.$method;
-
-        return Ability::make(static::prefixedKey($key), $method);
+        return Ability::make(
+            static::prefixedKey($key),
+            static::prepareMethod($method ?: $key)
+        );
     }
 
     /**
@@ -110,5 +73,27 @@ abstract class Policy implements PolicyContract
         return empty($prefix = static::prefix())
             ? $key
             : trim($prefix.$key);
+    }
+
+    /**
+     * Prepare the method name.
+     *
+     * @param  string  $method
+     *
+     * @return string|null
+     */
+    protected static function prepareMethod(string $method): ?string
+    {
+        // Dedicated Class
+        if (class_exists($method))
+            return $method;
+
+        // Dedicated Method
+        $method = Str::camel($method);
+
+        if (method_exists(static::class, $method))
+            return static::class.'@'.$method;
+
+        return null;
     }
 }

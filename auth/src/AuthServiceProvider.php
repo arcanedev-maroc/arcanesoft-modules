@@ -55,10 +55,15 @@ class AuthServiceProvider extends PackageServiceProvider
      */
     public function boot(): void
     {
-        $this->publishMultipleConfig();
-        $this->publishViews();
-        $this->publishTranslations();
+        $this->loadViews();
+        $this->loadTranslations();
 
-        Auth::$runsMigrations ? $this->loadMigrations() : $this->publishMigrations();
+        if ($this->app->runningInConsole()) {
+            $this->publishMultipleConfig();
+            $this->publishViews(false);
+            $this->publishTranslations(false);
+
+            Auth::$runsMigrations ? $this->loadMigrations() : $this->publishMigrations();
+        }
     }
 }

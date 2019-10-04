@@ -32,7 +32,7 @@ trait HasTranslations
      */
     protected function translationsDestinationPath(): string
     {
-        return $this->app['path.lang'].DS.'vendor'.DS.$this->package;
+        return $this->app['path.lang'].DS.'vendor'.DS.$this->packageName();
     }
 
     /* -----------------------------------------------------------------
@@ -45,17 +45,12 @@ trait HasTranslations
      *
      * @param  bool  $load
      */
-    protected function publishTranslations(bool $load = true): void
+    protected function publishTranslations(): void
     {
-        $this->checkPackageName();
-
         $this->publishes(
             [$this->translationsPath() => $this->translationsDestinationPath()],
             $this->getPublishTag('translations')
         );
-
-        if ($load)
-            $this->loadTranslations();
     }
 
     /**
@@ -63,7 +58,7 @@ trait HasTranslations
      */
     protected function loadTranslations(): void
     {
-        $this->loadTranslationsFrom($this->translationsPath(), $this->package);
+        $this->loadTranslationsFrom($this->translationsPath(), $this->packageName());
         $this->loadJsonTranslationsFrom($this->translationsPath());
     }
 }

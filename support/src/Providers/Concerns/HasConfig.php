@@ -38,7 +38,7 @@ trait HasConfig
      */
     protected function configFilePath(): string
     {
-        return $this->configPath("{$this->package}.php");
+        return $this->configPath("{$this->packageName()}.php");
     }
 
     /**
@@ -61,9 +61,7 @@ trait HasConfig
      */
     protected function registerConfig(): void
     {
-        $this->checkPackageName();
-
-        $this->mergeConfigFrom($this->configFilePath(), $this->package);
+        $this->mergeConfigFrom($this->configFilePath(), $this->packageName());
     }
 
     /**
@@ -71,10 +69,8 @@ trait HasConfig
      */
     protected function publishConfig(): void
     {
-        $this->checkPackageName();
-
         $this->publishes([
-            $this->configFilePath() => config_path("{$this->package}.php")
+            $this->configFilePath() => config_path("{$this->packageName()}.php")
         ], $this->getPublishTag('config'));
     }
 
@@ -85,11 +81,9 @@ trait HasConfig
      */
     protected function registerMultipleConfig(string $separator = '.'): void
     {
-        $this->checkPackageName();
-
         foreach ($this->configFilesPaths() as $configPath) {
             $this->mergeConfigFrom(
-                $configPath, $this->vendor.$separator.$this->package.$separator.basename($configPath, '.php')
+                $configPath, $this->vendor.$separator.$this->packageName().$separator.basename($configPath, '.php')
             );
         }
     }
@@ -99,11 +93,9 @@ trait HasConfig
      */
     protected function publishMultipleConfig(): void
     {
-        $this->checkPackageName();
-
         $files = Collection::make($this->configFilesPaths())
             ->mapWithKeys(function ($file) {
-                return [$file => config_path($this->vendor.DS.$this->package.DS.basename($file))];
+                return [$file => config_path($this->vendor.DS.$this->packageName().DS.basename($file))];
             })
             ->toArray();
 

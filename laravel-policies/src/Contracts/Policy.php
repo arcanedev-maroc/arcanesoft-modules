@@ -20,16 +20,11 @@ interface Policy
      */
 
     /**
-     * Get the FQN class.
+     * Get the ability's key.
+     *
+     * @param  string  $key
      *
      * @return string
      */
-    public static function class(): string;
-
-    /**
-     * Get all the abilities as collection.
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public function abilitiesAsCollection(): Collection;
+    public static function ability(string $key): string;
 }

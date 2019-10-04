@@ -52,12 +52,17 @@ class BlogServiceProvider extends PackageServiceProvider
     /**
      * Boot the service provider.
      */
-    public function boot()
+    public function boot(): void
     {
-        $this->publishMultipleConfig();
-        $this->publishViews();
-        $this->publishTranslations();
+        $this->loadViews();
+        $this->loadTranslations();
 
-        Blog::$runsMigrations ? $this->loadMigrations() : $this->publishMigrations();
+        if ($this->app->runningInConsole()) {
+            $this->publishMultipleConfig();
+            $this->publishViews(false);
+            $this->publishTranslations(false);
+
+            Blog::$runsMigrations ? $this->loadMigrations() : $this->publishMigrations();
+        }
     }
 }

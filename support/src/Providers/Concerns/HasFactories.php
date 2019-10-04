@@ -45,8 +45,6 @@ trait HasFactories
      */
     protected function publishFactories(): void
     {
-        $this->checkPackageName();
-
         $this->publishes([
             $this->factoriesPath() => $this->factoriesDestinationPath(),
         ], $this->getPublishTag('factories'));

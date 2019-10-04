@@ -55,9 +55,14 @@ class BackupsServiceProvider extends PackageServiceProvider
      */
     public function boot(): void
     {
-        $this->publishMultipleConfig();
-        $this->publishViews();
-        $this->publishTranslations();
+        $this->loadViews();
+        $this->loadTranslations();
+
+        if ($this->app->runningInConsole()) {
+            $this->publishMultipleConfig();
+            $this->publishViews(false);
+            $this->publishTranslations(false);
+        }
     }
 
     /**
@@ -65,7 +70,7 @@ class BackupsServiceProvider extends PackageServiceProvider
      *
      * @return array
      */
-    public function provides()
+    public function provides(): array
     {
         return [
             //

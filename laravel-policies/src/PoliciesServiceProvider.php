@@ -3,6 +3,7 @@
 namespace Arcanedev\LaravelPolicies;
 
 use Arcanedev\Support\PackageServiceProvider;
+use Illuminate\Contracts\Support\DeferrableProvider;
 
 /**
  * Class     PoliciesServiceProvider
@@ -10,7 +11,7 @@ use Arcanedev\Support\PackageServiceProvider;
  * @package  Arcanedev\LaravelPolicies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class PoliciesServiceProvider extends PackageServiceProvider
+class PoliciesServiceProvider extends PackageServiceProvider implements DeferrableProvider
 {
     /* -----------------------------------------------------------------
      |  Properties

@@ -32,7 +32,7 @@ trait HasAssets
      */
     protected function assetsDestinationPath(): string
     {
-        return base_path('assets'.DS.$this->package);
+        return base_path('assets'.DS.$this->packageName());
     }
 
     /* -----------------------------------------------------------------
@@ -45,8 +45,6 @@ trait HasAssets
      */
     protected function publishAssets(): void
     {
-        $this->checkPackageName();
-
         $this->publishes(
             [$this->assetsPath() => $this->assetsDestinationPath()],
             $this->getPublishTag('assets')
