@@ -1,7 +1,10 @@
-<?php namespace Arcanesoft\Blog\Policies;
+<?php
+
+namespace Arcanesoft\Blog\Policies;
 
 use App\Models\User as AuthenticatedUser;
 use Arcanesoft\Blog\Models\Post;
+use Arcanesoft\Foundation\Core\Auth\Policy;
 
 /**
  * Class     PostsPolicy
@@ -9,7 +12,7 @@ use Arcanesoft\Blog\Models\Post;
  * @package  Arcanesoft\Blog\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class PostsPolicy extends AbstractPolicy
+class PostsPolicy extends Policy
 {
     /* -----------------------------------------------------------------
      |  Properties
@@ -17,11 +20,14 @@ class PostsPolicy extends AbstractPolicy
      */
 
     /**
-     * Ability's prefix.
+     * Get the ability's prefix.
      *
-     * @var string|null
+     * @return string
      */
-    protected $prefix = 'admin::blog.posts.';
+    protected static function prefix(): string
+    {
+        return 'admin::blog.posts.';
+    }
 
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -31,9 +37,9 @@ class PostsPolicy extends AbstractPolicy
     /**
      * Get the policy's abilities.
      *
-     * @return \Arcanesoft\Support\Policies\Ability[]|array
+     * @return \Arcanedev\LaravelPolicies\Ability[]|iterable
      */
-    public function abilities(): array
+    public function abilities(): iterable
     {
         return [
 

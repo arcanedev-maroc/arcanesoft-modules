@@ -1,6 +1,4 @@
-<?php
-
-namespace Arcanesoft\Support\Policies;
+<?php namespace Arcanedev\LaravelPolicies;
 
 use Illuminate\Contracts\Support\{Arrayable, Jsonable};
 use Closure;
@@ -10,7 +8,7 @@ use JsonSerializable;
 /**
  * Class     Ability
  *
- * @package  Arcanesoft\Support\Policies
+ * @package  Arcanedev\LaravelPolicies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class Ability implements Arrayable, JsonSerializable, Jsonable

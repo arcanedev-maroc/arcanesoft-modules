@@ -3,6 +3,7 @@
 namespace Arcanesoft\Backups\Policies;
 
 use App\Models\User as AuthenticatedUser;
+use Arcanesoft\Foundation\Core\Auth\Policy;
 
 /**
  * Class     StatusesPolicy
@@ -10,19 +11,22 @@ use App\Models\User as AuthenticatedUser;
  * @package  Arcanesoft\Backups\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class StatusesPolicy extends AbstractPolicy
+class StatusesPolicy extends Policy
 {
     /* -----------------------------------------------------------------
-     |  Properties
+     |  Getters
      | -----------------------------------------------------------------
      */
 
     /**
-     * Ability's prefix.
+     * Get the ability's prefix.
      *
-     * @var string|null
+     * @return string
      */
-    protected $prefix = 'admin::backups.statuses.';
+    protected static function prefix(): string
+    {
+        return 'admin::backups.statuses.';
+    }
 
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -32,9 +36,9 @@ class StatusesPolicy extends AbstractPolicy
     /**
      * Get the policy's abilities.
      *
-     * @return \Arcanesoft\Support\Policies\Ability[]|array
+     * @return \Arcanedev\LaravelPolicies\Ability[]|iterable
      */
-    public function abilities(): array
+    public function abilities(): iterable
     {
         return [
 

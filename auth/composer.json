@@ -14,14 +14,14 @@
     ],
     "require": {
         "php": ">=7.2.0",
-        "arcanedev/gravatar": "~3.0.0",
-        "arcanedev/laravel-impersonator": "~2.0.0",
+        "arcanedev/gravatar": "^3.0",
+        "arcanedev/laravel-impersonator": "^2.0",
         "arcanesoft/foundation": "@dev",
         "yajra/laravel-datatables": "^1.5"
     },
     "require-dev": {
-        "phpunit/phpunit": "~8.0",
-        "phpunit/phpcov":  "~6.0"
+        "phpunit/phpunit": "^8.0",
+        "phpunit/phpcov":  "^6.0"
     },
     "autoload": {
         "psr-4": {

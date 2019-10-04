@@ -1,7 +1,10 @@
-<?php namespace Arcanesoft\Blog\Policies;
+<?php
+
+namespace Arcanesoft\Blog\Policies;
 
 use App\Models\User as AuthenticatedUser;
 use Arcanesoft\Blog\Models\Tag;
+use Arcanesoft\Foundation\Core\Auth\Policy;
 
 /**
  * Class     TagsPolicy
@@ -9,19 +12,22 @@ use Arcanesoft\Blog\Models\Tag;
  * @package  Arcanesoft\Blog\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class TagsPolicy extends AbstractPolicy
+class TagsPolicy extends Policy
 {
     /* -----------------------------------------------------------------
-     |  Properties
+     |  Getters
      | -----------------------------------------------------------------
      */
 
     /**
-     * Ability's prefix.
+     * Get the ability's prefix.
      *
-     * @var string|null
+     * @return string
      */
-    protected $prefix = 'admin::blog.tags.';
+    protected static function prefix(): string
+    {
+        return 'admin::blog.tags.';
+    }
 
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -31,9 +37,9 @@ class TagsPolicy extends AbstractPolicy
     /**
      * Get the policy's abilities.
      *
-     * @return \Arcanesoft\Support\Policies\Ability[]|array
+     * @return \Arcanedev\LaravelPolicies\Ability[]|iterable
      */
-    public function abilities(): array
+    public function abilities(): iterable
     {
         return [
 

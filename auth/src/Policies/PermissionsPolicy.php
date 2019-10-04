@@ -3,6 +3,7 @@
 namespace Arcanesoft\Auth\Policies;
 
 use App\Models\User as AuthenticatedUser;
+use Arcanesoft\Foundation\Core\Auth\Policy;
 
 /**
  * Class     PermissionsPolicy
@@ -10,19 +11,22 @@ use App\Models\User as AuthenticatedUser;
  * @package  Arcanesoft\Auth\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class PermissionsPolicy extends AbstractPolicy
+class PermissionsPolicy extends Policy
 {
     /* -----------------------------------------------------------------
-     |  Properties
+     |  Getters
      | -----------------------------------------------------------------
      */
 
     /**
-     * Ability's prefix.
+     * Get the ability's prefix.
      *
-     * @var string
+     * @return string
      */
-    protected $prefix = 'admin::auth.permissions.';
+    protected static function prefix(): string
+    {
+        return 'admin::auth.permissions.';
+    }
 
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -32,9 +36,9 @@ class PermissionsPolicy extends AbstractPolicy
     /**
      * Get the policy's abilities.
      *
-     * @return \Arcanesoft\Support\Policies\Ability[]|array
+     * @return \Arcanedev\LaravelPolicies\Ability[]|iterable
      */
-    public function abilities(): array
+    public function abilities(): iterable
     {
         return [
 

@@ -3,7 +3,7 @@
 namespace Arcanesoft\Foundation\Policies\System;
 
 use App\Models\User as AuthenticatedUser;
-use Arcanesoft\Foundation\Policies\AbstractPolicy;
+use Arcanesoft\Foundation\Core\Auth\Policy;
 
 /**
  * Class     RouteViewerPolicy
@@ -11,19 +11,22 @@ use Arcanesoft\Foundation\Policies\AbstractPolicy;
  * @package  Arcanesoft\Foundation\Policies\System
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class RouteViewerPolicy extends AbstractPolicy
+class RouteViewerPolicy extends Policy
 {
     /* -----------------------------------------------------------------
-     |  Properties
+     |  Getters
      | -----------------------------------------------------------------
      */
 
     /**
-     * Ability's prefix.
+     * Get the ability's prefix.
      *
-     * @var string|null
+     * @return string
      */
-    protected $prefix = 'admin::foundation.system.route-viewer';
+    protected static function prefix(): string
+    {
+        return 'admin::foundation.system.route-viewer.';
+    }
 
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -33,9 +36,9 @@ class RouteViewerPolicy extends AbstractPolicy
     /**
      * Get the policy's abilities.
      *
-     * @return \Arcanesoft\Support\Policies\Ability[]|array
+     * @return \Arcanedev\LaravelPolicies\Ability[]|iterable
      */
-    public function abilities(): array
+    public function abilities(): iterable
     {
         return [
 

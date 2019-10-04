@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Foundation\Http\Controllers;
+<?php
+
+namespace Arcanesoft\Foundation\Http\Controllers;
 
 use Arcanesoft\Foundation\Policies\DashboardPolicy;
 

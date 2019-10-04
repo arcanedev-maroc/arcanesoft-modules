@@ -2,7 +2,7 @@
 
 namespace Arcanesoft\Media\Providers;
 
-use Arcanesoft\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Arcanesoft\Foundation\Core\Providers\AuthServiceProvider as ServiceProvider;
 
 /**
  * Class     AuthServiceProvider
@@ -13,17 +13,17 @@ use Arcanesoft\Support\Providers\AuthServiceProvider as ServiceProvider;
 class AuthServiceProvider extends ServiceProvider
 {
     /* -----------------------------------------------------------------
-     |  Main Methods
+     |  Getters
      | -----------------------------------------------------------------
      */
 
     /**
-     * Register any authentication / authorization services.
+     * Get policy's classes.
+     *
+     * @return iterable
      */
-    public function boot(): void
+    public function policyClasses(): iterable
     {
-        $policies = $this->app->get('config')->get('arcanesoft.media.policies', []);
-
-        $this->registerDefinitions($policies);
+        return $this->app->get('config')->get('arcanesoft.media.policies', []);
     }
 }

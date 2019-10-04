@@ -4,6 +4,7 @@ namespace Arcanesoft\Auth\Policies;
 
 use App\Models\User as AuthenticatedUser;
 use Arcanesoft\Auth\Models\User;
+use Arcanesoft\Foundation\Core\Auth\Policy;
 
 /**
  * Class     UsersPolicy
@@ -13,14 +14,22 @@ use Arcanesoft\Auth\Models\User;
  *
  * TODO: Check the abilities
  */
-class UsersPolicy extends AbstractPolicy
+class UsersPolicy extends Policy
 {
     /* -----------------------------------------------------------------
-     |  Properties
+     |  Getters
      | -----------------------------------------------------------------
      */
 
-    protected $prefix = 'admin::auth.users.';
+    /**
+     * Get the ability's prefix.
+     *
+     * @return string
+     */
+    protected static function prefix(): string
+    {
+        return 'admin::auth.users.';
+    }
 
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -30,11 +39,12 @@ class UsersPolicy extends AbstractPolicy
     /**
      * Get the policy's abilities.
      *
-     * @return \Arcanesoft\Support\Policies\Ability[]|array
+     * @return \Arcanedev\LaravelPolicies\Ability[]|iterable
      */
-    public function abilities(): array
+    public function abilities(): iterable
     {
         return [
+
             // admin::auth.users.index
             $this->makeAbility('index')->setMetas([
                 'name'        => 'List all the users',

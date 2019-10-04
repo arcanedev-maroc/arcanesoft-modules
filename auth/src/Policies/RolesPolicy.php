@@ -4,6 +4,7 @@ namespace Arcanesoft\Auth\Policies;
 
 use App\Models\User as AuthenticatedUser;
 use Arcanesoft\Auth\Models\Role;
+use Arcanesoft\Foundation\Core\Auth\Policy;
 
 /**
  * Class     RolesPolicy
@@ -11,19 +12,22 @@ use Arcanesoft\Auth\Models\Role;
  * @package  Arcanesoft\Auth\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class RolesPolicy extends AbstractPolicy
+class RolesPolicy extends Policy
 {
     /* -----------------------------------------------------------------
-     |  Properties
+     |  Getters
      | -----------------------------------------------------------------
      */
 
     /**
-     * Ability's prefix.
+     * Get the ability's prefix.
      *
-     * @var string
+     * @return string
      */
-    protected $prefix = 'admin::auth.roles.';
+    protected static function prefix(): string
+    {
+        return 'admin::auth.roles.';
+    }
 
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -33,11 +37,12 @@ class RolesPolicy extends AbstractPolicy
     /**
      * Get the policy's abilities.
      *
-     * @return \Arcanesoft\Support\Policies\Ability[]|array
+     * @return \Arcanedev\LaravelPolicies\Ability[]|iterable
      */
-    public function abilities(): array
+    public function abilities(): iterable
     {
         return [
+
             // admin::auth.roles.index
             $this->makeAbility('index')->setMetas([
                 'name'        => 'List all the roles',

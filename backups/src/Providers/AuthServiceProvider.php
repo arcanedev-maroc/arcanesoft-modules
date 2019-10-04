@@ -2,8 +2,7 @@
 
 namespace Arcanesoft\Backups\Providers;
 
-use Arcanesoft\Backups\Policies\StatusesPolicy;
-use Arcanesoft\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Arcanesoft\Foundation\Core\Providers\AuthServiceProvider as ServiceProvider;
 
 /**
  * Class     AuthorizationServiceProvider
@@ -14,19 +13,17 @@ use Arcanesoft\Support\Providers\AuthServiceProvider as ServiceProvider;
 class AuthServiceProvider extends ServiceProvider
 {
     /* -----------------------------------------------------------------
-     |  Main Methods
+     |  Getters
      | -----------------------------------------------------------------
      */
 
     /**
-     * Register any application authentication / authorization services.
+     * Get policy's classes.
+     *
+     * @return iterable
      */
-    public function boot(): void
+    public function policyClasses(): iterable
     {
-        parent::registerPolicies();
-
-        $policies = $this->app->get('config')->get('arcanesoft.backups.policies', []);
-
-        $this->registerDefinitions($policies);
+        return $this->app->get('config')->get('arcanesoft.backups.policies', []);
     }
 }

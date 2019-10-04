@@ -1,17 +1,18 @@
 <?php
 
-namespace Arcanesoft\Auth\Policies;
+namespace Arcanedev\LaravelPolicies\Tests\Fixtures\Policies;
 
-use App\Models\User as AuthenticatedUser;
-use Arcanesoft\Foundation\Core\Auth\Policy;
+use Arcanedev\LaravelPolicies\Policy;
+use Arcanedev\LaravelPolicies\Tests\Fixtures\Policies\Abilities\AbilityClass;
+use Illuminate\Foundation\Auth\User;
 
 /**
- * Class     DashboardPolicy
+ * Class     PrefixedPolicy
  *
- * @package  Arcanesoft\Auth\Policies
+ * @package  Arcanedev\LaravelPolicies\Tests\Fixtures\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class DashboardPolicy extends Policy
+class PrefixedPolicy extends Policy
 {
     /* -----------------------------------------------------------------
      |  Getters
@@ -25,11 +26,11 @@ class DashboardPolicy extends Policy
      */
     protected static function prefix(): string
     {
-        return 'admin::auth.statistics.';
+        return 'policy::';
     }
 
     /* -----------------------------------------------------------------
-     |  Main Methods
+     |  Mains Methods
      | -----------------------------------------------------------------
      */
 
@@ -41,13 +42,16 @@ class DashboardPolicy extends Policy
     public function abilities(): iterable
     {
         return [
+            $this->makeAbility('current-class'),
 
-            // admin::auth.statistics.index
-            $this->makeAbility('index')->setMetas([
-                'name'        => 'Show all the statistics',
-                'description' => 'Ability to show all the statistics',
-            ]),
+            $this->makeAbility('current-class-with-custom-method', 'custom'),
 
+            $this->makeAbility('closure')->callback(function(?User $user) {
+                return true;
+            }),
+
+            $this->makeAbility('dedicated-class')
+                 ->setMethod(AbilityClass::class),
         ];
     }
 
@@ -56,15 +60,13 @@ class DashboardPolicy extends Policy
      | -----------------------------------------------------------------
      */
 
-    /**
-     * Allow to access all the auth stats.
-     *
-     * @param  \App\Models\User  $user
-     *
-     * @return bool|void
-     */
-    public function index(AuthenticatedUser $user)
+    public function currentClass(?User $user)
     {
-        //
+        return true;
+    }
+
+    public function custom(?User $user)
+    {
+        return true;
     }
 }

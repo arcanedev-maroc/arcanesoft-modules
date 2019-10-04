@@ -1,7 +1,9 @@
-<?php namespace Arcanesoft\Foundation\Policies\System;
+<?php
+
+namespace Arcanesoft\Foundation\Policies\System;
 
 use App\Models\User as AuthenticatedUser;
-use Arcanesoft\Foundation\Policies\AbstractPolicy;
+use Arcanesoft\Foundation\Core\Auth\Policy;
 
 /**
  * Class     MaintenancePolicy
@@ -9,19 +11,22 @@ use Arcanesoft\Foundation\Policies\AbstractPolicy;
  * @package  Arcanesoft\Foundation\Policies\System
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class MaintenancePolicy extends AbstractPolicy
+class MaintenancePolicy extends Policy
 {
     /* -----------------------------------------------------------------
-     |  Properties
+     |  Getters
      | -----------------------------------------------------------------
      */
 
     /**
-     * Ability's prefix.
+     * Get the ability's prefix.
      *
-     * @var string|null
+     * @return string
      */
-    protected $prefix = 'admin::foundation.system.maintenance.';
+    protected static function prefix(): string
+    {
+        return 'admin::foundation.system.maintenance.';
+    }
 
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -31,9 +36,9 @@ class MaintenancePolicy extends AbstractPolicy
     /**
      * Get the policy's abilities.
      *
-     * @return \Arcanesoft\Support\Policies\Ability[]|array
+     * @return \Arcanedev\LaravelPolicies\Ability[]|iterable
      */
-    public function abilities(): array
+    public function abilities(): iterable
     {
         return [
 

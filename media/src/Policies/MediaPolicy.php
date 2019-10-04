@@ -3,6 +3,7 @@
 namespace Arcanesoft\Media\Policies;
 
 use App\Models\User as AuthenticatedUser;
+use Arcanesoft\Foundation\Core\Auth\Policy;
 
 /**
  * Class     MediaPolicy
@@ -10,19 +11,22 @@ use App\Models\User as AuthenticatedUser;
  * @package  Arcanesoft\Media\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class MediaPolicy extends AbstractPolicy
+class MediaPolicy extends Policy
 {
     /* -----------------------------------------------------------------
-     |  Properties
+     |  Getters
      | -----------------------------------------------------------------
      */
 
     /**
-     * Ability's prefix.
+     * Get the ability's prefix.
      *
-     * @var string|null
+     * @return string
      */
-    protected $prefix = 'admin::media.';
+    protected static function prefix(): string
+    {
+        return 'admin::media.';
+    }
 
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -32,9 +36,9 @@ class MediaPolicy extends AbstractPolicy
     /**
      * Get the policy's abilities.
      *
-     * @return \Arcanesoft\Support\Policies\Ability[]|array
+     * @return \Arcanedev\LaravelPolicies\Ability[]|iterable
      */
-    public function abilities(): array
+    public function abilities(): iterable
     {
         return [
 

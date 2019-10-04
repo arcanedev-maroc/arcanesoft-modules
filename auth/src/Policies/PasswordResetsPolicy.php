@@ -3,6 +3,7 @@
 namespace Arcanesoft\Auth\Policies;
 
 use App\Models\User as AuthenticatedUser;
+use Arcanesoft\Foundation\Core\Auth\Policy;
 
 /**
  * Class     PasswordResetsPolicy
@@ -10,19 +11,22 @@ use App\Models\User as AuthenticatedUser;
  * @package  Arcanesoft\Auth\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class PasswordResetsPolicy extends AbstractPolicy
+class PasswordResetsPolicy extends Policy
 {
     /* -----------------------------------------------------------------
-     |  Properties
+     |  Getters
      | -----------------------------------------------------------------
      */
 
     /**
-     * Ability's prefix.
+     * Get the ability's prefix.
      *
-     * @var string
+     * @return string
      */
-    protected $prefix = 'admin::auth.password-resets.';
+    protected static function prefix(): string
+    {
+        return 'admin::auth.password-resets.';
+    }
 
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -32,9 +36,9 @@ class PasswordResetsPolicy extends AbstractPolicy
     /**
      * Get the policy's abilities.
      *
-     * @return \Arcanesoft\Support\Policies\Ability[]|array
+     * @return \Arcanedev\LaravelPolicies\Ability[]|iterable
      */
-    public function abilities(): array
+    public function abilities(): iterable
     {
         return [
 

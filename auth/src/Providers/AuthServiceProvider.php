@@ -2,7 +2,7 @@
 
 namespace Arcanesoft\Auth\Providers;
 
-use Arcanesoft\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Arcanesoft\Foundation\Core\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
 /**
@@ -14,6 +14,21 @@ use Illuminate\Support\Facades\Gate;
 class AuthServiceProvider extends ServiceProvider
 {
     /* -----------------------------------------------------------------
+     |  Getters
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Get policy's classes.
+     *
+     * @return iterable
+     */
+    public function policyClasses(): iterable
+    {
+        return $this->app->get('config')->get('arcanesoft.auth.policies', []);
+    }
+
+    /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
      */
@@ -21,7 +36,7 @@ class AuthServiceProvider extends ServiceProvider
     /**
      * Register any authentication / authorization services.
      */
-    public function boot()
+    public function boot(): void
     {
         Gate::after(function ($user, $ability) {
             /** @var  \App\Models\User  $user */
@@ -30,8 +45,6 @@ class AuthServiceProvider extends ServiceProvider
                 || $user->may($ability);
         });
 
-        $policies = $this->app->get('config')->get('arcanesoft.auth.policies', []);
-
-        $this->registerDefinitions($policies);
+        parent::boot();
     }
 }

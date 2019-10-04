@@ -1,6 +1,8 @@
-<?php namespace Arcanesoft\Support\Providers;
+<?php
 
-use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
+namespace Arcanesoft\Support\Providers;
+
+use Arcanedev\Support\ServiceProvider as IlluminateServiceProvider;
 
 /**
  * Class     ServiceProvider
@@ -10,43 +12,5 @@ use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
  */
 abstract class ServiceProvider extends IlluminateServiceProvider
 {
-    /* -----------------------------------------------------------------
-     |  Main Methods
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Register a shared binding in the container.
-     *
-     * @param  string                $abstract
-     * @param  \Closure|string|null  $concrete
-     */
-    public function singleton(string $abstract, $concrete = null): void
-    {
-        $this->app->singleton($abstract, $concrete);
-    }
-
-    /**
-     * Register providers.
-     *
-     * @param  array  $providers
-     */
-    public function registerProviders(array $providers): void
-    {
-        foreach ($providers as $provider) {
-            $this->app->register($provider);
-        }
-    }
-
-    /**
-     * Register the commands.
-     *
-     * @param  array  $commands
-     */
-    public function registerCommands(array $commands): void
-    {
-        if ($this->app->runningInConsole()) {
-            $this->commands($commands);
-        }
-    }
+    //
 }

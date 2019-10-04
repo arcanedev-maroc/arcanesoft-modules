@@ -1,6 +1,9 @@
-<?php namespace Arcanesoft\Blog\Policies;
+<?php
+
+namespace Arcanesoft\Blog\Policies;
 
 use App\Models\User as AuthenticatedUser;
+use Arcanesoft\Foundation\Core\Auth\Policy;
 
 /**
  * Class     DashboardPolicy
@@ -8,19 +11,22 @@ use App\Models\User as AuthenticatedUser;
  * @package  Arcanesoft\Blog\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class DashboardPolicy extends AbstractPolicy
+class DashboardPolicy extends Policy
 {
     /* -----------------------------------------------------------------
-     |  Properties
+     |  Getters
      | -----------------------------------------------------------------
      */
 
     /**
-     * Ability's prefix.
+     * Get the ability's prefix.
      *
-     * @var string|null
+     * @return string
      */
-    protected $prefix = 'admin::blog.statistics.';
+    protected static function prefix(): string
+    {
+        return 'admin::blog.statistics.';
+    }
 
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -30,9 +36,9 @@ class DashboardPolicy extends AbstractPolicy
     /**
      * Get the policy's abilities.
      *
-     * @return \Arcanesoft\Support\Policies\Ability[]|array
+     * @return \Arcanedev\LaravelPolicies\Ability[]|iterable
      */
-    public function abilities(): array
+    public function abilities(): iterable
     {
         return [
 
