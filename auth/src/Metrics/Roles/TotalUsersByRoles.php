@@ -13,6 +13,29 @@ use Illuminate\Http\Request;
 class TotalUsersByRoles extends Partition
 {
     /* -----------------------------------------------------------------
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    /** @var  \Arcanesoft\Auth\Repositories\RolesRepository */
+    protected $repo;
+
+    /* -----------------------------------------------------------------
+     |  Constructor
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * TotalUsersByRoles constructor.
+     *
+     * @param  \Arcanesoft\Auth\Metrics\Roles\RolesRepository  $repo
+     */
+    public function __construct(RolesRepository $repo)
+    {
+        $this->repo = $repo;
+    }
+
+    /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
      */
@@ -26,13 +49,10 @@ class TotalUsersByRoles extends Partition
      */
     public function calculate(Request $request)
     {
-        $result = Role::query()->withCount(['users'])
-            ->get()
-            ->filter(function ($role) {
-                return $role->users_count > 0;
-            })
-            ->pluck('users_count', 'name')
-            ->toArray();
+        // Calculate roles with users count
+        $result = $this->repo->withCount(['users'])->get()->filter(function ($role) {
+            return $role->users_count > 0;
+        })->pluck('users_count', 'name');
 
         return $this->result($result)->sort('desc');
     }

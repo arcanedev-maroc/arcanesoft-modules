@@ -7,8 +7,8 @@
 @push('content-nav')
     <div class="mb-3 text-right">
         <a href="{{ route('admin::auth.roles.metrics') }}" class="btn btn-sm btn-secondary {{ active(['admin::auth.roles.metrics']) }}">@lang('Metrics')</a>
-        <a href="{{ route('admin::auth.roles.index') }}" class="btn btn-sm btn-secondary {{ active(['admin::auth.roles.index']) }}">{{ __('Roles') }}</a>
-        {{ ui\action_link('add', route('admin::auth.roles.create'))->size('sm') }}
+        <a href="{{ route('admin::auth.roles.index') }}" class="btn btn-sm btn-secondary {{ active(['admin::auth.roles.index']) }}">@lang('Roles')</a>
+        {{ arcanesoft\ui\action_link('add', route('admin::auth.roles.create'))->size('sm') }}
     </div>
 @endpush
 
@@ -48,9 +48,9 @@
                     <div class="modal-body">
                     </div>
                     <div class="modal-footer justify-content-between">
-                        {{ ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
-                        {{ ui\action_button('activate')->id('activateRoleBtn')->submit() }}
-                        {{ ui\action_button('deactivate')->id('deactivateRoleBtn')->submit() }}
+                        {{ arcanesoft\ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
+                        {{ arcanesoft\ui\action_button('activate')->id('activateRoleBtn')->submit() }}
+                        {{ arcanesoft\ui\action_button('deactivate')->id('deactivateRoleBtn')->submit() }}
                     </div>
                 </div>
                 {{ form()->close() }}
@@ -75,8 +75,8 @@
                         @lang('Are you sure you want to delete this role ?')
                     </div>
                     <div class="modal-footer justify-content-between">
-                        {{ ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
-                        {{ ui\action_button('delete')->submit() }}
+                        {{ arcanesoft\ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
+                        {{ arcanesoft\ui\action_button('delete')->submit() }}
                     </div>
                 </div>
                 {{ form()->close() }}
@@ -113,14 +113,14 @@
                     $activateRoleForm.attr('action', activateRoleAction.replace(':id', id));
 
                     if (status === 'deactivated') {
-                        $activateRoleModal.find('.modal-title').html("{{ __('Activate Role') }}");
-                        $activateRoleModal.find('.modal-body').html("{{ __('Are you sure you want to activate role ?') }}");
+                        $activateRoleModal.find('.modal-title').html("@lang('Activate Role')");
+                        $activateRoleModal.find('.modal-body').html("@lang('Are you sure you want to activate role ?')");
                         $activateRoleModal.find('#activateRoleBtn').show();
                         $activateRoleModal.find('#deactivateRoleBtn').hide();
                     }
                     else if (status === 'activated') {
-                        $activateRoleModal.find('.modal-title').html("{{ __('Deactivate Role') }}");
-                        $activateRoleModal.find('.modal-body').html("{{ __('Are you sure you want to deactivate role ?') }}");
+                        $activateRoleModal.find('.modal-title').html("@lang('Deactivate Role')");
+                        $activateRoleModal.find('.modal-body').html("@lang('Are you sure you want to deactivate role ?')");
                         $activateRoleModal.find('#activateRoleBtn').hide();
                         $activateRoleModal.find('#deactivateRoleBtn').show();
                     }

@@ -3,6 +3,7 @@
 namespace Arcanesoft\Auth\Http\Routes;
 
 use Arcanesoft\Auth\Http\Controllers\Datatables\PermissionsController as PermissionsDataTableController;
+use Arcanesoft\Auth\Http\Controllers\Permissions\RolesController;
 use Arcanesoft\Auth\Http\Controllers\PermissionsController;
 use Arcanesoft\Auth\Repositories\PermissionsRepository;
 
@@ -33,14 +34,22 @@ class PermissionsRoutes extends RouteRegistrar
     {
         $this->adminGroup(function () {
             $this->prefix('permissions')->name('permissions.')->group(function () {
+                // admin::auth.permissions.index
                 $this->get('/', [PermissionsController::class, 'index'])
-                     ->name('index'); //  admin::auth.permissions.index
+                     ->name('index');
 
                 $this->mapDataTableRoutes();
 
                 $this->prefix('{'.self::PERMISSION_WILDCARD.'}')->group(function () {
+                    // admin::auth.permissions.show
                     $this->get('/', [PermissionsController::class, 'show'])
-                         ->name('show'); // admin::auth.permissions.show
+                         ->name('show');
+
+                    $this->namespace('Permissions')->group(function () {
+                        static::mapRouteClasses([
+                            Permissions\RolesRoutes::class,
+                        ]);
+                    });
                 });
             });
         });
@@ -52,20 +61,23 @@ class PermissionsRoutes extends RouteRegistrar
     protected function mapDataTableRoutes(): void
     {
         $this->dataTableGroup(function () {
+            // admin::auth.permissions.datatables.index
             $this->get('/', [PermissionsDataTableController::class, 'index'])
-                 ->name('index'); //  admin::auth.permissions.datatables.index
+                 ->name('index');
         });
     }
 
     /**
      * Register the route bindings.
      */
-    public function bindings(): void
+    public function bindings(PermissionsRepository $repo): void
     {
-        $this->bind(self::PERMISSION_WILDCARD, function (PermissionsRepository $repo, string $uuid) {
-            return $repo->query()
-                ->where('uuid', '=', $uuid)
-                ->firstOrFail();
+        $this->bind(self::PERMISSION_WILDCARD, function (string $uuid) use ($repo) {
+            return $repo->firstOrFailWhereUuid($uuid);
         });
+
+        static::bindRouteClasses([
+            Permissions\RolesRoutes::class,
+        ]);
     }
 }

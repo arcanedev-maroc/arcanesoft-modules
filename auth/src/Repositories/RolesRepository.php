@@ -1,15 +1,24 @@
-<?php namespace Arcanesoft\Auth\Repositories;
+<?php
+
+namespace Arcanesoft\Auth\Repositories;
 
 use Arcanesoft\Auth\Auth;
-use Arcanesoft\Auth\Models\Role as Role;
+use Arcanesoft\Auth\Models\{Role, Permission, User};
+use Arcanesoft\Auth\Events\Roles\{
+    DetachedAllUsersFromRole, DetachedPermissionFromRole, DetachedUserFromRole, DetachingAllPermissionsFromRole,
+    DetachedAllPermissionsFromRole, DetachingAllUsersFromRole, DetachingPermissionFromRole, DetachingUserFromRole,
+    SyncedPermissionsToRole, SyncingPermissionsToRole
+};
 
 /**
  * Class     RolesRepository
  *
  * @package  Arcanesoft\Auth\Repositories
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
+ *
+ * @mixin  \Arcanesoft\Auth\Models\Role
  */
-class RolesRepository
+class RolesRepository extends Repository
 {
     /* -----------------------------------------------------------------
      |  Query Methods
@@ -19,36 +28,95 @@ class RolesRepository
     /**
      * Get the model instance.
      *
-     * @return Role|mixed
+     * @return \Arcanesoft\Auth\Models\Role|mixed
      */
-    public function model()
+    public static function model()
     {
         return Auth::makeModel('role');
     }
 
-    /**
-     * Get the query builder.
-     *
-     * @return Role|\Illuminate\Database\Eloquent\Builder
-     */
-    public function query()
-    {
-        return $this->model()->newQuery();
-    }
-
     /* -----------------------------------------------------------------
-     |  Count Methods
+     |  CRUD Methods
      | -----------------------------------------------------------------
      */
 
     /**
-     * Get all the roles.
+     * Get the admin role.
      *
-     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     * @return \Arcanesoft\Auth\Models\Role|mixed
      */
-    public function all()
+    public function getAdminRole(): Role
     {
-        return $this->query()->get();
+        return $this->admin()->first();
+    }
+
+    /**
+     * Get first role with the given key, or fails if not found.
+     *
+     * @param  string  $key
+     *
+     * @return \Arcanesoft\Auth\Models\Role|mixed
+     */
+    public function firstOrFailWhereKey(string $key): Role
+    {
+        return $this->where('key', '=', $key)
+                    ->firstOrFail();
+    }
+
+    /**
+     * Get first role by the given uuid, or fails if not found.
+     *
+     * @param  string  $uuid
+     *
+     * @return \Arcanesoft\Auth\Models\Role|mixed
+     */
+    public function firstOrFailWhereUuid(string $uuid)
+    {
+        return $this->where('uuid', '=', $uuid)
+                    ->firstOrFail();
+    }
+
+    /**
+     * Get first related user by the given uuid, or fails if not found.
+     *
+     * @param  \Arcanesoft\Auth\Models\Role  $role
+     * @param  string                        $uuid
+     *
+     * @return \Arcanesoft\Auth\Models\User|mixed
+     */
+    public function firstUserWhereUuidOrFail(Role $role, string $uuid)
+    {
+        return $role->users()
+                    ->where('uuid', '=', $uuid)
+                    ->withTrashed() // Get also trashed records
+                    ->firstOrFail();
+    }
+
+    /**
+     * Get first related permission by the given uuid, or fails if not found.
+     *
+     * @param  \Arcanesoft\Auth\Models\Role  $role
+     * @param  string                        $uuid
+     *
+     * @return \Arcanesoft\Auth\Models\Permission|mixed
+     */
+    public function firstPermissionWhereUuidOrFail(Role $role, string $uuid)
+    {
+        return $role->permissions()
+                    ->where('uuid', '=', $uuid)
+                    ->firstOrFail();
+    }
+
+    /**
+     * Get roles with the given `key` (attribute) list.
+     *
+     * @param  mixed  $keys
+     *
+     * @return \Arcanesoft\Auth\Models\Role[]|\Illuminate\Database\Eloquent\Collection|mixed
+     */
+    public function getByKeys($keys)
+    {
+        return $this->whereIn('key', $keys)->get();
     }
 
     /**
@@ -60,15 +128,9 @@ class RolesRepository
      */
     public function create(array $attributes)
     {
-        $role = $this->model()->fill($attributes);
-        $role->save();
-
-        // Sync the permissions
-        foreach ($this->getPermissionsIdsByUuid($attributes['permissions']) as $permission) {
-            $role->attachPermission($permission);
-        }
-
-        return $role;
+        return tap(parent::create($attributes), function (Role $role) use ($attributes) {
+            $this->syncPermissions($role, $attributes['permissions'] ?: []);
+        });
     }
 
     /**
@@ -83,24 +145,118 @@ class RolesRepository
     {
         $updated = $role->update($attributes);
 
-        if ($attributes['permissions'])
-            $role->syncPermissions(
-                $this->getPermissionsIdsByUuid($attributes['permissions'])
-            );
-        else
-            $role->detachAllPermissions(false);
+        $this->syncPermissions($role, $attributes['permissions'] ?? []);
 
         return $updated;
     }
 
     /**
-     * Get the roles count.
+     * Sync the permissions (uuids) with the role, or detach all if the permissions is empty.
+     *
+     * @param  array  $permissions
+     *
+     * @return $this
+     */
+    public function syncPermissions(Role $role, array $uuids)
+    {
+        if (empty($uuids)) {
+            $this->detachAllPermissions($role);
+        }
+        else {
+            $ids = static::getRepository(PermissionsRepository::class)
+                ->getIdsWhereInUuid($uuids)
+                ->toArray();
+
+            $this->syncPermissionsByIds($role, $ids);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sync the permissions (ids) with the role.
+     *
+     * @param  \Arcanesoft\Auth\Models\Role  $role
+     * @param  array                         $ids
+     *
+     * @return array
+     */
+    public function syncPermissionsByIds(Role $role, array $ids): array
+    {
+        if (empty($ids))
+            return 0;
+
+        event(new SyncingPermissionsToRole($role, $ids));
+        $result = $role->permissions()->sync($ids);
+        event(new SyncedPermissionsToRole($role, $ids, $result));
+
+        return $result;
+    }
+
+    /**
+     * Deteach the given permission from role.
+     *
+     * @param  \Arcanesoft\Auth\Models\Role        $role
+     * @param  \Arcanesoft\Auth\Models\Permission  $permission
      *
      * @return int
      */
-    public function count()
+    public function detachPermission(Role $role, Permission $permission): int
     {
-        return $this->query()->count();
+        event(new DetachingPermissionFromRole($role, $permission));
+        $detached = $role->permissions()->detach($permission);
+        event(new DetachedPermissionFromRole($role, $permission, $detached));
+
+        return $detached;
+    }
+
+    /**
+     * Detach all the permissions from the given role.
+     *
+     * @param  \Arcanesoft\Auth\Models\Role  $role
+     *
+     * @return int
+     */
+    public function detachAllPermissions(Role $role): int
+    {
+        event(new DetachingAllPermissionsFromRole($role));
+        $detached = $role->permissions()->detach();
+        event(new DetachedAllPermissionsFromRole($role, $detached));
+
+        return $detached;
+    }
+
+    /**
+     * Deteach the given user from role.
+     *
+     * @param  \Arcanesoft\Auth\Models\Role  $role
+     * @param  \Arcanesoft\Auth\Models\User  $user
+     *
+     * @return int
+     */
+    public function detachUser(Role $role, User $user): int
+    {
+        event(new DetachingUserFromRole($role, $user));
+        $detached = $role->users()->detach($user);
+        event(new DetachedUserFromRole($role, $user, $detached));
+
+        return $detached;
+    }
+
+    /**
+     * Detach all the users from the given role.
+     *
+     * @param  \Arcanesoft\Auth\Models\Role  $role
+     *
+     * @return int
+     */
+    public function detachAllUsers(Role $role): int
+    {
+        event(new DetachingAllUsersFromRole($role));
+        $detached = $role->users()->detach();
+        event(new DetachedAllUsersFromRole($role, $detached));
+
+        return $detached;
     }
 
     /**
@@ -110,23 +266,7 @@ class RolesRepository
      */
     public function activeCount()
     {
-        return $this->query()->activated()->count();
-    }
-
-    /**
-     * Get the permissions' ids by the given uuid array.
-     *
-     * @param  array  $uuid
-     *
-     * @return array
-     */
-    private function getPermissionsIdsByUuid(array $uuid): array
-    {
-        return (new PermissionsRepository)
-            ->query()
-            ->whereIn('uuid', $uuid)
-            ->pluck('id')
-            ->toArray();
+        return $this->activated()->count();
     }
 
     /**

@@ -1,18 +1,19 @@
-<?php namespace Arcanesoft\Auth\Models;
+<?php
+
+namespace Arcanesoft\Auth\Models;
 
 use Arcanedev\LaravelImpersonator\Contracts\Impersonatable;
 use Arcanedev\LaravelImpersonator\Traits\CanImpersonate;
 use Arcanesoft\Auth\Auth;
-use Arcanesoft\Auth\Events\Users\{ActivatedUser, ActivatingUser, AttachedRoleToUser, AttachingRoleToUser, CreatedUser,
-    CreatingUser, DeactivatedUser, DeactivatingUser, DeletedUser, DeletingUser, DetachedRoleFromUser,
-    DetachedRolesFromUser, DetachingRoleFromUser, DetachingRolesFromUser, ForceDeletedUser, ReplicatingUser,
-    RestoredUser, RestoringUser, RetrievedUser, SavedUser, SavingUser, SyncedRolesToUser, SyncingRolesToUser,
-    UpdatedUser, UpdatingUser};
-use Arcanesoft\Auth\Models\Concerns\Activatable;
-use Arcanesoft\Auth\Models\Concerns\HasRoles;
+use Arcanesoft\Auth\Events\Users\{
+    ActivatedUser, ActivatingUser, AttachedRoleToUser, AttachingRoleToUser, CreatedUser, CreatingUser,
+    DeactivatedUser, DeactivatingUser, DeletedUser, DeletingUser, DetachedRoleFromUser, DetachedRolesFromUser,
+    DetachingRoleFromUser, DetachingRolesFromUser, ForceDeletedUser, ReplicatingUser, RestoredUser, RestoringUser,
+    RetrievedUser, SavedUser, SavingUser, SyncedRolesToUser, SyncingRolesToUser, UpdatedUser, UpdatingUser
+};
+use Arcanesoft\Auth\Models\Concerns\{Activatable, HasRoles};
 use Arcanesoft\Auth\Models\Presenters\UserPresenter;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\{Builder, SoftDeletes};
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
@@ -146,17 +147,17 @@ class User extends Authenticatable implements Impersonatable
      */
     public function roles()
     {
-        return $this->belongsToMany(
-            Auth::model('role', Role::class),
-            Auth::table('role-user', 'role_user')
-        )
-            ->using(Pivots\RoleUser::class)
-            ->as('role_user')
-            ->withPivot(['created_at']);
+        $related = Auth::model('role', Role::class);
+        $table   = Auth::table('role-user', 'role_user');
+
+        return $this->belongsToMany($related, $table)
+                    ->using(Pivots\RoleUser::class)
+                    ->as('role_user')
+                    ->withPivot(['created_at']);
     }
 
     /**
-     * Get all user permissions.
+     * Get all user's permissions (active roles).
      *
      * @return \Illuminate\Support\Collection
      */
@@ -200,113 +201,6 @@ class User extends Authenticatable implements Impersonatable
     public function getRouteKeyName(): string
     {
         return 'uuid';
-    }
-
-    /* -----------------------------------------------------------------
-     |  Main Methods
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Activate the user.
-     *
-     * @param  bool  $save
-     *
-     * @return bool
-     */
-    public function activate($save = true)
-    {
-        event(new ActivatingUser($this));
-        $result = $this->switchActive(true, $save);
-        event(new ActivatedUser($this));
-
-        return $result;
-    }
-
-    /**
-     * Deactivate the user.
-     *
-     * @param  bool  $save
-     *
-     * @return bool
-     */
-    public function deactivate($save = true)
-    {
-        event(new DeactivatingUser($this));
-        $result = $this->switchActive(false, $save);
-        event(new DeactivatedUser($this));
-
-        return $result;
-    }
-
-    /**
-     * Attach a role to a user.
-     *
-     * @param  \Arcanesoft\Auth\Models\Role|int  $role
-     * @param  bool                              $reload
-     */
-    public function attachRole($role, $reload = true)
-    {
-        if ($this->hasRole($role))
-            return;
-
-        event(new AttachingRoleToUser($this, $role));
-        $this->roles()->attach($role);
-        event(new AttachedRoleToUser($this, $role));
-
-        $this->loadRoles($reload);
-    }
-
-    /**
-     * Sync the roles by its keys.
-     *
-     * @param  array|\Illuminate\Support\Collection  $keys
-     * @param  bool                                  $reload
-     *
-     * @return array
-     */
-    public function syncRoles($keys, bool $reload = true)
-    {
-        return $this->performSyncRoles(
-            $keys, $reload, SyncingRolesToUser::class, SyncedRolesToUser::class
-        );
-    }
-
-    /**
-     * Detach a role from a user.
-     *
-     * @param  \Arcanesoft\Auth\Models\Role|int  $role
-     * @param  bool                              $reload
-     *
-     * @return int
-     */
-    public function detachRole($role, $reload = true)
-    {
-        event(new DetachingRoleFromUser($this, $role));
-        $results = $this->roles()->detach($role);
-        event(new DetachedRoleFromUser($this, $role, $results));
-
-        $this->loadRoles($reload);
-
-        return $results;
-    }
-
-    /**
-     * Detach all roles from a user.
-     *
-     * @param  bool  $reload
-     *
-     * @return int
-     */
-    public function detachAllRoles($reload = true)
-    {
-        event(new DetachingRolesFromUser($this));
-        $results = $this->roles()->detach();
-        event(new DetachedRolesFromUser($this, $results));
-
-        $this->loadRoles($reload);
-
-        return $results;
     }
 
     /* -----------------------------------------------------------------

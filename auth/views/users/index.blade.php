@@ -12,7 +12,7 @@
             <a href="{{ route('admin::auth.users.index') }}" class="btn btn-sm btn-secondary {{ active(['admin::auth.users.index']) }}">@lang('All')</a>
             <a href="{{ route('admin::auth.users.trash') }}" class="btn btn-sm btn-secondary {{ active(['admin::auth.users.trash']) }}">@lang('Trash')</a>
         </div>
-        {{ ui\action_link('add', route('admin::auth.users.create'))->size('sm') }}
+        {{ arcanesoft\ui\action_link('add', route('admin::auth.users.create'))->size('sm') }}
     </div>
 @endpush
 
@@ -41,10 +41,7 @@
     <div class="modal modal-danger fade" id="activate-user-modal" data-backdrop="static"
          tabindex="-1" role="dialog" aria-labelledby="activateUserTitle" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <form action="{{ route('admin::auth.users.activate', [':id']) }}" id="activate-user-form">
-                @csrf
-                @method('PUT')
-
+            {{ form()->open(['route' => ['admin::auth.users.activate', ':id'], 'method' => 'PUT', 'id' => 'activate-user-form']) }}
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" id="activateUserTitle"></h4>
@@ -55,12 +52,12 @@
                     <div id="activateUserMessage" class="modal-body">
                     </div>
                     <div class="modal-footer justify-content-between">
-                        {{ ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
-                        {{ ui\action_button('activate')->id('activateUserBtn')->submit() }}
-                        {{ ui\action_button('deactivate')->id('deactivateUserBtn')->submit() }}
+                        {{ arcanesoft\ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
+                        {{ arcanesoft\ui\action_button('activate')->id('activateUserBtn')->submit() }}
+                        {{ arcanesoft\ui\action_button('deactivate')->id('deactivateUserBtn')->submit() }}
                     </div>
                 </div>
-            </form>
+            {{ form()->close() }}
         </div>
     </div>
 
@@ -81,8 +78,8 @@
                             @lang('Are you sure you want to delete this user ?')
                         </div>
                         <div class="modal-footer justify-content-between">
-                            {{ ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
-                            {{ ui\action_button('delete')->submit() }}
+                            {{ arcanesoft\ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
+                            {{ arcanesoft\ui\action_button('delete')->submit() }}
                         </div>
                     </div>
                 {{ form()->close() }}
@@ -108,8 +105,8 @@
                             @lang('Are you sure you want to restore this user ?')
                         </div>
                         <div class="modal-footer justify-content-between">
-                            {{ ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
-                            {{ ui\action_button('restore')->submit() }}
+                            {{ arcanesoft\ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
+                            {{ arcanesoft\ui\action_button('restore')->submit() }}
                         </div>
                     </div>
                 {{ form()->close() }}

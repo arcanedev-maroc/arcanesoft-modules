@@ -23,7 +23,5 @@ class RoleTableSeeder extends RolesSeeder
     public function run(): void
     {
         //
-
-        static::syncAdminRole();
     }
 }

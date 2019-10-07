@@ -16,7 +16,7 @@ class DetachedAllPermissionsFromRole extends RoleEvent
      */
 
     /** @var  int */
-    public $results;
+    public $detached;
 
     /* -----------------------------------------------------------------
      |  Constructor
@@ -27,12 +27,12 @@ class DetachedAllPermissionsFromRole extends RoleEvent
      * DetachedAllPermissionsFromRole constructor.
      *
      * @param  \Arcanesoft\Auth\Models\Role  $role
-     * @param  int                           $results
+     * @param  int                           $detached
      */
-    public function __construct(Role $role, $results)
+    public function __construct(Role $role, $detached)
     {
         parent::__construct($role);
 
-        $this->results = $results;
+        $this->detached = $detached;
     }
 }

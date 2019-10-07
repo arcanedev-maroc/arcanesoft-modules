@@ -22,15 +22,10 @@ class PermissionTableSeeder extends PermissionsSeeder
      */
     public function run(): void
     {
-        $policies = config()->get('arcanesoft.blog.policies', []);
-
-        $this->seedOne([
-            'group'       => [
-                'name'        => 'Blog',
-                'slug'        => 'blog',
-                'description' => 'Blog permissions group',
-            ],
-            'permissions' => static::getPermissionsFromPolicies($policies),
-        ]);
+        $this->seed([
+            'name'        => 'Blog',
+            'slug'        => 'blog',
+            'description' => 'Blog permissions group',
+        ], $this->getPermissionsFromPolicyManager('admin::blog.'));
     }
 }

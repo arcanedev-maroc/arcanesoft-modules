@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Auth\Http\Requests\Users;
+<?php
+
+namespace Arcanesoft\Auth\Http\Requests\Users;
 
 use Arcanesoft\Auth\Http\Requests\FormRequest;
 
@@ -20,7 +22,7 @@ abstract class UserFormRequest extends FormRequest
      *
      * @return array
      */
-    public function getValidatedData()
+    public function getValidatedData(): array
     {
         return $this->all([
             'first_name',

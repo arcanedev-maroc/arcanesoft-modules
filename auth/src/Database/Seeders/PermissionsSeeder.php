@@ -2,8 +2,11 @@
 
 namespace Arcanesoft\Auth\Database\Seeders;
 
-use Arcanesoft\Support\Database\Seeder;
+use Arcanedev\LaravelPolicies\Ability;
+use Arcanedev\LaravelPolicies\Contracts\PolicyManager;
+use Arcanesoft\Auth\Repositories\PermissionsGroupsRepository;
 use Arcanesoft\Auth\Models\{Permission, PermissionsGroup};
+use Arcanesoft\Support\Database\Seeder;
 use Illuminate\Support\{Collection, Str};
 
 /**
@@ -20,25 +23,17 @@ abstract class PermissionsSeeder extends Seeder
      */
 
     /**
-     * Seed permissions for multiple groups.
+     * Seed permissions.
      *
-     * @param  array  $seeds
+     * @param  array                                          $group
+     * @param  \Arcanesoft\Auth\Models\Permission[]|iterable  $permissions
      */
-    public function seed(array $seeds)
+    public function seed(array $group, iterable $permissions)
     {
-        foreach ($seeds as $seed) {
-            $this->seedOne($seed);
-        }
-    }
+        /** @var  PermissionsGroupsRepository  $repo */
+        $repo = $this->container->make(PermissionsGroupsRepository::class);
 
-    /**
-     * Seed permissions for one group.
-     *
-     * @param  array  $group
-     */
-    public function seedOne(array $group)
-    {
-        static::createPermissionGroup($group);
+        $repo->savePermissions($repo->create($group), $permissions);
     }
 
     /* -----------------------------------------------------------------
@@ -47,66 +42,32 @@ abstract class PermissionsSeeder extends Seeder
      */
 
     /**
-     * Create permissions group.
+     * Get permissions from policy manager.
      *
-     * @param  array  $seed
+     * @param  string|array  $abilities
      *
-     * @return \Arcanesoft\Auth\Models\PermissionsGroup
+     * @return \Illuminate\Support\Collection
      */
-    protected static function createPermissionGroup(array $seed)
+    protected function getPermissionsFromPolicyManager($abilities): Collection
     {
-        return tap(
-            PermissionsGroup::query()->create($seed['group']),
-            function (PermissionsGroup $group) use ($seed) {
-                $permissions = array_map(function ($permission) {
-                    return new Permission($permission);
-                }, $seed['permissions']);
-
-                $group->permissions()->saveMany($permissions);
-            }
-        );
-    }
-
-    /* -----------------------------------------------------------------
-     |  Other Methods
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Get the permissions
-     *
-     * @param  array  $policies
-     *
-     * @return array
-     */
-    protected static function getPermissionsFromPolicies(array $policies): array
-    {
-        return Collection::make($policies)
-            ->transform(function ($class) {
-                /** @var  \Illuminate\Support\Collection  $seeds */
-                $seeds = $class::seeds(
-                    static::getPermissionsCategory($class)
-                );
-
-                return $seeds->transform(function ($permission) {
-                    return array_merge($permission, [
-                        'uuid' => Str::uuid(),
-                    ]);
-                })->toArray();
+        return $this->policyManager()->abilities()
+            ->filter(function (Ability $ability) use ($abilities) {
+                return Str::startsWith($ability->key(), $abilities);
             })
-            ->flatten(1)
-            ->toArray();
+            ->transform(function (Ability $ability) {
+                return new Permission(array_merge($ability->metas(), [
+                    'ability' => $ability->key(),
+                ]));
+            });
     }
 
     /**
-     * Get the permissions' category.
+     * Get the policy manager instance.
      *
-     * @param  string  $class
-     *
-     * @return string
+     * @return \Arcanedev\LaravelPolicies\Contracts\PolicyManager|mixed
      */
-    protected static function getPermissionsCategory(string $class): string
+    protected function policyManager(): PolicyManager
     {
-        return ucwords(Str::snake(str_replace('Policy', '', class_basename($class)), ' '));
+        return $this->container->make(PolicyManager::class);
     }
 }

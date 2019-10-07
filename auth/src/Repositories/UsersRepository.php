@@ -3,8 +3,17 @@
 namespace Arcanesoft\Auth\Repositories;
 
 use Arcanesoft\Auth\Auth;
+use Arcanesoft\Auth\Events\Users\{
+    ActivatedUser,
+    ActivatingUser,
+    DeactivatedUser,
+    DeactivatingUser,
+    SyncedRolesToUser,
+    SyncingRolesToUser};
 use Arcanesoft\Auth\Models\User;
-use Illuminate\Support\{Arr, Str};
+use Illuminate\Support\{
+    Arr,
+    Str};
 
 /**
  * Class     UsersRepository
@@ -12,7 +21,7 @@ use Illuminate\Support\{Arr, Str};
  * @package  Arcanesoft\Auth\Repositories
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class UsersRepository extends Respository
+class UsersRepository extends Repository
 {
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -24,12 +33,31 @@ class UsersRepository extends Respository
      *
      * @return \App\Models\User|\Arcanesoft\Auth\Models\User|mixed
      */
-    public function model()
+    public static function model()
     {
         return Auth::makeModel('user');
     }
 
+    /* -----------------------------------------------------------------
+     |  Queries
+     | -----------------------------------------------------------------
+     */
+
     /**
+     * Add a uuid where clause to the query.
+     *
+     * @param  string  $value
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|mixed
+     */
+    public function whereUuid(string $value)
+    {
+        return $this->query()->where('uuid', '=', $value);
+    }
+
+    /**
+     * Scope only the trashed records.
+     *
      * @param  bool  $condition
      *
      * @return \Arcanesoft\Auth\Models\User|\Illuminate\Database\Eloquent\Builder
@@ -42,27 +70,52 @@ class UsersRepository extends Respository
     }
 
     /* -----------------------------------------------------------------
-     |  Main Methods
+     |  CRUD Methods
      | -----------------------------------------------------------------
      */
+
+    /**
+     * Get first user with the given uuid, or fails.
+     *
+     * @param  string  $uuid
+     *
+     * @return \Arcanesoft\Auth\Models\User|mixed
+     */
+    public function firstOrFailWhereUuid(string $uuid)
+    {
+        return $this->query()
+            ->where('uuid', '=', $uuid)
+            ->withTrashed() // Get also trashed records
+            ->firstOrFail();
+    }
 
     /**
      * Create a new user.
      *
      * @param  array  $attributes
      *
-     * @return \Arcanesoft\Auth\Models\User
+     * @return \Arcanesoft\Auth\Models\User|mixed
      */
     public function create(array $attributes)
     {
         $roles = Arr::pull($attributes, 'roles', []);
-
         $attributes['password'] = $attributes['password'] ?? Str::random(8);
 
-        return tap($this->query()->create($attributes), function ($user) use ($roles) {
-            /** @var  \Arcanesoft\Auth\Models\User  $user */
-            $user->syncRoles($roles, false);
+        return tap($this->query()->create($attributes), function (User $user) use ($roles) {
+            $this->syncRoles($user, $roles);
         });
+    }
+
+    /**
+     * Force create a new user.
+     *
+     * @param array $attributes
+     *
+     * @return \Arcanesoft\Auth\Models\User|mixed
+     */
+    public function forceCreate(array $attributes)
+    {
+        return $this->query()->forceCreate($attributes);
     }
 
     /**
@@ -75,12 +128,13 @@ class UsersRepository extends Respository
      */
     public function update(User $user, array $attributes)
     {
-        $attributes = array_filter($attributes); // Remove the nullable attributes
+        // Remove the nullable attributes
+        $attributes = array_filter($attributes);
 
         $user->update($attributes);
 
         if (isset($attributes['roles']))
-            $user->syncRoles($attributes['roles'], false);
+            $this->syncRoles($user, $attributes['roles']);
 
         return $user;
     }
@@ -95,8 +149,46 @@ class UsersRepository extends Respository
     public function toggleActive(User $user): bool
     {
         return $user->isActive()
-            ? $user->deactivate()
-            : $user->activate();
+            ? $this->deactivate($user)
+            : $this->activate($user);
+    }
+
+    /**
+     * Activate the given user.
+     *
+     * @param  \Arcanesoft\Auth\Models\User  $user
+     *
+     * @return bool
+     */
+    public function activate(User $user)
+    {
+        if ($user->isActive())
+            return false;
+
+        event(new ActivatingUser($user));
+        $result = $user->forceFill(['activated_at' => $user->freshTimestamp()])->save();
+        event(new ActivatedUser($user));
+
+        return $result;
+    }
+
+    /**
+     * Deactivate the given user.
+     *
+     * @param  \Arcanesoft\Auth\Models\User  $user
+     *
+     * @return bool
+     */
+    public function deactivate(User $user): bool
+    {
+        if ( ! $user->isActive())
+            return false;
+
+        event(new DeactivatingUser($user));
+        $result = $user->forceFill(['activated_at' => null])->save();
+        event(new DeactivatedUser($user));
+
+        return $result;
     }
 
     /**
@@ -135,6 +227,26 @@ class UsersRepository extends Respository
     public function find($id)
     {
         return $this->query()->find($id);
+    }
+
+    /**
+     * Sync roles with the user.
+     *
+     * @param  \Arcanesoft\Auth\Models\User  $user
+     * @param  iterable                      $roleKeys
+     *
+     * @return array
+     */
+    public function syncRoles(User $user, iterable $roleKeys): array
+    {
+        $roles = static::getRepository(RolesRepository::class)
+            ->getByKeys($roleKeys);
+
+        event(new SyncingRolesToUser($user, $roles));
+        $synced = $user->roles()->sync($roles->pluck('id'));
+        event(new SyncedRolesToUser($user, $roles, $synced));
+
+        return $synced;
     }
 
     /* -----------------------------------------------------------------

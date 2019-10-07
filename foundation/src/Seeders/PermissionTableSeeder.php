@@ -22,15 +22,10 @@ class PermissionTableSeeder extends PermissionsSeeder
      */
     public function run(): void
     {
-        $this->seedOne([
-            'group'       => [
-                'name'        => 'Foundation',
-                'slug'        => 'foundation',
-                'description' => 'Foundation permissions group',
-            ],
-            'permissions' => static::getPermissionsFromPolicies(
-                config()->get('arcanesoft.foundation.policies', [])
-            ),
-        ]);
+        $this->seed([
+            'name'        => 'Foundation',
+            'slug'        => 'foundation',
+            'description' => 'Foundation permissions group',
+        ], $this->getPermissionsFromPolicyManager('admin::foundation.'));
     }
 }

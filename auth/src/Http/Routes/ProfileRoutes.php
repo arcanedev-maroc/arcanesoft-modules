@@ -1,13 +1,13 @@
 <?php
 
-namespace Arcanesoft\Foundation\Http\Routes;
+namespace Arcanesoft\Auth\Http\Routes;
 
-use Arcanesoft\Foundation\Http\Controllers\ProfileController;
+use Arcanesoft\Auth\Http\Controllers\ProfileController;
 
 /**
  * Class     ProfileRoutes
  *
- * @package  Arcanesoft\Foundation\Http\Routes
+ * @package  Arcanesoft\Auth\Http\Routes
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class ProfileRoutes extends RouteRegistrar
@@ -23,7 +23,7 @@ class ProfileRoutes extends RouteRegistrar
     public function map(): void
     {
         $this->adminGroup(function () {
-            $this->prefix('profile')->name('foundation.profile.')->group(function () {
+            $this->prefix('profile')->name('profile.')->group(function () {
                 $this->get('/', [ProfileController::class, 'index'])
                      ->name('index'); // admin::foundation.profile.index
 

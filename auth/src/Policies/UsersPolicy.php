@@ -43,6 +43,10 @@ class UsersPolicy extends Policy
      */
     public function abilities(): iterable
     {
+        $this->setMetas([
+            'category' => 'Users',
+        ]);
+
         return [
 
             // admin::auth.users.index
@@ -117,7 +121,7 @@ class UsersPolicy extends Policy
      *
      * @param  \App\Models\User|mixed  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function index(AuthenticatedUser $user)
     {
@@ -129,7 +133,7 @@ class UsersPolicy extends Policy
      *
      * @param  \App\Models\User|mixed  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function metrics(AuthenticatedUser $user)
     {
@@ -141,7 +145,7 @@ class UsersPolicy extends Policy
      *
      * @param  \App\Models\User|mixed  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function show(AuthenticatedUser $user)
     {
@@ -153,7 +157,7 @@ class UsersPolicy extends Policy
      *
      * @param  \App\Models\User|mixed  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function create(AuthenticatedUser $user)
     {
@@ -166,9 +170,9 @@ class UsersPolicy extends Policy
      * @param  \App\Models\User                   $user
      * @param  \Arcanesoft\Auth\Models\User|null  $model
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function update(AuthenticatedUser $user, ?User $model)
+    public function update(AuthenticatedUser $user, ?User $model = null)
     {
         //
     }
@@ -179,9 +183,9 @@ class UsersPolicy extends Policy
      * @param  \App\Models\User                   $user
      * @param  \Arcanesoft\Auth\Models\User|null  $model
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function activate(AuthenticatedUser $user, ?User $model)
+    public function activate(AuthenticatedUser $user, ?User $model = null)
     {
         if ($user->is($model))
             return false;
@@ -196,9 +200,9 @@ class UsersPolicy extends Policy
      * @param  \App\Models\User                   $user
      * @param  \Arcanesoft\Auth\Models\User|null  $model
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function delete(AuthenticatedUser $user, ?User $model)
+    public function delete(AuthenticatedUser $user, User $model = null)
     {
         if ($user->is($model))
             return false;
@@ -213,9 +217,9 @@ class UsersPolicy extends Policy
      * @param  \App\Models\User                   $user
      * @param  \Arcanesoft\Auth\Models\User|null  $model
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function forceDelete(AuthenticatedUser $user, ?User $model)
+    public function forceDelete(AuthenticatedUser $user, ?User $model = null)
     {
         if ( ! is_null($model))
             return $model->isDeletable();
@@ -227,9 +231,9 @@ class UsersPolicy extends Policy
      * @param  \App\Models\User                   $user
      * @param  \Arcanesoft\Auth\Models\User|null  $model
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function restore(AuthenticatedUser $user, ?User $model)
+    public function restore(AuthenticatedUser $user, ?User $model = null)
     {
         if ( ! is_null($model))
             return $model->trashed();
@@ -241,7 +245,7 @@ class UsersPolicy extends Policy
      * @param  \App\Models\User                   $user
      * @param  \Arcanesoft\Auth\Models\User|null  $model
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function impersonate(AuthenticatedUser $user, ?User $model)
     {

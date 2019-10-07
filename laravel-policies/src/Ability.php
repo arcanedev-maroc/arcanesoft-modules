@@ -1,4 +1,8 @@
-<?php namespace Arcanedev\LaravelPolicies;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanedev\LaravelPolicies;
 
 use Illuminate\Contracts\Support\{Arrayable, Jsonable};
 use Closure;
@@ -35,8 +39,8 @@ class Ability implements Arrayable, JsonSerializable, Jsonable
     /**
      * Ability constructor.
      *
-     * @param string               $key
-     * @param string|\Closure|null $method
+     * @param  string                $key
+     * @param  string|\Closure|null  $method
      */
     public function __construct(string $key, $method = null)
     {
@@ -77,7 +81,7 @@ class Ability implements Arrayable, JsonSerializable, Jsonable
      *
      * @param  string  $key
      *
-     * @return self
+     * @return $this
      */
     public function setKey(string $key): self
     {
@@ -101,9 +105,9 @@ class Ability implements Arrayable, JsonSerializable, Jsonable
      *
      * @param  \Closure  $callback
      *
-     * @return $this|\Arcanedev\LaravelPolicies\Ability
+     * @return $this
      */
-    public function callback(Closure $callback)
+    public function callback(Closure $callback): self
     {
         return $this->setMethod($callback);
     }
@@ -136,12 +140,13 @@ class Ability implements Arrayable, JsonSerializable, Jsonable
      * Set the ability's meta.
      *
      * @param  array  $metas
+     * @param  bool   $keepMetas
      *
      * @return self
      */
-    public function setMetas(array $metas): self
+    public function setMetas(array $metas, bool $keepMetas = true): self
     {
-        $this->metas = $metas;
+        $this->metas = array_merge($keepMetas ? $this->metas : [], $metas);
 
         return $this;
     }

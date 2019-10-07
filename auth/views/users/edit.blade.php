@@ -59,8 +59,8 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
-                        {{ ui\action_link('cancel', route('admin::auth.users.show', [$user]))->size('sm') }}
-                        {{ ui\action_button('update')->size('sm')->submit() }}
+                        {{ arcanesoft\ui\action_link('cancel', route('admin::auth.users.show', [$user]))->size('sm') }}
+                        {{ arcanesoft\ui\action_button('update')->size('sm')->submit() }}
                     </div>
                 </div>
             </div>

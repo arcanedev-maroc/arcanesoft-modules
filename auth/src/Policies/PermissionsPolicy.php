@@ -3,6 +3,7 @@
 namespace Arcanesoft\Auth\Policies;
 
 use App\Models\User as AuthenticatedUser;
+use Arcanesoft\Auth\Models\{Permission, Role};
 use Arcanesoft\Foundation\Core\Auth\Policy;
 
 /**
@@ -40,6 +41,10 @@ class PermissionsPolicy extends Policy
      */
     public function abilities(): iterable
     {
+        $this->setMetas([
+            'category' => 'Permissions',
+        ]);
+
         return [
 
             // auth.permissions.index
@@ -52,6 +57,12 @@ class PermissionsPolicy extends Policy
             $this->makeAbility('show')->setMetas([
                 'name'         => 'Show a permission',
                 'description'  => "Ability to show the permission's details",
+            ]),
+
+            // auth.permissions.roles.detach
+            $this->makeAbility('roles.detach', 'detachRole')->setMetas([
+                'name'         => 'Detach a role from permission',
+                'description'  => 'Ability to detach the related role from permission',
             ]),
 
         ];
@@ -67,7 +78,7 @@ class PermissionsPolicy extends Policy
      *
      * @param  \App\Models\User|mixed  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function index(AuthenticatedUser $user)
     {
@@ -77,12 +88,28 @@ class PermissionsPolicy extends Policy
     /**
      * Allow to show a role details.
      *
-     * @param  \App\Models\User|mixed  $user
+     * @param  \App\Models\User|mixed                    $user
+     * @param  \Arcanesoft\Auth\Models\Permission|mixed  $permission
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function show(AuthenticatedUser $user)
+    public function show(AuthenticatedUser $user, ?Permission $permission = null)
     {
         //
+    }
+
+    /**
+     * Allow to show a role details.
+     *
+     * @param  \App\Models\User|mixed                    $user
+     * @param  \Arcanesoft\Auth\Models\Permission|mixed  $permission
+     * @param  \Arcanesoft\Auth\Models\Role|mixed        $role
+     *
+     * @return \Illuminate\Auth\Access\Response|bool|void
+     */
+    public function detachRole(AuthenticatedUser $user, ?Permission $permission = null, ?Role $role = null)
+    {
+        if ( ! is_null($role))
+            return ! $role->isLocked();
     }
 }

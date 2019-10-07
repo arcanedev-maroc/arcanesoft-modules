@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Auth\Http\Controllers;
+<?php 
+
+namespace Arcanesoft\Auth\Http\Controllers;
 
 use Arcanedev\LaravelImpersonator\Contracts\Impersonator;
 use Arcanesoft\Auth\Http\Requests\Users\{CreateUserRequest, UpdateUserRequest};
@@ -135,7 +137,7 @@ class UsersController extends Controller
             __($user->isActive() ? 'The user has been successfully activated!' : 'The user has been successfully deactivated!')
         );
 
-        return $this->jsonResponseSuccess();
+        return static::jsonResponseSuccess();
     }
 
     public function delete(User $user, UsersRepository $usersRepo)
@@ -149,7 +151,7 @@ class UsersController extends Controller
             __('The user has been successfully deleted!')
         );
 
-        return $this->jsonResponseSuccess();
+        return static::jsonResponseSuccess();
     }
 
     public function restore(User $user, UsersRepository $usersRepo)
@@ -163,7 +165,7 @@ class UsersController extends Controller
             __('The user has been successfully restored!')
         );
 
-        return $this->jsonResponseSuccess();
+        return static::jsonResponseSuccess();
     }
 
     public function impersonate(User $user, Impersonator $impersonator)

@@ -47,16 +47,6 @@ return [
                     ],
                 ],
                 [
-                    'name'        => 'foundation::system.maintenance',
-                    'title'       => 'Maintenance',
-                    'icon'        => 'far fa-fw fa-stop-circle',
-                    'route'       => 'admin::foundation.system.maintenance.index',
-                    'roles'       => [Role::ADMINISTRATOR],
-                    'permissions' => [
-                        'admin::foundation.system.maintenance.index',
-                    ],
-                ],
-                [
                     'name'        => 'foundation::system.log-viewer',
                     'title'       => 'LogViewer',
                     'icon'        => 'fas fa-fw fa-clipboard-list',

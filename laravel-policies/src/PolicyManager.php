@@ -1,8 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanedev\LaravelPolicies;
 
-use Arcanedev\LaravelPolicies\Contracts\PolicyManager as PolicyManagerContract;
+use Arcanedev\LaravelPolicies\Contracts\{
+    Policy as PolicyContract,
+    PolicyManager as PolicyManagerContract
+};
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Collection;
 use Illuminate\Contracts\Auth\Access\Gate;
@@ -36,6 +41,8 @@ class PolicyManager implements PolicyManagerContract
 
     /**
      * PolicyManager constructor.
+     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
      */
     public function __construct(Application $app)
     {
@@ -52,7 +59,7 @@ class PolicyManager implements PolicyManagerContract
     /**
      * Get the registered policies.
      *
-     * @return \Illuminate\Support\Collection
+     * @return \Arcanedev\LaravelPolicies\Contracts\Policy[]|\Illuminate\Support\Collection
      */
     public function policies(): Collection
     {
@@ -62,7 +69,7 @@ class PolicyManager implements PolicyManagerContract
     /**
      * Get the registered abilities.
      *
-     * @return \Illuminate\Support\Collection
+     * @return \Arcanedev\LaravelPolicies\Ability[]|\Illuminate\Support\Collection
      */
     public function abilities(): Collection
     {
@@ -75,16 +82,42 @@ class PolicyManager implements PolicyManagerContract
      */
 
     /**
+     * Parse policies classes.
+     *
+     * @param  iterable  $classes
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function parsePolicies(iterable $classes): Collection
+    {
+        return Collection::make($classes)->transform(function (string $class) {
+            return $this->parsePolicy($class);
+        });
+    }
+
+    /**
+     * Parse the class into a policy instance.
+     *
+     * @param  string  $class
+     *
+     * @return \Arcanedev\LaravelPolicies\Contracts\Policy|mixed
+     */
+    public function parsePolicy(string $class): PolicyContract
+    {
+        return $this->app->make($class);
+    }
+
+    /**
      * Register a policy class.
      *
      * @param  string  $class
      *
-     * @return $this
+     * @return \Arcanedev\LaravelPolicies\Contracts\PolicyManager
      */
     public function registerClass(string $class): PolicyManagerContract
     {
         return $this->register(
-            $this->app->make($class)
+            $this->parsePolicy($class)
         );
     }
 
@@ -93,37 +126,23 @@ class PolicyManager implements PolicyManagerContract
      *
      * @param  \Arcanedev\LaravelPolicies\Contracts\Policy  $policy
      *
-     * @return $this
+     * @return \Arcanedev\LaravelPolicies\Contracts\PolicyManager
      */
-    public function register(Contracts\Policy $policy): PolicyManagerContract
+    public function register(PolicyContract $policy): PolicyManagerContract
     {
         $this->policies->put(get_class($policy), $policy);
 
-        return $this->registerAbilities(
-            $this->app->call([$policy, 'abilities'])
-        );
+        foreach ($this->app->call([$policy, 'abilities']) as $ability) {
+            $this->registerAbility($ability);
+        }
+
+        return $this;
     }
 
     /* -----------------------------------------------------------------
      |  Other Methods
      | -----------------------------------------------------------------
      */
-
-    /**
-     * Register the abilities into the gate access.
-     *
-     * @param  \Arcanedev\LaravelPolicies\Ability[]|array  $abilities
-     *
-     * @return $this
-     */
-    protected function registerAbilities(iterable $abilities)
-    {
-        foreach ($abilities as $ability) {
-            $this->registerAbility($ability);
-        }
-
-        return $this;
-    }
 
     /**
      * Register the ability object.
@@ -145,7 +164,7 @@ class PolicyManager implements PolicyManagerContract
      *
      * @return \Illuminate\Contracts\Auth\Access\Gate|mixed
      */
-    protected function gate(): Gate
+    private function gate(): Gate
     {
         return $this->app->make(Gate::class);
     }

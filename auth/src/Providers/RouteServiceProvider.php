@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Auth\Providers;
+<?php
+
+namespace Arcanesoft\Auth\Providers;
 
 use Arcanesoft\Auth\Http\Routes;
 use Arcanesoft\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -27,5 +29,7 @@ class RouteServiceProvider extends ServiceProvider
         Routes\RolesRoutes::class,
         Routes\PermissionsRoutes::class,
         Routes\PasswordResetsRoutes::class,
+
+        Routes\ProfileRoutes::class,
     ];
 }

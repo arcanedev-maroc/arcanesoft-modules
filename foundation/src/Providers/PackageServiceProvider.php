@@ -1,6 +1,8 @@
-<?php namespace Arcanesoft\Foundation\Providers;
+<?php
 
-use Arcanedev\Support\ServiceProvider;
+namespace Arcanesoft\Foundation\Providers;
+
+use Arcanedev\Support\Providers\ServiceProvider;
 use Illuminate\Contracts\Foundation\Application;
 
 /**
@@ -45,7 +47,7 @@ class PackageServiceProvider extends ServiceProvider
     protected function registerModulesServiceProviders(): void
     {
         $this->registerProviders(
-            $this->config()->get('arcanesoft.foundation.modules.providers', [])
+            $this->app['config']->get('arcanesoft.foundation.modules.providers', [])
         );
     }
 

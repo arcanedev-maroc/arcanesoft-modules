@@ -40,6 +40,10 @@ class PasswordResetsPolicy extends Policy
      */
     public function abilities(): iterable
     {
+        $this->setMetas([
+            'category' => 'Password Resets',
+        ]);
+
         return [
 
             // admin::auth.password-resets.index
@@ -73,7 +77,7 @@ class PasswordResetsPolicy extends Policy
      *
      * @param  \App\Models\User|mixed  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function index(AuthenticatedUser $user)
     {
@@ -85,7 +89,7 @@ class PasswordResetsPolicy extends Policy
      *
      * @param  \App\Models\User|mixed  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function metrics(AuthenticatedUser $user)
     {
@@ -97,7 +101,7 @@ class PasswordResetsPolicy extends Policy
      *
      * @param  \App\Models\User|mixed  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function delete(AuthenticatedUser $user)
     {

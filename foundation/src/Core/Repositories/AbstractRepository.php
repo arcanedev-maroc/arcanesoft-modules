@@ -1,17 +1,26 @@
 <?php
 
-namespace Arcanesoft\Auth\Repositories;
+namespace Arcanesoft\Foundation\Core\Repositories;
 
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Traits\ForwardsCalls;
 
 /**
- * Class     Respository
+ * Class     AbstractRepository
  *
- * @package  Arcanesoft\Auth\Repositories
+ * @package  Arcanesoft\Foundation\Core\Repositories
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
-abstract class Respository
+abstract class AbstractRepository implements RepositoryInterface
 {
+    /* -----------------------------------------------------------------
+     |  Traits
+     | -----------------------------------------------------------------
+     */
+
+    use ForwardsCalls;
+
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
@@ -22,7 +31,7 @@ abstract class Respository
      *
      * @return \Illuminate\Database\Eloquent\Model|mixed
      */
-    abstract public function model();
+    abstract public static function model();
 
     /**
      * Get the query builder.
@@ -31,7 +40,7 @@ abstract class Respository
      */
     public function query()
     {
-        return $this->model()->newQuery();
+        return static::model()->newQuery();
     }
 
     /* -----------------------------------------------------------------
@@ -64,5 +73,32 @@ abstract class Respository
     public function count(): int
     {
         return $this->query()->count();
+    }
+
+    /**
+     * Get a repository.
+     *
+     * @param  string  $repo
+     *
+     * @return \Arcanesoft\Foundation\Core\Repositories\RepositoryInterface|mixed
+     */
+    protected static function getRepository(string $repo): RepositoryInterface
+    {
+        return app()->make($repo);
+    }
+
+    /**
+     * Pass dynamic methods onto the query instance.
+     *
+     * @param  string  $method
+     * @param  array   $parameters
+     *
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        return $this->forwardCallTo(
+            $this->query(), $method, $parameters
+        );
     }
 }

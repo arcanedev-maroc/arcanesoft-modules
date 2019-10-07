@@ -48,28 +48,6 @@ trait Activatable
     }
 
     /* -----------------------------------------------------------------
-     |  Main Methods
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Activate/deactivate the model.
-     *
-     * @param  bool  $active
-     * @param  bool  $save
-     *
-     * @return bool
-     */
-    protected function switchActive($active, $save = true)
-    {
-        $this->forceFill([
-            'activated_at' => $active === true ? $this->freshTimestamp() : null,
-        ]);
-
-        return $save ? $this->save() : false;
-    }
-
-    /* -----------------------------------------------------------------
      |  Check Methods
      | -----------------------------------------------------------------
      */

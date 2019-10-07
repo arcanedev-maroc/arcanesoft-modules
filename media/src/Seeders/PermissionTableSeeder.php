@@ -20,15 +20,10 @@ class PermissionTableSeeder extends PermissionsSeeder
      */
     public function run(): void
     {
-        $policies = config()->get('arcanesoft.media.policies', []);
-
-        $this->seedOne([
-            'group'       => [
-                'name'        => 'Media',
-                'slug'        => 'media',
-                'description' => 'Media permissions group',
-            ],
-            'permissions' => static::getPermissionsFromPolicies($policies),
-        ]);
+        $this->seed([
+            'name'        => 'Media',
+            'slug'        => 'media',
+            'description' => 'Media permissions group',
+        ], $this->getPermissionsFromPolicyManager('admin::media.'));
     }
 }

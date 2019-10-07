@@ -23,7 +23,7 @@ class RoleTableSeeder extends RolesSeeder
      */
     public function run(): void 
     {
-        $this->seed([
+        $this->seedMany([
             [
                 'name'        => 'Administrator',
                 'key'         => Role::ADMINISTRATOR,
@@ -55,7 +55,5 @@ class RoleTableSeeder extends RolesSeeder
                 'admin::auth.*',
             ],
         ]);
-
-        static::syncAdminRole();
     }
 }

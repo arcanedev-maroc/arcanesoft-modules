@@ -1,5 +1,5 @@
 {
-    "name":        "arcanedev/laravel-policies",
+    "name":        "arcanesoft/laravel-policies",
     "description": "Policies manager for Laravel",
     "keywords":    ["arcanedev", "arcanesoft", "laravel", "policy", "policies", "acl", "ability", "abilities"],
     "homepage":    "https://github.com/ARCANEDEV/LaravelPolicies",
@@ -16,17 +16,19 @@
     "require": {
         "php":               ">=7.2.0",
         "ext-json":          "*",
-        "arcanedev/support": "^5.0"
+        "arcanedev/support": "~5.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^4.0",
-        "phpunit/phpcov":      "^6.0",
-        "phpunit/phpunit":     "^8.0"
+        "orchestra/testbench":       "~4.0",
+        "phpunit/phpcov":            "~6.0",
+        "phpunit/phpunit":           "~8.0",
+        "squizlabs/php_codesniffer": "^3.5"
     },
     "autoload": {
         "psr-4": {
             "Arcanedev\\LaravelPolicies\\": "src/"
-        }
+        },
+        "files": ["helpers.php"]
     },
     "autoload-dev": {
         "psr-4": {

@@ -1,6 +1,7 @@
 <?php namespace Arcanesoft\Auth\Listeners\Roles;
 
 use Arcanesoft\Auth\Events\Roles\DeletingRole;
+use Arcanesoft\Auth\Repositories\RolesRepository;
 
 /**
  * Class     DetachingPermissions
@@ -10,6 +11,29 @@ use Arcanesoft\Auth\Events\Roles\DeletingRole;
  */
 class DetachPermissions
 {
+    /* -----------------------------------------------------------------
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    /** @var  \Arcanesoft\Auth\Repositories\RolesRepository */
+    protected $repo;
+
+    /* -----------------------------------------------------------------
+     |  Constructor
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * DetachPermissions constructor.
+     *
+     * @param  \Arcanesoft\Auth\Repositories\RolesRepository  $repo
+     */
+    public function __construct(RolesRepository $repo)
+    {
+        $this->repo = $repo;
+    }
+
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
@@ -22,6 +46,6 @@ class DetachPermissions
      */
     public function handle(DeletingRole $event)
     {
-        $event->role->permissions()->detach();
+        $this->repo->detachAllPermissions($event->role);
     }
 }

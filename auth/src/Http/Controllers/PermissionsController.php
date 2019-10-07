@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Auth\Http\Controllers;
+<?php
+
+namespace Arcanesoft\Auth\Http\Controllers;
 
 use Arcanesoft\Auth\Models\Permission;
 use Arcanesoft\Auth\Policies\PermissionsPolicy;
@@ -42,7 +44,7 @@ class PermissionsController extends Controller
 
         $permission->load(['roles.users']);
 
-        $this->addBreadcrumbRoute(__("Permission's details"), 'admin::auth.permissions.show', [$permission->id]);
+        $this->addBreadcrumbRoute(__("Permission's details"), 'admin::auth.permissions.show', [$permission]);
 
         return $this->view('permissions.show', compact('permission'));
     }

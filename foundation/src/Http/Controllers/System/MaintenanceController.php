@@ -31,8 +31,8 @@ class MaintenanceController extends Controller
 
         parent::__construct();
 
+        $this->setCurrentSidebarItem('foundation::system.info');
         $this->addBreadcrumbRoute(__('Maintenance'), 'admin::foundation.system.maintenance.index');
-        $this->setCurrentSidebarItem('foundation::system.maintenance');
     }
 
     /* -----------------------------------------------------------------
@@ -66,7 +66,7 @@ class MaintenanceController extends Controller
 
     public function stop()
     {
-        if ($this->maintenance->isDown()) {
+        if ($this->maintenance->isEnabled()) {
             $this->maintenance->up();
 
             // TODO: Add notification

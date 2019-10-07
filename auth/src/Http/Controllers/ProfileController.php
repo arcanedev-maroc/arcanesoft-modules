@@ -1,15 +1,16 @@
-<?php namespace Arcanesoft\Foundation\Http\Controllers;
+<?php
+
+namespace Arcanesoft\Auth\Http\Controllers;
 
 use Arcanesoft\Auth\Repositories\UsersRepository;
 use Arcanesoft\Foundation\Concerns\HasNotifications;
-use Arcanesoft\Foundation\Http\Requests\Profile\UpdateUserAccountRequest;
-use Arcanesoft\Foundation\Http\Requests\Profile\UpdateUserPasswordRequest;
+use Arcanesoft\Foundation\Http\Requests\Profile\{UpdateUserAccountRequest, UpdateUserPasswordRequest};
 use Illuminate\Http\Request;
 
 /**
  * Class     ProfileController
  *
- * @package  Arcanesoft\Foundation\Http\Controllers
+ * @package  Arcanesoft\Auth\Http\Controllers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class ProfileController extends Controller
@@ -30,7 +31,7 @@ class ProfileController extends Controller
     {
         parent::__construct();
 
-        $this->addBreadcrumbRoute(__('Profile'), 'admin::foundation.profile.index');
+        $this->addBreadcrumbRoute(__('Profile'), 'admin::auth.profile.index');
     }
 
     /* -----------------------------------------------------------------

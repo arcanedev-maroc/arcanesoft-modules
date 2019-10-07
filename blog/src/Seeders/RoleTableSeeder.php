@@ -22,7 +22,7 @@ class RoleTableSeeder extends RolesSeeder
      */
     public function run(): void
     {
-        $this->seed([
+        $this->seedMany([
             [
                 'name'        => 'Blog Moderator',
                 'key'         => 'blog-moderator',
@@ -34,7 +34,7 @@ class RoleTableSeeder extends RolesSeeder
                 'key'         => 'blog-author',
                 'description' => 'The blog author role',
                 'is_locked'   => true,
-            ],
+            ]
         ]);
 
         $this->syncRoles([
@@ -46,7 +46,5 @@ class RoleTableSeeder extends RolesSeeder
                 'admin::blog.tags.*',
             ],
         ]);
-
-        static::syncAdminRole();
     }
 }

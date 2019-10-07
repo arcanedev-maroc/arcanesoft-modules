@@ -28,13 +28,12 @@ class RoleTransformer extends AbstractTransformer
      */
     public function transform(Role $role): array
     {
-        $usersCount = $role->users->count();
-        $actions    = static::getActions($role);
+        $actions = static::getActions($role);
 
         return [
             'name'        => $role->name,
             'description' => $role->description,
-            'users_count' => '<span class="badge badge-pill '.($usersCount > 0 ? 'badge-info' : 'badge-light').'">'.$usersCount.'</span>',
+            'users_count' => \arcanesoft\ui\count_pill($role->users->count())->toHtml(),
             'locked'      => '<span class="status '.($role->isLocked() ? 'status-danger' : 'status-secondary').'" data-toggle="tooltip" data-placement="top" title="'.($role->isLocked() ? __('Locked') : __('Unlocked')).'"></span>',
             'status'      => '<span class="status '.($role->isActive() ? 'status-success status-animated' : 'status-secondary').'" data-toggle="tooltip" data-placement="top" title="'.($role->isActive() ? __('Activated') : __('Deactivated')).'"></span>',
             'actions'     => static::renderActions($actions),

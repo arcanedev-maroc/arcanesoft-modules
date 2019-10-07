@@ -99,13 +99,10 @@ class UsersRoutes extends RouteRegistrar
     /**
      * Register the route bindings.
      */
-    public function bindings(): void
+    public function bindings(UsersRepository $repo): void
     {
-        $this->bind(static::USER_WILDCARD, function (UsersRepository $repo, string $uuid) {
-            return $repo->query()
-                ->where('uuid', '=', $uuid)
-                ->withTrashed()
-                ->firstOrFail();
+        $this->bind(static::USER_WILDCARD, function (string $uuid) use ($repo) {
+            return $repo->firstOrFailWhereUuid($uuid);
         });
     }
 }

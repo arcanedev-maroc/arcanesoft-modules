@@ -1,11 +1,11 @@
-<?php namespace Arcanesoft\Auth\Http\Controllers;
+<?php
 
-use Arcanesoft\Auth\Http\Requests\Roles\CreateRoleRequest;
-use Arcanesoft\Auth\Http\Requests\Roles\UpdateRoleRequest;
+namespace Arcanesoft\Auth\Http\Controllers;
+
+use Arcanesoft\Auth\Http\Requests\Roles\{CreateRoleRequest, UpdateRoleRequest};
 use Arcanesoft\Auth\Models\Role;
 use Arcanesoft\Auth\Policies\RolesPolicy;
-use Arcanesoft\Auth\Repositories\PermissionsRepository;
-use Arcanesoft\Auth\Repositories\RolesRepository;
+use Arcanesoft\Auth\Repositories\{PermissionsRepository, RolesRepository};
 use Arcanesoft\Foundation\Concerns\HasNotifications;
 
 /**

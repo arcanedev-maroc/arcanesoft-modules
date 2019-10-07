@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Auth\Models\Concerns;
+<?php
+
+namespace Arcanesoft\Auth\Models\Concerns;
 
 use Arcanesoft\Auth\Auth;
 use Arcanesoft\Auth\Models\Role;
@@ -108,49 +110,5 @@ trait HasRoles
         return $this->active_roles->filter(function (Role $role) use ($key) {
             return $role->hasKey($key);
         })->isNotEmpty();
-    }
-
-    /* -----------------------------------------------------------------
-     |  Other Methods
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Perform the roles syncing.
-     *
-     * @param  \Illuminate\Support\Collection|array  $keys
-     * @param  bool                                  $reload
-     * @param  string                                $beforeEvent
-     * @param  string                                $afterEvent
-     *
-     * @return array
-     */
-    protected function performSyncRoles($keys, bool $reload, string $beforeEvent, string $afterEvent): array
-    {
-        /** @var  \Illuminate\Database\Eloquent\Collection  $roles */
-        $roles = app(Auth::model('role', Role::class))
-            ->newQuery()
-            ->whereIn('key', $keys)
-            ->get();
-
-        event(new $beforeEvent($this, $roles));
-        $synced = $this->roles()->sync($roles->pluck('id'));
-        event(new $afterEvent($this, $roles, $synced));
-
-        $this->loadRoles($reload);
-
-        return $synced;
-    }
-
-    /**
-     * Load all roles.
-     *
-     * @param  bool  $load
-     *
-     * @return $this
-     */
-    protected function loadRoles(bool $load = true)
-    {
-        return $load ? $this->load(['roles']) : $this;
     }
 }

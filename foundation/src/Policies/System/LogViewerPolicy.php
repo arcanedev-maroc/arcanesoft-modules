@@ -40,6 +40,10 @@ class LogViewerPolicy extends Policy
      */
     public function abilities(): iterable
     {
+        $this->setMetas([
+            'category' => 'Log Viewer',
+        ]);
+
         return [
 
             // admin::foundation.system.log-viewer.index
@@ -79,7 +83,7 @@ class LogViewerPolicy extends Policy
      *
      * @param  \App\Models\User  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function index(AuthenticatedUser $user)
     {
@@ -91,7 +95,7 @@ class LogViewerPolicy extends Policy
      *
      * @param  \App\Models\User  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function show(AuthenticatedUser $user)
     {
@@ -103,7 +107,7 @@ class LogViewerPolicy extends Policy
      *
      * @param  \App\Models\User  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function download(AuthenticatedUser $user)
     {
@@ -115,7 +119,7 @@ class LogViewerPolicy extends Policy
      *
      * @param  \App\Models\User  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function delete(AuthenticatedUser $user)
     {

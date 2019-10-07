@@ -1,12 +1,14 @@
-<?php namespace Arcanesoft\Foundation\Http\Requests\Profile;
+<?php
 
+namespace Arcanesoft\Auth\Http\Requests\Profile;
+
+use Arcanesoft\Auth\Http\Requests\FormRequest;
 use Arcanesoft\Auth\Rules\Users\UserEmailRule;
-use Arcanesoft\Foundation\Http\Requests\FormRequest;
 
 /**
  * Class     UpdateUserAccountRequest
  *
- * @package  Arcanesoft\Foundation\Http\Requests\Profile
+ * @package  Arcanesoft\Auth\Http\Requests\Profile
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class UpdateUserAccountRequest extends FormRequest
@@ -21,7 +23,7 @@ class UpdateUserAccountRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'first_name' => ['required', 'string', 'max:50'],
@@ -30,7 +32,12 @@ class UpdateUserAccountRequest extends FormRequest
         ];
     }
 
-    public function getValidatedData()
+    /**
+     * Get the validated data.
+     *
+     * @return array
+     */
+    public function getValidatedData(): array
     {
         return $this->all([
             'first_name',

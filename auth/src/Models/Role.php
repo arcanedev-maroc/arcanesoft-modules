@@ -278,6 +278,23 @@ class Role extends Model
     }
 
     /**
+     * Activate/deactivate the model.
+     *
+     * @param  bool  $active
+     * @param  bool  $save
+     *
+     * @return bool
+     */
+    protected function switchActive($active, $save = true)
+    {
+        $this->forceFill([
+            'activated_at' => $active === true ? $this->freshTimestamp() : null,
+        ]);
+
+        return $save ? $this->save() : false;
+    }
+
+    /**
      * Attach a permission to a role.
      *
      * @param  \Arcanesoft\Auth\Models\User|int  $user
@@ -319,24 +336,6 @@ class Role extends Model
     // TODO: Adding detach multiple users to a role ?
 
     /**
-     * Detach all users from a role.
-     *
-     * @param  bool  $reload
-     *
-     * @return int
-     */
-    public function detachAllUsers(bool $reload = true)
-    {
-        event(new DetachingAllUsersFromRole($this));
-        $results = $this->users()->detach();
-        event(new DetachedAllUsersFromRole($this, $results));
-
-        $this->loadUsers($reload);
-
-        return $results;
-    }
-
-    /**
      * Attach a permission to a role.
      *
      * @param  \Arcanesoft\Auth\Models\Permission|int  $permission
@@ -352,71 +351,6 @@ class Role extends Model
         event(new AttachedPermissionToRole($this, $permission));
 
         $this->loadPermissions($reload);
-    }
-
-    /**
-     * Sync the permissions.
-     *
-     * @param  array  $ids
-     * @param  bool   $reload
-     *
-     * @return array
-     */
-    public function syncPermissions(array $ids, bool $reload = true): array
-    {
-        if (empty($ids))
-            return [];
-
-        event(new SyncingPermissionsToRole($this, $ids));
-        $result = $this->permissions()->sync($ids);
-        event(new SyncedPermissionsToRole($this, $ids, $result));
-
-        $this->loadPermissions($reload);
-
-        return $result;
-    }
-
-    /**
-     * Detach a permission from a role.
-     *
-     * @param  \Arcanesoft\Auth\Models\Permission|int  $permission
-     * @param  bool                                    $reload
-     *
-     * @return int
-     */
-    public function detachPermission($permission, bool $reload = true)
-    {
-        if ( ! $this->hasPermission($permission))
-            return 0;
-
-        event(new DetachingPermissionFromRole($this, $permission));
-        $results = $this->permissions()->detach($permission);
-        event(new DetachedPermissionFromRole($this, $permission, $results));
-
-        $this->loadPermissions($reload);
-
-        return $results;
-    }
-
-    /**
-     * Detach all permissions from a role.
-     *
-     * @param  bool  $reload
-     *
-     * @return int
-     */
-    public function detachAllPermissions(bool $reload = true)
-    {
-        if ($this->permissions->isEmpty())
-            return 0;
-
-        event(new DetachingAllPermissionsFromRole($this));
-        $results = $this->permissions()->detach();
-        event(new DetachedAllPermissionsFromRole($this, $results));
-
-        $this->loadPermissions($reload);
-
-        return $results;
     }
 
     /* -----------------------------------------------------------------

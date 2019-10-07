@@ -1,6 +1,6 @@
-<?php namespace Arcanesoft\Auth\Http\Requests\Users;
+<?php
 
-
+namespace Arcanesoft\Auth\Http\Requests\Users;
 
 use Arcanesoft\Auth\Http\Routes\UsersRoutes;
 use Arcanesoft\Auth\Rules\Users\UserEmailRule;
@@ -23,12 +23,14 @@ class UpdateUserRequest extends UserFormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
+        $user = $this->getCurrentUser();
+
         return [
             'first_name' => ['required', 'string', 'max:50'],
             'last_name'  => ['required', 'string', 'max:50'],
-            'email'      => ['required', 'string', 'email', 'max:255', UserEmailRule::unique()->ignore($this->getCurrentUser()->id)],
+            'email'      => ['required', 'string', 'email', 'max:255', UserEmailRule::unique()->ignore($user->id)],
             'password'   => ['nullable', 'string', 'min:8', 'confirmed'],
             'roles'      => ['array'],
         ];

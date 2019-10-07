@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Auth\Events\Roles;
+<?php
+
+namespace Arcanesoft\Auth\Events\Roles;
 
 use Arcanesoft\Auth\Models\Role;
 
@@ -18,6 +20,9 @@ class DetachedPermissionFromRole extends RoleEvent
     /** @var  \Arcanesoft\Auth\Models\Permission|int */
     public $permission;
 
+    /** @var  int */
+    public $detached;
+
     /* -----------------------------------------------------------------
      |  Constructor
      | -----------------------------------------------------------------
@@ -28,12 +33,13 @@ class DetachedPermissionFromRole extends RoleEvent
      *
      * @param  \Arcanesoft\Auth\Models\Role            $role
      * @param  \Arcanesoft\Auth\Models\Permission|int  $permission
-     * @param  int                                     $results
+     * @param  int                                     $detached
      */
-    public function __construct(Role $role, $permission, $results)
+    public function __construct(Role $role, $permission, $detached)
     {
         parent::__construct($role);
 
         $this->permission = $permission;
+        $this->detached   = $detached;
     }
 }

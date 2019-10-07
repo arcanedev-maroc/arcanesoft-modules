@@ -18,16 +18,21 @@ class PermissionTransformer extends AbstractTransformer
      | -----------------------------------------------------------------
      */
 
+    /**
+     * Transform the users for datatable.
+     *
+     * @param  \Arcanesoft\Auth\Models\Permission  $permission
+     *
+     * @return array
+     */
     public function transform(Permission $permission)
     {
-        $rolesCount = $permission->roles->count();
-
         return [
             'group_id'    => $permission->group->name,
             'category'    => $permission->category,
             'name'        => $permission->name,
             'description' => '<small>'.$permission->description.'</small>',
-            'roles_count' => '<span class="badge badge-pill '.($rolesCount > 0 ? 'badge-info' : 'badge-light').'">'.$rolesCount.'</span>',
+            'roles_count' => \arcanesoft\ui\count_pill($permission->roles->count())->toHtml(),
             'actions'     => static::renderActions([
                 LinkAction::action('show', route('admin::auth.permissions.show', [$permission]), false)->size('sm'),
             ]),

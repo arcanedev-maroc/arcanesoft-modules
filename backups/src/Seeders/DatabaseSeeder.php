@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
      *
      * @var array
      */
-    protected $seeds = [
+    protected $seeders = [
         PermissionsTableSeeder::class,
         RolesTableSeeder::class,
     ];

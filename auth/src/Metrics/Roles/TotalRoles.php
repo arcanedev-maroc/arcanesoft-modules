@@ -1,6 +1,7 @@
 <?php namespace Arcanesoft\Auth\Metrics\Roles;
 
 use Arcanedev\LaravelMetrics\Metrics\Value;
+use Arcanesoft\Auth\Auth;
 use Arcanesoft\Auth\Models\Role;
 use Illuminate\Http\Request;
 
@@ -12,6 +13,29 @@ use Illuminate\Http\Request;
  */
 class TotalRoles extends Value
 {
+    /* -----------------------------------------------------------------
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    /** @var  \Arcanesoft\Auth\Repositories\RolesRepository */
+    protected $repo;
+
+    /* -----------------------------------------------------------------
+     |  Constructor
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * TotalUsersByRoles constructor.
+     *
+     * @param  \Arcanesoft\Auth\Metrics\Roles\RolesRepository  $repo
+     */
+    public function __construct(RolesRepository $repo)
+    {
+        $this->repo = $repo;
+    }
+
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
@@ -26,6 +50,6 @@ class TotalRoles extends Value
      */
     public function calculate(Request $request)
     {
-        return $this->count(Role::class);
+        return $this->count($this->repo->query());
     }
 }

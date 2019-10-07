@@ -20,9 +20,9 @@ class RolesTableSeeder extends RolesSeeder
     /**
      * Run the database seeds.
      */
-    public function run()
+    public function run(): void
     {
-        $this->seed([
+        $this->seedMany([
             [
                 'name'        => 'Backups Manager',
                 'description' => 'The Backups manager role.',
@@ -30,9 +30,10 @@ class RolesTableSeeder extends RolesSeeder
             ],
         ]);
 
-        $this->syncAdminRole();
         $this->syncRoles([
-            'backups-manager' => 'backups.',
+            'backups-manager' => [
+                'admin::backups.*',
+            ],
         ]);
     }
 }

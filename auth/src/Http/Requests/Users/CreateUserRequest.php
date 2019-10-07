@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Auth\Http\Requests\Users;
+<?php
+
+namespace Arcanesoft\Auth\Http\Requests\Users;
 
 use Arcanesoft\Auth\Rules\Users\UserEmailRule;
 
@@ -20,7 +22,7 @@ class CreateUserRequest extends UserFormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'first_name' => ['required', 'string', 'max:50'],

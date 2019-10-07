@@ -33,11 +33,11 @@
                     </div>
                 </a>
                 <div class="dropdown-menu navbar-dropdown" aria-labelledby="profile-dropdown-menu">
-                    <a href="{{ route('admin::foundation.profile.index') }}" class="dropdown-item">
-                        <i class="fa fa-fw fa-user mr-2"></i> {{ __('Profile') }}
+                    <a href="{{ route('admin::auth.profile.index') }}" class="dropdown-item">
+                        <i class="fa fa-fw fa-user mr-2"></i> @lang('Profile')
                     </a>
                     <div class="dropdown-divider"></div>
-                    <logout-nav-btn-component url="{{ route('auth::logout') }}" text="{{ __('Logout') }}"></logout-nav-btn-component>
+                    <logout-nav-btn-component url="{{ route('auth::logout') }}" text="@lang('Logout')"></logout-nav-btn-component>
                 </div>
             </li>
         </ul>

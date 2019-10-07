@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanedev\LaravelPolicies\Contracts;
 
 use Illuminate\Support\Collection;
@@ -20,14 +22,14 @@ interface PolicyManager
     /**
      * Get the registered policies.
      *
-     * @return \Illuminate\Support\Collection
+     * @return \Arcanedev\LaravelPolicies\Contracts\Policy[]|\Illuminate\Support\Collection
      */
     public function policies(): Collection;
 
     /**
      * Get the registered abilities.
      *
-     * @return \Illuminate\Support\Collection
+     * @return \Arcanedev\LaravelPolicies\Ability[]|\Illuminate\Support\Collection
      */
     public function abilities(): Collection;
 
@@ -35,6 +37,22 @@ interface PolicyManager
      |  Main Methods
      | -----------------------------------------------------------------
      */
+
+    /**
+     * @param  array  $classes
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function parsePolicies(array $classes): Collection;
+
+    /**
+     * Parse the class into a policy instance.
+     *
+     * @param  string  $class
+     *
+     * @return \Arcanedev\LaravelPolicies\Contracts\Policy
+     */
+    public function parsePolicy(string $class): Policy;
 
     /**
      * Register a policy class.

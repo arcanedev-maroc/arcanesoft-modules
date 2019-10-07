@@ -1,12 +1,14 @@
-<?php namespace Arcanesoft\Foundation\Http\Requests\Profile;
+<?php
+
+namespace Arcanesoft\Auth\Http\Requests\Profile;
 
 use Arcanesoft\Auth\Rules\Users\OldPasswordRule;
-use Arcanesoft\Foundation\Http\Requests\FormRequest;
+use Arcanesoft\Auth\Http\Requests\FormRequest;
 
 /**
  * Class     UpdateUserPasswordRequest
  *
- * @package  Arcanesoft\Foundation\Http\Requests\Profile
+ * @package  Arcanesoft\Auth\Http\Requests\Profile
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class UpdateUserPasswordRequest extends FormRequest

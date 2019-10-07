@@ -41,6 +41,10 @@ class TagsPolicy extends Policy
      */
     public function abilities(): iterable
     {
+        $this->setMetas([
+            'category' => 'Tags',
+        ]);
+
         return [
 
             // admin::blog.tags.index
@@ -92,7 +96,7 @@ class TagsPolicy extends Policy
      *
      * @param  \App\Models\User|mixed  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function index(AuthenticatedUser $user)
     {
@@ -104,7 +108,7 @@ class TagsPolicy extends Policy
      *
      * @param  \App\Models\User|mixed  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function metrics(AuthenticatedUser $user)
     {
@@ -116,7 +120,7 @@ class TagsPolicy extends Policy
      *
      * @param  \App\Models\User|mixed  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function show(AuthenticatedUser $user)
     {
@@ -128,7 +132,7 @@ class TagsPolicy extends Policy
      *
      * @param  \App\Models\User|mixed  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function create(AuthenticatedUser $user)
     {
@@ -141,7 +145,7 @@ class TagsPolicy extends Policy
      * @param  \App\Models\User                   $user
      * @param  \Arcanesoft\Blog\Models\Tag|null  $model
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function update(AuthenticatedUser $user, ?Tag $model)
     {
@@ -154,7 +158,7 @@ class TagsPolicy extends Policy
      * @param  \App\Models\User                   $user
      * @param  \Arcanesoft\Blog\Models\Tag|null  $model
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function delete(AuthenticatedUser $user, ?Tag $model)
     {

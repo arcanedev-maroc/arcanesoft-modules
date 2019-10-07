@@ -17,7 +17,8 @@
         "arcanedev/gravatar": "^3.0",
         "arcanedev/laravel-impersonator": "^2.0",
         "arcanesoft/foundation": "@dev",
-        "yajra/laravel-datatables": "^1.5"
+        "yajra/laravel-datatables-fractal": "^1.5",
+        "yajra/laravel-datatables-oracle": "^9.7"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0",

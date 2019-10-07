@@ -65,6 +65,13 @@ class RolesRoutes extends RouteRegistrar
                     $this->delete('delete', [RolesController::class, 'delete'])
                          ->middleware(['ajax'])
                          ->name('delete'); // admin::auth.roles.delete
+
+                    $this->namespace('Roles')->group(function () {
+                        static::mapRouteClasses([
+                            Roles\PermissionsRoutes::class,
+                            Roles\UsersRoutes::class,
+                        ]);
+                    });
                 });
             });
         });
@@ -84,12 +91,15 @@ class RolesRoutes extends RouteRegistrar
     /**
      * Register the route bindings.
      */
-    public function bindings(): void
+    public function bindings(RolesRepository $repo): void
     {
-        $this->bind(self::ROLE_WILDCARD, function (RolesRepository $repo, string $uuid) {
-            return $repo->query()
-                ->where('uuid', '=', $uuid)
-                ->firstOrFail();
+        $this->bind(self::ROLE_WILDCARD, function (string $uuid) use ($repo) {
+            return $repo->firstOrFailWhereUuid( $uuid);
         });
+
+        static::bindRouteClasses([
+            Roles\PermissionsRoutes::class,
+            Roles\UsersRoutes::class,
+        ]);
     }
 }

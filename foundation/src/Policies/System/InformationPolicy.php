@@ -40,6 +40,10 @@ class InformationPolicy extends Policy
      */
     public function abilities(): iterable
     {
+        $this->setMetas([
+            'category' => 'System Information',
+        ]);
+
         return [
 
             // admin::foundation.system.index
@@ -61,7 +65,7 @@ class InformationPolicy extends Policy
      *
      * @param  \App\Models\User  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function index(AuthenticatedUser $user)
     {

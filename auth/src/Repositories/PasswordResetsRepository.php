@@ -10,7 +10,7 @@ use Arcanesoft\Auth\Auth;
  * @package  Arcanesoft\Auth\Repositories
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class PasswordResetsRepository extends Respository
+class PasswordResetsRepository extends Repository
 {
     /* -----------------------------------------------------------------
      |  Query Methods
@@ -22,7 +22,7 @@ class PasswordResetsRepository extends Respository
      *
      * @return \Arcanesoft\Auth\Models\Permission|mixed
      */
-    public function model()
+    public static function model()
     {
         return Auth::makeModel('password-resets');
     }

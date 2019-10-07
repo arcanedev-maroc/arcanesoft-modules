@@ -27,7 +27,6 @@ class RouteServiceProvider extends ServiceProvider
         Routes\DashboardRoutes::class,
         Routes\SystemRoutes::class,
         Routes\MetricsRoutes::class,
-        Routes\ProfileRoutes::class,
 
         Routes\ApiRoutes::class,
     ];

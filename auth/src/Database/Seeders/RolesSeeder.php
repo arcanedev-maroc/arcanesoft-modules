@@ -2,17 +2,20 @@
 
 namespace Arcanesoft\Auth\Database\Seeders;
 
-use Arcanesoft\Support\Database\Seeder;
 use Arcanesoft\Auth\Auth;
+use Arcanesoft\Auth\Repositories\PermissionsRepository;
 use Arcanesoft\Auth\Models\{Permission, Role};
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\{Arr, Carbon, Str};
+use Arcanesoft\Auth\Repositories\RolesRepository;
+use Arcanesoft\Support\Database\Seeder;
+use Illuminate\Support\{Arr, Collection, Facades\Date, Str};
 
 /**
  * Class     RolesSeeder
  *
  * @package  Arcanesoft\Auth\Database\Seeders
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
+ *
+ * @todo: Use the repositories instead ?
  */
 abstract class RolesSeeder extends Seeder
 {
@@ -22,15 +25,20 @@ abstract class RolesSeeder extends Seeder
      */
 
     /**
-     * Seed roles.
+     * Seed multiple roles.
      *
      * @param  array  $roles
      */
-    public function seed(array $roles): void
+    public function seedMany(array $roles): void
     {
-        $roles = static::prepareRoles($roles);
+        $roles = array_map(function (array $role) {
+            return static::prepareRole($role);
+        }, $roles);
 
-        Role::query()->insert($roles);
+
+        $this->getRolesRepository()->insert($roles);
+
+        $this->syncAdminRole();
     }
 
     /* -----------------------------------------------------------------
@@ -39,38 +47,57 @@ abstract class RolesSeeder extends Seeder
      */
 
     /**
-     * Prepare roles to seed.
+     * Get the roles repository.
      *
-     * @param  array  $roles
+     * @return \Arcanesoft\Auth\Repositories\RolesRepository|mixed
+     */
+    private function getRolesRepository()
+    {
+        return $this->container->make(RolesRepository::class);
+    }
+
+    /**
+     * Get the permissions repository.
+     *
+     * @return \Arcanesoft\Auth\Repositories\PermissionsRepository|mixed
+     */
+    private function getPermissionsRepository()
+    {
+        return $this->container->make(PermissionsRepository::class);
+    }
+
+    /**
+     * Prepare the role for seed.
+     *
+     * @param  array  $role
      *
      * @return array
      */
-    protected static function prepareRoles(array $roles): array
+    protected static function prepareRole(array $role): array
     {
-        $now = Carbon::now();
+        $now = Date::now();
 
-        return array_map(function ($role) use ($now) {
-            return array_merge($role, [
-                'uuid'         => $role['uuid'] ?? Str::uuid(),
-                'key'          => $role['key'] ?? Auth::slugRoleKey($role['name']),
-                'is_locked'    => $role['is_locked'] ?? true,
-                'activated_at' => $now,
-                'created_at'   => $now,
-                'updated_at'   => $now,
-            ]);
-        }, $roles);
+        return array_merge($role, [
+            'uuid'         => $role['uuid'] ?? Str::uuid(),
+            'key'          => $role['key'] ?? Auth::slugRoleKey($role['name']),
+            'is_locked'    => $role['is_locked'] ?? true,
+            'activated_at' => $now,
+            'created_at'   => $now,
+            'updated_at'   => $now,
+        ]);
     }
 
     /**
      * Sync the admin role with all permissions.
      */
-    protected static function syncAdminRole(): void
+    private function syncAdminRole(): void
     {
-        tap(Role::admin()->first(), function (Role $role) {
-            $role->permissions()->sync(
-                Permission::all()->pluck('id')->toArray()
-            );
-        });
+        $rolesRepo = $this->getRolesRepository();
+
+        $rolesRepo->syncPermissionsByIds(
+            $rolesRepo->getAdminRole(),
+            $this->getPermissionsRepository()->getAllIds()->toArray()
+        );
     }
 
     /**
@@ -80,13 +107,13 @@ abstract class RolesSeeder extends Seeder
      */
     protected function syncRoles(array $roles): void
     {
-        $permissions = Permission::all();
+        $rolesRepo   = $this->getRolesRepository();
+        $permissions = $this->getPermissionsRepository()->pluck('ability', 'id');
 
-        foreach ($roles as $roleKey => $abilities) {
-            /** @var  \Arcanesoft\Auth\Models\Role  $role */
-            if ($role = Role::query()->where('key', $roleKey)->first()) {
-                $role->permissions()->sync(
-                    $this->getAllowedPermissions($permissions, $abilities)
+        foreach ($roles as $key => $needles) {
+            if ($role = $rolesRepo->firstOrFailWhereKey($key)) {
+                $rolesRepo->syncPermissionsByIds(
+                    $role, static::getAllowedPermissions($permissions, $needles)
                 );
             }
         }
@@ -95,22 +122,17 @@ abstract class RolesSeeder extends Seeder
     /**
      * Get the allowed permissions' ids.
      *
-     * @param  \Illuminate\Database\Eloquent\Collection  $permissions
-     * @param  array|string                              $abilities
+     * @param  \Illuminate\Support\Collection  $permissions
+     * @param  array|string                    $needles
      *
      * @return array
      */
-    private function getAllowedPermissions(Collection $permissions, $abilities): array
+    private static function getAllowedPermissions(Collection $permissions, $needles): array
     {
-        $abilities = Arr::wrap($abilities);
+        $needles = Arr::wrap($needles);
 
-        return $permissions->filter(function (Permission $permission) use ($abilities) {
-            foreach ($abilities as $ability) {
-                if (Str::startsWith($permission->ability, $ability) || Str::is($ability, $permission->ability))
-                    return true;
-            }
-
-            return false;
-        })->pluck('id')->toArray();
+        return $permissions->filter(function ($ability) use ($needles) {
+            return Str::startsWith($ability, $needles) || Str::is($needles, $ability);
+        })->keys()->toArray();
     }
 }

@@ -4,26 +4,14 @@ namespace Arcanesoft\Auth\Models;
 
 use Arcanesoft\Auth\Auth;
 use Arcanesoft\Auth\Events\Permissions\{
-    AttachedRoleToPermission,
-    AttachingRoleToPermission,
-    CreatedPermission,
-    CreatingPermission,
-    DeletedPermission,
-    DeletingPermission,
-    DetachedAllRolesFromPermission,
-    DetachedRoleFromPermission,
-    DetachingAllRolesFromPermission,
-    DetachingRoleFromPermission,
-    RetrievedPermission,
-    SavedPermission,
-    SavingPermission,
-    SyncedRolesToPermission,
-    SyncingRolesToPermission,
-    UpdatedPermission,
+    AttachedRoleToPermission, AttachingRoleToPermission, CreatedPermission, CreatingPermission, DeletedPermission,
+    DeletingPermission, DetachedAllRolesFromPermission, DetachedRoleFromPermission, DetachingAllRolesFromPermission,
+    DetachingRoleFromPermission, RetrievedPermission, SavedPermission, SavingPermission, UpdatedPermission,
     UpdatingPermission
 };
 use Arcanesoft\Auth\Models\Concerns\HasRoles;
 use Arcanesoft\Auth\Models\Presenters\PermissionPresenter;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 
 /**
@@ -186,81 +174,6 @@ class Permission extends Model
     }
 
     /* -----------------------------------------------------------------
-     |  Main Methods
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Attach a role to a user.
-     *
-     * @param  \Arcanesoft\Auth\Models\Role|int  $role
-     * @param  bool                              $reload
-     */
-    public function attachRole($role, $reload = true)
-    {
-        if ($this->hasRole($role))
-            return;
-
-        event(new AttachingRoleToPermission($this, $role));
-        $this->roles()->attach($role);
-        event(new AttachedRoleToPermission($this, $role));
-
-        $this->loadRoles($reload);
-    }
-
-    /**
-     * Sync the roles by its keys.
-     *
-     * @param  array|\Illuminate\Support\Collection  $keys
-     * @param  bool                                  $reload
-     *
-     * @return array
-     */
-    public function syncRoles($keys, bool $reload = true): array
-    {
-        return $this->performSyncRoles(
-            $keys, $reload, SyncingRolesToPermission::class, SyncedRolesToPermission::class
-        );
-    }
-
-    /**
-     * Detach a role from a user.
-     *
-     * @param  \Arcanesoft\Auth\Models\Role|int  $role
-     * @param  bool                              $reload
-     *
-     * @return int
-     */
-    public function detachRole($role, bool $reload = true): int
-    {
-        event(new DetachingRoleFromPermission($this, $role));
-        $results = $this->roles()->detach($role);
-        event(new DetachedRoleFromPermission($this, $role, $results));
-
-        $this->loadRoles($reload);
-
-        return $results;
-    }
-
-    /**
-     * Detach all roles from a user.
-     *
-     * @param  bool  $reload
-     *
-     * @return int
-     */
-    public function detachAllRoles(bool $reload = true): int
-    {
-        event(new DetachingAllRolesFromPermission($this));
-        $results = $this->roles()->detach();
-        event(new DetachedAllRolesFromPermission($this, $results));
-
-        $this->loadRoles($reload);
-
-        return $results;
-    }
-
-    /* -----------------------------------------------------------------
      |  Check Methods
      | -----------------------------------------------------------------
      */
@@ -275,6 +188,16 @@ class Permission extends Model
     public function hasAbility($ability): bool
     {
         return $this->ability === $this->prepareAbility($ability);
+    }
+
+    /**
+     * Check if the ability is registered (Gate).
+     *
+     * @return bool
+     */
+    public function isAbilityRegistered(): bool
+    {
+        return Gate::has($this->ability);
     }
 
     /* -----------------------------------------------------------------

@@ -40,6 +40,10 @@ class StatusesPolicy extends Policy
      */
     public function abilities(): iterable
     {
+        $this->setMetas([
+            'category' => 'Statuses',
+        ]);
+
         return [
 
             // admin::backups.statuses.index
@@ -79,7 +83,7 @@ class StatusesPolicy extends Policy
      *
      * @param  \App\Models\User  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function index(AuthenticatedUser $user)
     {
@@ -91,7 +95,7 @@ class StatusesPolicy extends Policy
      *
      * @param  \App\Models\User  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function show(AuthenticatedUser $user)
     {
@@ -103,7 +107,7 @@ class StatusesPolicy extends Policy
      *
      * @param  \App\Models\User  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function create(AuthenticatedUser $user)
     {
@@ -115,7 +119,7 @@ class StatusesPolicy extends Policy
      *
      * @param  \App\Models\User  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function clean(AuthenticatedUser $user)
     {

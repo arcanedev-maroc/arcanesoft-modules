@@ -40,6 +40,10 @@ class DashboardPolicy extends Policy
      */
     public function abilities(): iterable
     {
+        $this->setMetas([
+            'category' => 'Dashboard',
+        ]);
+
         return [
 
             // admin::foundation.dashboard.index
@@ -61,7 +65,7 @@ class DashboardPolicy extends Policy
      *
      * @param  \App\Models\User  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function index(AuthenticatedUser $user)
     {

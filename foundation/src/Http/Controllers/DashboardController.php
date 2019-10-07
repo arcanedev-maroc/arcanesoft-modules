@@ -2,7 +2,6 @@
 
 namespace Arcanesoft\Foundation\Http\Controllers;
 
-use Arcanedev\LaravelPolicies\Contracts\PolicyManager;
 use Arcanesoft\Foundation\Policies\DashboardPolicy;
 
 /**
@@ -18,7 +17,7 @@ class DashboardController extends Controller
      | -----------------------------------------------------------------
      */
 
-    public function index(PolicyManager $manager)
+    public function index()
     {
         $this->authorize(DashboardPolicy::ability('index'));
 

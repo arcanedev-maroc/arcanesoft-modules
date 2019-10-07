@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanedev\LaravelPolicies;
 
 use Arcanedev\LaravelPolicies\Contracts\Policy as PolicyContract;
-use Illuminate\Support\{Collection, Str};
+use Illuminate\Support\Str;
 
 /**
  * Class     Policy
@@ -14,7 +16,19 @@ use Illuminate\Support\{Collection, Str};
 abstract class Policy implements PolicyContract
 {
     /* -----------------------------------------------------------------
-     |  Getters
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Default metas for the abilities.
+     *
+     * @var array
+     */
+    protected $metas = [];
+
+    /* -----------------------------------------------------------------
+     |  Getters & Setters
      | -----------------------------------------------------------------
      */
 
@@ -25,7 +39,31 @@ abstract class Policy implements PolicyContract
      */
     protected static function prefix(): string
     {
-        return static::$prefix;
+        return '';
+    }
+
+    /**
+     * Set the default metas for the abilities.
+     *
+     * @return array
+     */
+    protected function getMetas(): array
+    {
+        return $this->metas;
+    }
+
+    /**
+     * Set the default metas for the abilities.
+     *
+     * @param  array  $metas
+     *
+     * @return $this
+     */
+    protected function setMetas(array $metas)
+    {
+        $this->metas = $metas;
+
+        return $this;
     }
 
     /* -----------------------------------------------------------------
@@ -36,13 +74,18 @@ abstract class Policy implements PolicyContract
     /**
      * Get the ability's key.
      *
-     * @param  string  $key
+     * @param  array|string  $keys
      *
-     * @return string
+     * @return array|string
      */
-    public static function ability(string $key): string
+    public static function ability($keys)
     {
-        return static::prefixedKey($key);
+        if (is_string($keys))
+            return static::prefixedKey($keys);
+
+        return array_map(function (string $key) {
+            return static::prefixedKey($key);
+        }, (array) $keys);
     }
 
     /**
@@ -58,7 +101,7 @@ abstract class Policy implements PolicyContract
         return Ability::make(
             static::prefixedKey($key),
             static::prepareMethod($method ?: $key)
-        );
+        )->setMetas($this->getMetas());
     }
 
     /**

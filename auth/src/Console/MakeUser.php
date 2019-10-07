@@ -2,10 +2,11 @@
 
 namespace Arcanesoft\Auth\Console;
 
-use Arcanesoft\Auth\Auth;
 use Arcanesoft\Auth\Models\Role;
+use Arcanesoft\Auth\Repositories\UsersRepository;
 use Illuminate\Console\Command;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
+use Closure;
 
 /**
  * Class     MakeUser
@@ -39,7 +40,10 @@ class MakeUser extends Command
      | -----------------------------------------------------------------
      */
 
-    public function handle()
+    /**
+     * Handle the command.
+     */
+    public function handle(): void
     {
         $this->comment('Creating a new User');
 
@@ -65,13 +69,14 @@ class MakeUser extends Command
      *
      * @return \Closure
      */
-    protected static function defaultCreateUserCallback()
+    protected static function defaultCreateUserCallback(): Closure
     {
         return function (string $firstName, string $lastName, string $email, string $password, bool $isAdmin) {
-            $now = Carbon::now();
+            $now = Date::now();
 
-            /** @var  \App\Models\User  $model */
-            $model = app(Auth::model('user'))->newQuery()->forceCreate([
+            /** @var  \Arcanesoft\Auth\Repositories\UsersRepository  $repo */
+            $repo = app(UsersRepository::class);
+            $user = $repo->forceCreate([
                 'first_name'        => $firstName,
                 'last_name'         => $lastName,
                 'email'             => $email,
@@ -81,7 +86,7 @@ class MakeUser extends Command
                 'activated_at'      => $now
             ]);
 
-            $model->syncRoles($isAdmin ? [Role::ADMINISTRATOR] : [Role::MEMBER]);
+            $repo->syncRoles($user, $isAdmin ? [Role::ADMINISTRATOR] : [Role::MEMBER]);
         };
     }
 }

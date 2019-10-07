@@ -43,8 +43,8 @@ class CreateAuthPermissionsTable extends Migration
             $table->uuid('uuid');
             $table->unsignedInteger('group_id')->default(0);
 
-            $table->string('category')->nullable();
             $table->string('ability')->unique();
+            $table->string('category')->nullable();
             $table->string('name');
             $table->string('description')->nullable();
 

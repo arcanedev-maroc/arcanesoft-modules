@@ -35,6 +35,8 @@ class SystemController extends Controller
     {
         $this->authorize(InformationPolicy::ability('index'));
 
+        $this->addBreadcrumb(__('System Information'));
+
         return $this->view('system.index');
     }
 }

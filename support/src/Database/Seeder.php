@@ -26,6 +26,21 @@ abstract class Seeder extends IlluminateSeeder
     protected $seeders = [];
 
     /* -----------------------------------------------------------------
+     |  Getters
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Get the seeders.
+     *
+     * @return array
+     */
+    public function seeders(): array
+    {
+        return $this->seeders;
+    }
+
+    /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
      */
@@ -35,12 +50,12 @@ abstract class Seeder extends IlluminateSeeder
      */
     public function run(): void
     {
-//        Eloquent::unguard();
+        Eloquent::unguard();
 
-        foreach ($this->seeders as $seed) {
+        foreach ($this->seeders() as $seed) {
             $this->call($seed);
         }
 
-//        Eloquent::reguard();
+        Eloquent::reguard();
     }
 }

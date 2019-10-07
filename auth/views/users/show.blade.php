@@ -87,21 +87,21 @@
                     @endcan
 
                     @can(Arcanesoft\Auth\Policies\UsersPolicy::ability('update'), $user)
-                        {{ ui\action_link('edit', route('admin::auth.users.edit', [$user]))->size('sm') }}
+                        {{ arcanesoft\ui\action_link('edit', route('admin::auth.users.edit', [$user]))->size('sm') }}
                     @endcan
 
                     @can(Arcanesoft\Auth\Policies\UsersPolicy::ability('activate'), $user)
-                        {{ ui\action_button($user->isActive() ? 'deactivate' : 'activate')->attribute('onclick', "window.Foundation.\$emit('auth::users.activate')")->size('sm')->setDisabled($user->isSuperAdmin()) }}
+                        {{ arcanesoft\ui\action_button($user->isActive() ? 'deactivate' : 'activate')->attribute('onclick', "window.Foundation.\$emit('auth::users.activate')")->size('sm')->setDisabled($user->isSuperAdmin()) }}
                     @endcan
 
                     @if ($user->trashed())
                         @can(Arcanesoft\Auth\Policies\UsersPolicy::ability('restore'), $user)
-                        {{ ui\action_button('restore')->attribute('onclick', "window.Foundation.\$emit('auth::users.restore')")->size('sm') }}
+                        {{ arcanesoft\ui\action_button('restore')->attribute('onclick', "window.Foundation.\$emit('auth::users.restore')")->size('sm') }}
                         @endcan
                     @endif
 
                     @can(Arcanesoft\Auth\Policies\UsersPolicy::ability('delete'), $user)
-                        {{ ui\action_button('delete')->attribute('onclick', "window.Foundation.\$emit('auth::users.delete')")->size('sm')->setDisabled($user->isNotDeletable()) }}
+                        {{ arcanesoft\ui\action_button('delete')->attribute('onclick', "window.Foundation.\$emit('auth::users.delete')")->size('sm')->setDisabled($user->isNotDeletable()) }}
                     @endcan
                 </div>
             </div>
@@ -124,7 +124,7 @@
                                 <td>{{ $role->name }}</td>
                                 <td>{{ $role->description }}</td>
                                 <td class="text-right">
-                                    {{ ui\action_link_icon('show', route('admin::auth.roles.show', [$role]))->size('sm') }}
+                                    {{ arcanesoft\ui\action_link_icon('show', route('admin::auth.roles.show', [$role]))->size('sm') }}
                                 </td>
                             </tr>
                         @empty
@@ -157,8 +157,8 @@
                             @lang($user->isActive() ? 'Are you sure you want to deactivate user ?' : 'Are you sure you want to activate user ?')
                         </div>
                         <div class="modal-footer justify-content-between">
-                            {{ ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
-                            {{ ui\action_button($user->isActive() ? 'deactivate' : 'activate')->submit() }}
+                            {{ arcanesoft\ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
+                            {{ arcanesoft\ui\action_button($user->isActive() ? 'deactivate' : 'activate')->submit() }}
                         </div>
                     </div>
                 {{ form()->close() }}
@@ -183,8 +183,8 @@
                             @lang('Are you sure you want to delete this user ?')
                         </div>
                         <div class="modal-footer justify-content-between">
-                            {{ ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
-                            {{ ui\action_button('delete')->submit() }}
+                            {{ arcanesoft\ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
+                            {{ arcanesoft\ui\action_button('delete')->submit() }}
                         </div>
                     </div>
                 {{ form()->close() }}
@@ -210,8 +210,8 @@
                             @lang('Are you sure you want to restore this user ?')
                         </div>
                         <div class="modal-footer justify-content-between">
-                            {{ ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
-                            {{ ui\action_button('restore')->submit() }}
+                            {{ arcanesoft\ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
+                            {{ arcanesoft\ui\action_button('restore')->submit() }}
                         </div>
                     </div>
                 {{ form()->close() }}
@@ -241,7 +241,7 @@
                 );
                 submitBtn.loading();
 
-                window.Foundation.request().put($activateUserForm.attr('action'))
+                window.request().put($activateUserForm.attr('action'))
                      .then((response) => {
                          if (response.data.code === 'success') {
                              $activateUserModal.modal('hide');
@@ -279,7 +279,7 @@
                 );
                 submitBtn.loading();
 
-                window.Foundation.request().delete($deleteUserForm.attr('action'))
+                window.request().delete($deleteUserForm.attr('action'))
                       .then((response) => {
                           if (response.data.code === 'success') {
                               $deleteUserModal.modal('hide');
@@ -322,7 +322,7 @@
                 );
                 submitBtn.loading();
 
-                window.Foundation.request().put($restoreUserForm.attr('action'))
+                window.request().put($restoreUserForm.attr('action'))
                      .then((response) => {
                          if (response.data.code === 'success') {
                              $restoreUserModal.modal('hide');

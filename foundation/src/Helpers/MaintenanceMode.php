@@ -1,7 +1,7 @@
 <?php namespace Arcanesoft\Foundation\Helpers;
 
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 
 /**
  * Class     MaintenanceMode
@@ -61,13 +61,14 @@ class MaintenanceMode
      */
     public function data(): array
     {
-        if ( ! $this->isDown())
-            return [];
+        $data = [];
 
-        $data = json_decode(file_get_contents($this->path()), true);
+        if ($this->isEnabled()) {
+            $data = json_decode(file_get_contents($this->path()), true);
 
-        if ($data['time'])
-            $data['time'] = Carbon::createFromTimestamp($data['time']);
+            if ($data['time'])
+                $data['time'] = Date::createFromTimestamp($data['time']);
+        }
 
         return $data;
     }
@@ -82,7 +83,7 @@ class MaintenanceMode
     public function down(array $allowed, string $message = null, $retry = null)
     {
         $payload = [
-            'time'    => Carbon::now()->getTimestamp(),
+            'time'    => Date::now()->getTimestamp(),
             'message' => $message,
             'retry'   => is_numeric($retry) && $retry > 0 ? (int) $retry : null,
             'allowed' => $allowed,
@@ -107,9 +108,9 @@ class MaintenanceMode
      *
      * @return bool
      */
-    public function isDown(): bool
+    public function isEnabled(): bool
     {
-        return file_exists($this->path());
+        return $this->app->isDownForMaintenance();
     }
 
     /**
@@ -117,8 +118,8 @@ class MaintenanceMode
      *
      * @return bool
      */
-    public function isUp()
+    public function isDisabled()
     {
-        return ! $this->isDown();
+        return ! $this->isEnabled();
     }
 }

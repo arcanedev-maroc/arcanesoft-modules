@@ -1,4 +1,6 @@
-<?php namespace Arcanesoft\Auth\Http\Transformers;
+<?php
+
+namespace Arcanesoft\Auth\Http\Transformers;
 
 use Arcanesoft\Auth\Models\PasswordReset;
 use function ui\action_link_icon;

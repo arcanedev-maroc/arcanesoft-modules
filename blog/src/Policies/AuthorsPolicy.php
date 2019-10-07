@@ -41,6 +41,10 @@ class AuthorsPolicy extends Policy
      */
     public function abilities(): iterable
     {
+        $this->setMetas([
+            'category' => 'Authors',
+        ]);
+
         return [
 
             // admin::blog.authors.index
@@ -92,7 +96,7 @@ class AuthorsPolicy extends Policy
      *
      * @param  \App\Models\User|mixed  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function index(AuthenticatedUser $user)
     {
@@ -104,7 +108,7 @@ class AuthorsPolicy extends Policy
      *
      * @param  \App\Models\User|mixed  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function metrics(AuthenticatedUser $user)
     {
@@ -116,7 +120,7 @@ class AuthorsPolicy extends Policy
      *
      * @param  \App\Models\User|mixed  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function show(AuthenticatedUser $user)
     {
@@ -128,7 +132,7 @@ class AuthorsPolicy extends Policy
      *
      * @param  \App\Models\User|mixed  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function create(AuthenticatedUser $user)
     {
@@ -141,7 +145,7 @@ class AuthorsPolicy extends Policy
      * @param  \App\Models\User                     $user
      * @param  \Arcanesoft\Blog\Models\Author|null  $model
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function update(AuthenticatedUser $user, ?Author $model)
     {
@@ -154,7 +158,7 @@ class AuthorsPolicy extends Policy
      * @param  \App\Models\User                     $user
      * @param  \Arcanesoft\Blog\Models\Author|null  $model
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function delete(AuthenticatedUser $user, ?Author $model)
     {

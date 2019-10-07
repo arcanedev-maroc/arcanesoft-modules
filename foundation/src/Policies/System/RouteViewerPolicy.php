@@ -40,6 +40,10 @@ class RouteViewerPolicy extends Policy
      */
     public function abilities(): iterable
     {
+        $this->setMetas([
+            'category' => 'Route Viewer',
+        ]);
+
         return [
 
             // admin::foundation.system.route-viewer.index
@@ -61,7 +65,7 @@ class RouteViewerPolicy extends Policy
      *
      * @param  \App\Models\User  $user
      *
-     * @return bool|void
+     * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function index(AuthenticatedUser $user)
     {
