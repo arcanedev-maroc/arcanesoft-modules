@@ -57,7 +57,7 @@ class RolesRepository extends Repository
      *
      * @return \Arcanesoft\Auth\Models\Role|mixed
      */
-    public function firstOrFailWhereKey(string $key): Role
+    public function firstWithKeyOrFail(string $key): Role
     {
         return $this->where('key', '=', $key)
                     ->firstOrFail();
@@ -70,7 +70,7 @@ class RolesRepository extends Repository
      *
      * @return \Arcanesoft\Auth\Models\Role|mixed
      */
-    public function firstOrFailWhereUuid(string $uuid)
+    public function firstWithUuidOrFail(string $uuid)
     {
         return $this->where('uuid', '=', $uuid)
                     ->firstOrFail();
@@ -84,7 +84,7 @@ class RolesRepository extends Repository
      *
      * @return \Arcanesoft\Auth\Models\User|mixed
      */
-    public function firstUserWhereUuidOrFail(Role $role, string $uuid)
+    public function firstUserWithUuidOrFail(Role $role, string $uuid)
     {
         return $role->users()
                     ->where('uuid', '=', $uuid)
@@ -100,7 +100,7 @@ class RolesRepository extends Repository
      *
      * @return \Arcanesoft\Auth\Models\Permission|mixed
      */
-    public function firstPermissionWhereUuidOrFail(Role $role, string $uuid)
+    public function firstPermissionWithUuidOrFail(Role $role, string $uuid)
     {
         return $role->permissions()
                     ->where('uuid', '=', $uuid)
@@ -108,29 +108,27 @@ class RolesRepository extends Repository
     }
 
     /**
-     * Get roles with the given `key` (attribute) list.
+     * Get roles with the given list of `key` (attribute).
      *
-     * @param  mixed  $keys
+     * @param  array  $keys
      *
      * @return \Arcanesoft\Auth\Models\Role[]|\Illuminate\Database\Eloquent\Collection|mixed
      */
-    public function getByKeys($keys)
+    public function getByKeys(array $keys)
     {
         return $this->whereIn('key', $keys)->get();
     }
 
     /**
-     * Create a new role.
+     * Get roles with the given list of `uuid` (attribute).
      *
-     * @param  array  $attributes
+     * @param  array  $uuids
      *
-     * @return Role|mixed
+     * @return \Arcanesoft\Auth\Models\Role[]|\Illuminate\Database\Eloquent\Collection|mixed
      */
-    public function create(array $attributes)
+    public function getByUuids($uuids)
     {
-        return tap(parent::create($attributes), function (Role $role) use ($attributes) {
-            $this->syncPermissions($role, $attributes['permissions'] ?: []);
-        });
+        return $this->whereIn('uuid', $uuids)->get();
     }
 
     /**
@@ -141,56 +139,46 @@ class RolesRepository extends Repository
      *
      * @return bool
      */
-    public function update(Role $role, array $attributes)
+    public function update(Role $role, array $attributes): bool
     {
-        $updated = $role->update($attributes);
-
-        $this->syncPermissions($role, $attributes['permissions'] ?? []);
-
-        return $updated;
+        return $role->update($attributes);
     }
 
     /**
-     * Sync the permissions (uuids) with the role, or detach all if the permissions is empty.
+     * Sync permissions by the given uuids.
      *
-     * @param  array  $permissions
+     * @param  \Arcanesoft\Auth\Models\Role|mixed  $role
+     * @param  array                               $uuids
      *
-     * @return $this
+     * @return array
      */
-    public function syncPermissions(Role $role, array $uuids)
+    public function syncPermissionsByUuids(Role $role, array $uuids): array
     {
-        if (empty($uuids)) {
-            $this->detachAllPermissions($role);
-        }
-        else {
-            $ids = static::getRepository(PermissionsRepository::class)
-                ->getIdsWhereInUuid($uuids)
-                ->toArray();
+        $ids = static::getRepository(PermissionsRepository::class)
+            ->getIdsWhereInUuid($uuids)
+            ->toArray();
 
-            $this->syncPermissionsByIds($role, $ids);
-        }
-
-        return $this;
+        return $this->syncPermissionsByIds($role, $ids);
     }
 
     /**
-     * Sync the permissions (ids) with the role.
+     * Sync the permissions by the given ids.
      *
-     * @param  \Arcanesoft\Auth\Models\Role  $role
-     * @param  array                         $ids
+     * @param  \Arcanesoft\Auth\Models\Role|mixed  $role
+     * @param  array                               $ids
      *
      * @return array
      */
     public function syncPermissionsByIds(Role $role, array $ids): array
     {
         if (empty($ids))
-            return 0;
+            return [];
 
         event(new SyncingPermissionsToRole($role, $ids));
-        $result = $role->permissions()->sync($ids);
-        event(new SyncedPermissionsToRole($role, $ids, $result));
+        $synced = $role->permissions()->sync($ids);
+        event(new SyncedPermissionsToRole($role, $ids, $synced));
 
-        return $result;
+        return $synced;
     }
 
     /**

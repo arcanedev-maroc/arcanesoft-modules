@@ -4,22 +4,19 @@ namespace Arcanesoft\Auth\Repositories;
 
 use Arcanesoft\Auth\Auth;
 use Arcanesoft\Auth\Events\Users\{
-    ActivatedUser,
-    ActivatingUser,
-    DeactivatedUser,
-    DeactivatingUser,
-    SyncedRolesToUser,
-    SyncingRolesToUser};
+    ActivatedUser, ActivatingUser, DeactivatedUser, DeactivatingUser, SyncedRolesToUser, SyncingRolesToUser,
+};
 use Arcanesoft\Auth\Models\User;
-use Illuminate\Support\{
-    Arr,
-    Str};
+use Illuminate\Support\{Arr, Collection, Str};
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class     UsersRepository
  *
  * @package  Arcanesoft\Auth\Repositories
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
+ *
+ * @mixin  \Arcanesoft\Auth\Models\User
  */
 class UsersRepository extends Repository
 {
@@ -52,7 +49,7 @@ class UsersRepository extends Repository
      */
     public function whereUuid(string $value)
     {
-        return $this->query()->where('uuid', '=', $value);
+        return $this->where('uuid', '=', $value);
     }
 
     /**
@@ -64,7 +61,7 @@ class UsersRepository extends Repository
      */
     public function onlyTrashed(bool $condition = true)
     {
-        return $this->query()->when($condition, function ($q) {
+        return $this->when($condition, function (Builder $q) {
             return $q->onlyTrashed();
         });
     }
@@ -75,18 +72,17 @@ class UsersRepository extends Repository
      */
 
     /**
-     * Get first user with the given uuid, or fails.
+     * Get the first user with the given uuid, or fails if not found.
      *
      * @param  string  $uuid
      *
      * @return \Arcanesoft\Auth\Models\User|mixed
      */
-    public function firstOrFailWhereUuid(string $uuid)
+    public function firstWhereUuidOrFail(string $uuid): User
     {
-        return $this->query()
-            ->where('uuid', '=', $uuid)
-            ->withTrashed() // Get also trashed records
-            ->firstOrFail();
+        return $this->where('uuid', '=', $uuid)
+                    ->withTrashed() // Get also trashed records
+                    ->firstOrFail();
     }
 
     /**
@@ -96,26 +92,11 @@ class UsersRepository extends Repository
      *
      * @return \Arcanesoft\Auth\Models\User|mixed
      */
-    public function create(array $attributes)
+    public function create(array $attributes): User
     {
-        $roles = Arr::pull($attributes, 'roles', []);
         $attributes['password'] = $attributes['password'] ?? Str::random(8);
 
-        return tap($this->query()->create($attributes), function (User $user) use ($roles) {
-            $this->syncRoles($user, $roles);
-        });
-    }
-
-    /**
-     * Force create a new user.
-     *
-     * @param array $attributes
-     *
-     * @return \Arcanesoft\Auth\Models\User|mixed
-     */
-    public function forceCreate(array $attributes)
-    {
-        return $this->query()->forceCreate($attributes);
+        return parent::create($attributes);
     }
 
     /**
@@ -126,15 +107,12 @@ class UsersRepository extends Repository
      *
      * @return \Arcanesoft\Auth\Models\User
      */
-    public function update(User $user, array $attributes)
+    public function update(User $user, array $attributes): User
     {
-        // Remove the nullable attributes
+        // Remove the nullable attributes (like leaving password null to skip the update)
         $attributes = array_filter($attributes);
 
         $user->update($attributes);
-
-        if (isset($attributes['roles']))
-            $this->syncRoles($user, $attributes['roles']);
 
         return $user;
     }
@@ -200,9 +178,7 @@ class UsersRepository extends Repository
      */
     public function delete(User $user)
     {
-        return $user->trashed()
-            ? $user->forceDelete()
-            : $user->delete();
+        return $user->trashed() ? $user->forceDelete() : $user->delete();
     }
 
     /**
@@ -218,29 +194,47 @@ class UsersRepository extends Repository
     }
 
     /**
-     * Find a user by the given id.
+     * Sync roles by keys.
      *
-     * @param  int  $id
+     * @param  \Arcanesoft\Auth\Models\User  $user
+     * @param  array                         $keys
      *
-     * @return \Arcanesoft\Auth\Models\User|mixed|null
+     * @return array
      */
-    public function find($id)
+    public function syncRolesByKeys(User $user, array $keys): array
     {
-        return $this->query()->find($id);
+        return $this->syncRoles(
+            $user, $this->getRolesRepository()->getByKeys($keys)
+        );
+    }
+
+    /**
+     * Sync roles by uuids.
+     *
+     * @param  \Arcanesoft\Auth\Models\User  $user
+     * @param  array                         $uuids
+     *
+     * @return array
+     */
+    public function syncRolesByUuids(User $user, array $uuids): array
+    {
+        return $this->syncRoles(
+            $user, $this->getRolesRepository()->getByUuids($uuids)
+        );
     }
 
     /**
      * Sync roles with the user.
      *
-     * @param  \Arcanesoft\Auth\Models\User  $user
-     * @param  iterable                      $roleKeys
+     * @param  \Arcanesoft\Auth\Models\User    $user
+     * @param  \Illuminate\Support\Collection  $roles
      *
      * @return array
      */
-    public function syncRoles(User $user, iterable $roleKeys): array
+    public function syncRoles(User $user, Collection $roles): array
     {
-        $roles = static::getRepository(RolesRepository::class)
-            ->getByKeys($roleKeys);
+        if (empty($roles))
+            return [];
 
         event(new SyncingRolesToUser($user, $roles));
         $synced = $user->roles()->sync($roles->pluck('id'));
@@ -261,7 +255,7 @@ class UsersRepository extends Repository
      */
     public function activeCount(): int
     {
-        return $this->query()->activated()->count();
+        return $this->activated()->count();
     }
 
     /**
@@ -271,7 +265,7 @@ class UsersRepository extends Repository
      */
     public function verifiedCount(): int
     {
-        return $this->query()->verifiedEmail()->count();
+        return $this->verifiedEmail()->count();
     }
 
     /**
@@ -282,5 +276,20 @@ class UsersRepository extends Repository
     public function trashedCount(): int
     {
         return $this->onlyTrashed()->count();
+    }
+
+    /* -----------------------------------------------------------------
+     |  Other Methods
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Get the roles repository.
+     *
+     * @return \Arcanesoft\Auth\Repositories\RolesRepository|mixed
+     */
+    protected function getRolesRepository(): RolesRepository
+    {
+        return static::getRepository(RolesRepository::class);
     }
 }

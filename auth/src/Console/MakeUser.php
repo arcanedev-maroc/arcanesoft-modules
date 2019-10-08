@@ -45,6 +45,7 @@ class MakeUser extends Command
      */
     public function handle(): void
     {
+        $this->line('');
         $this->comment('Creating a new User');
 
         call_user_func(static::defaultCreateUserCallback(), ...[
@@ -56,7 +57,6 @@ class MakeUser extends Command
         ]);
 
         $this->comment('User created successfully.');
-        $this->line('');
     }
 
     /* -----------------------------------------------------------------
@@ -72,10 +72,9 @@ class MakeUser extends Command
     protected static function defaultCreateUserCallback(): Closure
     {
         return function (string $firstName, string $lastName, string $email, string $password, bool $isAdmin) {
-            $now = Date::now();
-
             /** @var  \Arcanesoft\Auth\Repositories\UsersRepository  $repo */
             $repo = app(UsersRepository::class);
+            $now  = Date::now();
             $user = $repo->forceCreate([
                 'first_name'        => $firstName,
                 'last_name'         => $lastName,
@@ -86,7 +85,7 @@ class MakeUser extends Command
                 'activated_at'      => $now
             ]);
 
-            $repo->syncRoles($user, $isAdmin ? [Role::ADMINISTRATOR] : [Role::MEMBER]);
+            $repo->syncRolesByKeys($user, $isAdmin ? [Role::ADMINISTRATOR] : [Role::MEMBER]);
         };
     }
 }

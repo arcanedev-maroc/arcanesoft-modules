@@ -65,7 +65,7 @@ class RolesController extends Controller
 
         $this->addBreadcrumb(__('Create Role'));
 
-        $permissions = $permissionsRepo->query()->with(['group'])->get();
+        $permissions = $permissionsRepo->with(['group'])->get();
 
         return $this->view('roles.create', compact('permissions'));
     }
@@ -74,7 +74,10 @@ class RolesController extends Controller
     {
         $this->authorize(RolesPolicy::ability('create'));
 
-        $role = $rolesRepo->create($request->getValidatedData());
+        $data = $request->getValidatedData();
+        $role = $rolesRepo->create($data);
+
+        $rolesRepo->syncPermissionsByUuids($role, $data['permissions'] ?: []);
 
         return redirect()->route('admin::auth.roles.show', [$role]);
     }
@@ -97,7 +100,7 @@ class RolesController extends Controller
         $this->addBreadcrumb(__('Edit Role'));
 
         $role->load(['permissions']);
-        $permissions = $permissionsRepo->query()->with(['group'])->get();
+        $permissions = $permissionsRepo->with(['group'])->get();
 
         return $this->view('roles.edit', compact('role', 'permissions'));
     }
@@ -106,7 +109,13 @@ class RolesController extends Controller
     {
         $this->authorize(RolesPolicy::ability('update'));
 
-        $rolesRepo->update($role, $request->getValidatedData());
+        $data = $request->getValidatedData();
+        $rolesRepo->update($role, $data);
+
+        if (empty($permissions = $data['permissions'] ?: []))
+            $rolesRepo->detachAllPermissions($role);
+        else
+            $rolesRepo->syncPermissionsByUuids($role, $permissions);
 
         return redirect()->route('admin::auth.roles.show', [$role]);
     }

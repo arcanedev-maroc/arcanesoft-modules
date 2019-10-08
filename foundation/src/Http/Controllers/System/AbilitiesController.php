@@ -4,6 +4,8 @@ namespace Arcanesoft\Foundation\Http\Controllers\System;
 
 use Arcanedev\LaravelPolicies\Ability;
 use Arcanedev\LaravelPolicies\Contracts\PolicyManager;
+use Arcanesoft\Foundation\Helpers\Sidebar\Collection;
+use Arcanesoft\Foundation\Policies\System\AbilitiesPolicy;
 use Illuminate\Support\Facades\Gate;
 
 /**
@@ -44,12 +46,41 @@ class AbilitiesController extends Controller
 
     public function index()
     {
-//        $this->authorize(MaintenancePolicy::ability('index'));
+        $this->authorize(AbilitiesPolicy::ability('index'));
 
-        $abilities = $this->manager->abilities()->map(function (Ability $ability) {
-            return $ability->setMeta('registered', Gate::has($ability->key()));
-        });
+        $abilities = $this->getAbilities();
 
         return $this->view('system.abilities.index', compact('abilities'));
+    }
+
+    public function show(string $key)
+    {
+        /** @var  \Arcanedev\LaravelPolicies\Ability  $ability */
+        $ability = $this->getAbilities()->get($key);
+
+        abort_if(is_null($ability), 404);
+
+        $this->authorize(AbilitiesPolicy::ability('show'), [$ability]);
+
+        $this->addBreadcrumb($ability->key());
+
+        return $this->view('system.abilities.show', compact('ability'));
+    }
+
+    /* -----------------------------------------------------------------
+     |  Other Methods
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Get the abilities.
+     *
+     * @return \Arcanedev\LaravelPolicies\Ability[]|\Illuminate\Support\Collection
+     */
+    protected function getAbilities()
+    {
+        return $this->manager->abilities()->map(function (Ability $ability) {
+            return $ability->setMeta('is_registered', Gate::has($ability->key()));
+        });
     }
 }

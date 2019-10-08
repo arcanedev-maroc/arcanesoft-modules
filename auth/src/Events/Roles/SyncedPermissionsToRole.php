@@ -23,11 +23,11 @@ class SyncedPermissionsToRole extends RoleEvent
     public $ids;
 
     /**
-     * The sync result.
+     * The synced result.
      *
      * @var array
      */
-    public $result;
+    public $synced;
 
     /* -----------------------------------------------------------------
      |  Constructor
@@ -39,13 +39,13 @@ class SyncedPermissionsToRole extends RoleEvent
      *
      * @param  \Arcanesoft\Auth\Models\Role  $role
      * @param  array                         $ids
-     * @param  array                         $result
+     * @param  array                         $synched
      */
-    public function __construct(Role $role, array $ids, array $result)
+    public function __construct(Role $role, array $ids, array $synched)
     {
         parent::__construct($role);
 
-        $this->ids = $ids;
-        $this->result = $result;
+        $this->ids    = $ids;
+        $this->synced = $synched;
     }
 }

@@ -111,7 +111,7 @@ abstract class RolesSeeder extends Seeder
         $permissions = $this->getPermissionsRepository()->pluck('ability', 'id');
 
         foreach ($roles as $key => $needles) {
-            if ($role = $rolesRepo->firstOrFailWhereKey($key)) {
+            if ($role = $rolesRepo->firstWithKeyOrFail($key)) {
                 $rolesRepo->syncPermissionsByIds(
                     $role, static::getAllowedPermissions($permissions, $needles)
                 );

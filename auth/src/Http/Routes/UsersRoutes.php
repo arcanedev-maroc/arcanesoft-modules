@@ -102,7 +102,7 @@ class UsersRoutes extends RouteRegistrar
     public function bindings(UsersRepository $repo): void
     {
         $this->bind(static::USER_WILDCARD, function (string $uuid) use ($repo) {
-            return $repo->firstOrFailWhereUuid($uuid);
+            return $repo->firstWhereUuidOrFail($uuid);
         });
     }
 }

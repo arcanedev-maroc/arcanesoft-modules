@@ -82,7 +82,9 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability('create'));
 
-        $user = $usersRepo->create($request->getValidatedData());
+        $data = $request->getValidatedData();
+        $user = $usersRepo->create($data);
+        $usersRepo->syncRolesByUuids($user, $data['roles'] ?: []);
 
         $this->notifySuccess(
             __('User Created'),
@@ -116,7 +118,9 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability('update'), [$user]);
 
-        $usersRepo->update($user, $request->getValidatedData());
+        $data = $request->getValidatedData();
+        $user = $usersRepo->update($user, $data);
+        $usersRepo->syncRolesByUuids($user, $data['roles'] ?: []);
 
         $this->notifySuccess(
             __('User Updated'),
@@ -183,7 +187,7 @@ class UsersController extends Controller
 
         $this->notifyError(
             __('Impersonation Not Allowed'),
-            __("You're not allowed to impersonate this user")
+            __('You\'re not allowed to impersonate this user')
         );
 
         return redirect()->back();

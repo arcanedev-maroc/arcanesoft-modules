@@ -80,7 +80,7 @@
                             <?php /** @var  Arcanesoft\Auth\Models\Role  $role */ ?>
                             <tr>
                                 <td>
-                                    {{ form()->checkbox('roles[]', $role->key, in_array($role->key, old('roles', $user->roles->pluck('key')->toArray()))) }}
+                                    {{ form()->checkbox('roles[]', $role->uuid, in_array($role->uuid, old('roles', $user->roles->pluck('uuid')->toArray()))) }}
                                 </td>
                                 <td>{{ $role->name }}</td>
                                 <td>{{ $role->description }}</td>

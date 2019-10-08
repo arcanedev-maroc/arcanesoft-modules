@@ -1,7 +1,9 @@
-<?php namespace Arcanesoft\Auth\Metrics\PasswordResets;
+<?php
+
+namespace Arcanesoft\Auth\Metrics\PasswordResets;
 
 use Arcanedev\LaravelMetrics\Metrics\Trend;
-use Arcanesoft\Auth\Models\PasswordReset;
+use Arcanesoft\Auth\Repositories\PasswordResetsRepository;
 use Illuminate\Http\Request;
 
 /**
@@ -24,9 +26,9 @@ class PasswordResetsPerDay extends Trend
      *
      * @return mixed
      */
-    public function calculate(Request $request)
+    public function calculate(Request $request, PasswordResetsRepository $repo)
     {
-        return $this->countByDays(PasswordReset::class);
+        return $this->countByDays($repo->query());
     }
 
     /**
@@ -37,9 +39,9 @@ class PasswordResetsPerDay extends Trend
     public function ranges(): array
     {
         return [
-            7  => '7 Days',
-            14 => '14 Days',
-            30 => '30 Days',
+            7  => __(':days Days', ['days' => 7]),
+            14 => __(':days Days', ['days' => 14]),
+            30 => __(':days Days', ['days' => 30]),
         ];
     }
 }

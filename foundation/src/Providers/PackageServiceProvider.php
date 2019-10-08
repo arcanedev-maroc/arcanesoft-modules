@@ -2,8 +2,10 @@
 
 namespace Arcanesoft\Foundation\Providers;
 
-use Arcanedev\Support\Providers\ServiceProvider;
+use Arcanedev\LaravelMetrics\Metrics\Metric;
+use Arcanesoft\Support\Providers\ServiceProvider;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Http\Request;
 
 /**
  * Class     PackageServiceProvider
@@ -17,21 +19,28 @@ class PackageServiceProvider extends ServiceProvider
      |  Main Methods
      | -----------------------------------------------------------------
      */
+
     /**
      * Register the service provider.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         parent::register();
 
         $this->registerModulesServiceProviders();
 
-        $this->app->booting(function ($app) {
+        $this->app->booting(function (Application $app) {
             static::changeLogViewerSettings($app);
             static::changeRouteViewerSettings($app);
         });
+    }
+
+    /**
+     * Boot the service provider.
+     */
+    public function boot(): void
+    {
+        $this->extendMetricMacros();
     }
 
     /* -----------------------------------------------------------------
@@ -41,10 +50,8 @@ class PackageServiceProvider extends ServiceProvider
 
     /**
      * Register the modules service providers.
-     *
-     * @return void
      */
-    protected function registerModulesServiceProviders(): void
+    private function registerModulesServiceProviders(): void
     {
         $this->registerProviders(
             $this->app['config']->get('arcanesoft.foundation.modules.providers', [])
@@ -56,7 +63,7 @@ class PackageServiceProvider extends ServiceProvider
      *
      * @param  \Illuminate\Contracts\Foundation\Application  $app
      */
-    protected static function changeLogViewerSettings(Application $app): void
+    private static function changeLogViewerSettings(Application $app): void
     {
         $app['config']->set('log-viewer.route.enabled', false);
         $app['config']->set('log-viewer.menu.filter-route', 'admin::foundation.system.log-viewer.logs.filter');
@@ -70,5 +77,17 @@ class PackageServiceProvider extends ServiceProvider
     protected static function changeRouteViewerSettings(Application $app)
     {
         $app['config']->set('route-viewer.route.enabled', false);
+    }
+
+    /**
+     * Extend classes with macros.
+     */
+    private function extendMetricMacros(): void
+    {
+        Metric::macro('authorizedToSee', function (Request $request): bool {
+            return method_exists($this, 'authorize')
+                ? $this->authorize($request) === true
+                : true;
+        });
     }
 }

@@ -1,8 +1,10 @@
-<?php namespace Arcanesoft\Auth\Metrics\PasswordResets;
+<?php
+
+namespace Arcanesoft\Auth\Metrics\PasswordResets;
 
 use Arcanedev\LaravelMetrics\Metrics\Value;
-use Arcanesoft\Auth\Models\PasswordReset;
 use Arcanesoft\Auth\Policies\PasswordResetsPolicy;
+use Arcanesoft\Auth\Repositories\PasswordResetsRepository;
 use Illuminate\Http\Request;
 
 /**
@@ -25,12 +27,19 @@ class TotalPasswordResets extends Value
      *
      * @return mixed
      */
-    public function calculate(Request $request)
+    public function calculate(Request $request, PasswordResetsRepository $repo)
     {
-        return $this->result(PasswordReset::query()->count());
+        return $this->result($repo->count());
     }
 
-    public function authorize(Request $request)
+    /**
+     * Check if the current user is authorized.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return bool
+     */
+    public function authorize(Request $request): bool
     {
         return $request->user()->can(PasswordResetsPolicy::ability('metrics'));
     }

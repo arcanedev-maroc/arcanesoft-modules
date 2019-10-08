@@ -94,7 +94,7 @@ class RolesRoutes extends RouteRegistrar
     public function bindings(RolesRepository $repo): void
     {
         $this->bind(self::ROLE_WILDCARD, function (string $uuid) use ($repo) {
-            return $repo->firstOrFailWhereUuid( $uuid);
+            return $repo->firstWithUuidOrFail($uuid);
         });
 
         static::bindRouteClasses([

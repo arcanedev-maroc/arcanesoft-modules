@@ -47,7 +47,7 @@ class PermissionsRoutes extends RouteRegistrar
     public function bindings(RolesRepository $repo): void
     {
         $this->bind(self::PERMISSION_WILDCARD, function (string $uuid, Route $route) use ($repo) {
-            return $repo->firstPermissionWhereUuidOrFail(
+            return $repo->firstPermissionWithUuidOrFail(
                 $route->parameter(RolesRoutes::ROLE_WILDCARD),
                 $uuid
             );

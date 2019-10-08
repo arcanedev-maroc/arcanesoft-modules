@@ -2,7 +2,6 @@
 
 namespace Arcanesoft\Auth\Http\Requests\Profile;
 
-use Arcanesoft\Auth\Rules\Users\OldPasswordRule;
 use Arcanesoft\Auth\Http\Requests\FormRequest;
 
 /**
@@ -23,10 +22,10 @@ class UpdateUserPasswordRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'old_password' => ['required', 'string', 'min:8', new OldPasswordRule($this->user()->id)],
+            'old_password' => ['required', 'string', 'min:8', 'password'],
             'password'     => ['required', 'string', 'min:8', 'different:old_password', 'confirmed'],
         ];
     }
@@ -36,7 +35,7 @@ class UpdateUserPasswordRequest extends FormRequest
      *
      * @return array
      */
-    public function getValidatedData()
+    public function getValidatedData(): array
     {
         return $this->all([
             'password',

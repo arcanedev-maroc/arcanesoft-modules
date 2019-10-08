@@ -51,6 +51,7 @@
                 </table>
             </div>
 
+            @can(Arcanesoft\Foundation\Policies\System\AbilitiesPolicy::ability('show'))
             <div class="card card-borderless shadow-sm mb-3">
                 <div class="card-header p-2">@lang('Gate')</div>
                 <table class="table table-borderless table-md mb-0">
@@ -77,7 +78,11 @@
                         </tr>
                     </tbody>
                 </table>
+                <div class="card-footer text-right px-2">
+                    {{ arcanesoft\ui\action_link('show', route('admin::foundation.system.abilities.show', $permission->ability))->size('sm') }}
+                </div>
             </div>
+            @endcan
         </div>
         <div class="col-md-7 col-lg-8">
             <div class="card card-borderless shadow-sm mb-3">

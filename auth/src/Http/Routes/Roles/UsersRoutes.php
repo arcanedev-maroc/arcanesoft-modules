@@ -46,7 +46,7 @@ class UsersRoutes extends RouteRegistrar
     public function bindings(RolesRepository $repo): void
     {
         $this->bind(self::USER_WILDCARD, function (string $uuid, Route $route) use ($repo) {
-            return $repo->firstUserWhereUuidOrFail(
+            return $repo->firstUserWithUuidOrFail(
                 $route->parameter(RolesRoutes::ROLE_WILDCARD),
                 $uuid
             );

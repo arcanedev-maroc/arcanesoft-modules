@@ -1,7 +1,9 @@
-<?php namespace Arcanesoft\Auth\Metrics\Users;
+<?php
+
+namespace Arcanesoft\Auth\Metrics\Users;
 
 use Arcanedev\LaravelMetrics\Metrics\RangedValue;
-use Arcanesoft\Auth\Models\User;
+use Arcanesoft\Auth\Repositories\UsersRepository;
 use Illuminate\Http\Request;
 
 /**
@@ -20,13 +22,14 @@ class NewUsers extends RangedValue
     /**
      * Calculate the value of the metric.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request                       $request
+     * @param  \Arcanesoft\Auth\Repositories\UsersRepository  $repo
      *
-     * @return mixed
+     * @return \Arcanedev\LaravelMetrics\Results\Result|mixed
      */
-    public function calculate(Request $request)
+    public function calculate(Request $request, UsersRepository $repo)
     {
-        return $this->count(User::class);
+        return $this->count($repo->query());
     }
 
     /**

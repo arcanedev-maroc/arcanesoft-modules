@@ -60,8 +60,8 @@ class FoundationServiceProvider extends PackageServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishMultipleConfig();
-            $this->publishViews(false);
-            $this->publishTranslations(false);
+            $this->publishViews();
+            $this->publishTranslations();
             $this->publishAssets();
 
             Foundation::$runsMigrations ? $this->loadMigrations() : $this->publishMigrations();

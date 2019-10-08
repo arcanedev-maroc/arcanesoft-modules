@@ -34,14 +34,16 @@
                             <small>{{ $ability->meta('description', '') }}</small>
                         </td>
                         <td class="text-center">
-                            @if ($ability->meta('registered', false))
+                            @if ($ability->meta('is_registered', false))
                                 <span class="status status-success status-animated" data-toggle="tooltip" data-placement="top" title="@lang('Yes')"></span>
                             @else
                                 <span class="status status-secondary" data-toggle="tooltip" data-placement="top" title="@lang('No')"></span>
                             @endif
                         </td>
                         <td class="text-right">
-
+                            @can(Arcanesoft\Foundation\Policies\System\AbilitiesPolicy::ability('show'))
+                            {{ arcanesoft\ui\action_link_icon('show', route('admin::foundation.system.abilities.show', $ability->key()))->size('sm') }}
+                            @endcan
                         </td>
                     </tr>
                 @empty

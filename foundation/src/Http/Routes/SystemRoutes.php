@@ -75,6 +75,10 @@ class SystemRoutes extends RouteRegistrar
             // admin::foundation.system.abilities.index
             $this->get('/', [AbilitiesController::class, 'index'])
                 ->name('index');
+
+            // admin::foundation.system.abilities.show
+            $this->get('{admin_ability_key}', [AbilitiesController::class, 'show'])
+                ->name('show');
         });
     }
 
@@ -93,7 +97,7 @@ class SystemRoutes extends RouteRegistrar
                 $this->get('/', [LogViewerController::class, 'logs'])
                      ->name('index');
 
-                $this->prefix('{log_file_date}')->group(function () {
+                $this->prefix('{admin_log_file_date}')->group(function () {
                     // admin::foundation.system.log-viewer.logs.show
                     $this->get('/', [LogViewerController::class, 'showLog'])
                          ->name('show');
@@ -107,7 +111,7 @@ class SystemRoutes extends RouteRegistrar
                          ->middleware(['ajax'])
                          ->name('delete');
 
-                    $this->prefix('{log_level}')->group(function () {
+                    $this->prefix('{admin_log_level}')->group(function () {
                         // admin::foundation.system.log-viewer.logs.filter
                         $this->get('/', [LogViewerController::class, 'filter'])
                              ->name('filter');
