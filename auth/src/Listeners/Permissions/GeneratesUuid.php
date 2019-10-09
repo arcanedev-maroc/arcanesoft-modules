@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Auth\Listeners\Permissions;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Auth\Listeners\Permissions;
 
 use Arcanesoft\Auth\Events\Permissions\CreatingPermission;
 use Illuminate\Support\Str;

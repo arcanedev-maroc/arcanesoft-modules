@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Auth\Metrics\Roles;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Auth\Metrics\Roles;
 
 use Arcanedev\LaravelMetrics\Metrics\Partition;
 use Arcanesoft\Auth\Repositories\RolesRepository;

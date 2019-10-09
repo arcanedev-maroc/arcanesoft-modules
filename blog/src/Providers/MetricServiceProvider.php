@@ -1,6 +1,10 @@
-<?php namespace Arcanesoft\Blog\Providers;
+<?php 
 
-use Arcanesoft\Support\Providers\MetricServiceProvider as ServiceProvider;
+declare(strict_types=1);
+
+namespace Arcanesoft\Blog\Providers;
+
+use Arcanesoft\Foundation\Core\Providers\MetricServiceProvider as ServiceProvider;
 
 /**
  * Class     MetricServiceProvider
@@ -11,16 +15,17 @@ use Arcanesoft\Support\Providers\MetricServiceProvider as ServiceProvider;
 class MetricServiceProvider extends ServiceProvider
 {
     /* -----------------------------------------------------------------
-     |  Properties
+     |  Getters
      | -----------------------------------------------------------------
      */
 
     /**
-     * The metrics.
+     * Get the metrics.
      *
-     * @var array
+     * @return iterable
      */
-    protected $metrics = [
-        //
-    ];
+    public function metrics(): iterable
+    {
+        return [];
+    }
 }

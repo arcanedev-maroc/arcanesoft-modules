@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Auth\Rules\Users;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Auth\Rules\Users;
 
 use Arcanesoft\Auth\Auth;
 use Illuminate\Validation\Rules\Unique;

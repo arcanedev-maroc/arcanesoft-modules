@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Auth\Console;
 
 use Arcanesoft\Auth\Models\Role;

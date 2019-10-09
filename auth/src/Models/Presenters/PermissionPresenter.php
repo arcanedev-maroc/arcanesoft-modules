@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Auth\Models\Presenters;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Auth\Models\Presenters;
 
 use Arcanesoft\Auth\Models\Role;
 

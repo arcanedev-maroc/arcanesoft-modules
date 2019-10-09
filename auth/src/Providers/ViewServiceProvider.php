@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Auth\Providers;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Auth\Providers;
 
 use Arcanesoft\Support\Providers\ViewServiceProvider as ServiceProvider;
 

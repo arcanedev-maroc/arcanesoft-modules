@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Auth\Http\Controllers\Datatables;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Auth\Http\Controllers\Datatables;
 
 use Arcanesoft\Auth\Http\Transformers\PermissionTransformer;
 use Arcanesoft\Auth\Repositories\PermissionsRepository;

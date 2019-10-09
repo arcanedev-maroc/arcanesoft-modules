@@ -18,9 +18,9 @@ trait HasRouteClasses
     /**
      * Map route classes.
      *
-     * @param  array  $routes
+     * @param  iterable  $routes
      */
-    protected static function mapRouteClasses(array $routes): void
+    protected static function mapRouteClasses(iterable $routes): void
     {
         static::callRoutesClassMethod($routes, 'map');
     }
@@ -28,9 +28,9 @@ trait HasRouteClasses
     /**
      * Bind route classes.
      *
-     * @param  array  $routes
+     * @param  iterable  $routes
      */
-    protected static function bindRouteClasses(array $routes): void
+    protected static function bindRouteClasses(iterable $routes): void
     {
         static::callRoutesClassMethod($routes, 'bindings');
     }
@@ -43,17 +43,14 @@ trait HasRouteClasses
     /**
      * Call the route method.
      *
-     * @param  string  $route
-     * @param  string  $method
+     * @param  iterable  $routes
+     * @param  string    $method
      */
-    private static function callRoutesClassMethod(array $routes, string $method): void
+    private static function callRoutesClassMethod(iterable $routes, string $method): void
     {
-        /** @var  \Illuminate\Contracts\Foundation\Application  $app */
-        $app = app();
-
         foreach ($routes as $route) {
             if (method_exists($route, $method)) {
-                $app->call($route.'@'.$method);
+                app()->call($route.'@'.$method);
             }
         }
     }

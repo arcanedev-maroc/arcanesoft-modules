@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Auth\Seeders;
 
 use Arcanesoft\Auth\Database\Seeders\PermissionsSeeder;

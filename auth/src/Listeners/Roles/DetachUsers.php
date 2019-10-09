@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Auth\Listeners\Roles;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Auth\Listeners\Roles;
 
 use Arcanesoft\Auth\Events\Roles\DeletingRole;
 use Arcanesoft\Auth\Repositories\RolesRepository;

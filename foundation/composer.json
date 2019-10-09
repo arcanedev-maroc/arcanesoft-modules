@@ -18,7 +18,7 @@
         "arcanedev/breadcrumbs":      "^4.0",
         "arcanedev/laravel-active":   "^2.0",
         "arcanedev/laravel-html":     "^6.0",
-        "arcanedev/laravel-metrics":  "*",
+        "arcanedev/laravel-metrics":  "^1.0",
         "arcanedev/laravel-policies": "@dev",
         "arcanedev/log-viewer":       "^5.0",
         "arcanedev/notify":           "^5.0",
@@ -46,5 +46,12 @@
                 "Arcanesoft\\Foundation\\FoundationServiceProvider"
             ]
         }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
     }
 }

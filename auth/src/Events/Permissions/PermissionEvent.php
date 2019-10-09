@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Auth\Events\Permissions;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Auth\Events\Permissions;
 
 use Arcanesoft\Auth\Models\Permission;
 

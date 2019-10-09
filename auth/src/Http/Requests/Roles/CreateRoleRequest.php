@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Auth\Http\Requests\Roles;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Auth\Http\Requests\Roles;
 
 use Arcanesoft\Auth\Auth;
 use Arcanesoft\Auth\Http\Requests\FormRequest;

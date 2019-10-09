@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Auth;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Auth;
 
 use Illuminate\Support\Str;
 

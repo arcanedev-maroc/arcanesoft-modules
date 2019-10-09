@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Auth\Events\Roles;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Auth\Events\Roles;
 
 /**
  * Class     UpdatedRole

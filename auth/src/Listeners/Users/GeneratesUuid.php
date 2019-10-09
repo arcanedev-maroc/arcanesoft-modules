@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Auth\Listeners\Users;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Auth\Listeners\Users;
 
 use Arcanesoft\Auth\Events\Users\CreatingUser;
 use Illuminate\Support\Str;

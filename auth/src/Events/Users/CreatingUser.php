@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Auth\Events\Users;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Auth\Events\Users;
 
 /**
  * Class     CreatingUser

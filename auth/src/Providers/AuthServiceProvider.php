@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Auth\Providers;
 
 use Arcanesoft\Foundation\Core\Providers\AuthServiceProvider as ServiceProvider;

@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Auth\Http\Controllers;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Auth\Http\Controllers;
 
 /**
  * Class     DashboardController

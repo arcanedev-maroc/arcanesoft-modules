@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Auth\Http\Transformers;
 
 use Arcanesoft\Auth\Models\PasswordReset;

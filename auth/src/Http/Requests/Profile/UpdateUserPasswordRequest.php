@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Auth\Http\Requests\Profile;
 
 use Arcanesoft\Auth\Http\Requests\FormRequest;

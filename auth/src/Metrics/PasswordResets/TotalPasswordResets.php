@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Auth\Metrics\PasswordResets;
 
 use Arcanedev\LaravelMetrics\Metrics\Value;

@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Auth\Providers;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Auth\Providers;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 

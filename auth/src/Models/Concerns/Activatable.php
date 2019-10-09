@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Auth\Models\Concerns;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Auth\Models\Concerns;
 
 use Illuminate\Database\Eloquent\Builder;
 

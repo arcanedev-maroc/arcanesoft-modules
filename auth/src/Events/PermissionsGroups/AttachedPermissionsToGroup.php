@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Auth\Events\PermissionsGroups;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Auth\Events\PermissionsGroups;
 
 use Arcanesoft\Auth\Models\PermissionsGroup;
 use Illuminate\Database\Eloquent\Collection;

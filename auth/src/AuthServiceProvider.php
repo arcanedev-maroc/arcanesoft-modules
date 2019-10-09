@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Auth;
 
 use Arcanesoft\Auth\Console\{InstallCommand, MakeUser};

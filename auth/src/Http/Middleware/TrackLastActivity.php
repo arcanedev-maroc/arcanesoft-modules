@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Auth\Http\Middleware;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Auth\Http\Middleware;
 
 use Arcanesoft\Auth\Models\User;
 use Closure;
