@@ -147,9 +147,10 @@ class UsersPolicy extends Policy
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function show(AuthenticatedUser $user)
+    public function show(AuthenticatedUser $user, User $model = null)
     {
-        //
+        if ($model && $model->isSuperAdmin() && ! $user->isSuperAdmin())
+            return false;
     }
 
     /**
@@ -172,7 +173,7 @@ class UsersPolicy extends Policy
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function update(AuthenticatedUser $user, ?User $model = null)
+    public function update(AuthenticatedUser $user, User $model = null)
     {
         //
     }
@@ -185,7 +186,7 @@ class UsersPolicy extends Policy
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function activate(AuthenticatedUser $user, ?User $model = null)
+    public function activate(AuthenticatedUser $user, User $model = null)
     {
         if ($user->is($model))
             return false;
@@ -219,7 +220,7 @@ class UsersPolicy extends Policy
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function forceDelete(AuthenticatedUser $user, ?User $model = null)
+    public function forceDelete(AuthenticatedUser $user, User $model = null)
     {
         if ( ! is_null($model))
             return $model->isDeletable();
@@ -233,7 +234,7 @@ class UsersPolicy extends Policy
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function restore(AuthenticatedUser $user, ?User $model = null)
+    public function restore(AuthenticatedUser $user, User $model = null)
     {
         if ( ! is_null($model))
             return $model->trashed();
@@ -247,7 +248,7 @@ class UsersPolicy extends Policy
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function impersonate(AuthenticatedUser $user, ?User $model)
+    public function impersonate(AuthenticatedUser $user, User $model)
     {
         if ($model->isAdmin())
             return false;

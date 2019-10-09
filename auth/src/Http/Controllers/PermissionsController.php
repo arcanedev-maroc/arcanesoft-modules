@@ -4,6 +4,7 @@ namespace Arcanesoft\Auth\Http\Controllers;
 
 use Arcanesoft\Auth\Models\Permission;
 use Arcanesoft\Auth\Policies\PermissionsPolicy;
+use Illuminate\Http\Request;
 
 /**
  * Class     PermissionsController
@@ -38,14 +39,14 @@ class PermissionsController extends Controller
         return $this->view('permissions.index');
     }
 
-    public function show(Permission $permission)
+    public function show(Permission $permission, Request $request)
     {
         $this->authorize(PermissionsPolicy::ability('show'));
 
-        $permission->load(['roles.users']);
+        $roles = $permission->roles()->filterByAuthenticatedUser($request->user())->get();
 
         $this->addBreadcrumbRoute(__("Permission's details"), 'admin::auth.permissions.show', [$permission]);
 
-        return $this->view('permissions.show', compact('permission'));
+        return $this->view('permissions.show', compact('permission', 'roles'));
     }
 }

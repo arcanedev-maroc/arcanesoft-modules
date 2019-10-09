@@ -2,6 +2,7 @@
 
 use Arcanesoft\Auth\Http\Transformers\PermissionTransformer;
 use Arcanesoft\Auth\Repositories\PermissionsRepository;
+use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 /**
@@ -17,15 +18,11 @@ class PermissionsController
      | -----------------------------------------------------------------
      */
 
-    /**
-     * @param  \Yajra\DataTables\DataTables                         $dataTables
-     * @param  \Arcanesoft\Auth\Repositories\PermissionsRepository  $permissionsRepo
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function index(DataTables $dataTables, PermissionsRepository $permissionsRepo)
+    public function index(DataTables $dataTables, PermissionsRepository $permissionsRepo, Request $request)
     {
-        $query = $permissionsRepo->query()->with(['group', 'roles']);
+        $query = $permissionsRepo->with(['group', 'roles' => function ($query) use ($request) {
+            return $query->filterByAuthenticatedUser($request->user());
+        }]);
 
         return $dataTables->eloquent($query)
             ->setTransformer(new PermissionTransformer)

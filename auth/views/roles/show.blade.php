@@ -73,15 +73,15 @@
                     </tbody>
                 </table>
                 <div class="card-footer text-right p-2">
-                    @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('update'), $role)
+                    @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('update'), [$role])
                         {{ arcanesoft\ui\action_link('edit', route('admin::auth.roles.edit', [$role]))->size('sm')->setDisabled($role->isLocked()) }}
                     @endcan
 
-                    @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('activate'), $role)
+                    @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('activate'), [$role])
                         {{ arcanesoft\ui\action_button($role->isActive() ? 'deactivate' : 'activate')->attribute('onclick', "window.Foundation.\$emit('auth::roles.activate')")->size('sm')->setDisabled($role->isLocked()) }}
                     @endcan
 
-                    @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('delete'), $role)
+                    @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('delete'), [$role])
                         {{ arcanesoft\ui\action_button('delete')->attributeIf($role->isDeletable(), 'onclick', "window.Foundation.\$emit('auth::roles.delete', ".json_encode(['id' => $role->getRouteKey()]).")")->size('sm')->setDisabled($role->isNotDeletable()) }}
                     @endcan
                 </div>
@@ -193,7 +193,7 @@
 
 @push('modals')
     {{-- ACIVATE MODAL --}}
-    @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('activate'), $role)
+    @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('activate'), [$role])
         <div class="modal modal-danger fade" id="activate-role-modal" data-backdrop="static"
              tabindex="-1" role="dialog" aria-labelledby="activateRoleTitle" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -220,7 +220,7 @@
 
     {{-- DELETE MODAL --}}
     @if ($role->isDeletable())
-        @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('delete'), $role)
+        @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('delete'), [$role])
             <div class="modal modal-danger fade" id="delete-role-modal" data-backdrop="static"
                  tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -249,7 +249,7 @@
     {{-- PERMISSIONS --}}
     @if ($role->permissions->isNotEmpty())
         {{-- DETACH PERMISSION MODAL --}}
-        @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('permissions.detach'), $role)
+        @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('permissions.detach'), [$role])
             <div class="modal modal-danger fade" id="detach-permission-modal" data-backdrop="static"
                  tabindex="-1" role="dialog" aria-labelledby="detach-permission-modal-title" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -280,7 +280,7 @@
     {{-- USERS --}}
     @if ($role->users->isNotEmpty())
         {{-- DETACH USER MODAL --}}
-        @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('users.detach'), $role)
+        @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('users.detach'), [$role])
             <div class="modal modal-danger fade" id="detach-user-modal" data-backdrop="static"
                  tabindex="-1" role="dialog" aria-labelledby="detach-user-modal-title" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -312,7 +312,7 @@
     <script>
         window.ready(() => {
             {{-- ACTIVATE SCRIPT --}}
-            @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('activate'), $role)
+            @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('activate'), [$role])
                 let $activateRoleModal = $('div#activate-role-modal'),
                     $activateRoleForm  = $('form#activate-role-form');
 
@@ -349,7 +349,7 @@
             @endcan
 
             {{-- DELETE SCRIPT --}}
-            @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('delete'), $role)
+            @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('delete'), [$role])
                 let $deleteRoleModal = $('div#delete-role-modal'),
                     $deleteRoleForm  = $('form#delete-role-form');
 
@@ -399,7 +399,7 @@
                 });
 
                 {{-- DETACH PERMISSION SCRIPT --}}
-                @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('permissions.detach'), $role)
+                @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('permissions.detach'), [$role])
                     let $detachPermissionModal = $('div#detach-permission-modal'),
                         $detachPermissionForm  = $('form#detach-permission-form'),
                         detachPermissionAction = $detachPermissionForm.attr('action');
@@ -459,7 +459,7 @@
                 });
 
                 {{-- DETACH USER SCRIPT --}}
-                @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('users.detach'), $role)
+                @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('users.detach'), [$role])
                     let $detachUserModal = $('div#detach-user-modal'),
                         $detachUserForm  = $('form#detach-user-form'),
                         detachUserAction = $detachUserForm.attr('action');

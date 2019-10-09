@@ -122,9 +122,10 @@ class RolesPolicy extends Policy
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function show(AuthenticatedUser $user, ?Role $role = null)
+    public function show(AuthenticatedUser $user, Role $model = null)
     {
-        //
+        if ($model && $model->key === Role::ADMINISTRATOR && ! $user->isSuperAdmin())
+            return false;
     }
 
     /**
@@ -147,7 +148,7 @@ class RolesPolicy extends Policy
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function update(AuthenticatedUser $user, ?Role $role = null)
+    public function update(AuthenticatedUser $user, Role $model = null)
     {
         //
     }
@@ -160,9 +161,9 @@ class RolesPolicy extends Policy
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function activate(AuthenticatedUser $user, ?Role $role = null)
+    public function activate(AuthenticatedUser $user, Role $model = null)
     {
-        if (static::isRoleLocked($role))
+        if (static::isRoleLocked($model))
             return false;
     }
 
@@ -170,27 +171,27 @@ class RolesPolicy extends Policy
      * Allow to delete a role.
      *
      * @param  \App\Models\User                   $user
-     * @param  \Arcanesoft\Auth\Models\Role|null  $role
+     * @param  \Arcanesoft\Auth\Models\Role|null  $model
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function delete(AuthenticatedUser $user, ?Role $role = null)
+    public function delete(AuthenticatedUser $user, Role $model = null)
     {
-        if ( ! is_null($role))
-            return $role->isDeletable();
+        if ( ! is_null($model))
+            return $model->isDeletable();
     }
 
     /**
      * Allow to detach a user from a role.
      *
      * @param  \App\Models\User                   $user
-     * @param  \Arcanesoft\Auth\Models\Role|null  $role
+     * @param  \Arcanesoft\Auth\Models\Role|null  $model
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function detachUser(AuthenticatedUser $user, ?Role $role = null, ?User $related = null)
+    public function detachUser(AuthenticatedUser $user, Role $model = null, User $related = null)
     {
-        if (static::isRoleLocked($role))
+        if (static::isRoleLocked($model))
             return false;
 
         if ( ! $user->isAdmin() && $related->isAdmin())
@@ -201,13 +202,13 @@ class RolesPolicy extends Policy
      * Allow to detach a permission from a role.
      *
      * @param  \App\Models\User                   $user
-     * @param  \Arcanesoft\Auth\Models\Role|null  $role
+     * @param  \Arcanesoft\Auth\Models\Role|null  $model
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function detachPermission(AuthenticatedUser $user, ?Role $role = null, ?Permission $related = null)
+    public function detachPermission(AuthenticatedUser $user, Role $model = null, Permission $related = null)
     {
-        if (static::isRoleLocked($role))
+        if (static::isRoleLocked($model))
             return false;
     }
 
@@ -219,12 +220,12 @@ class RolesPolicy extends Policy
     /**
      * Check if the role is locked.
      *
-     * @param  \Arcanesoft\Auth\Models\Role|null  $role
+     * @param  \Arcanesoft\Auth\Models\Role|null  $model
      *
      * @return bool
      */
-    protected static function isRoleLocked(?Role $role = null): bool
+    protected static function isRoleLocked(Role $model = null): bool
     {
-        return ! is_null($role) && $role->isLocked();
+        return ! is_null($model) && $model->isLocked();
     }
 }

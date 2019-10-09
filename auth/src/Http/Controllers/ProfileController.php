@@ -6,6 +6,7 @@ use Arcanesoft\Auth\Repositories\UsersRepository;
 use Arcanesoft\Foundation\Concerns\HasNotifications;
 use Arcanesoft\Foundation\Http\Requests\Profile\{UpdateUserAccountRequest, UpdateUserPasswordRequest};
 use Illuminate\Http\Request;
+use Arcanesoft\Foundation\Core\Http\Controller;
 
 /**
  * Class     ProfileController
@@ -21,6 +22,18 @@ class ProfileController extends Controller
      */
 
     use HasNotifications;
+
+    /* -----------------------------------------------------------------
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * The view namespace.
+     *
+     * @var string|null
+     */
+    protected $viewNamespace = 'auth';
 
     /* -----------------------------------------------------------------
      |  Constructor

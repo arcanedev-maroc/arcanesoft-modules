@@ -1,7 +1,10 @@
 <?php namespace Arcanesoft\Auth\Http\Controllers\Datatables;
 
 use Arcanesoft\Auth\Http\Transformers\RoleTransformer;
+use Arcanesoft\Auth\Models\Role;
 use Arcanesoft\Auth\Repositories\RolesRepository;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 /**
@@ -17,9 +20,10 @@ class RolesController
      | -----------------------------------------------------------------
      */
 
-    public function index(DataTables $dataTables, RolesRepository $rolesRepo)
+    public function index(DataTables $dataTables, RolesRepository $rolesRepo, Request $request)
     {
-        $query = $rolesRepo->query()->with(['users']);
+        $query = $rolesRepo->with(['users'])
+                           ->filterByAuthenticatedUser($request->user());
 
         return $dataTables->eloquent($query)
             ->setTransformer(new RoleTransformer)

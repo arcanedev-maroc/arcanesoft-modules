@@ -34,13 +34,7 @@
                         <tr>
                             <th class="text-muted">@lang('Roles') :</th>
                             <td class="text-right">
-                                {{ arcanesoft\ui\count_pill($permission->roles->count()) }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="text-muted">@lang('Users') :</th>
-                            <td class="text-right">
-                                {{ arcanesoft\ui\count_pill($permission->users_count) }}
+                                {{ arcanesoft\ui\count_pill($roles->count()) }}
                             </td>
                         </tr>
                         <tr>
@@ -97,7 +91,7 @@
                         <th class="text-right">@lang('Actions')</th>
                     </thead>
                     <tbody>
-                        @forelse($permission->roles as $role)
+                        @forelse($roles as $role)
                             <?php /** @var  \Arcanesoft\Auth\Models\Role  $role */ ?>
                             <tr>
                                 <td>{{ $role->name }}</td>
@@ -118,7 +112,7 @@
                                     @endif
                                 </td>
                                 <td class="text-right">
-                                    @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('show'), $role)
+                                    @can(Arcanesoft\Auth\Policies\RolesPolicy::ability('show'), [$role])
                                         {{ arcanesoft\ui\action_link_icon('show', route('admin::auth.roles.show', [$role]))->size('sm') }}
                                     @endcan
 
@@ -134,6 +128,9 @@
                                 </td>
                             </tr>
                         @empty
+                            <tr>
+                                <td colspan="6">@lang('The list is empty!')</td>
+                            </tr>
                         @endforelse
                     </tbody>
                 </table>

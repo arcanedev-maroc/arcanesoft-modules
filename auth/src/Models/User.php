@@ -41,6 +41,7 @@ use Illuminate\Support\Collection;
  *
  * @property  \Illuminate\Database\Eloquent\Collection  permissions
  *
+ * @method  static|\Illuminate\Database\Eloquent\Builder  filterByAuthenticatedUser(User $user)
  * @method  static|\Illuminate\Database\Eloquent\Builder  verifiedEmail()
  */
 class User extends Authenticatable implements Impersonatable
@@ -175,6 +176,22 @@ class User extends Authenticatable implements Impersonatable
      |  Scopes
      | -----------------------------------------------------------------
      */
+
+    /**
+     * Scope by the authenticated user.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  \Arcanesoft\Auth\Models\User           $user
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|mixed
+     */
+    public function scopeFilterByAuthenticatedUser(Builder $query, User $user)
+    {
+        if ($user->isSuperAdmin())
+            return $query;
+
+        return $query->where('is_admin', '!=', true);
+    }
 
     /**
      * Scope only verified email users.

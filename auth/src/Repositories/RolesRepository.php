@@ -280,4 +280,20 @@ class RolesRepository extends Repository
     {
         return $role->delete();
     }
+
+    /**
+     * Get the roles filtered by authenticated user.
+     * If the user is a super admin shows all the roles.
+     *
+     * @return \Arcanesoft\Auth\Models\Role[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function getFilteredByAuthenticatedUser(User $user)
+    {
+        return $this->get()->filter(function (Role $role) use ($user) {
+            if ($user->isSuperAdmin())
+                return false;
+
+            return $role->key !== Role::ADMINISTRATOR;
+        });
+    }
 }

@@ -1,8 +1,8 @@
 <?php namespace Arcanesoft\Auth\Http\Controllers\Datatables;
 
 use Arcanesoft\Auth\Http\Transformers\UserTransformer;
-use Arcanesoft\Auth\Models\User;
 use Arcanesoft\Auth\Repositories\UsersRepository;
+use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 /**
@@ -18,17 +18,18 @@ class UsersController
      | -----------------------------------------------------------------
      */
 
-    public function index(DataTables $dataTables, UsersRepository $usersRepo, bool $trash = false)
+    public function index(DataTables $dataTables, UsersRepository $usersRepo, Request $request, bool $trash = false)
     {
-        $query = $usersRepo->onlyTrashed($trash);
+        $query = $usersRepo->onlyTrashed($trash)
+                           ->filterByAuthenticatedUser($request->user());
 
         return $dataTables->eloquent($query)
             ->setTransformer(new UserTransformer)
             ->make(true);
     }
 
-    public function trash(DataTables $dataTables, UsersRepository $usersRepo)
+    public function trash(DataTables $dataTables, UsersRepository $usersRepo, Request $request)
     {
-        return $this->index($dataTables, $usersRepo, true);
+        return $this->index($dataTables, $usersRepo, $request, true);
     }
 }

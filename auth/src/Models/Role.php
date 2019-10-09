@@ -52,6 +52,8 @@ use Illuminate\Database\Eloquent\Builder;
  * @method  static  \Illuminate\Database\Eloquent\Builder|static  admin()
  * @method  static  \Illuminate\Database\Eloquent\Builder|static  moderator()
  * @method  static  \Illuminate\Database\Eloquent\Builder|static  member()
+ *
+ * @method  static  \Illuminate\Database\Eloquent\Builder|static  filterByAuthenticatedUser()
  */
 class Role extends Model
 {
@@ -175,6 +177,22 @@ class Role extends Model
      |  Scopes
      | -----------------------------------------------------------------
      */
+
+    /**
+     * Scope by the authenticated user.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  \Arcanesoft\Auth\Models\User           $user
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|mixed
+     */
+    public function scopeFilterByAuthenticatedUser(Builder $query, User $user)
+    {
+        if ($user->isSuperAdmin())
+            return $query;
+
+        return $query->where('key', '!=', static::ADMINISTRATOR);
+    }
 
     /**
      * Scope only with administrator role.

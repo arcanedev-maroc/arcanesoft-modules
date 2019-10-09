@@ -23,7 +23,7 @@ class ProfileRoutes extends RouteRegistrar
     public function map(): void
     {
         $this->adminGroup(function () {
-            $this->prefix('profile')->name('profile.')->group(function () {
+            $this->prefix('profile')->name('profile.')->middleware(['password.confirm'])->group(function () {
                 $this->get('/', [ProfileController::class, 'index'])
                      ->name('index'); // admin::foundation.profile.index
 

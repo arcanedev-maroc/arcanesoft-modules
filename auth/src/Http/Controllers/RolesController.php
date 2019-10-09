@@ -50,7 +50,7 @@ class RolesController extends Controller
 
     public function metrics()
     {
-        // TODO: Add metrics ability
+        $this->authorize(RolesPolicy::ability('metrics'));
 
         $this->addBreadcrumbRoute(__('Metrics'), 'admin::auth.users.metrics');
 
@@ -84,7 +84,7 @@ class RolesController extends Controller
 
     public function show(Role $role)
     {
-        $this->authorize(RolesPolicy::ability('show'));
+        $this->authorize(RolesPolicy::ability('show'), [$role]);
 
         $role->load(['users', 'permissions.group']);
 

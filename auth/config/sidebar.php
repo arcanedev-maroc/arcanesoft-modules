@@ -9,7 +9,7 @@ return [
             'name'        => 'auth::authorization',
             'title'       => 'Authorization',
             'icon'        => 'fas fa-fw fa-key',
-            'roles'       => [Role::ADMINISTRATOR],
+            'roles'       => [],
             'permissions' => [],
             'children'    => [
                 [
@@ -17,7 +17,10 @@ return [
                     'title'       => 'Statistics',
                     'icon'        => 'fas fa-fw fa-tachometer-alt',
                     'route'       => 'admin::auth.index',
-                    'roles'       => [Role::ADMINISTRATOR],
+                    'roles'       => [
+                        Role::ADMINISTRATOR,
+                        'auth-moderator',
+                    ],
                     'permissions' => [],
                 ],
                 [
@@ -25,7 +28,10 @@ return [
                     'title'       => 'Users',
                     'icon'        => 'fas fa-fw fa-users',
                     'route'       => 'admin::auth.users.index',
-                    'roles'       => [Role::ADMINISTRATOR],
+                    'roles'       => [
+                        Role::ADMINISTRATOR,
+                        'auth-moderator',
+                    ],
                     'permissions' => [],
                 ],
                 [
@@ -33,7 +39,10 @@ return [
                     'title'       => 'Roles',
                     'icon'        => 'fas fa-fw fa-user-tag',
                     'route'       => 'admin::auth.roles.index',
-                    'roles'       => [Role::ADMINISTRATOR],
+                    'roles'       => [
+                        Role::ADMINISTRATOR,
+                        'auth-moderator',
+                    ],
                     'permissions' => [],
                 ],
                 [
@@ -41,7 +50,10 @@ return [
                     'title'       => 'Permissions',
                     'icon'        => 'fas fa-fw fa-shield-alt',
                     'route'       => 'admin::auth.permissions.index',
-                    'roles'       => [Role::ADMINISTRATOR],
+                    'roles'       => [
+                        Role::ADMINISTRATOR,
+                        'auth-moderator',
+                    ],
                     'permissions' => [],
                 ],
                 [
@@ -49,7 +61,10 @@ return [
                     'title'       => 'Password Resets',
                     'icon'        => 'fas fa-fw fa-sync',
                     'route'       => 'admin::auth.password-resets.index',
-                    'roles'       => [Role::ADMINISTRATOR],
+                    'roles'       => [
+                        Role::ADMINISTRATOR,
+                        'auth-moderator',
+                    ],
                     'permissions' => [],
                 ],
             ],

@@ -3,9 +3,11 @@
 namespace Arcanesoft\Auth\Http\Controllers;
 
 use Arcanedev\LaravelImpersonator\Contracts\Impersonator;
+use Arcanesoft\Auth\Models\Role;
 use Arcanesoft\Auth\Http\Requests\Users\{CreateUserRequest, UpdateUserRequest};
 use Arcanesoft\Auth\Models\User;
 use Arcanesoft\Auth\Policies\UsersPolicy;
+use Illuminate\Http\Request;
 use Arcanesoft\Auth\Repositories\{RolesRepository, UsersRepository};
 use Arcanesoft\Foundation\Concerns\HasNotifications;
 
@@ -42,6 +44,13 @@ class UsersController extends Controller
      | -----------------------------------------------------------------
      */
 
+    /**
+     * List all the users.
+     *
+     * @param  bool  $trash
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function index($trash = false)
     {
         $this->authorize(UsersPolicy::ability('index'));
@@ -49,6 +58,11 @@ class UsersController extends Controller
         return $this->view('users.index', compact('trash'));
     }
 
+    /**
+     * List all the deleted users.
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function trash()
     {
         $this->authorize(UsersPolicy::ability('index'));
@@ -56,6 +70,11 @@ class UsersController extends Controller
         return $this->index(true);
     }
 
+    /**
+     * Show the metrics.
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function metrics()
     {
         $this->authorize(UsersPolicy::ability('metrics'));
@@ -67,17 +86,33 @@ class UsersController extends Controller
         return $this->view('users.metrics');
     }
 
-    public function create(RolesRepository $rolesRepo)
+    /**
+     * Create a new user.
+     *
+     * @param  \Arcanesoft\Auth\Repositories\RolesRepository  $rolesRepo
+     * @param  \Illuminate\Http\Request                       $request
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function create(RolesRepository $rolesRepo, Request $request)
     {
         $this->authorize(UsersPolicy::ability('create'));
 
-        $roles = $rolesRepo->all();
+        $roles = $rolesRepo->getFilteredByAuthenticatedUser($request->user());
 
         $this->addBreadcrumb(__('New User'));
 
         return $this->view('users.create', compact('roles'));
     }
 
+    /**
+     * Persit the new user.
+     *
+     * @param  \Arcanesoft\Auth\Http\Requests\Users\CreateUserRequest  $request
+     * @param  \Arcanesoft\Auth\Repositories\UsersRepository           $usersRepo
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(CreateUserRequest $request, UsersRepository $usersRepo)
     {
         $this->authorize(UsersPolicy::ability('create'));
@@ -94,26 +129,51 @@ class UsersController extends Controller
         return redirect()->route('admin::auth.users.show', [$user]);
     }
 
+    /**
+     * Show the user's details.
+     *
+     * @param  \Arcanesoft\Auth\Models\User  $user
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function show(User $user)
     {
-        $this->authorize(UsersPolicy::ability('show'));
+        $this->authorize(UsersPolicy::ability('show'), [$user]);
 
         $this->addBreadcrumbRoute(__("User's details"), 'admin::auth.users.show', [$user]);
 
         return $this->view('users.show', compact('user'));
     }
 
-    public function edit(User $user, RolesRepository $rolesRepo)
+    /**
+     * Edit the user.
+     *
+     * @param  \Arcanesoft\Auth\Models\User                   $user
+     * @param  \Arcanesoft\Auth\Repositories\RolesRepository  $rolesRepo
+     * @param  \Illuminate\Http\Request                       $request
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function edit(User $user, RolesRepository $rolesRepo, Request $request)
     {
         $this->authorize(UsersPolicy::ability('update'), [$user]);
 
-        $roles = $rolesRepo->all();
+        $roles = $rolesRepo->getFilteredByAuthenticatedUser($request->user());
 
         $this->addBreadcrumbRoute(__('Edit User'), 'admin::auth.users.edit', [$user]);
 
         return $this->view('users.edit', compact('user', 'roles'));
     }
 
+    /**
+     * Update the user.
+     *
+     * @param  \Arcanesoft\Auth\Models\User                            $user
+     * @param  \Arcanesoft\Auth\Http\Requests\Users\UpdateUserRequest  $request
+     * @param  \Arcanesoft\Auth\Repositories\UsersRepository           $usersRepo
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(User $user, UpdateUserRequest $request, UsersRepository $usersRepo)
     {
         $this->authorize(UsersPolicy::ability('update'), [$user]);
@@ -130,6 +190,14 @@ class UsersController extends Controller
         return redirect()->route('admin::auth.users.show', [$user]);
     }
 
+    /**
+     * Activate/Deactivate the user.
+     *
+     * @param  \Arcanesoft\Auth\Models\User                   $user
+     * @param  \Arcanesoft\Auth\Repositories\UsersRepository  $usersRepo
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function activate(User $user, UsersRepository $usersRepo)
     {
         $this->authorize(UsersPolicy::ability('activate'), [$user]);
@@ -144,6 +212,14 @@ class UsersController extends Controller
         return static::jsonResponseSuccess();
     }
 
+    /**
+     * Delete a user.
+     *
+     * @param  \Arcanesoft\Auth\Models\User                   $user
+     * @param  \Arcanesoft\Auth\Repositories\UsersRepository  $usersRepo
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function delete(User $user, UsersRepository $usersRepo)
     {
         $this->authorize(UsersPolicy::ability($user->trashed() ? 'force-delete' : 'delete'), [$user]);
@@ -158,6 +234,14 @@ class UsersController extends Controller
         return static::jsonResponseSuccess();
     }
 
+    /**
+     * Restore a deleted user.
+     *
+     * @param  \Arcanesoft\Auth\Models\User                   $user
+     * @param  \Arcanesoft\Auth\Repositories\UsersRepository  $usersRepo
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function restore(User $user, UsersRepository $usersRepo)
     {
         $this->authorize(UsersPolicy::ability('restore'), [$user]);
@@ -172,6 +256,14 @@ class UsersController extends Controller
         return static::jsonResponseSuccess();
     }
 
+    /**
+     * Impersonate a user.
+     *
+     * @param  \Arcanesoft\Auth\Models\User                           $user
+     * @param  \Arcanedev\LaravelImpersonator\Contracts\Impersonator  $impersonator
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function impersonate(User $user, Impersonator $impersonator)
     {
         $this->authorize(UsersPolicy::ability('impersonate'), [$user]);

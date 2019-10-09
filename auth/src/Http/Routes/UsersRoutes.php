@@ -6,6 +6,7 @@ use Arcanesoft\Auth\Auth;
 use Arcanesoft\Auth\Http\Controllers\Datatables\UsersController as UsersDatatablesController;
 use Arcanesoft\Auth\Http\Controllers\UsersController;
 use Arcanesoft\Auth\Repositories\UsersRepository;
+use Illuminate\Http\Request;
 
 /**
  * Class     UsersRoutes
@@ -99,9 +100,9 @@ class UsersRoutes extends RouteRegistrar
     /**
      * Register the route bindings.
      */
-    public function bindings(UsersRepository $repo): void
+    public function bindings(UsersRepository $repo, Request $request): void
     {
-        $this->bind(static::USER_WILDCARD, function (string $uuid) use ($repo) {
+        $this->bind(static::USER_WILDCARD, function (string $uuid) use ($repo, $request) {
             return $repo->firstWhereUuidOrFail($uuid);
         });
     }
