@@ -24,9 +24,9 @@ trait HasNotifications
      *
      * @return \Arcanedev\Notify\Contracts\Notify
      */
-    protected function notifySuccess(string $message, string $content, array $extra = [])
+    protected static function notifySuccess(string $message, string $content, array $extra = [])
     {
-        return $this->notify($message, 'success', array_merge($extra, compact('content')));
+        return static::notify($message, 'success', array_merge($extra, compact('content')));
     }
 
     /**
@@ -38,9 +38,9 @@ trait HasNotifications
      *
      * @return \Arcanedev\Notify\Contracts\Notify
      */
-    protected function notifyError(string $message, string $content, array $extra = [])
+    protected static function notifyError(string $message, string $content, array $extra = [])
     {
-        return $this->notify($message, 'danger', array_merge($extra, compact('content')));
+        return static::notify($message, 'danger', array_merge($extra, compact('content')));
     }
 
     /**
@@ -52,9 +52,9 @@ trait HasNotifications
      *
      * @return \Arcanedev\Notify\Contracts\Notify
      */
-    protected function notifyWarning(string $message, string $content, array $extra = [])
+    protected static function notifyWarning(string $message, string $content, array $extra = [])
     {
-        return $this->notify($message, 'warning', array_merge($extra, compact('content')));
+        return static::notify($message, 'warning', array_merge($extra, compact('content')));
     }
 
     /**
@@ -66,9 +66,9 @@ trait HasNotifications
      *
      * @return \Arcanedev\Notify\Contracts\Notify
      */
-    protected function notifyInfo(string $message, string $content, array $extra = [])
+    protected static function notifyInfo(string $message, string $content, array $extra = [])
     {
-        return $this->notify($message, 'info', array_merge($extra, compact('content')));
+        return static::notify($message, 'info', array_merge($extra, compact('content')));
     }
 
     /**
@@ -80,7 +80,7 @@ trait HasNotifications
      *
      * @return \Arcanedev\Notify\Contracts\Notify
      */
-    protected function notify(string $message, string $type, array $extra = [])
+    protected static function notify(string $message, string $type, array $extra = [])
     {
         return notify()->flash($message, $type, $extra);
     }
