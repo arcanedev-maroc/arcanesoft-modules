@@ -12,7 +12,7 @@ use Arcanesoft\Blog\Http\Controllers\TagsController;
  * @package  Arcanesoft\Blog\Http\Routes
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class TagsRoutes extends RouteRegistrar
+class TagsRoutes extends AbstractRouteRegistrar
 {
     /* -----------------------------------------------------------------
      |  Constants

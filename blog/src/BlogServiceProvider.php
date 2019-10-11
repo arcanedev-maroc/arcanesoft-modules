@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Blog;
 
-use Arcanesoft\Support\Providers\PackageServiceProvider;
+use Arcanesoft\Foundation\Support\Providers\PackageServiceProvider;
 
 /**
  * Class     BlogServiceProvider
@@ -39,9 +41,9 @@ class BlogServiceProvider extends PackageServiceProvider
         $this->registerProviders([
             Providers\AuthServiceProvider::class,
             Providers\EventServiceProvider::class,
+            Providers\MetricServiceProvider::class,
             Providers\RouteServiceProvider::class,
 //            Providers\ViewServiceProvider::class,
-            Providers\MetricServiceProvider::class,
         ]);
 
         $this->registerCommands([

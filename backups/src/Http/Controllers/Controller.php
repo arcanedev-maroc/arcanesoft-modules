@@ -2,8 +2,7 @@
 
 namespace Arcanesoft\Backups\Http\Controllers;
 
-use Arcanesoft\Core\Traits\Notifyable;
-use Arcanesoft\Foundation\Core\Http\Controller as BaseController;
+use Arcanesoft\Foundation\Support\Http\Controller as BaseController;
 
 /**
  * Class     Controller

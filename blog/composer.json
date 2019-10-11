@@ -14,7 +14,7 @@
     ],
     "require": {
         "php": ">=7.2.0",
-        "arcanesoft/auth": "@dev"
+        "arcanesoft/foundation": "@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0",

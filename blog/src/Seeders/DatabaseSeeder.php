@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Blog\Seeders;
 
-use Arcanesoft\Support\Database\Seeder;
+use Arcanesoft\Foundation\Support\Database\Seeder;
 
 /**
  * Class     DatabaseSeeder

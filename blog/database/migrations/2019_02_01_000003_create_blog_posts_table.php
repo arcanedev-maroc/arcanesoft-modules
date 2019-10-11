@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Arcanesoft\Blog\Base\Migration;
 use Arcanesoft\Blog\Blog;
 use Illuminate\Database\Schema\Blueprint;
@@ -36,7 +38,7 @@ class CreateBlogPostsTable extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
         $this->createSchema(function (Blueprint $table) {
             $table->bigIncrements('id');

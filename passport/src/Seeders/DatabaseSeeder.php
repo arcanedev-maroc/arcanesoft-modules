@@ -2,7 +2,7 @@
 
 namespace Arcanesoft\Passport\Seeders;
 
-use Arcanesoft\Support\Database\Seeder;
+use Arcanesoft\Foundation\Support\Database\Seeder;
 
 /**
  * Class     DatabaseSeeder

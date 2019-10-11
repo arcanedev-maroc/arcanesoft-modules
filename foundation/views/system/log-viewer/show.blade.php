@@ -13,10 +13,10 @@
 
 @push('content-nav')
     <div class="mb-3 text-right">
-        <a href="{{ route('admin::foundation.system.log-viewer.index') }}"
-           class="btn btn-sm btn-secondary {{ active(['admin::foundation.system.log-viewer.index']) }}">@lang('Metrics')</a>
-        <a href="{{ route('admin::foundation.system.log-viewer.logs.index') }}"
-           class="btn btn-sm btn-secondary {{ active(['admin::foundation.system.log-viewer.logs.index']) }}">@lang('Logs')</a>
+        <a href="{{ route('admin::system.log-viewer.index') }}"
+           class="btn btn-sm btn-secondary {{ active(['admin::system.log-viewer.*']) }}">@lang('Metrics')</a>
+        <a href="{{ route('admin::system.log-viewer.logs.index') }}"
+           class="btn btn-sm btn-secondary {{ active(['admin::system.log-viewer.logs.*']) }}">@lang('Logs')</a>
     </div>
 @endpush
 
@@ -51,13 +51,13 @@
             </tbody>
         </table>
         <div class="card-footer p-2 text-right">
-            @can(Arcanesoft\Foundation\Policies\System\LogViewerPolicy::ability('download'))
-            <a href="{{ route('admin::foundation.system.log-viewer.logs.download', [$log->date]) }}" class="btn btn-sm btn-success">
+            @can(Arcanesoft\Foundation\System\Policies\LogViewerPolicy::ability('download'))
+            <a href="{{ route('admin::system.log-viewer.logs.download', [$log->date]) }}" class="btn btn-sm btn-success">
                 <i class="fa fa-download"></i> @lang('Download')
             </a>
             @endcan
 
-            @can(Arcanesoft\Foundation\Policies\System\LogViewerPolicy::ability('delete'))
+            @can(Arcanesoft\Foundation\System\Policies\LogViewerPolicy::ability('delete'))
             {{ arcanesoft\ui\action_button('delete')->attribute('onclick', "window.Foundation.\$emit('foundation::system.log-viewer.delete')")->size('sm') }}
             @endcan
         </div>
@@ -66,13 +66,13 @@
     {{-- SEARCH FORM --}}
     <div class="card card-borderless shadow-sm mb-3">
         <div class="card-body p-2">
-            <form action="{{ route('admin::foundation.system.log-viewer.logs.search', [$log->date, $level]) }}" method="GET">
+            <form action="{{ route('admin::system.log-viewer.logs.search', [$log->date, $level]) }}" method="GET">
                 <div class=form-group">
                     <div class="input-group">
                         <input id="query" name="query" class="form-control"  value="{{ $query }}" placeholder="Type here to search">
                         <div class="input-group-append">
                             @unless (is_null($query))
-                                <a href="{{ route('admin::foundation.system.log-viewer.logs.show', [$log->date]) }}" class="btn btn-secondary">
+                                <a href="{{ route('admin::system.log-viewer.logs.show', [$log->date]) }}" class="btn btn-secondary">
                                     ({{ $entries->count() }} results) <i class="fa fa-fw fa-times"></i>
                                 </a>
                             @endunless
@@ -140,11 +140,11 @@
 
 @push('modals')
     {{-- DELETE MODAL --}}
-    @can(Arcanesoft\Foundation\Policies\System\LogViewerPolicy::ability('delete'))
+    @can(Arcanesoft\Foundation\System\Policies\LogViewerPolicy::ability('delete'))
     <div class="modal modal-danger fade" id="delete-log-modal" data-backdrop="static"
          tabindex="-1" role="dialog" aria-labelledby="deleteLogTitle" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <form action="{{ route('admin::foundation.system.log-viewer.logs.delete', [$log->date]) }}" id="delete-log-form">
+            <form action="{{ route('admin::system.log-viewer.logs.delete', [$log->date]) }}" id="delete-log-form">
                 @csrf
                 @method('DELETE')
 
@@ -173,7 +173,7 @@
     <script>
         window.ready(() => {
             {{-- DELETE SCRIPT --}}
-            @can(Arcanesoft\Foundation\Policies\System\LogViewerPolicy::ability('delete'))
+            @can(Arcanesoft\Foundation\System\Policies\LogViewerPolicy::ability('delete'))
             let $deleteLogModal = $('div#delete-log-modal'),
                 $deleteLogForm  = $('form#delete-log-form');
 
@@ -193,7 +193,7 @@
                     .then((response) => {
                         if (response.data.code === 'success') {
                             $deleteLogModal.modal('hide');
-                            location.replace("{{ route('admin::foundation.system.log-viewer.logs.index') }}");
+                            location.replace("{{ route('admin::system.log-viewer.logs.index') }}");
                         }
                         else {
                             alert('ERROR ! Check the console !');

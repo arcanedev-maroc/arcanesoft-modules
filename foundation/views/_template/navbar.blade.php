@@ -19,7 +19,7 @@
 
             <li class="nav-item dropdown">
                 <?php
-                    /** @var  App\Models\User  $user */
+                    /** @var  Arcanesoft\Foundation\Auth\Models\User|mixed  $user */
                     $user = auth()->user();
                 ?>
                 <a class="nav-link profile-dropdown-menu dropdown-toggle" id="profile-dropdown-menu"

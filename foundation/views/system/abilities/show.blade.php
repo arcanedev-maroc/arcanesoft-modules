@@ -49,9 +49,9 @@
                         </tr>
                     </tbody>
                 </table>
-                @can(Arcanesoft\Foundation\Policies\System\AbilitiesPolicy::ability('index'))
+                @can(Arcanesoft\Foundation\System\Policies\AbilitiesPolicy::ability('index'))
                 <div class="card-footer text-right px-2">
-                    <a href="{{ route('admin::foundation.system.abilities.index') }}" class="btn btn-sm btn-light">
+                    <a href="{{ route('admin::system.abilities.index') }}" class="btn btn-sm btn-light">
                         @lang('Return back')
                     </a>
                 </div>

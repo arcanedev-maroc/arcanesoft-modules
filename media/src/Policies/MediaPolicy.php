@@ -2,8 +2,8 @@
 
 namespace Arcanesoft\Media\Policies;
 
-use App\Models\User as AuthenticatedUser;
-use Arcanesoft\Foundation\Core\Auth\Policy;
+use Arcanesoft\Foundation\Auth\ModelsUser as AuthenticatedUser;
+use Arcanesoft\Foundation\Support\Auth\Policy;
 
 /**
  * Class     MediaPolicy
@@ -63,7 +63,7 @@ class MediaPolicy extends Policy
     /**
      * Allow to access the main media manager.
      *
-     * @param  \App\Models\User  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */

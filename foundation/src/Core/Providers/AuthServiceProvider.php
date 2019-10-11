@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Foundation\Core\Providers;
 
-use Arcanedev\LaravelPolicies\Contracts\PolicyManager;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Arcanesoft\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 /**
  * Class     AuthServiceProvider
@@ -11,19 +13,22 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
  * @package  Arcanesoft\Foundation\Core\Providers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-abstract class AuthServiceProvider extends ServiceProvider
+class AuthServiceProvider extends ServiceProvider
 {
     /* -----------------------------------------------------------------
-     |  Properties
+     |  Getters
      | -----------------------------------------------------------------
      */
 
     /**
-     * Policy's classes.
+     * Get policy's classes.
      *
-     * @var array
+     * @return array
      */
-    protected $policyClasses = [];
+    public function policyClasses(): array
+    {
+        return $this->app['config']->get('arcanesoft.foundation.policies', []);
+    }
 
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -35,34 +40,12 @@ abstract class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->registerPolicies();
-        $this->registerPolicyClasses();
-    }
+        Gate::after(function ($user, string $ability) {
+            /** @var  \App\Models\User  $user */
+            return $user->isAdmin()
+                || $user->may($ability);
+        });
 
-    /* -----------------------------------------------------------------
-     |  Other Methods
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Register the policy's classes.
-     */
-    protected function registerPolicyClasses(): void
-    {
-        $manager = $this->app->make(PolicyManager::class);
-
-        foreach ($this->policyClasses() as $class) {
-            $manager->registerClass($class);
-        }
-    }
-
-    /**
-     * Get policy's classes.
-     *
-     * @return iterable
-     */
-    public function policyClasses(): iterable
-    {
-        return $this->policyClasses;
+        parent::boot();
     }
 }

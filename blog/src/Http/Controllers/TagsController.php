@@ -1,11 +1,14 @@
-<?php namespace Arcanesoft\Blog\Http\Controllers;
+<?php
 
-use Arcanesoft\Blog\Http\Requests\Tags\CreateTagRequest;
-use Arcanesoft\Blog\Http\Requests\Tags\UpdateTagRequest;
+declare(strict_types=1);
+
+namespace Arcanesoft\Blog\Http\Controllers;
+
+use Arcanesoft\Blog\Http\Requests\Tags\{CreateTagRequest, UpdateTagRequest};
 use Arcanesoft\Blog\Models\Tag;
 use Arcanesoft\Blog\Policies\TagsPolicy;
 use Arcanesoft\Blog\Repositories\TagsRepository;
-use Arcanesoft\Foundation\Concerns\HasNotifications;
+use Arcanesoft\Foundation\Support\Traits\HasNotifications;
 
 /**
  * Class     TagsController

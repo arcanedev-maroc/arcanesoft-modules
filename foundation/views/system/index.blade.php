@@ -9,13 +9,13 @@
 
     <div class="row">
         <div class="col-lg-4">
-            @include(Arcanesoft\Foundation\ViewComposers\System\ApplicationInfoComposer::VIEW)
+            @include(Arcanesoft\Foundation\System\ViewComposers\ApplicationInfoComposer::VIEW)
         </div>
         <div class="col-lg-4">
-            @include(Arcanesoft\Foundation\ViewComposers\System\FoldersPermissionsComposer::VIEW)
+            @include(Arcanesoft\Foundation\System\ViewComposers\FoldersPermissionsComposer::VIEW)
         </div>
         <div class="col-lg-4">
-            @include(Arcanesoft\Foundation\ViewComposers\System\RequiredPhpExtensionsComposer::VIEW)
+            @include(Arcanesoft\Foundation\System\ViewComposers\RequiredPhpExtensionsComposer::VIEW)
         </div>
     </div>
 @endsection

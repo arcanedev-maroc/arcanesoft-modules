@@ -14,7 +14,7 @@
     ],
     "require": {
         "php": ">=7.2.0",
-        "arcanesoft/auth": "@dev",
+        "arcanesoft/foundation": "@dev",
         "laravel/passport": "^7.5"
     },
     "require-dev": {
