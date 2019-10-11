@@ -1,11 +1,14 @@
-<?php namespace Arcanesoft\Blog\Http\Controllers;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Blog\Http\Controllers;
 
 use Arcanesoft\Blog\Http\Requests\Posts\{CreatePostRequest, UpdatePostRequest};
 use Arcanesoft\Blog\Models\Post;
 use Arcanesoft\Blog\Policies\PostsPolicy;
-use Arcanesoft\Blog\Repositories\PostsRepository;
-use Arcanesoft\Blog\Repositories\TagsRepository;
-use Arcanesoft\Foundation\Concerns\HasNotifications;
+use Arcanesoft\Blog\Repositories\{PostsRepository, TagsRepository};
+use Arcanesoft\Foundation\Support\Traits\HasNotifications;
 
 /**
  * Class     PostsController

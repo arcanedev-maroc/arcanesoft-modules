@@ -11,7 +11,7 @@ use Arcanesoft\Blog\Http\Controllers\Datatables\PostsController as PostsDataTabl
  * @package  Arcanesoft\Blog\Http\Routes
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class PostsRoutes extends RouteRegistrar
+class PostsRoutes extends AbstractRouteRegistrar
 {
     /* -----------------------------------------------------------------
      |  Main Methods

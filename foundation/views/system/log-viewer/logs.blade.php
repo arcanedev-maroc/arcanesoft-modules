@@ -6,10 +6,10 @@
 
 @push('content-nav')
     <div class="mb-3 text-right">
-        <a href="{{ route('admin::foundation.system.log-viewer.index') }}"
-           class="btn btn-sm btn-secondary {{ active(['admin::foundation.system.log-viewer.index']) }}">@lang('Metrics')</a>
-        <a href="{{ route('admin::foundation.system.log-viewer.logs.index') }}"
-           class="btn btn-sm btn-secondary {{ active(['admin::foundation.system.log-viewer.logs.index']) }}">@lang('Logs')</a>
+        <a href="{{ route('admin::system.log-viewer.index') }}"
+           class="btn btn-sm btn-secondary {{ active(['admin::system.log-viewer.*']) }}">@lang('Metrics')</a>
+        <a href="{{ route('admin::system.log-viewer.logs.index') }}"
+           class="btn btn-sm btn-secondary {{ active(['admin::system.log-viewer.logs.*']) }}">@lang('Logs')</a>
     </div>
 @endpush
 
@@ -41,26 +41,26 @@
                                     @elseif ($value == 0)
                                         <span class="badge badge-pill badge-light">{{ $value }}</span>
                                     @else
-                                        <a href="{{ route('admin::foundation.system.log-viewer.logs.filter', [$date, $key]) }}" class="text-white border-0">
+                                        <a href="{{ route('admin::system.log-viewer.logs.filter', [$date, $key]) }}" class="text-white border-0">
                                             <span class="badge badge-pill bg-log-level-{{ $key }}">{{ $value }}</span>
                                         </a>
                                     @endif
                                 </td>
                             @endforeach
                             <td class="text-right">
-                                @can(Arcanesoft\Foundation\Policies\System\LogViewerPolicy::ability('show'))
-                                <a href="{{ route('admin::foundation.system.log-viewer.logs.show', [$date]) }}" class="btn btn-sm btn-info">
+                                @can(Arcanesoft\Foundation\System\Policies\LogViewerPolicy::ability('show'))
+                                <a href="{{ route('admin::system.log-viewer.logs.show', [$date]) }}" class="btn btn-sm btn-info">
                                     <i class="fa fa-search"></i>
                                 </a>
                                 @endcan
 
-                                @can(Arcanesoft\Foundation\Policies\System\LogViewerPolicy::ability('download'))
-                                <a href="{{ route('admin::foundation.system.log-viewer.logs.download', [$date]) }}" class="btn btn-sm btn-success">
+                                @can(Arcanesoft\Foundation\System\Policies\LogViewerPolicy::ability('download'))
+                                <a href="{{ route('admin::system.log-viewer.logs.download', [$date]) }}" class="btn btn-sm btn-success">
                                     <i class="fa fa-download"></i>
                                 </a>
                                 @endcan
 
-                                @can(Arcanesoft\Foundation\Policies\System\LogViewerPolicy::ability('delete'))
+                                @can(Arcanesoft\Foundation\System\Policies\LogViewerPolicy::ability('delete'))
                                 {{ arcanesoft\ui\action_button_icon('delete')->attribute('onclick', "window.Foundation.\$emit('foundation::system.log-viewer.delete', ['{$date}'])")->size('sm') }}
                                 @endcan
                             </td>
@@ -68,7 +68,7 @@
                     @empty
                         <tr>
                             <td colspan="11" class="text-center">
-                                <span class="badge badge-secondary">{{ trans('log-viewer::general.empty-logs') }}</span>
+                                <span class="badge badge-secondary">@lang('The list is empty!')</span>
                             </td>
                         </tr>
                     @endforelse
@@ -80,11 +80,11 @@
 
 @push('modals')
     {{-- DELETE MODAL --}}
-    @can(Arcanesoft\Foundation\Policies\System\LogViewerPolicy::ability('delete'))
+    @can(Arcanesoft\Foundation\System\Policies\LogViewerPolicy::ability('delete'))
     <div class="modal modal-danger fade" id="delete-log-modal" data-backdrop="static"
          tabindex="-1" role="dialog" aria-labelledby="deleteLogTitle" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <form action="{{ route('admin::foundation.system.log-viewer.logs.delete', [':id']) }}" id="delete-log-form">
+            <form action="{{ route('admin::system.log-viewer.logs.delete', [':id']) }}" id="delete-log-form">
                 @csrf
                 @method('DELETE')
 
@@ -113,7 +113,7 @@
     <script>
         ready(() => {
             {{-- DELETE SCRIPT --}}
-            @can(Arcanesoft\Foundation\Policies\System\LogViewerPolicy::ability('delete'))
+            @can(Arcanesoft\Foundation\System\Policies\LogViewerPolicy::ability('delete'))
             let $deleteLogModal = $('div#delete-log-modal'),
                 $deleteLogForm  = $('form#delete-log-form'),
                 deleteLogAction = $deleteLogForm.attr('action');
@@ -135,7 +135,7 @@
                     .then((response) => {
                         if (response.data.code === 'success') {
                             $deleteLogModal.modal('hide');
-                            location.replace("{{ route('admin::foundation.system.log-viewer.logs.index') }}");
+                            location.replace("{{ route('admin::system.log-viewer.logs.index') }}");
                         }
                         else {
                             alert('ERROR ! Check the console !');

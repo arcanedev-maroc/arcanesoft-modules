@@ -2,9 +2,8 @@
 
 namespace Arcanesoft\Blog\Policies;
 
-use App\Models\User as AuthenticatedUser;
 use Arcanesoft\Blog\Models\Tag;
-use Arcanesoft\Foundation\Core\Auth\Policy;
+use ArcanesoftFoundation\Auth\ModelsUser as AuthenticatedUser;
 
 /**
  * Class     TagsPolicy
@@ -12,7 +11,7 @@ use Arcanesoft\Foundation\Core\Auth\Policy;
  * @package  Arcanesoft\Blog\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class TagsPolicy extends Policy
+class TagsPolicy extends AbstractPolicy
 {
     /* -----------------------------------------------------------------
      |  Getters
@@ -59,16 +58,16 @@ class TagsPolicy extends Policy
                 'description' => "Ability to list all the tags' metrics",
             ]),
 
-            // admin::blog.tags.show
-            $this->makeAbility('show')->setMetas([
-                'name'        => 'Show a tag',
-                'description' => "Ability to show the tag's details",
-            ]),
-
             // admin::blog.tags.create
             $this->makeAbility('create')->setMetas([
                 'name'        => 'Create a new tag',
                 'description' => 'Ability to create a new tag',
+            ]),
+
+            // admin::blog.tags.show
+            $this->makeAbility('show')->setMetas([
+                'name'        => 'Show a tag',
+                'description' => "Ability to show the tag's details",
             ]),
 
             // admin::blog.tags.update
@@ -94,7 +93,7 @@ class TagsPolicy extends Policy
     /**
      * Allow to list all the tags.
      *
-     * @param  \App\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
@@ -106,7 +105,7 @@ class TagsPolicy extends Policy
     /**
      * Allow to list all the tags' metrics.
      *
-     * @param  \App\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
@@ -116,21 +115,9 @@ class TagsPolicy extends Policy
     }
 
     /**
-     * Allow to show a tag details.
-     *
-     * @param  \App\Models\User|mixed  $user
-     *
-     * @return \Illuminate\Auth\Access\Response|bool|void
-     */
-    public function show(AuthenticatedUser $user)
-    {
-        //
-    }
-
-    /**
      * Allow to create a tag.
      *
-     * @param  \App\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
@@ -140,14 +127,27 @@ class TagsPolicy extends Policy
     }
 
     /**
-     * Allow to update a tag.
+     * Allow to show a tag details.
      *
-     * @param  \App\Models\User                   $user
-     * @param  \Arcanesoft\Blog\Models\Tag|null  $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Blog\Models\Tag|mixed|null         $model
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function update(AuthenticatedUser $user, ?Tag $model)
+    public function show(AuthenticatedUser $user, Tag $model = null)
+    {
+        //
+    }
+
+    /**
+     * Allow to update a tag.
+     *
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Blog\Models\Tag|mixed|null         $model
+     *
+     * @return \Illuminate\Auth\Access\Response|bool|void
+     */
+    public function update(AuthenticatedUser $user, Tag $model = null)
     {
         //
     }
@@ -155,12 +155,12 @@ class TagsPolicy extends Policy
     /**
      * Allow to delete a tag.
      *
-     * @param  \App\Models\User                   $user
-     * @param  \Arcanesoft\Blog\Models\Tag|null  $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Blog\Models\Tag|mixed|null         $model
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function delete(AuthenticatedUser $user, ?Tag $model)
+    public function delete(AuthenticatedUser $user, Tag $model = null)
     {
         if ( ! is_null($model))
             return $model->isDeletable();

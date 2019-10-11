@@ -1,5 +1,5 @@
 <div class="card card-borderless shadow-sm mb-3">
-    <div class="card-header p-2">{{ __('Required PHP Extensions') }}</div>
+    <div class="card-header p-2">@lang('Required PHP Extensions')</div>
     <table class="table table-md mb-0">
         @foreach($requiredPhpExtensions as $extension => $loaded)
         <tr>

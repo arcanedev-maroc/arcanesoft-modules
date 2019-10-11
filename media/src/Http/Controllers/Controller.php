@@ -2,7 +2,7 @@
 
 namespace Arcanesoft\Media\Http\Controllers;
 
-use Arcanesoft\Foundation\Core\Http\Controller as BaseController;
+use Arcanesoft\Foundation\Support\Http\Controller as BaseController;
 use Arcanesoft\Media\MediaManager;
 
 /**

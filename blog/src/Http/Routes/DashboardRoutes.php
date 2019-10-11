@@ -10,7 +10,7 @@ use Arcanesoft\Blog\Http\Controllers\DashboardController;
  * @package  Arcanesoft\Blog\Http\Routes
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class DashboardRoutes extends RouteRegistrar
+class DashboardRoutes extends AbstractRouteRegistrar
 {
     /* -----------------------------------------------------------------
      |  Main Methods

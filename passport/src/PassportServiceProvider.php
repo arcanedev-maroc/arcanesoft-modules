@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Passport;
 
-use Arcanesoft\Support\Providers\PackageServiceProvider;
+use Arcanesoft\Foundation\Support\Providers\PackageServiceProvider;
 
 /**
  * Class     PassportServiceProvider

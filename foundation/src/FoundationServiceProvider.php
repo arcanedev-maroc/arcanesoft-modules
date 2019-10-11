@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Foundation;
 
-use Arcanesoft\Support\Providers\PackageServiceProvider;
+use Arcanesoft\Foundation\Support\Providers\PackageServiceProvider;
 
 /**
  * Class     FoundationServiceProvider
@@ -37,16 +39,10 @@ class FoundationServiceProvider extends PackageServiceProvider
         $this->registerMultipleConfig();
 
         $this->registerProviders([
-            Providers\PackageServiceProvider::class,
-            Providers\AuthServiceProvider::class,
-            Providers\EventServiceProvider::class,
-            Providers\RouteServiceProvider::class,
-            Providers\ViewServiceProvider::class,
-        ]);
-
-        $this->registerCommands([
-            Console\SetupCommand::class,
-            Console\PublishCommand::class,
+            // Foundation's Modules
+            Auth\AuthServiceProvider::class,
+            Core\CoreServiceProvider::class,
+            System\SystemServiceProvider::class,
         ]);
     }
 

@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Blog\Policies;
 
-use App\Models\User as AuthenticatedUser;
-use Arcanesoft\Foundation\Core\Auth\Policy;
+use ArcanesoftFoundation\AuthModelsUser as AuthenticatedUser;
 
 /**
  * Class     DashboardPolicy
@@ -11,7 +12,7 @@ use Arcanesoft\Foundation\Core\Auth\Policy;
  * @package  Arcanesoft\Blog\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class DashboardPolicy extends Policy
+class DashboardPolicy extends AbstractPolicy
 {
     /* -----------------------------------------------------------------
      |  Getters
@@ -64,7 +65,7 @@ class DashboardPolicy extends Policy
     /**
      * Allow to access all the auth stats.
      *
-     * @param  \App\Models\User  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */

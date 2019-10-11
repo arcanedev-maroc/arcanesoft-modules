@@ -7,11 +7,21 @@
 
 return [
 
-    Arcanesoft\Foundation\Policies\DashboardPolicy::class,
-    Arcanesoft\Foundation\Policies\System\InformationPolicy::class,
-    Arcanesoft\Foundation\Policies\System\AbilitiesPolicy::class,
-    Arcanesoft\Foundation\Policies\System\MaintenancePolicy::class,
-    Arcanesoft\Foundation\Policies\System\LogViewerPolicy::class,
-    Arcanesoft\Foundation\Policies\System\RouteViewerPolicy::class,
+    // Core
+    Arcanesoft\Foundation\Core\Policies\DashboardPolicy::class,
+
+    // System
+    Arcanesoft\Foundation\System\Policies\InformationPolicy::class,
+    Arcanesoft\Foundation\System\Policies\AbilitiesPolicy::class,
+    Arcanesoft\Foundation\System\Policies\MaintenancePolicy::class,
+    Arcanesoft\Foundation\System\Policies\LogViewerPolicy::class,
+    Arcanesoft\Foundation\System\Policies\RouteViewerPolicy::class,
+
+    // Auth
+    Arcanesoft\Foundation\Auth\Policies\DashboardPolicy::class,
+    Arcanesoft\Foundation\Auth\Policies\UsersPolicy::class,
+    Arcanesoft\Foundation\Auth\Policies\RolesPolicy::class,
+    Arcanesoft\Foundation\Auth\Policies\PermissionsPolicy::class,
+    Arcanesoft\Foundation\Auth\Policies\PasswordResetsPolicy::class,
 
 ];

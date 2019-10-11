@@ -1,10 +1,14 @@
-<?php namespace Arcanesoft\Blog\Http\Controllers;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Blog\Http\Controllers;
 
 use Arcanesoft\Blog\Http\Requests\Authors\CreateAuthorRequest;
 use Arcanesoft\Blog\Models\Author;
 use Arcanesoft\Blog\Policies\PostsPolicy;
 use Arcanesoft\Blog\Repositories\AuthorsRepository;
-use Arcanesoft\Foundation\Concerns\HasNotifications;
+use Arcanesoft\Foundation\Support\Traits\HasNotifications;
 
 /**
  * Class     AuthorsController

@@ -4,9 +4,7 @@
     <i class="fas fa-fw fa-user-shield"></i> @lang('Abilities')
 @endsection
 
-<?php
-/** @var  Illuminate\Support\Collection  $abilities */
-?>
+<?php /** @var  Illuminate\Support\Collection  $abilities */ ?>
 
 @section('content')
     @include('foundation::system._includes.system-nav')
@@ -15,11 +13,11 @@
         <table class="table table-hover mb-0">
             <thead>
                 <tr>
-                    <th>Ability</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th class="text-center">Registered</th>
-                    <th class="text-right">Action</th>
+                    <th>@lang('Ability')</th>
+                    <th>@lang('Name')</th>
+                    <th>@lang('Description')</th>
+                    <th class="text-center">@lang('Registered')</th>
+                    <th class="text-right">@lang('Action')</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,8 +39,8 @@
                             @endif
                         </td>
                         <td class="text-right">
-                            @can(Arcanesoft\Foundation\Policies\System\AbilitiesPolicy::ability('show'))
-                            {{ arcanesoft\ui\action_link_icon('show', route('admin::foundation.system.abilities.show', $ability->key()))->size('sm') }}
+                            @can(Arcanesoft\Foundation\System\Policies\AbilitiesPolicy::ability('show'))
+                            {{ arcanesoft\ui\action_link_icon('show', route('admin::system.abilities.show', $ability->key()))->size('sm') }}
                             @endcan
                         </td>
                     </tr>
@@ -55,4 +53,3 @@
         </table>
     </div>
 @endsection
-

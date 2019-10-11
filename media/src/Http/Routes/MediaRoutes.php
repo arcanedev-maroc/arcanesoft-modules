@@ -2,7 +2,7 @@
 
 namespace Arcanesoft\Media\Http\Routes;
 
-use Arcanesoft\Foundation\Core\Http\RouteRegistrar as RouteRegistrar;
+use Arcanesoft\Foundation\Support\Http\AdminRouteRegistrar;
 use Arcanesoft\Media\Http\Controllers\{MediaApiController, MediaController};
 
 /**
@@ -11,7 +11,7 @@ use Arcanesoft\Media\Http\Controllers\{MediaApiController, MediaController};
  * @package  Arcanesoft\Media\Http\Routes
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class MediaRoutes extends RouteRegistrar
+class MediaRoutes extends AdminRouteRegistrar
 {
     /* -----------------------------------------------------------------
      |  Main Methods

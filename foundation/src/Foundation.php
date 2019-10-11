@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Foundation;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Foundation;
 
 /**
  * Class     Foundation
@@ -13,7 +17,7 @@ class Foundation
      | -----------------------------------------------------------------
      */
 
-    const VERSION = '3.0.0';
+    const VERSION = '4.0.0';
 
     /* -----------------------------------------------------------------
      |  Properties
@@ -47,7 +51,7 @@ class Foundation
      *
      * @return string
      */
-    public function template()
+    public function template(): string
     {
         return 'foundation::_template.master';
     }

@@ -2,8 +2,8 @@
 
 namespace Arcanesoft\Backups\Policies;
 
-use App\Models\User as AuthenticatedUser;
-use Arcanesoft\Foundation\Core\Auth\Policy;
+use Arcanesoft\Foundation\Auth\Models\User as AuthenticatedUser;
+use Arcanesoft\Foundation\Support\Auth\Policy;
 
 /**
  * Class     StatusesPolicy
@@ -81,7 +81,7 @@ class StatusesPolicy extends Policy
     /**
      * Allow to list all the backups.
      *
-     * @param  \App\Models\User  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
@@ -93,7 +93,7 @@ class StatusesPolicy extends Policy
     /**
      * Allow to display a backup.
      *
-     * @param  \App\Models\User  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
@@ -105,7 +105,7 @@ class StatusesPolicy extends Policy
     /**
      * Allow to create a backup.
      *
-     * @param  \App\Models\User  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
@@ -117,7 +117,7 @@ class StatusesPolicy extends Policy
     /**
      * Allow to clean backups.
      *
-     * @param  \App\Models\User  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */

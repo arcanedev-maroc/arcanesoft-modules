@@ -6,10 +6,10 @@
 
 @push('content-nav')
     <div class="mb-3 text-right">
-        <a href="{{ route('admin::foundation.system.log-viewer.index') }}"
-           class="btn btn-sm btn-secondary {{ active(['admin::foundation.system.log-viewer.index']) }}">@lang('Metrics')</a>
-        <a href="{{ route('admin::foundation.system.log-viewer.logs.index') }}"
-           class="btn btn-sm btn-secondary {{ active(['admin::foundation.system.log-viewer.logs.index']) }}">@lang('Logs')</a>
+        <a href="{{ route('admin::system.log-viewer.index') }}"
+           class="btn btn-sm btn-secondary {{ active(['admin::system.log-viewer.*']) }}">@lang('Metrics')</a>
+        <a href="{{ route('admin::system.log-viewer.logs.index') }}"
+           class="btn btn-sm btn-secondary {{ active(['admin::system.log-viewer.logs.*']) }}">@lang('Logs')</a>
     </div>
 @endpush
 

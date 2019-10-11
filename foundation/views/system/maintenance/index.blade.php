@@ -60,9 +60,9 @@ $maintenanceData = $maintenance->data();
                         </tr>
                         @endif
                     </table>
-                    @can (Arcanesoft\Foundation\Policies\System\MaintenancePolicy::ability('toggle'))
+                    @can (Arcanesoft\Foundation\System\Policies\MaintenancePolicy::ability('toggle'))
                     <div class="card-footer p-2 text-right">
-                        <form action="{{ route('admin::foundation.system.maintenance.stop') }}" method="POST">
+                        <form action="{{ route('admin::system.maintenance.stop') }}" method="POST">
                             @csrf
                             <button class="btn btn-outline-success" type="submit">
                                 <i class="fa fa-fw fa-stop"></i> @lang('Stop Maintenance Mode')
@@ -83,9 +83,9 @@ $maintenanceData = $maintenance->data();
             </div>
 
             @if ($maintenance->isDisabled())
-                @can (Arcanesoft\Foundation\Policies\System\MaintenancePolicy::ability('toggle'))
+                @can (Arcanesoft\Foundation\System\Policies\MaintenancePolicy::ability('toggle'))
                     <div class="card card-borderless shadow-sm mb-3">
-                        <form action="{{ route('admin::foundation.system.maintenance.start') }}" method="POST">
+                        <form action="{{ route('admin::system.maintenance.start') }}" method="POST">
                             @csrf
                             <div class="card-body p-2">
                                 <div class="form-group {{ $errors->first('allowed', 'is-invalid') }}">

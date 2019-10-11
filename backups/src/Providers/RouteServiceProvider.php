@@ -1,7 +1,11 @@
-<?php namespace Arcanesoft\Backups\Providers;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Backups\Providers;
 
 use Arcanesoft\Backups\Http\Routes;
-use Arcanesoft\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Arcanesoft\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 /**
  * Class     RouteServiceProvider
@@ -16,7 +20,12 @@ class RouteServiceProvider extends ServiceProvider
      | -----------------------------------------------------------------
      */
 
-    protected $routes = [
+    /**
+     * The routes list.
+     *
+     * @var array
+     */
+    protected $routeClasses = [
         Routes\StatusesRoutes::class
     ];
 }

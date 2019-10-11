@@ -12,7 +12,7 @@ use Arcanesoft\Blog\Http\Controllers\Datatables\AuthorsController as AuthorsData
  * @package  Arcanesoft\Blog\Http\Routes
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class AuthorsRoutes extends RouteRegistrar
+class AuthorsRoutes extends AbstractRouteRegistrar
 {
     /* -----------------------------------------------------------------
      |  Constants

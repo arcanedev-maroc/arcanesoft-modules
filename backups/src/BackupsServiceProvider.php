@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Backups;
 
 use Arcanesoft\Backups\Console\{InstallCommand, PublishCommand};
-use Arcanesoft\Support\Providers\PackageServiceProvider;
+use Arcanesoft\Foundation\Support\Providers\PackageServiceProvider;
 
 /**
  * Class     BackupsServiceProvider
@@ -35,8 +37,6 @@ class BackupsServiceProvider extends PackageServiceProvider
      */
     public function register(): void
     {
-        parent::register();
-
         $this->registerMultipleConfig();
 
         $this->registerProviders([
@@ -63,17 +63,5 @@ class BackupsServiceProvider extends PackageServiceProvider
             $this->publishViews(false);
             $this->publishTranslations(false);
         }
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides(): array
-    {
-        return [
-            //
-        ];
     }
 }

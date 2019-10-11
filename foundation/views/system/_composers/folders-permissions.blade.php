@@ -1,5 +1,5 @@
 <div class="card card-borderless shadow-sm mb-3">
-    <div class="card-header p-2">{{ __('Folders Permissions') }}</div>
+    <div class="card-header p-2">@lang('Folders Permissions')</div>
     <table class="table table-md mb-0">
         @foreach($foldersPermissions as $folder => $permission)
         <tr>

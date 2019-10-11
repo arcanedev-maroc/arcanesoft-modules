@@ -1,22 +1,19 @@
 @extends(arcanesoft\foundation()->template())
 
 @section('page-title')
-    <i class="fas fa-fw fa-map-signs"></i> {{ __('Routes Viewer') }}
+    <i class="fas fa-fw fa-map-signs"></i> @lang('Routes Viewer')
 @endsection
-
-@push('content-nav')
-@endpush
 
 @section('content')
     <div class="card card-borderless shadow-sm">
-        <div class="card-header">{{ __('Routes') }}</div>
+        <div class="card-header">@lang('Routes')</div>
         <table class="table table-hover table-md mb-0">
             <thead>
                 <tr>
-                    <th>{{ __('Method') }}</th>
-                    <th>{{ __('Domain') }}</th>
-                    <th>{{ __('URI') }} / {{ __('Name') }} / {{ __('Action') }}</th>
-                    <th>{{ __('Middleware') }}</th>
+                    <th>@lang('Method')</th>
+                    <th>@lang('Domain')</th>
+                    <th>@lang('URI') / @lang('Name') / @lang('Action')</th>
+                    <th>@lang('Middleware')</th>
                 </tr>
             </thead>
             <tbody>
@@ -55,6 +52,3 @@
         </table>
     </div>
 @endsection
-
-@push('scripts')
-@endpush

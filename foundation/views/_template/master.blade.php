@@ -20,7 +20,7 @@
       class="{{ implode(' ', $classes) }}">
     <div id="foundation" class="app-container">
         <div class="wrapper">
-            @include(Arcanesoft\Foundation\ViewComposers\SidebarComposer::MAIN_SIDEBAR_VIEW)
+            @include(Arcanesoft\Foundation\Core\ViewComposers\SidebarComposer::VIEW)
 
             <main class="main-container">
                 @include('foundation::_template.navbar')
@@ -28,11 +28,11 @@
                 @include('foundation::_template.page-header')
 
                 <section class="content-wrapper">
-                    @include(Arcanesoft\Foundation\ViewComposers\NotificationsComposer::VIEW)
+                    @include(Arcanesoft\Foundation\Core\ViewComposers\NotificationsComposer::VIEW)
 
                     @stack('content-nav')
 
-                    @include(Arcanesoft\Foundation\ViewComposers\MetricsComposer::VIEW)
+                    @include(Arcanesoft\Foundation\Core\ViewComposers\MetricsComposer::VIEW)
 
                     @yield('content')
                 </section>

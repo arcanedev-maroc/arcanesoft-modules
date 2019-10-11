@@ -1,6 +1,6 @@
 <?php
 
-use Arcanesoft\Auth\Models\Role;
+use Arcanesoft\Foundation\Auth\Models\Role;
 use Arcanesoft\Backups\Policies\StatusesPolicy;
 
 return [

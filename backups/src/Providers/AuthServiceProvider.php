@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Backups\Providers;
 
-use Arcanesoft\Foundation\Core\Providers\AuthServiceProvider as ServiceProvider;
+use Arcanesoft\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 /**
  * Class     AuthorizationServiceProvider

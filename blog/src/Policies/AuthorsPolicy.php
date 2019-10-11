@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Blog\Policies;
 
-use App\Models\User as AuthenticatedUser;
 use Arcanesoft\Blog\Models\Author;
-use Arcanesoft\Foundation\Core\Auth\Policy;
+use Arcanesoft\Foundation\Auth\Models\User as AuthenticatedUser;
 
 /**
  * Class     AuthorsPolicy
@@ -12,7 +13,7 @@ use Arcanesoft\Foundation\Core\Auth\Policy;
  * @package  Arcanesoft\Blog\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class AuthorsPolicy extends Policy
+class AuthorsPolicy extends AbstractPolicy
 {
     /* -----------------------------------------------------------------
      |  Getters
@@ -59,16 +60,16 @@ class AuthorsPolicy extends Policy
                 'description' => "Ability to list all the authors' metrics",
             ]),
 
-            // admin::blog.authors.show
-            $this->makeAbility('show')->setMetas([
-                'name'        => 'Show a author',
-                'description' => "Ability to show the author's details",
-            ]),
-
             // admin::blog.authors.create
             $this->makeAbility('create')->setMetas([
                 'name'        => 'Create a new author',
                 'description' => 'Ability to create a new author',
+            ]),
+
+            // admin::blog.authors.show
+            $this->makeAbility('show')->setMetas([
+                'name'        => 'Show a author',
+                'description' => "Ability to show the author's details",
             ]),
 
             // admin::blog.authors.update
@@ -94,7 +95,7 @@ class AuthorsPolicy extends Policy
     /**
      * Allow to list all the authors.
      *
-     * @param  \App\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
@@ -106,7 +107,7 @@ class AuthorsPolicy extends Policy
     /**
      * Allow to list all the authors' metrics.
      *
-     * @param  \App\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
@@ -116,21 +117,9 @@ class AuthorsPolicy extends Policy
     }
 
     /**
-     * Allow to show a author details.
-     *
-     * @param  \App\Models\User|mixed  $user
-     *
-     * @return \Illuminate\Auth\Access\Response|bool|void
-     */
-    public function show(AuthenticatedUser $user)
-    {
-        //
-    }
-
-    /**
      * Allow to create a author.
      *
-     * @param  \App\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
@@ -140,14 +129,27 @@ class AuthorsPolicy extends Policy
     }
 
     /**
-     * Allow to update a author.
+     * Allow to show a author details.
      *
-     * @param  \App\Models\User                     $user
-     * @param  \Arcanesoft\Blog\Models\Author|null  $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Blog\Models\Author|mixed|null      $model
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function update(AuthenticatedUser $user, ?Author $model)
+    public function show(AuthenticatedUser $user, Author $model = null)
+    {
+        //
+    }
+
+    /**
+     * Allow to update a author.
+     *
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Blog\Models\Author|mixed|null      $model
+     *
+     * @return \Illuminate\Auth\Access\Response|bool|void
+     */
+    public function update(AuthenticatedUser $user, Author $model = null)
     {
         //
     }
@@ -155,12 +157,12 @@ class AuthorsPolicy extends Policy
     /**
      * Allow to delete a author.
      *
-     * @param  \App\Models\User                     $user
-     * @param  \Arcanesoft\Blog\Models\Author|null  $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Blog\Models\Author|mixed|null      $model
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function delete(AuthenticatedUser $user, ?Author $model)
+    public function delete(AuthenticatedUser $user, Author $model = null)
     {
         if ( ! is_null($model))
             return $model->isDeletable();

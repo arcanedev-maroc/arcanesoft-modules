@@ -15,7 +15,7 @@
     "license": "MIT",
     "require": {
         "php": ">=7.2.0",
-        "arcanesoft/auth": "@dev",
+        "arcanesoft/foundation": "@dev",
         "spatie/laravel-backup": "^6.4"
     },
     "require-dev": {
