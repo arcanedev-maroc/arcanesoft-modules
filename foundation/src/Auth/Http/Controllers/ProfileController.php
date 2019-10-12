@@ -50,7 +50,7 @@ class ProfileController extends Controller
 
     public function updateAccount(UpdateUserAccountRequest $request, UsersRepository $repo)
     {
-        $repo->update(
+        $repo->updateUser(
             $request->user(),
             $request->getValidatedData()
         );
@@ -65,7 +65,7 @@ class ProfileController extends Controller
 
     public function updatePassword(UpdateUserPasswordRequest $request, UsersRepository $repo)
     {
-        $repo->update(
+        $repo->updateUser(
             $request->user(),
             $request->getValidatedData()
         );

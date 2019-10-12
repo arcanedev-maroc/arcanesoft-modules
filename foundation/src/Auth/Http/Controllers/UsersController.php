@@ -84,7 +84,7 @@ class UsersController extends Controller
 
         $this->addBreadcrumbRoute(__('Metrics'), 'admin::auth.users.metrics');
 
-        $this->selectMetrics('arcanesoft.auth.metrics.users');
+        $this->selectMetrics('arcanesoft.foundation.metrics.selected.auth-users');
 
         return $this->view('auth.users.metrics');
     }
@@ -184,9 +184,7 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability('update'), [$user]);
 
-        $data = $request->getValidatedData();
-        $user = $usersRepo->update($user, $data);
-        $usersRepo->syncRolesByUuids($user, $data['roles'] ?: []);
+        $usersRepo->updateUser($user, $request->getValidatedData());
 
         $this->notifySuccess(
             __('User Updated'),
@@ -230,7 +228,7 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability($user->trashed() ? 'force-delete' : 'delete'), [$user]);
 
-        $usersRepo->delete($user);
+        $usersRepo->deleteUser($user);
 
         $this->notifySuccess(
             __('User Deleted'),
@@ -252,7 +250,7 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability('restore'), [$user]);
 
-        $usersRepo->restore($user);
+        $usersRepo->restoreUser($user);
 
         $this->notifySuccess(
             __('User Restored'),

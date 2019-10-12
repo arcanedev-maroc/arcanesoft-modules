@@ -29,13 +29,13 @@ class UsersRepository extends AbstractRepository
      */
 
     /**
-     * Get the model instance.
+     * Get the model FQN class.
      *
-     * @return \Arcanesoft\Foundation\Auth\Models\User|mixed
+     * @return string
      */
-    public static function model(): User
+    public static function modelClass(): string
     {
-        return Auth::makeModel('user');
+        return Auth::model('user', User::class);
     }
 
     /* -----------------------------------------------------------------
@@ -113,45 +113,31 @@ class UsersRepository extends AbstractRepository
     {
         $attributes['password'] = $attributes['password'] ?? Str::random(8);
 
-        $user = $this->fill($attributes)->forceFill([
-            'activated_at' => $attributes['activated_at'] ?: now(), // TODO: Add a setting to change this
-        ]);
+        return tap($this->fill($attributes), function (User $user) use ($attributes) {
+            $user->forceFill([
+                'activated_at' => $attributes['activated_at'] ?: now(), // TODO: Add a setting to change this
+            ]);
 
-        $user->save();
-
-        return $user;
+            $user->save();
+        });
     }
 
     /**
-     * Create a new user.
-     *
-     * @param  array  $attributes
-     *
-     * @return \Arcanesoft\Foundation\Auth\Models\User|mixed
-     */
-    public function create(array $attributes): User
-    {
-        $attributes['password'] = $attributes['password'] ?? Str::random(8);
-
-        return parent::create($attributes);
-    }
-
-    /**
-     * Update an existed user.
+     * Update the given user (+ synced roles).
      *
      * @param  \Arcanesoft\Foundation\Auth\Models\User  $user
      * @param  array                                    $attributes
      *
-     * @return \Arcanesoft\Foundation\Auth\Models\User
+     * @return bool
      */
-    public function update(User $user, array $attributes): User
+    public function updateUser(User $user, array $attributes): bool
     {
-        // Remove the nullable attributes (like leaving password null to skip the update)
         $attributes = array_filter($attributes);
+        $updated    = $user->update($attributes);
 
-        $user->update($attributes);
+        $this->syncRolesByUuids($user, $attributes['roles'] ?: []);
 
-        return $user;
+        return $updated;
     }
 
     /**
@@ -207,13 +193,13 @@ class UsersRepository extends AbstractRepository
     }
 
     /**
-     * Delete a user.
+     * Delete or Force delete a user if trashed.
      *
      * @param  \Arcanesoft\Foundation\Auth\Models\User  $user
      *
      * @return bool|null
      */
-    public function delete(User $user)
+    public function deleteUser(User $user)
     {
         return $user->trashed() ? $user->forceDelete() : $user->delete();
     }
@@ -225,7 +211,7 @@ class UsersRepository extends AbstractRepository
      *
      * @return bool|null
      */
-    public function restore(User $user)
+    public function restoreUser(User $user)
     {
         return $user->restore();
     }

@@ -20,18 +20,18 @@ use Illuminate\Support\Collection;
 class PermissionsRepository extends AbstractRepository
 {
     /* -----------------------------------------------------------------
-     |  Query Methods
+     |  Main Methods
      | -----------------------------------------------------------------
      */
 
     /**
-     * Get the permission instance.
+     * Get the model FQN class.
      *
-     * @return \Arcanesoft\Foundation\Auth\Models\Permission|mixed
+     * @return string
      */
-    public static function model()
+    public static function modelClass(): string
     {
-        return Auth::makeModel('permission');
+        return Auth::model('permission', Permission::class);
     }
 
     /* -----------------------------------------------------------------

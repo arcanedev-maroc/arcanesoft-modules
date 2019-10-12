@@ -1,23 +1,23 @@
 <?php
 
-namespace Arcanedev\LaravelPolicies\Tests;
+namespace Arcanesoft\Foundation\Tests\Unit;
 
-use Arcanedev\LaravelPolicies\PoliciesServiceProvider;
+use Arcanesoft\Foundation\Tests\TestCase;
 
 /**
- * Class     PoliciesServiceProviderTest
+ * Class     FoundationServiceProviderTest
  *
- * @package  Arcanedev\LaravelPolicies\Tests
+ * @package  Arcanesoft\Foundation\Tests\Unit
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class PoliciesServiceProviderTest extends TestCase
+class FoundationServiceProviderTest extends TestCase
 {
     /* -----------------------------------------------------------------
      |  Properties
      | -----------------------------------------------------------------
      */
 
-    /** @var  \Arcanedev\LaravelPolicies\PoliciesServiceProvider */
+    /** @var  \Arcanesoft\Foundation\FoundationServiceProvider */
     private $provider;
 
     /* -----------------------------------------------------------------
@@ -29,7 +29,7 @@ class PoliciesServiceProviderTest extends TestCase
     {
         parent::setUp();
 
-        $this->provider = $this->app->get(PoliciesServiceProvider::class);
+        $this->provider = $this->app->getProvider(\Arcanesoft\Foundation\FoundationServiceProvider::class);
     }
 
     /* -----------------------------------------------------------------
@@ -43,22 +43,13 @@ class PoliciesServiceProviderTest extends TestCase
         $expectations = [
             \Illuminate\Support\ServiceProvider::class,
             \Arcanedev\Support\Providers\ServiceProvider::class,
-            \Arcanedev\Support\Providers\PackageServiceProvider::class,
-            \Arcanedev\LaravelPolicies\PoliciesServiceProvider::class,
+            \Arcanesoft\Foundation\Support\Providers\ServiceProvider::class,
+            \Arcanesoft\Foundation\Support\Providers\PackageServiceProvider::class,
+            \Arcanesoft\Foundation\FoundationServiceProvider::class,
         ];
 
         foreach ($expectations as $expected) {
             static::assertInstanceOf($expected, $this->provider);
         }
-    }
-
-    /** @test */
-    public function it_can_provides()
-    {
-        $expected = [
-            \Arcanedev\LaravelPolicies\Contracts\PolicyManager::class,
-        ];
-
-        static::assertEquals($expected, $this->provider->provides());
     }
 }

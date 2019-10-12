@@ -58,7 +58,7 @@ class RolesController extends Controller
 
         $this->addBreadcrumbRoute(__('Metrics'), 'admin::auth.users.metrics');
 
-        $this->selectMetrics('arcanesoft.auth.metrics.roles');
+        $this->selectMetrics('arcanesoft.foundation.metrics.selected.auth-roles');
 
         return $this->view('auth.roles.metrics');
     }

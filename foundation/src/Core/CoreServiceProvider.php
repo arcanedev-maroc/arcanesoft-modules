@@ -29,6 +29,7 @@ class CoreServiceProvider extends ServiceProvider
         $this->registerProviders([
             Providers\AuthServiceProvider::class,
             Providers\EventServiceProvider::class,
+            Providers\MetricServiceProvider::class,
             Providers\RouteServiceProvider::class,
             Providers\ViewServiceProvider::class,
         ]);

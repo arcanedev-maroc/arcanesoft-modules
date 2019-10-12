@@ -23,18 +23,18 @@ use Arcanesoft\Foundation\Auth\Events\Roles\{
 class RolesRepository extends AbstractRepository
 {
     /* -----------------------------------------------------------------
-     |  Query Methods
+     |  Main Methods
      | -----------------------------------------------------------------
      */
 
     /**
-     * Get the model instance.
+     * Get the model FQN class.
      *
-     * @return \Arcanesoft\Foundation\Auth\Models\Role|mixed
+     * @return string
      */
-    public static function model(): Role
+    public static function modelClass(): string
     {
-        return Auth::makeModel('role');
+        return Auth::model('role', Role::class);
     }
 
     /* -----------------------------------------------------------------

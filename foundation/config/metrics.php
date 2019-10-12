@@ -1,5 +1,7 @@
 <?php
 
+// TODO: Find an eloquent way to register and select metrics
+
 return [
 
     /* -----------------------------------------------------------------
@@ -38,7 +40,7 @@ return [
     'selected' => [
 
         // Auth - Dashboard
-        'dashboard' => [
+        'auth-dashboard' => [
             'index' => [
                 Arcanesoft\Foundation\Auth\Metrics\Users\TotalUsers::class,
                 Arcanesoft\Foundation\Auth\Metrics\Users\UsersPerDay::class,
@@ -46,7 +48,7 @@ return [
         ],
 
         // Auth - Users
-        'users' => [
+        'auth-users' => [
             Arcanesoft\Foundation\Auth\Metrics\Users\TotalUsers::class,
             Arcanesoft\Foundation\Auth\Metrics\Users\NewUsers::class,
             Arcanesoft\Foundation\Auth\Metrics\Users\VerifiedEmails::class,
@@ -55,13 +57,13 @@ return [
         ],
 
         // Auth - Roles
-        'roles' => [
+        'auth-roles' => [
             Arcanesoft\Foundation\Auth\Metrics\Roles\TotalUsersByRoles::class,
             Arcanesoft\Foundation\Auth\Metrics\Roles\TotalRoles::class,
         ],
 
         // Auth - Password resets
-        'password-resets' => [
+        'auth-password-resets' => [
             Arcanesoft\Foundation\Auth\Metrics\PasswordResets\TotalPasswordResets::class,
             Arcanesoft\Foundation\Auth\Metrics\PasswordResets\PasswordResetsPerDay::class,
         ],

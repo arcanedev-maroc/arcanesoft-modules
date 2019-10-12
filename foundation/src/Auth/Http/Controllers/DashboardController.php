@@ -22,7 +22,7 @@ class DashboardController extends Controller
         $this->setCurrentSidebarItem('auth::authorization.dashboard');
         $this->addBreadcrumbParent();
 
-        $this->selectMetrics(config('arcanesoft.auth.metrics.dashboard.index', []));
+        $this->selectMetrics('arcanesoft.foundation.metrics.selected.auth-dashboard');
 
         return $this->view('auth.dashboard');
     }

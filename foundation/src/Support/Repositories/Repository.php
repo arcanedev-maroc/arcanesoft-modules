@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Support\Repositories;
 
 use Arcanesoft\Foundation\Support\Contracts\Repository as RepositoryContract;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Traits\ForwardsCalls;
 
 /**
@@ -30,11 +31,21 @@ abstract class Repository implements RepositoryContract
      */
 
     /**
+     * Get the model FQN class.
+     *
+     * @return string
+     */
+    abstract public static function modelClass(): string;
+
+    /**
      * Get the model instance.
      *
      * @return \Illuminate\Database\Eloquent\Model|mixed
      */
-    abstract public static function model();
+    public function model(): Model
+    {
+        return app()->make(static::modelClass());
+    }
 
     /**
      * Get the query builder.
@@ -43,7 +54,7 @@ abstract class Repository implements RepositoryContract
      */
     public function query()
     {
-        return static::model()->newQuery();
+        return $this->model()->newQuery();
     }
 
     /* -----------------------------------------------------------------
@@ -60,7 +71,7 @@ abstract class Repository implements RepositoryContract
      */
     public function all($columns = ['*'])
     {
-        return $this->query()->get($columns);
+        return $this->get($columns);
     }
 
     /* -----------------------------------------------------------------

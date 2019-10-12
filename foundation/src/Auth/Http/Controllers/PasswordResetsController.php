@@ -55,7 +55,7 @@ class PasswordResetsController extends Controller
 
         $this->addBreadcrumbRoute(__('Metrics'), 'admin::auth.password-resets.metrics');
 
-        $this->selectMetrics('arcanesoft.auth.metrics.password-resets');
+        $this->selectMetrics('arcanesoft.foundation.metrics.selected.auth-password-resets');
 
         return $this->view('auth.password-resets.metrics');
     }

@@ -59,6 +59,7 @@ class FoundationServiceProvider extends PackageServiceProvider
             $this->publishViews();
             $this->publishTranslations();
             $this->publishAssets();
+            $this->publishFactories();
 
             Foundation::$runsMigrations ? $this->loadMigrations() : $this->publishMigrations();
         }

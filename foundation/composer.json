@@ -21,7 +21,7 @@
         "arcanedev/gravatar":               "^3.0",
         "arcanedev/laravel-impersonator":   "^2.0",
         "arcanedev/laravel-metrics":        "^1.0",
-        "arcanedev/laravel-policies":       "@dev",
+        "arcanedev/laravel-policies":       "^1.0",
         "arcanedev/log-viewer":             "^5.0",
         "arcanedev/notify":                 "^5.0",
         "arcanedev/route-viewer":           "^2.0",

@@ -18,18 +18,18 @@ use Arcanesoft\Foundation\Auth\Models\PermissionsGroup;
 class PermissionsGroupsRepository extends AbstractRepository
 {
     /* -----------------------------------------------------------------
-     |  Query Methods
+     |  Main Methods
      | -----------------------------------------------------------------
      */
 
     /**
-     * Get the permission instance.
+     * Get the model FQN class.
      *
-     * @return \Arcanesoft\Foundation\Auth\Models\PermissionsGroup|mixed
+     * @return string
      */
-    public static function model()
+    public static function modelClass(): string
     {
-        return Auth::makeModel('permissions-group', PermissionsGroup::class);
+        return Auth::model('permissions-group', PermissionsGroup::class);
     }
 
     /* -----------------------------------------------------------------

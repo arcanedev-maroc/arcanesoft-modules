@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Repositories;
 
 use Arcanesoft\Foundation\Auth\Auth;
+use Arcanesoft\Foundation\Auth\Models\PasswordReset;
 
 /**
  * Class     PasswordResetsRepository
@@ -17,17 +18,17 @@ use Arcanesoft\Foundation\Auth\Auth;
 class PasswordResetsRepository extends AbstractRepository
 {
     /* -----------------------------------------------------------------
-     |  Query Methods
+     |  Main Methods
      | -----------------------------------------------------------------
      */
 
     /**
-     * Get the permission instance.
+     * Get the model FQN class.
      *
-     * @return \Arcanesoft\Foundation\Auth\Models\Permission|mixed
+     * @return string
      */
-    public static function model()
+    public static function modelClass(): string
     {
-        return Auth::makeModel('password-resets');
+        return Auth::model('password-resets', PasswordReset::class);
     }
 }
