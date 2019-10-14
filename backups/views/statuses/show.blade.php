@@ -1,122 +1,122 @@
 @extends(arcanesoft\foundation()->template())
 
-@section('header')
-    <h1><i class="fa fa-fw fa-database"></i> {{ trans('backups::statuses.titles.backups') }} <small>{{ trans('backups::statuses.titles.monitor-status') }}</small></h1>
+@section('page-title')
+    <i class="fa fa-fw fa-database"></i> @lang('Backups')
 @endsection
+
+<?php
+/** @var  Spatie\Backup\Tasks\Monitor\BackupDestinationStatus  $status */
+$destination = $status->backupDestination()
+?>
 
 @section('content')
     <div class="row">
         <div class="col-md-4">
-            <div class="box">
-                <div class="box-header with-border">
-                    <h2 class="box-title">{{ trans('backups::statuses.titles.monitor-status') }}</h2>
-                </div>
-                <div class="box-body no-padding">
-                    <div class="table-responsive">
-                        <table class="table table-condensed no-margin">
-                            <tr>
-                                <th>{{ trans('backups::statuses.attributes.name') }} :</th>
-                                <td>
-                                    <span class="label label-inverse">{{ $status->backupName() }}</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>{{ trans('backups::statuses.attributes.disk') }} :</th>
-                                <td>
-                                    <span class="label label-primary">{{ $status->diskName() }}</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>{{ trans('backups::statuses.attributes.reachable') }} :</th>
-                                <td>
-                                    @if ($status->isReachable())
-                                        <span class="label label-success">Yes</span>
-                                    @else
-                                        <span class="label label-danger">No</span>
-                                    @endif
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>{{ trans('backups::statuses.attributes.healthy') }} :</th>
-                                <td>
-                                    @if ($status->isHealthy())
-                                        <span class="label label-success">Yes</span>
-                                    @else
-                                        <span class="label label-danger">No</span>
-                                    @endif
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>{{ trans('backups::statuses.attributes.number_of_backups') }} :</th>
-                                <td>
-                                    @if ($status->isReachable())
-                                        {{ label_count($status->amountOfBackups()) }}
-                                    @else
-                                        <span class="label label-default">/</span>
-                                    @endif
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>{{ trans('backups::statuses.attributes.newest_backup') }} :</th>
-                                <td>
-                                    @if ($status->isReachable())
-                                        <small>{{ $status->dateOfNewestBackup() ?: 'null' }}</small>
-                                    @else
-                                        <span class="label label-default">/</span>
-                                    @endif
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>{{ trans('backups::statuses.attributes.used_storage') }} :</th>
-                                <td>
-                                    @if ($status->isReachable())
-                                        <span class="label label-default">{{ $status->humanReadableUsedStorage() }}</span>
-                                    @else
-                                        <span class="label label-default">/</span>
-                                    @endif
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
+            <div class="card card-borderless shadow-sm mb-3">
+                <div class="card-header">@lang('Monitor Status')</div>
+                <table class="table table-condensed mb-0">
+                    <tr>
+                        <th>@lang('Name') :</th>
+                        <td class="text-right">
+                            <span class="badge badge-outline-dark">{{ $destination->backupName() }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>@lang('Disk') :</th>
+                        <td class="text-right">
+                            <span class="badge badge-outline-primary">{{ $destination->diskName() }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>@lang('Reachable') :</th>
+                        <td class="text-right">
+                            @if ($destination->isReachable())
+                                <span class="badge badge-outline-success">@lang('Yes')</span>
+                            @else
+                                <span class="badge badge-outline-danger">@lang('No')</span>
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>@lang('Healthy') :</th>
+                        <td class="text-right">
+                            @if ($status->isHealthy())
+                                <span class="badge badge-outline-success">@lang('Yes')</span>
+                            @else
+                                <span class="badge badge-outline-danger">@lang('No')</span>
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>@lang('Backups') :</th>
+                        <td class="text-right">
+                            @if ($destination->isReachable())
+                                {{ arcanesoft\ui\count_pill($destination->backups()->count()) }}
+                            @else
+                                <span class="badge badge-default">/</span>
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>@lang('Newest Backup') :</th>
+                        <td class="text-right">
+                            @if ($destination->isReachable() && $destination->newestBackup())
+                                <small>{{ $destination->newestBackup()->date()->diffForHumans() ?: 'null' }}</small>
+                            @else
+                                <span class="badge badge-default">/</span>
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>@lang('Used Storage') :</th>
+                        <td class="text-right">
+                            @if ($destination->isReachable())
+                                <span class="badge badge-light">
+                                    {{ Spatie\Backup\Helpers\Format::humanReadableSize($destination->usedStorage()) }}
+                                </span>
+                            @else
+                                <span class="badge badge-light">/</span>
+                            @endif
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
 
         <div class="col-md-8">
-            <div class="box">
-                <div class="box-header with-border">
-                    <h2 class="box-title">{{ trans('backups::statuses.titles.backups') }}</h2>
+            <div class="card card-borderless shadow-sm mb-3">
+                <div class="card-header">
+                    @lang('Backups')
                 </div>
                 <div class="box-body no-padding">
                     <div class="table-responsive">
-                        <table class="table table-condensed no-margin">
+                        <table class="table table-condensed mb-0">
                             <thead>
                                 <tr>
-                                    <th>{{ trans('backups::statuses.attributes.date') }}</th>
-                                    <th>{{ trans('backups::statuses.attributes.path') }}</th>
-                                    <th>{{ trans('backups::statuses.attributes.size') }}</th>
+                                    <th>@lang('Date')</th>
+                                    <th>@lang('Path')</th>
+                                    <th class="text-right">@lang('Size')</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($backups as $backup)
+                                @forelse ($destination->backups() as $backup)
+                                    <?php /** @var  \Spatie\Backup\BackupDestination\Backup  $backup */ ?>
                                     <tr>
                                         <td>
                                             <small>{{ $backup->date() }}</small>
                                         </td>
                                         <td>
-                                            <span class="label label-inverse">{{ $backup->path() }}</span>
+                                            <span class="badge badge-inverse">{{ $backup->path() }}</span>
                                         </td>
-                                        <td>
-                                            <span class="label label-default">
+                                        <td class="text-right">
+                                            <span class="badge badge-default">
                                                 {{ Spatie\Backup\Helpers\Format::humanReadableSize($backup->size()) }}
                                             </span>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="3" class="text-center">
-                                            <span class="label label-default">There is no backups for the time being</span>
-                                        </td>
+                                        <td colspan="3" class="text-center">There is no backups for the time being</td>
                                     </tr>
                                 @endforelse
                             </tbody>

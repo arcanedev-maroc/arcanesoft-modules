@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Backups\Services;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Backups\Services;
 
 use Spatie\Backup\BackupDestination\BackupDestinationFactory;
 use Spatie\Backup\Tasks\Backup\BackupJobFactory;
@@ -21,11 +25,11 @@ class BackupStatuses
     /**
      * Get all the statuses.
      *
-     * @return \Illuminate\Support\Collection
+     * @return \Spatie\Backup\Tasks\Monitor\BackupDestinationStatus[]\Illuminate\Support\Collection
      */
     public static function all()
     {
-        return BackupDestinationStatusFactory::createForMonitorConfig(config('laravel-backup.monitorBackups'));
+        return BackupDestinationStatusFactory::createForMonitorConfig(config('backup.monitor_backups'));
     }
 
     /**
@@ -50,7 +54,7 @@ class BackupStatuses
     public static function runBackups($disk = null)
     {
         try {
-            $backupJob = BackupJobFactory::createFromArray(config('laravel-backup'));
+            $backupJob = BackupJobFactory::createFromArray(config('backup'));
 
             if ( ! is_null($disk)) {
                 $backupJob->onlyBackupTo($disk);
