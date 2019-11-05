@@ -5,7 +5,7 @@
 @endsection
 
 <?php
-/** @var  Spatie\Backup\Tasks\Monitor\BackupDestinationStatus  $status */
+/** @var  Arcanedev\LaravelBackup\Entities\BackupDestinationStatus  $status */
 $destination = $status->backupDestination()
 ?>
 
@@ -53,7 +53,7 @@ $destination = $status->backupDestination()
                             @if ($destination->isReachable())
                                 {{ arcanesoft\ui\count_pill($destination->backups()->count()) }}
                             @else
-                                <span class="badge badge-default">/</span>
+                                <span class="badge badge-default">-</span>
                             @endif
                         </td>
                     </tr>
@@ -63,20 +63,16 @@ $destination = $status->backupDestination()
                             @if ($destination->isReachable() && $destination->newestBackup())
                                 <small>{{ $destination->newestBackup()->date()->diffForHumans() ?: 'null' }}</small>
                             @else
-                                <span class="badge badge-default">/</span>
+                                <span class="badge badge-default">-</span>
                             @endif
                         </td>
                     </tr>
                     <tr>
                         <th>@lang('Used Storage') :</th>
                         <td class="text-right">
-                            @if ($destination->isReachable())
-                                <span class="badge badge-light">
-                                    {{ Spatie\Backup\Helpers\Format::humanReadableSize($destination->usedStorage()) }}
-                                </span>
-                            @else
-                                <span class="badge badge-light">/</span>
-                            @endif
+                            <span class="badge badge-light">
+                                {{ $destination->isReachable() ? $destination->humanReadableUsedStorage() : '-' }}
+                            </span>
                         </td>
                     </tr>
                 </table>
@@ -100,7 +96,7 @@ $destination = $status->backupDestination()
                             </thead>
                             <tbody>
                                 @forelse ($destination->backups() as $backup)
-                                    <?php /** @var  \Spatie\Backup\BackupDestination\Backup  $backup */ ?>
+                                    <?php /** @var  Arcanedev\LaravelBackup\Entities\Backup  $backup */ ?>
                                     <tr>
                                         <td>
                                             <small>{{ $backup->date() }}</small>
@@ -110,7 +106,7 @@ $destination = $status->backupDestination()
                                         </td>
                                         <td class="text-right">
                                             <span class="badge badge-default">
-                                                {{ Spatie\Backup\Helpers\Format::humanReadableSize($backup->size()) }}
+                                                {{ $backup->humanReadableSize() }}
                                             </span>
                                         </td>
                                     </tr>

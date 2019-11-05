@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Arcanesoft\Backups\Http\Controllers;
 
 use Arcanesoft\Backups\Policies\StatusesPolicy;
-use Arcanesoft\Backups\Services\BackupStatuses;
+use Arcanesoft\Backups\Services\BackupService;
 use Arcanesoft\Foundation\Support\Traits\HasNotifications;
 use Illuminate\Support\Facades\Log;
 
@@ -25,6 +25,14 @@ class StatusesController extends Controller
     use HasNotifications;
 
     /* -----------------------------------------------------------------
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    /** @var  \Arcanesoft\Backups\Services\BackupService */
+    protected $backupService;
+
+    /* -----------------------------------------------------------------
      |  Constructor
      | -----------------------------------------------------------------
      */
@@ -32,12 +40,14 @@ class StatusesController extends Controller
     /**
      * StatusesController constructor.
      */
-    public function __construct()
+    public function __construct(BackupService $backupService)
     {
         parent::__construct();
 
         $this->setCurrentSidebarItem('foundation::backups');
         $this->addBreadcrumbRoute(__('Backups'), 'admin::backups.statuses.index');
+
+        $this->backupService = $backupService;
     }
 
     /* -----------------------------------------------------------------
@@ -49,7 +59,7 @@ class StatusesController extends Controller
     {
         $this->authorize(StatusesPolicy::ability('index'));
 
-        $statuses = BackupStatuses::all();
+        $statuses = $this->backupService->statuses();
 
         $this->setTitle($title = __('List of Monitor Statuses'));
         $this->addBreadcrumb($title);
@@ -61,7 +71,9 @@ class StatusesController extends Controller
     {
         $this->authorize(StatusesPolicy::ability('show'));
 
-        abort_if(is_null($status = BackupStatuses::getStatus($index)), 404);
+        $status = $this->backupService->getStatus($index);
+
+        abort_if(is_null($status), 404);
 
         $this->setTitle($title = __('Monitor Status'));
         $this->addBreadcrumb($title);
@@ -73,7 +85,7 @@ class StatusesController extends Controller
     {
         $this->authorize(StatusesPolicy::ability('create'));
 
-        if (BackupStatuses::runBackups()) {
+        if ($this->backupService->runBackups()) {
             return static::jsonResponseSuccess([
                 'message' => $this->transNotification('created'),
             ]);
@@ -88,7 +100,7 @@ class StatusesController extends Controller
     {
         $this->authorize(StatusesPolicy::ability('clean'));
 
-        if (BackupStatuses::clearBackups()) {
+        if ($this->backupService->clearBackups()) {
             return static::jsonResponseSuccess([
                 'message' => $this->transNotification('cleared'),
             ]);
