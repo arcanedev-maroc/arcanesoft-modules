@@ -129,4 +129,29 @@ class Auth
             $default
         );
     }
+
+    /* -----------------------------------------------------------------
+     |  Check Methods
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Check if the registration feature is enabled.
+     *
+     * @return bool
+     */
+    public static function isRegistrationEnabled(): bool
+    {
+        return static::config('authentication.register.enabled', true);
+    }
+
+    /**
+     * Check if socialite is enabled.
+     *
+     * @return bool
+     */
+    public static function isSocialiteEnabled(): bool
+    {
+        return static::config('socialite.enabled');
+    }
 }

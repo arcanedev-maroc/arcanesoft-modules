@@ -36,13 +36,35 @@ return [
          */
 
         'models' => [
-            'user'              => App\Models\User::class,
-            'role'              => Arcanesoft\Foundation\Auth\Models\Role::class,
-            'permission'        => Arcanesoft\Foundation\Auth\Models\Permission::class,
-            'permissions-group' => Arcanesoft\Foundation\Auth\Models\PermissionsGroup::class,
-            'password-resets'   => Arcanesoft\Foundation\Auth\Models\PasswordReset::class,
+            'user'               => App\Models\User::class,
+            'role'               => Arcanesoft\Foundation\Auth\Models\Role::class,
+            'permission'         => Arcanesoft\Foundation\Auth\Models\Permission::class,
+            'permissions-group'  => Arcanesoft\Foundation\Auth\Models\PermissionsGroup::class,
+            'password-resets'    => Arcanesoft\Foundation\Auth\Models\PasswordReset::class,
+            'socialite-provider' => Arcanesoft\Foundation\Auth\Models\SocialiteProvider::class,
         ],
 
+    ],
+
+    'authentication' => [
+        'login' => [
+            'enabled' => true,
+        ],
+
+        'register' => [
+            'enabled' => true,
+        ],
+    ],
+
+    'socialite' => [
+        'enabled' => true,
+
+        'drivers' => [
+            'facebook',
+            'github',
+            'google',
+            'twitter',
+        ],
     ],
 
 ];

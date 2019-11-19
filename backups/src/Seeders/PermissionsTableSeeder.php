@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Backups\Seeders;
 
-use Arcanesoft\Auth\Database\Seeders\PermissionsSeeder;
+use Arcanesoft\Foundation\Auth\Database\Seeders\PermissionsSeeder;
 
 /**
  * Class     PermissionsTableSeeder

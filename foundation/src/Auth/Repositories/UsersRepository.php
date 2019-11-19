@@ -8,10 +8,9 @@ use Arcanesoft\Foundation\Auth\Auth;
 use Arcanesoft\Foundation\Auth\Events\Users\{
     ActivatedUser, ActivatingUser, DeactivatedUser, DeactivatingUser, SyncedRolesToUser, SyncingRolesToUser,
 };
-use Arcanesoft\Foundation\Auth\Models\Role;
-use Arcanesoft\Foundation\Auth\Models\User;
-use Illuminate\Support\{Collection, Str};
+use Arcanesoft\Foundation\Auth\Models\{Role, User};
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\{Collection, Str};
 
 /**
  * Class     UsersRepository
@@ -113,9 +112,9 @@ class UsersRepository extends AbstractRepository
     {
         $attributes['password'] = $attributes['password'] ?? Str::random(8);
 
-        return tap($this->fill($attributes), function (User $user) use ($attributes) {
+        return tap($this->model()->fill($attributes), function (User $user) use ($attributes) {
             $user->forceFill([
-                'activated_at' => $attributes['activated_at'] ?: now(), // TODO: Add a setting to change this
+                'activated_at' => $attributes['activated_at'] ?? now(), // TODO: Add a setting to change this
             ]);
 
             $user->save();
@@ -133,11 +132,10 @@ class UsersRepository extends AbstractRepository
     public function updateUser(User $user, array $attributes): bool
     {
         $attributes = array_filter($attributes);
-        $updated    = $user->update($attributes);
 
-        $this->syncRolesByUuids($user, $attributes['roles'] ?: []);
-
-        return $updated;
+        return tap($user->update($attributes), function () use ($user, $attributes) {
+            $this->syncRolesByUuids($user, $attributes['roles'] ?? []);
+        });
     }
 
     /**
@@ -305,7 +303,6 @@ class UsersRepository extends AbstractRepository
      |  Other Methods
      | -----------------------------------------------------------------
      */
-
 
     /**
      * Get the roles repository.

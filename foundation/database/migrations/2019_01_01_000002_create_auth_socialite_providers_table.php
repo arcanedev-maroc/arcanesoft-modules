@@ -27,7 +27,7 @@ class CreateAuthSocialiteProvidersTable extends Migration
     {
         parent::__construct();
 
-        $this->setTable(Auth::table('socialite-providers', 'socialite_providers'));
+        $this->setTable(Auth::table('socialite-providers', 'socialite_providers', false));
     }
 
     /* -----------------------------------------------------------------
@@ -45,7 +45,8 @@ class CreateAuthSocialiteProvidersTable extends Migration
             $table->unsignedBigInteger('user_id')->index();
             $table->string('provider_type', 50);
             $table->text('provider_id');
-            $table->timestamp('created_at')->nullable();
+            $table->text('token')->nullable();
+            $table->timestamps();
         });
     }
 }

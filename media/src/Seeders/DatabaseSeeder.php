@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Media\Seeders;
 
 use Arcanesoft\Foundation\Support\Database\Seeder;

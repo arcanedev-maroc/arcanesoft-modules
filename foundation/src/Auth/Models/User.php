@@ -13,7 +13,7 @@ use Arcanesoft\Foundation\Auth\Events\Users\{
 };
 use Arcanesoft\Foundation\Auth\Models\Concerns\{Activatable, HasRoles};
 use Arcanesoft\Foundation\Auth\Models\Presenters\UserPresenter;
-use Illuminate\Database\Eloquent\{Builder, SoftDeletes};
+use Illuminate\Database\Eloquent\{Builder, Relations\HasMany, SoftDeletes};
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
@@ -170,6 +170,16 @@ class User extends Authenticatable implements Impersonatable
             ->unique(function (Permission $permission) {
                 return $permission->getKey();
             });
+    }
+
+    /**
+     * Get the socialite providers' relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function providers(): HasMany
+    {
+        return $this->hasMany(SocialiteProvider::class);
     }
 
     /* -----------------------------------------------------------------
@@ -372,5 +382,19 @@ class User extends Authenticatable implements Impersonatable
     public function canBeImpersonated(): bool
     {
         return impersonator()->isEnabled() && ! $this->isAdmin();
+    }
+
+    /**
+     * Check if the user has a registered social provider.
+     *
+     * @param  string  $provider
+     *
+     * @return bool
+     */
+    public function hasProvider(string $provider): bool
+    {
+        return $this->providers()
+            ->where('provider_type', $provider)
+            ->exists();
     }
 }

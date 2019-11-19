@@ -27,8 +27,7 @@ class CreateAuthPasswordResetsTable extends Migration
     {
         parent::__construct();
 
-        $this->setPrefix(null);
-        $this->setTable(Auth::table('password-resets', 'password_resets', true));
+        $this->setTable(Auth::table('password-resets', 'password_resets', false));
     }
 
     /* -----------------------------------------------------------------

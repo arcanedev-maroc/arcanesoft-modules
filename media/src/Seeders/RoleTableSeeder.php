@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Media\Seeders;
 
-use Arcanesoft\Auth\Database\Seeders\RolesSeeder;
+use Arcanesoft\Foundation\Auth\Database\Seeders\RolesSeeder;
 
 /**
  * Class     RoleTableSeeder
