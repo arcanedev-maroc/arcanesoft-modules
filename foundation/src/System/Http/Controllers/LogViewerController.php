@@ -5,14 +5,19 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\System\Http\Controllers;
 
 use Arcanedev\LogViewer\Contracts\LogViewer;
-use Arcanedev\LogViewer\Entities\{LogEntry, LogEntryCollection};
+use Arcanedev\LogViewer\Entities\{
+    LogEntry,
+    LogEntryCollection};
 use Arcanedev\LogViewer\Exceptions\LogNotFoundException;
-use Arcanedev\LogViewer\Tables\StatsTable;
 use Arcanesoft\Foundation\Support\Traits\HasNotifications;
+use Arcanesoft\Foundation\System\Metrics\LogViewer\LogEntriesCountByLevel;
+use Arcanesoft\Foundation\System\Metrics\LogViewer\LogFilesCount;
 use Arcanesoft\Foundation\System\Policies\LogViewerPolicy;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\{Arr, Collection, Str};
+use Illuminate\Support\{
+    Collection,
+    Str};
 
 /**
  * Class     LogViewerController
@@ -60,27 +65,20 @@ class LogViewerController extends Controller
      | -----------------------------------------------------------------
      */
 
-    public function index()
+    public function index(Request $request)
     {
         $this->authorize(LogViewerPolicy::ability('index'));
 
-        $chartData = $this->prepareChartData($stats = $this->logViewer->statsTable());
-        $percents  = $this->calculatePercentages($stats->footer(), $stats->header());
-
-        return $this->view('system.log-viewer.index', compact('percents', 'chartData'));
-    }
-
-    public function logs(Request $request)
-    {
-        $this->authorize(LogViewerPolicy::ability('index'));
+        $this->selectMetrics([
+            LogFilesCount::class,
+            LogEntriesCountByLevel::class,
+        ]);
 
         $stats   = $this->logViewer->statsTable();
         $headers = $stats->header();
         $rows    = $this->paginate($stats->rows(), $request);
 
-        $this->addBreadcrumbRoute(__('Logs'), 'admin::system.log-viewer.logs.index');
-
-        return $this->view('system.log-viewer.logs', compact('headers', 'rows'));
+        return $this->view('system.log-viewer.index', compact('headers', 'rows'));
     }
 
     public function showLog(Request $request, string $date)
@@ -97,7 +95,6 @@ class LogViewerController extends Controller
     {
         $this->authorize(LogViewerPolicy::ability('show'));
 
-        $this->addBreadcrumbRoute(__('Logs'), 'admin::system.log-viewer.logs.index');
         $this->addBreadcrumbRoute($date, 'admin::system.log-viewer.logs.show', [$date]);
 
         $log     = $this->getLogOrFail($date);
@@ -138,53 +135,6 @@ class LogViewerController extends Controller
      */
 
     /**
-     * Get the chart data.
-     *
-     * @param  \Arcanedev\LogViewer\Tables\StatsTable  $stats
-     *
-     * @return array
-     */
-    protected function prepareChartData(StatsTable $stats): array
-    {
-        $totals = $stats->totals()->all();
-
-        return [
-            'labels'   => Arr::pluck($totals, 'label'),
-            'datasets' => [
-                [
-                    'data'                 => Arr::pluck($totals, 'value'),
-                    'backgroundColor'      => Arr::pluck($totals, 'color'),
-                    'hoverBackgroundColor' => Arr::pluck($totals, 'highlight'),
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * Calculate the percentages.
-     *
-     * @param  array  $total
-     * @param  array  $names
-     *
-     * @return array
-     */
-    protected function calculatePercentages(array $total, array $names)
-    {
-        $percents = [];
-        $all      = Arr::get($total, 'all');
-
-        foreach ($total as $level => $value) {
-            $percents[$level] = [
-                'name'    => $names[$level],
-                'value'   => $value,
-                'percent' => $all !== 0 ? round(($value / $all) * 100, 2) : 0,
-            ];
-        }
-
-        return $percents;
-    }
-
-    /**
      * Paginate logs.
      *
      * @param  array                     $data
@@ -216,15 +166,13 @@ class LogViewerController extends Controller
      */
     protected function getLogOrFail($date)
     {
-        $log = null;
-
         try {
-            $log = $this->logViewer->get($date);
+            return $this->logViewer->get($date);
         }
         catch (LogNotFoundException $e) {
             abort(404, $e->getMessage());
         }
 
-        return $log;
+        return null;
     }
 }

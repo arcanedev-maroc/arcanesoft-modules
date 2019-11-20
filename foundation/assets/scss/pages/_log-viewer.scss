@@ -25,6 +25,7 @@ $log-levels: (
         &.bg-log-level-empty {
             color: var(--skin-surface-text-normal-color);
         }
+
         &:not(.bg-log-level-empty) {
             color: $white;
         }
@@ -118,8 +119,7 @@ $log-levels: (
 }
 
 @each $level, $value in $log-levels {
-    .bg-log-level-#{$level},
-    .log-levels-menu-nav-item.level-#{$level} {
+    .bg-log-level-#{$level} {
         background-color: $value !important;
     }
 
@@ -131,5 +131,11 @@ $log-levels: (
     .badge.badge-log-level-#{$level} {
         background-color: $value;
         color: #FFF;
+    }
+
+    .badge {
+        &.badge-outline-log-level-#{$level} {
+            border-color: $value;
+        }
     }
 }

@@ -31,10 +31,6 @@ class LogViewerRoutes extends AbstractRouteRegistrar
                      ->name('index');
 
                 $this->prefix('logs')->name('logs.')->group(function () {
-                    // admin::system.log-viewer.logs.index
-                    $this->get('/', [LogViewerController::class, 'logs'])
-                         ->name('index');
-
                     $this->prefix('{admin_log_file_date}')->group(function () {
                         // admin::system.log-viewer.logs.show
                         $this->get('/', [LogViewerController::class, 'showLog'])

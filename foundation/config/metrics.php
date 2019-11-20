@@ -30,6 +30,10 @@ return [
         Arcanesoft\Foundation\Auth\Metrics\PasswordResets\PasswordResetsPerDay::class,
         Arcanesoft\Foundation\Auth\Metrics\PasswordResets\TotalPasswordResets::class,
 
+        // System - LogViewer
+        Arcanesoft\Foundation\System\Metrics\LogViewer\LogFilesCount::class,
+        Arcanesoft\Foundation\System\Metrics\LogViewer\LogEntriesCountByLevel::class,
+
     ],
 
     /* -----------------------------------------------------------------

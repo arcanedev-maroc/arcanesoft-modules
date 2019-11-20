@@ -13,6 +13,7 @@
         data() {
             return {
                 selected: null,
+                eventClass: "Arcanesoft\\Foundation\\Core\\Events\\UI\\SkinModeToggled",
             }
         },
 
@@ -31,7 +32,7 @@
                 document.body.dataset.skinMode = this.selected
 
                 window['request']().post('/admin/api/events', {
-                    class: "Arcanesoft\\Foundation\\Events\\UI\\SkinModeToggled",
+                    class: this.eventClass,
                     options: {mode},
                 })
 

@@ -11,18 +11,9 @@
     <i class="fas fa-fw fa-clipboard-list"></i> @lang('LogViewer')
 @endsection
 
-@push('content-nav')
-    <div class="mb-3 text-right">
-        <a href="{{ route('admin::system.log-viewer.index') }}"
-           class="btn btn-sm btn-secondary {{ active(['admin::system.log-viewer.*']) }}">@lang('Metrics')</a>
-        <a href="{{ route('admin::system.log-viewer.logs.index') }}"
-           class="btn btn-sm btn-secondary {{ active(['admin::system.log-viewer.logs.*']) }}">@lang('Logs')</a>
-    </div>
-@endpush
-
 @section('content')
     {{-- Log Details --}}
-    <div class="card card-borderless shadow-sm mb-3">
+    <div class="card card-borderless shadow-sm mb-4">
         <div class="card-header p-2">
             <span class="badge badge-outline-secondary">{{ $log->date }}</span>
         </div>
@@ -64,7 +55,7 @@
     </div>
 
     {{-- SEARCH FORM --}}
-    <div class="card card-borderless shadow-sm mb-3">
+    <div class="card card-borderless shadow-sm mb-4">
         <div class="card-body p-2">
             <form action="{{ route('admin::system.log-viewer.logs.search', [$log->date, $level]) }}" method="GET">
                 <div class=form-group">
@@ -87,18 +78,24 @@
     </div>
 
     {{-- Log Levels Menu --}}
-    <nav class="log-levels-menu-nav mb-3">
+    <nav class="log-levels-menu-nav mb-4">
         @foreach($log->menu() as $levelKey => $item)
-            <a class="log-levels-menu-nav-item shadow-sm level-{{ $item['count'] === 0 ? 'empty disabled' : $levelKey }}{{ $level === $levelKey ? ' active' : ''}}"
-                href="{{ $item['count'] === 0 ? '#' : $item['url'] }}">
-                <span class="level-name mb-1">{{ $item['name'] }}</span>
-                <span class="badge badge-light">{{ $item['count'] }}</span>
-            </a>
+            @if ($item['count'] === 0)
+                <a href="#" class="log-levels-menu-nav-item shadow-sm bg-log-level-empty disabled {{ $level === $levelKey ? 'active' : ''}}">
+                    <span class="level-name text-muted mb-1">{{ $item['name'] }}</span>
+                    <span class="badge badge-light">-</span>
+                </a>
+            @else
+                <a href="{{ $item['url'] }}" class="log-levels-menu-nav-item shadow-sm bg-log-level-{{ $levelKey }} {{ $level === $levelKey ? 'active' : ''}}">
+                    <span class="level-name mb-1">{{ $item['name'] }}</span>
+                    <span class="badge badge-light">{{ $item['count'] }}</span>
+                </a>
+            @endif
         @endforeach
     </nav>
 
     {{-- Log Entries --}}
-    <div class="mb-3">
+    <div class="mb-4">
         @if ($entries->hasPages())
             <span class="badge badge-info">
                 @lang('Page :current of :last', ['current' => $entries->currentPage(), 'last' => $entries->lastPage()])
@@ -109,7 +106,7 @@
     <section class="timeline-container">
         @foreach($entries as $key => $entry)
             <?php /** @var  Arcanedev\LogViewer\Entities\LogEntry  $entry */ ?>
-            <div class="timeline-item card card-borderless shadow-sm mb-3">
+            <div class="timeline-item card card-borderless shadow-sm mb-4">
                 <div class="timeline-dot shadow-sm text-white bg-log-level-{{ $entry->level }}">{{ $entry->icon() }}</div>
                 <div class="card-header d-flex px-3 py-2">
                     <div>
@@ -193,7 +190,7 @@
                     .then((response) => {
                         if (response.data.code === 'success') {
                             $deleteLogModal.modal('hide');
-                            location.replace("{{ route('admin::system.log-viewer.logs.index') }}");
+                            location.replace("{{ route('admin::system.log-viewer.index') }}");
                         }
                         else {
                             alert('ERROR ! Check the console !');

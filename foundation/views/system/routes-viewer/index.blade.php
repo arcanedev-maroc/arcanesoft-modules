@@ -6,7 +6,17 @@
 
 @section('content')
     <div class="card card-borderless shadow-sm">
-        <div class="card-header">@lang('Routes')</div>
+        <div class="card-header d-flex justify-content-between">
+            <span>@lang('Routes')</span>
+
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <a href="#" class="btn btn-sm btn-secondary">ALL</a>
+                <a href="#" class="btn btn-sm btn-success">GET</a>
+                <a href="#" class="btn btn-sm btn-primary">POST</a>
+                <a href="#" class="btn btn-sm btn-warning">PUT</a>
+                <a href="#" class="btn btn-sm btn-danger">DELETE</a>
+            </div>
+        </div>
         <table class="table table-hover table-md mb-0">
             <thead>
                 <tr>
