@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Core\Policies;
 
-use Arcanesoft\Foundation\Auth\Models\User as AuthenticatedUser;
+use Arcanesoft\Foundation\Auth\Models\Admin;
 
 /**
  * Class     DashboardPolicy
@@ -68,9 +68,8 @@ class DashboardPolicy extends AbstractPolicy
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function index(AuthenticatedUser $user)
+    public function index(Admin $user)
     {
-        if ($user->isModerator())
-            return true;
+        //
     }
 }

@@ -56,6 +56,17 @@ return [
                     'permissions' => [],
                 ],
                 [
+                    'name'        => 'auth::authorization.admins',
+                    'title'       => 'Administrators',
+                    'icon'        => 'fas fa-fw fa-users',
+                    'route'       => 'admin::auth.admins.index',
+                    'roles'       => [
+                        Role::ADMINISTRATOR,
+                        'auth-moderator',
+                    ],
+                    'permissions' => [],
+                ],
+                [
                     'name'        => 'auth::authorization.roles',
                     'title'       => 'Roles',
                     'icon'        => 'fas fa-fw fa-user-tag',

@@ -29,22 +29,8 @@ class EnsureIsAdmin
      */
     public function handle($request, Closure $next)
     {
-        $this->ensureUserCanAccessAdminPanel($request->user());
+        //
 
         return $next($request);
-    }
-
-    /**
-     * Check if the given user is an administrator.
-     *
-     * @param  \App\Models\User|mixed  $user
-     */
-    protected function ensureUserCanAccessAdminPanel($user)
-    {
-        if (is_null($user))
-            abort(404, 'Page not found');
-
-        if ( ! $user->isAdmin() && ! $user->isModerator())
-            abort(404, 'Page not found');
     }
 }

@@ -19,6 +19,7 @@ return [
         'prefix'     => 'auth_',
 
         'tables'     => [
+            'admins'              => 'admins',
             'users'               => 'users',
             'roles'               => 'roles',
             'permissions'         => 'permissions',
@@ -26,7 +27,7 @@ return [
             'password-resets'     => 'password_resets',
             'socialite-providers' => 'socialite_providers',
             'throttles'           => 'throttles',
-            'role-user'           => 'role_user',
+            'admin-role'          => 'admin_role',
             'permission-role'     => 'permission_role',
         ],
 
@@ -37,6 +38,7 @@ return [
 
         'models' => [
             'user'               => App\Models\User::class,
+            'admin'              => Arcanesoft\Foundation\Auth\Models\Admin::class,
             'role'               => Arcanesoft\Foundation\Auth\Models\Role::class,
             'permission'         => Arcanesoft\Foundation\Auth\Models\Permission::class,
             'permissions-group'  => Arcanesoft\Foundation\Auth\Models\PermissionsGroup::class,

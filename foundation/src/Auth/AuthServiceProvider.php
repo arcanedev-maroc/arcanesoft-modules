@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth;
 
-use Arcanesoft\Foundation\Auth\Console\MakeUser;
+use Arcanesoft\Foundation\Auth\Console\{MakeAdmin, MakeUser};
 use Arcanesoft\Foundation\Support\Providers\ServiceProvider;
 
 /**
@@ -33,6 +33,7 @@ class AuthServiceProvider extends ServiceProvider
 
         $this->registerCommands([
             MakeUser::class,
+            MakeAdmin::class,
         ]);
     }
 }

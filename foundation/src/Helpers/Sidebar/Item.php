@@ -223,6 +223,7 @@ class Item
      */
     public function canSee($user = null): bool
     {
+        /** @var  \Arcanesoft\Foundation\Auth\Models\Admin  $user */
         $user = $user ?? auth()->user();
 
         if ($user->isSuperAdmin())

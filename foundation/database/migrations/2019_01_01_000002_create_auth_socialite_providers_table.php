@@ -7,7 +7,7 @@ use Arcanesoft\Foundation\Auth\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
 /**
- * Class     CreateUsersTable
+ * Class     CreateAuthSocialiteProvidersTable
  *
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  *

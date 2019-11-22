@@ -58,7 +58,7 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability('index'));
 
-        return $this->view('auth.users.index', compact('trash'));
+        return $this->view('authorization.users.index', compact('trash'));
     }
 
     /**
@@ -86,7 +86,7 @@ class UsersController extends Controller
 
         $this->selectMetrics('arcanesoft.foundation.metrics.selected.auth-users');
 
-        return $this->view('auth.users.metrics');
+        return $this->view('authorization.users.metrics');
     }
 
     /**
@@ -105,7 +105,7 @@ class UsersController extends Controller
 
         $this->addBreadcrumb(__('New User'));
 
-        return $this->view('auth.users.create', compact('roles'));
+        return $this->view('authorization.users.create', compact('roles'));
     }
 
     /**
@@ -148,7 +148,7 @@ class UsersController extends Controller
 
         $this->addBreadcrumbRoute(__("User's details"), 'admin::auth.users.show', [$user]);
 
-        return $this->view('auth.users.show', compact('user'));
+        return $this->view('authorization.users.show', compact('user'));
     }
 
     /**
@@ -168,7 +168,7 @@ class UsersController extends Controller
 
         $this->addBreadcrumbRoute(__('Edit User'), 'admin::auth.users.edit', [$user]);
 
-        return $this->view('auth.users.edit', compact('user', 'roles'));
+        return $this->view('authorization.users.edit', compact('user', 'roles'));
     }
 
     /**

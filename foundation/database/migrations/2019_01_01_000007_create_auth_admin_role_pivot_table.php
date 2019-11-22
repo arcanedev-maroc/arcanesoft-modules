@@ -7,13 +7,13 @@ use Arcanesoft\Foundation\Auth\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
 /**
- * Class     CreateRolesTable
+ * Class     CreateAuthAdminRolePivotTable
  *
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  *
- * @see  \Arcanesoft\Foundation\Auth\Models\Role
+ * @see  \Arcanesoft\Foundation\Auth\Models\Pivots\AdminRole
  */
-class CreateAuthRolesTable extends Migration
+class CreateAuthAdminRolePivotTable extends Migration
 {
     /* -----------------------------------------------------------------
      |  Constructor
@@ -21,13 +21,13 @@ class CreateAuthRolesTable extends Migration
      */
 
     /**
-     * Make a migration instance.
+     * CreateAuthRoleUserPivotTable constructor.
      */
     public function __construct()
     {
         parent::__construct();
 
-        $this->setTable(Auth::table('roles', 'roles', false));
+        $this->setTable(Auth::table('admin-role', 'admin_role', false));
     }
 
     /* -----------------------------------------------------------------
@@ -41,18 +41,12 @@ class CreateAuthRolesTable extends Migration
     public function up(): void
     {
         $this->createSchema(function (Blueprint $table) {
-            $table->increments('id');
-            $table->uuid('uuid');
+            $table->unsignedBigInteger('admin_id');
+            $table->unsignedInteger('role_id');
 
-            $table->string('name');
-            $table->string('key')->unique();
-            $table->string('description')->nullable();
-            $table->boolean('is_locked')->default(false);
+            $table->timestamp('created_at')->nullable();
 
-            $table->timestamps();
-            $table->timestamp('activated_at')->nullable();
-
-            $table->index(['uuid', 'key']);
+            $table->primary(['admin_id', 'role_id']);
         });
     }
 }

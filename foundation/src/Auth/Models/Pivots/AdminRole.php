@@ -7,12 +7,12 @@ namespace Arcanesoft\Foundation\Auth\Models\Pivots;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
- * Class     RoleUser
+ * Class     AdminRole
  *
  * @package  Arcanesoft\Foundation\Auth\Models\Pivots
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class RoleUser extends Pivot
+class AdminRole extends Pivot
 {
     /* -----------------------------------------------------------------
      |  Constants
@@ -32,7 +32,7 @@ class RoleUser extends Pivot
      * @var array
      */
     protected $casts = [
-        'user_id' => 'integer',
-        'role_id' => 'integer',
+        'admin_id' => 'integer',
+        'role_id'  => 'integer',
     ];
 }

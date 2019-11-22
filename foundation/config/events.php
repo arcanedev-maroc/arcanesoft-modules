@@ -58,6 +58,48 @@ return [
     Arcanesoft\Foundation\Auth\Events\Users\SyncedRolesToUser::class => [],
 
     /* -----------------------------------------------------------------
+     |  Auth - Admins
+     | -----------------------------------------------------------------
+     */
+
+    Arcanesoft\Foundation\Auth\Events\Admins\RetrievedAdmin::class => [],
+
+    Arcanesoft\Foundation\Auth\Events\Admins\CreatingAdmin::class => [
+        Arcanesoft\Foundation\Auth\Listeners\Admins\GeneratesUuid::class
+    ],
+    Arcanesoft\Foundation\Auth\Events\Admins\CreatedAdmin::class => [],
+
+    Arcanesoft\Foundation\Auth\Events\Admins\UpdatingAdmin::class => [],
+    Arcanesoft\Foundation\Auth\Events\Admins\UpdatedAdmin::class => [],
+
+    Arcanesoft\Foundation\Auth\Events\Admins\SavingAdmin::class => [],
+    Arcanesoft\Foundation\Auth\Events\Admins\SavedAdmin::class => [],
+
+    Arcanesoft\Foundation\Auth\Events\Admins\DeletingAdmin::class => [],
+    Arcanesoft\Foundation\Auth\Events\Admins\DeletedAdmin::class => [],
+    Arcanesoft\Foundation\Auth\Events\Admins\ForceDeletedAdmin::class => [],
+
+    Arcanesoft\Foundation\Auth\Events\Admins\RestoringAdmin::class => [],
+    Arcanesoft\Foundation\Auth\Events\Admins\RestoredAdmin::class => [],
+
+    Arcanesoft\Foundation\Auth\Events\Admins\ReplicatingAdmin::class => [],
+
+    Arcanesoft\Foundation\Auth\Events\Admins\ActivatingAdmin::class => [],
+    Arcanesoft\Foundation\Auth\Events\Admins\ActivatedAdmin::class => [],
+    Arcanesoft\Foundation\Auth\Events\Admins\DeactivatingAdmin::class => [],
+    Arcanesoft\Foundation\Auth\Events\Admins\DeactivatedAdmin::class => [],
+
+    Arcanesoft\Foundation\Auth\Events\Admins\AttachingRoleToAdmin::class => [],
+    Arcanesoft\Foundation\Auth\Events\Admins\AttachedRoleToAdmin::class => [],
+    Arcanesoft\Foundation\Auth\Events\Admins\DetachingRoleFromAdmin::class => [],
+    Arcanesoft\Foundation\Auth\Events\Admins\DetachedRoleFromAdmin::class => [],
+
+    Arcanesoft\Foundation\Auth\Events\Admins\DetachingRolesFromAdmin::class => [],
+    Arcanesoft\Foundation\Auth\Events\Admins\DetachedRolesFromAdmin::class => [],
+    Arcanesoft\Foundation\Auth\Events\Admins\SyncingRolesToAdmin::class => [],
+    Arcanesoft\Foundation\Auth\Events\Admins\SyncedRolesToAdmin::class => [],
+
+    /* -----------------------------------------------------------------
      |  Auth - Roles
      | -----------------------------------------------------------------
      */
@@ -77,7 +119,7 @@ return [
 
     Arcanesoft\Foundation\Auth\Events\Roles\DeletingRole::class                    => [
         Arcanesoft\Foundation\Auth\Listeners\Roles\DetachPermissions::class,
-        Arcanesoft\Foundation\Auth\Listeners\Roles\DetachUsers::class,
+        Arcanesoft\Foundation\Auth\Listeners\Roles\DetachAdmins::class,
     ],
     Arcanesoft\Foundation\Auth\Events\Roles\DeletedRole::class                     => [],
 

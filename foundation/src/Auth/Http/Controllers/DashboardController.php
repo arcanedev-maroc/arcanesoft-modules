@@ -24,6 +24,6 @@ class DashboardController extends Controller
 
         $this->selectMetrics('arcanesoft.foundation.metrics.selected.auth-dashboard');
 
-        return $this->view('auth.dashboard');
+        return $this->view('authorization.dashboard');
     }
 }

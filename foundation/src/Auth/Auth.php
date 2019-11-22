@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth;
 
+use Arcanesoft\Foundation\Auth\Models\Admin;
 use Illuminate\Support\Str;
 
 /**
@@ -134,6 +135,22 @@ class Auth
      |  Check Methods
      | -----------------------------------------------------------------
      */
+
+    /**
+     * Check if the given user is a super admin.
+     *
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $user
+     *
+     * @return bool
+     */
+    public static function isSuperAdmin(Admin $user): bool
+    {
+        $emails = [
+            'admin@example.com',
+        ];
+
+        return in_array($user->email, $emails);
+    }
 
     /**
      * Check if the registration feature is enabled.

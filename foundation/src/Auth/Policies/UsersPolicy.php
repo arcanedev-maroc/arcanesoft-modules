@@ -249,9 +249,6 @@ class UsersPolicy extends AbstractPolicy
      */
     public function impersonate(AuthenticatedUser $user, User $model)
     {
-        if ($model->isAdmin())
-            return false;
-
         return $user->isNot($model);
     }
 }

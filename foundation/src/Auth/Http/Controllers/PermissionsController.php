@@ -40,7 +40,7 @@ class PermissionsController extends Controller
     {
         $this->authorize(PermissionsPolicy::ability('index'));
 
-        return $this->view('auth.permissions.index');
+        return $this->view('authorization.permissions.index');
     }
 
     public function show(Permission $permission, Request $request)
@@ -52,6 +52,6 @@ class PermissionsController extends Controller
 
         $this->addBreadcrumbRoute(__("Permission's details"), 'admin::auth.permissions.show', [$permission]);
 
-        return $this->view('auth.permissions.show', compact('permission', 'roles'));
+        return $this->view('authorization.permissions.show', compact('permission', 'roles'));
     }
 }

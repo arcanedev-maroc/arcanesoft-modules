@@ -7,13 +7,13 @@ use Arcanesoft\Foundation\Auth\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
 /**
- * Class     CreatePermissionsTable
+ * Class     CreateAuthAdminsTable
  *
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  *
- * @see  \Arcanesoft\Foundation\Auth\Models\PermissionsGroup
+ * @see  \Arcanesoft\Foundation\Auth\Models\Admin
  */
-class CreateAuthPermissionsGroupsTable extends Migration
+class CreateAuthAdminsTable extends Migration
 {
     /* -----------------------------------------------------------------
      |  Constructor
@@ -27,7 +27,7 @@ class CreateAuthPermissionsGroupsTable extends Migration
     {
         parent::__construct();
 
-        $this->setTable(Auth::table('permissions-groups', 'permissions_groups', false));
+        $this->setTable(Auth::table('admins', 'admins', false));
     }
 
     /* -----------------------------------------------------------------
@@ -41,15 +41,20 @@ class CreateAuthPermissionsGroupsTable extends Migration
     public function up(): void
     {
         $this->createSchema(function (Blueprint $table) {
-            $table->increments('id');
-
-            $table->string('name');
-            $table->string('slug');
-            $table->string('description')->nullable();
-
+            $table->bigIncrements('id');
+            $table->uuid('uuid');
+            $table->string('first_name', 30)->nullable();
+            $table->string('last_name', 30)->nullable();
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->string('avatar')->nullable();
+            $table->rememberToken();
+            $table->timestamp('last_activity_at')->nullable();
             $table->timestamps();
+            $table->timestamp('activated_at')->nullable();
+            $table->softDeletes();
 
-            $table->unique(['slug']);
+            $table->index(['uuid', 'email']);
         });
     }
 }

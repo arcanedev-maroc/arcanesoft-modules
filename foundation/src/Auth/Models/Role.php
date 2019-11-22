@@ -130,11 +130,11 @@ class Role extends Model
     {
         return $this
             ->belongsToMany(
-                Auth::model('user', User::class),
-                Auth::table('role-user', 'role_user')
+                Auth::model('admin', Admin::class),
+                Auth::table('admin-role', 'admin_role')
             )
-            ->using(Pivots\RoleUser::class)
-            ->as('role_user')
+            ->using(Pivots\AdminRole::class)
+            ->as('admin_role')
             ->withPivot(['created_at']);
     }
 

@@ -8,12 +8,12 @@ use Arcanesoft\Foundation\Auth\Events\Roles\DeletingRole;
 use Arcanesoft\Foundation\Auth\Repositories\RolesRepository;
 
 /**
- * Class     DetachUsers
+ * Class     DetachAdmins
  *
  * @package  Arcanesoft\Foundation\Auth\Listeners\Roles
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class DetachUsers
+class DetachAdmins
 {
     /* -----------------------------------------------------------------
      |  Properties

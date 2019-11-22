@@ -49,7 +49,7 @@ class RolesController extends Controller
     {
         $this->authorize(RolesPolicy::ability('index'));
 
-        return $this->view('auth.roles.index');
+        return $this->view('authorization.roles.index');
     }
 
     public function metrics()
@@ -60,7 +60,7 @@ class RolesController extends Controller
 
         $this->selectMetrics('arcanesoft.foundation.metrics.selected.auth-roles');
 
-        return $this->view('auth.roles.metrics');
+        return $this->view('authorization.roles.metrics');
     }
 
     public function create(PermissionsRepository $permissionsRepo)
@@ -71,7 +71,7 @@ class RolesController extends Controller
 
         $permissions = $permissionsRepo->with(['group'])->get();
 
-        return $this->view('auth.roles.create', compact('permissions'));
+        return $this->view('authorization.roles.create', compact('permissions'));
     }
 
     public function store(CreateRoleRequest $request, RolesRepository $rolesRepo)
@@ -94,7 +94,7 @@ class RolesController extends Controller
 
         $this->addBreadcrumbRoute($role->name, 'admin::auth.roles.show', [$role]);
 
-        return $this->view('auth.roles.show', compact('role'));
+        return $this->view('authorization.roles.show', compact('role'));
     }
 
     public function edit(Role $role, PermissionsRepository $permissionsRepo)
@@ -106,7 +106,7 @@ class RolesController extends Controller
         $role->load(['permissions']);
         $permissions = $permissionsRepo->with(['group'])->get();
 
-        return $this->view('auth.roles.edit', compact('role', 'permissions'));
+        return $this->view('authorization.roles.edit', compact('role', 'permissions'));
     }
 
     public function update(Role $role, UpdateRoleRequest $request, RolesRepository $rolesRepo)
