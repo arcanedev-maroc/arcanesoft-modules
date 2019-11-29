@@ -34,62 +34,56 @@ class AdminsRoutes extends AbstractRouteRegistrar
     public function map(): void
     {
         $this->adminGroup(function () {
-            $this->name('admins.')->prefix('admins')->group(function () {
-                // admin::auth.admins.index
+            $this->name('administrators.')->prefix('administrators')->group(function () {
+                // admin::auth.administrators.index
                 $this->get('/', [AdminsController::class, 'index'])
                      ->name('index');
 
-                // admin::auth.admins.trash
+                // admin::auth.administrators.trash
                 $this->get('trash', [AdminsController::class, 'trash'])
                      ->name('trash');
 
                 $this->mapDataTablesRoutes();
 
-                // admin::auth.admins.metrics
+                // admin::auth.administrators.metrics
                 $this->get('metrics', [AdminsController::class, 'metrics'])
                      ->name('metrics');
 
-                // admin::auth.admins.create
+                // admin::auth.administrators.create
                 $this->get('create', [AdminsController::class, 'create'])
                      ->name('create');
 
-                // admin::auth.admins.post
+                // admin::auth.administrators.post
                 $this->post('store', [AdminsController::class, 'store'])
                      ->name('store');
 
                 $this->prefix('{'.static::USER_WILDCARD.'}')->group(function () {
-                    // admin::auth.admins.show
+                    // admin::auth.administrators.show
                     $this->get('/', [AdminsController::class, 'show'])
                          ->name('show');
 
-                    // admin::auth.admins.edit
+                    // admin::auth.administrators.edit
                     $this->get('edit', [AdminsController::class, 'edit'])
                          ->name('edit');
 
-                    // admin::auth.admins.update
+                    // admin::auth.administrators.update
                     $this->put('update', [AdminsController::class, 'update'])
                          ->name('update');
 
-                    // admin::auth.admins.activate
+                    // admin::auth.administrators.activate
                     $this->put('activate', [AdminsController::class, 'activate'])
                          ->middleware(['ajax'])
                          ->name('activate');
 
-                    // admin::auth.admins.delete
+                    // admin::auth.administrators.delete
                     $this->delete('delete', [AdminsController::class, 'delete'])
                          ->middleware(['ajax'])
                          ->name('delete');
 
-                    // admin::auth.admins.restore
+                    // admin::auth.administrators.restore
                     $this->put('restore', [AdminsController::class, 'restore'])
                          ->middleware(['ajax'])
                          ->name('restore');
-
-                    if (impersonator()->isEnabled()) {
-                        // admin::auth.admins.impersonate
-                        $this->get('impersonate', [AdminsController::class, 'impersonate'])
-                             ->name('impersonate');
-                    }
                 });
             });
         });
@@ -101,11 +95,11 @@ class AdminsRoutes extends AbstractRouteRegistrar
     protected function mapDataTablesRoutes(): void
     {
         $this->dataTableGroup(function () {
-            // admin::auth.admins.datatables.index
+            // admin::auth.administrators.datatables.index
             $this->get('/', [AdminsDataTablesController::class, 'index'])
                  ->name('index');
 
-            // admin::auth.admins.datatables.trash
+            // admin::auth.administrators.datatables.trash
             $this->get('trash', [AdminsDataTablesController::class, 'trash'])
                  ->name('trash');
         });

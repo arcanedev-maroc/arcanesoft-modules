@@ -43,15 +43,15 @@ class ProfileController extends Controller
 
     public function index(Request $request)
     {
-        return $this->view('auth.profile.index', [
-            'user' => $request->user(),
+        return $this->view('authorization.profile.index', [
+            'user' => $request->user('admin'),
         ]);
     }
 
     public function updateAccount(UpdateUserAccountRequest $request, UsersRepository $repo)
     {
         $repo->updateUser(
-            $request->user(),
+            $request->user('admin'),
             $request->getValidatedData()
         );
 
@@ -66,7 +66,7 @@ class ProfileController extends Controller
     public function updatePassword(UpdateUserPasswordRequest $request, UsersRepository $repo)
     {
         $repo->updateUser(
-            $request->user(),
+            $request->user('admin'),
             $request->getValidatedData()
         );
 

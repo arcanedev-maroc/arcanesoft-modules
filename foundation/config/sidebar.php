@@ -1,7 +1,5 @@
 <?php
 
-use Arcanesoft\Foundation\Auth\Models\Role;
-
 return [
 
     /* -----------------------------------------------------------------
@@ -16,7 +14,7 @@ return [
             'title'       => 'Dashboard',
             'icon'        => 'fa fa-fw fa-tachometer-alt',
             'route'       => 'admin::index',
-            'roles'       => [Role::ADMINISTRATOR, Role::MODERATOR],
+            'roles'       => [],
             'permissions' => [],
         ],
 
@@ -38,10 +36,7 @@ return [
                     'title'       => 'Statistics',
                     'icon'        => 'fas fa-fw fa-tachometer-alt',
                     'route'       => 'admin::auth.index',
-                    'roles'       => [
-                        Role::ADMINISTRATOR,
-                        'auth-moderator',
-                    ],
+                    'roles'       => ['auth-moderator'],
                     'permissions' => [],
                 ],
                 [
@@ -49,21 +44,15 @@ return [
                     'title'       => 'Users',
                     'icon'        => 'fas fa-fw fa-users',
                     'route'       => 'admin::auth.users.index',
-                    'roles'       => [
-                        Role::ADMINISTRATOR,
-                        'auth-moderator',
-                    ],
+                    'roles'       => ['auth-moderator'],
                     'permissions' => [],
                 ],
                 [
-                    'name'        => 'auth::authorization.admins',
+                    'name'        => 'auth::authorization.administrators',
                     'title'       => 'Administrators',
-                    'icon'        => 'fas fa-fw fa-users',
-                    'route'       => 'admin::auth.admins.index',
-                    'roles'       => [
-                        Role::ADMINISTRATOR,
-                        'auth-moderator',
-                    ],
+                    'icon'        => 'fas fa-fw fa-user-secret',
+                    'route'       => 'admin::auth.administrators.index',
+                    'roles'       => ['auth-moderator'],
                     'permissions' => [],
                 ],
                 [
@@ -71,10 +60,7 @@ return [
                     'title'       => 'Roles',
                     'icon'        => 'fas fa-fw fa-user-tag',
                     'route'       => 'admin::auth.roles.index',
-                    'roles'       => [
-                        Role::ADMINISTRATOR,
-                        'auth-moderator',
-                    ],
+                    'roles'       => ['auth-moderator'],
                     'permissions' => [],
                 ],
                 [
@@ -82,10 +68,7 @@ return [
                     'title'       => 'Permissions',
                     'icon'        => 'fas fa-fw fa-shield-alt',
                     'route'       => 'admin::auth.permissions.index',
-                    'roles'       => [
-                        Role::ADMINISTRATOR,
-                        'auth-moderator',
-                    ],
+                    'roles'       => ['auth-moderator'],
                     'permissions' => [],
                 ],
                 [
@@ -93,10 +76,7 @@ return [
                     'title'       => 'Password Resets',
                     'icon'        => 'fas fa-fw fa-sync',
                     'route'       => 'admin::auth.password-resets.index',
-                    'roles'       => [
-                        Role::ADMINISTRATOR,
-                        'auth-moderator',
-                    ],
+                    'roles'       => ['auth-moderator'],
                     'permissions' => [],
                 ],
             ],
@@ -108,7 +88,7 @@ return [
             'title'       => 'System',
             'icon'        => 'fas fa-fw fa-desktop',
             'route'       => 'admin::index',
-            'roles'       => [Role::ADMINISTRATOR],
+            'roles'       => [],
             'permissions' => [],
             'children'    => [
                 [
@@ -116,30 +96,24 @@ return [
                     'title'       => 'Information',
                     'icon'        => 'fas fa-fw fa-info-circle',
                     'route'       => 'admin::system.index',
-                    'roles'       => [Role::ADMINISTRATOR],
-                    'permissions' => [
-                        'admin::system.index',
-                    ],
+                    'roles'       => [],
+                    'permissions' => ['admin::system.index'],
                 ],
                 [
                     'name'        => 'foundation::system.log-viewer',
                     'title'       => 'LogViewer',
                     'icon'        => 'fas fa-fw fa-clipboard-list',
                     'route'       => 'admin::system.log-viewer.index',
-                    'roles'       => [Role::ADMINISTRATOR],
-                    'permissions' => [
-                        'admin::system.log-viewer.index',
-                    ],
+                    'roles'       => [],
+                    'permissions' => ['admin::system.log-viewer.index'],
                 ],
                 [
                     'name'        => 'foundation::system.routes-viewer',
                     'title'       => 'Routes Viewer',
                     'icon'        => 'fas fa-fw fa-map-signs',
                     'route'       => 'admin::system.routes-viewer.index',
-                    'roles'       => [Role::ADMINISTRATOR],
-                    'permissions' => [
-                        'admin::system.routes-viewer.index',
-                    ],
+                    'roles'       => [],
+                    'permissions' => ['admin::system.routes-viewer.index'],
                 ],
             ],
         ],

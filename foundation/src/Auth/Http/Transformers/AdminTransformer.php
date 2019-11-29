@@ -61,26 +61,26 @@ class AdminTransformer extends AbstractTransformer
         $actions = [];
 
         if (static::can(AdminsPolicy::ability('show'), [$user]))
-            $actions[] = LinkAction::action('show', route('admin::auth.admins.show', [$user]), false)
+            $actions[] = LinkAction::action('show', route('admin::auth.administrators.show', [$user]), false)
                 ->size('sm');
 
         if (static::can(AdminsPolicy::ability('update'), [$user]))
-            $actions[] = LinkAction::action('edit', route('admin::auth.admins.edit', [$user]), false)
+            $actions[] = LinkAction::action('edit', route('admin::auth.administrators.edit', [$user]), false)
                 ->size('sm');
 
         if (static::can(AdminsPolicy::ability('activate'), [$user]))
             $actions[] = ButtonAction::action($user->isActive() ? 'deactivate' : 'activate', false)
-                ->attributeIf($user->isDeletable(), 'onclick', "Foundation.\$emit('auth::admins.activate', ".json_encode(['id' => $user->uuid, 'status' => $user->isActive() ? 'activated' : 'deactivated']).")")
+                ->attributeIf($user->isDeletable(), 'onclick', "Foundation.\$emit('auth::administrators.activate', ".json_encode(['id' => $user->uuid, 'status' => $user->isActive() ? 'activated' : 'deactivated']).")")
                 ->size('sm');
 
         if (static::can(AdminsPolicy::ability('restore'), [$user]) && $user->trashed())
             $actions[] = ButtonAction::action('restore', false)
-                ->attribute('onclick', "window.Foundation.\$emit('auth::admins.restore', ".json_encode(['id' => $user->uuid]).")")
+                ->attribute('onclick', "window.Foundation.\$emit('auth::administrators.restore', ".json_encode(['id' => $user->uuid]).")")
                 ->size('sm');
 
         if (static::can(AdminsPolicy::ability('delete'), [$user]))
             $actions[] = ButtonAction::action('delete', false)
-                ->attributeIf($user->isDeletable(), 'onclick', "window.Foundation.\$emit('auth::admins.delete', ".json_encode(['id' => $user->uuid]).")")
+                ->attributeIf($user->isDeletable(), 'onclick', "window.Foundation.\$emit('auth::administrators.delete', ".json_encode(['id' => $user->uuid]).")")
                 ->size('sm');
 
         return $actions;

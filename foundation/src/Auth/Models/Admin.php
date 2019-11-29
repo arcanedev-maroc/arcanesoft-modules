@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Models;
 
+use App\Notifications\Auth\ResetPassword as ResetPasswordNotification;
 use Arcanesoft\Foundation\Auth\Auth;
 use Arcanesoft\Foundation\Auth\Events\Admins\{
     CreatedAdmin, CreatingAdmin, DeletedAdmin, DeletingAdmin, ForceDeletedAdmin, ReplicatingAdmin, RestoredAdmin,
@@ -304,5 +305,17 @@ class Admin extends Authenticatable
     public function isSuperAdmin(): bool
     {
         return Auth::isSuperAdmin($this);
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     *
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 }

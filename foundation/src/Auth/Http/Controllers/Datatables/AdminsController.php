@@ -6,7 +6,6 @@ namespace Arcanesoft\Foundation\Auth\Http\Controllers\Datatables;
 
 use Arcanesoft\Foundation\Auth\Http\Transformers\AdminTransformer;
 use Arcanesoft\Foundation\Auth\Repositories\AdminsRepository;
-use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 /**

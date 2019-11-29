@@ -46,6 +46,16 @@ class Auth
      */
 
     /**
+     * Get the authenticated administrator.
+     *
+     * @return \Arcanesoft\Foundation\Auth\Models\Admin|mixed
+     */
+    public static function admin(): Admin
+    {
+        return auth('admin')->user();
+    }
+
+    /**
      * Get the auth table name.
      *
      * @param  string       $name
@@ -58,7 +68,9 @@ class Auth
     {
         $name = static::config("database.tables.{$name}", $default);
 
-        return $prefixed ? static::prefixTable($name) : $name;
+        return $prefixed
+            ? static::prefixTable($name)
+            : $name;
     }
 
     /**
@@ -145,11 +157,10 @@ class Auth
      */
     public static function isSuperAdmin(Admin $user): bool
     {
-        $emails = [
-            'admin@example.com',
-        ];
+        $emails = static::config('admins.emails', []);
 
-        return in_array($user->email, $emails);
+        return ! empty($emails)
+            && in_array($user->email, $emails);
     }
 
     /**
@@ -160,15 +171,5 @@ class Auth
     public static function isRegistrationEnabled(): bool
     {
         return static::config('authentication.register.enabled', true);
-    }
-
-    /**
-     * Check if socialite is enabled.
-     *
-     * @return bool
-     */
-    public static function isSocialiteEnabled(): bool
-    {
-        return static::config('socialite.enabled');
     }
 }

@@ -101,12 +101,6 @@ class AdminsPolicy extends AbstractPolicy
                 'name'        => 'Restore a admin',
                 'description' => 'Ability to restore a admin',
             ]),
-
-            // admin::auth.admins.impersonate
-            $this->makeAbility('impersonate')->setMetas([
-                'name'        => 'Impersonate a admin',
-                'description' => 'Ability to impersonate a admin',
-            ]),
         ];
     }
 
@@ -238,18 +232,5 @@ class AdminsPolicy extends AbstractPolicy
     {
         if ( ! is_null($model))
             return $model->trashed();
-    }
-
-    /**
-     * Allow to impersonate a admin.
-     *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|null   $model
-     *
-     * @return \Illuminate\Auth\Access\Response|bool|void
-     */
-    public function impersonate(AuthenticatedAdmin $admin, Admin $model)
-    {
-        return $admin->isNot($model);
     }
 }

@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Http\Controllers;
 
-use Arcanedev\LaravelImpersonator\Contracts\Impersonator;
 use Arcanesoft\Foundation\Auth\Http\Requests\Admins\{CreateAdminRequest, UpdateAdminRequest};
 use Arcanesoft\Foundation\Auth\Models\Admin;
 use Arcanesoft\Foundation\Auth\Policies\AdminsPolicy;
-use Arcanesoft\Foundation\Auth\Repositories\{RolesRepository, AdminsRepository};
+use Arcanesoft\Foundation\Auth\Repositories\{AdminsRepository, RolesRepository};
 use Arcanesoft\Foundation\Support\Traits\HasNotifications;
 use Illuminate\Http\Request;
 
@@ -36,10 +35,10 @@ class AdminsController extends Controller
     {
         parent::__construct();
 
-        $this->setCurrentSidebarItem('auth::authorization.admins');
+        $this->setCurrentSidebarItem('auth::authorization.administrators');
 
         $this->addBreadcrumbParent();
-        $this->addBreadcrumbRoute(__('Admins'), 'admin::auth.admins.index');
+        $this->addBreadcrumbRoute(__('Administrators'), 'admin::auth.administrators.index');
     }
 
     /* -----------------------------------------------------------------
@@ -82,7 +81,7 @@ class AdminsController extends Controller
     {
         $this->authorize(AdminsPolicy::ability('metrics'));
 
-        $this->addBreadcrumbRoute(__('Metrics'), 'admin::auth.admins.metrics');
+        $this->addBreadcrumbRoute(__('Metrics'), 'admin::auth.administrators.metrics');
 
         $this->selectMetrics('arcanesoft.foundation.metrics.selected.auth-admins');
 
@@ -93,7 +92,7 @@ class AdminsController extends Controller
      * Create a new user.
      *
      * @param  \Arcanesoft\Foundation\Auth\Repositories\RolesRepository  $rolesRepo
-     * @param  \Illuminate\Http\Request                       $request
+     * @param  \Illuminate\Http\Request                                  $request
      *
      * @return \Illuminate\Contracts\View\View
      */
@@ -103,7 +102,7 @@ class AdminsController extends Controller
 
         $roles = $rolesRepo->getFilteredByAuthenticatedUser($request->user());
 
-        $this->addBreadcrumb(__('New Admin'));
+        $this->addBreadcrumb(__('New Administrator'));
 
         return $this->view('authorization.admins.create', compact('roles'));
     }
@@ -112,7 +111,7 @@ class AdminsController extends Controller
      * Persist the new user.
      *
      * @param  \Arcanesoft\Foundation\Auth\Http\Requests\Admins\CreateAdminRequest  $request
-     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdminsRepository           $adminsRepo
+     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdminsRepository            $adminsRepo
      *
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -123,75 +122,75 @@ class AdminsController extends Controller
         $data = $request->getValidatedData();
 
         $adminsRepo->syncRolesByUuids(
-            $user = $adminsRepo->createAdmin($data),
+            $admin = $adminsRepo->createAdmin($data),
             $data['roles'] ?: []
         );
 
         $this->notifySuccess(
-            __('Admin Created'),
-            __('A new user has been successfully created!')
+            __('Administrator Created'),
+            __('A new administrator has been successfully created!')
         );
 
-        return redirect()->route('admin::auth.admins.show', [$user]);
+        return redirect()->route('admin::auth.administrators.show', [$admin]);
     }
 
     /**
      * Show the user's details.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function show(Admin $user)
+    public function show(Admin $admin)
     {
-        $this->authorize(AdminsPolicy::ability('show'), [$user]);
+        $this->authorize(AdminsPolicy::ability('show'), [$admin]);
 
-        $this->addBreadcrumbRoute(__("Admin's details"), 'admin::auth.admins.show', [$user]);
+        $this->addBreadcrumbRoute(__("Administrator's details"), 'admin::auth.administrators.show', [$admin]);
 
-        return $this->view('authorization.admins.show', compact('user'));
+        return $this->view('authorization.admins.show', compact('admin'));
     }
 
     /**
      * Edit the user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin                   $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin                  $admin
      * @param  \Arcanesoft\Foundation\Auth\Repositories\RolesRepository  $rolesRepo
-     * @param  \Illuminate\Http\Request                       $request
+     * @param  \Illuminate\Http\Request                                  $request
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit(Admin $user, RolesRepository $rolesRepo, Request $request)
+    public function edit(Admin $admin, RolesRepository $rolesRepo, Request $request)
     {
-        $this->authorize(AdminsPolicy::ability('update'), [$user]);
+        $this->authorize(AdminsPolicy::ability('update'), [$admin]);
 
         $roles = $rolesRepo->getFilteredByAuthenticatedUser($request->user());
 
-        $this->addBreadcrumbRoute(__('Edit Admin'), 'admin::auth.admins.edit', [$user]);
+        $this->addBreadcrumbRoute(__('Edit Administrator'), 'admin::auth.administrators.edit', [$admin]);
 
-        return $this->view('authorization.admins.edit', compact('user', 'roles'));
+        return $this->view('authorization.admins.edit', compact('admin', 'roles'));
     }
 
     /**
      * Update the user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin                            $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin                             $admin
      * @param  \Arcanesoft\Foundation\Auth\Http\Requests\Admins\UpdateAdminRequest  $request
-     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdminsRepository           $adminsRepo
+     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdminsRepository            $adminsRepo
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Admin $user, UpdateAdminRequest $request, AdminsRepository $adminsRepo)
+    public function update(Admin $admin, UpdateAdminRequest $request, AdminsRepository $adminsRepo)
     {
-        $this->authorize(AdminsPolicy::ability('update'), [$user]);
+        $this->authorize(AdminsPolicy::ability('update'), [$admin]);
 
-        $adminsRepo->updateAdmin($user, $request->getValidatedData());
+        $adminsRepo->updateAdmin($admin, $request->getValidatedData());
 
         $this->notifySuccess(
-            __('Admin Updated'),
-            __('The user has been successfully updated!')
+            __('Administrator Updated'),
+            __('The administrator has been successfully updated!')
         );
 
-        return redirect()->route('admin::auth.admins.show', [$user]);
+        return redirect()->route('admin::auth.administrators.show', [$admin]);
     }
 
     /**
@@ -209,8 +208,8 @@ class AdminsController extends Controller
         $adminsRepo->toggleActive($user);
 
         $this->notifySuccess(
-            __($user->isActive() ? 'Admin Activated' : 'Admin Deactivated'),
-            __($user->isActive() ? 'The user has been successfully activated!' : 'The user has been successfully deactivated!')
+            __($user->isActive() ? 'Administrator Activated' : 'Administrator Deactivated'),
+            __($user->isActive() ? 'The administrator has been successfully activated!' : 'The administrator has been successfully deactivated!')
         );
 
         return static::jsonResponseSuccess();
@@ -219,20 +218,20 @@ class AdminsController extends Controller
     /**
      * Delete a user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin                   $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin                   $admin
      * @param  \Arcanesoft\Foundation\Auth\Repositories\AdminsRepository  $adminsRepo
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function delete(Admin $user, AdminsRepository $adminsRepo)
+    public function delete(Admin $admin, AdminsRepository $adminsRepo)
     {
-        $this->authorize(AdminsPolicy::ability($user->trashed() ? 'force-delete' : 'delete'), [$user]);
+        $this->authorize(AdminsPolicy::ability($admin->trashed() ? 'force-delete' : 'delete'), [$admin]);
 
-        $adminsRepo->deleteAdmin($user);
+        $adminsRepo->deleteAdmin($admin);
 
         $this->notifySuccess(
-            __('Admin Deleted'),
-            __('The user has been successfully deleted!')
+            __('Administrator Deleted'),
+            __('The administrator has been successfully deleted!')
         );
 
         return static::jsonResponseSuccess();
@@ -241,51 +240,22 @@ class AdminsController extends Controller
     /**
      * Restore a deleted user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin                   $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin                   $admin
      * @param  \Arcanesoft\Foundation\Auth\Repositories\AdminsRepository  $adminsRepo
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function restore(Admin $user, AdminsRepository $adminsRepo)
+    public function restore(Admin $admin, AdminsRepository $adminsRepo)
     {
-        $this->authorize(AdminsPolicy::ability('restore'), [$user]);
+        $this->authorize(AdminsPolicy::ability('restore'), [$admin]);
 
-        $adminsRepo->restoreAdmin($user);
+        $adminsRepo->restoreAdmin($admin);
 
         $this->notifySuccess(
-            __('Admin Restored'),
-            __('The user has been successfully restored!')
+            __('Administrator Restored'),
+            __('The administrator has been successfully restored!')
         );
 
         return static::jsonResponseSuccess();
-    }
-
-    /**
-     * Impersonate a user.
-     *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin                           $user
-     * @param  \Arcanedev\LaravelImpersonator\Contracts\Impersonator  $impersonator
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function impersonate(Admin $user, Impersonator $impersonator)
-    {
-        $this->authorize(AdminsPolicy::ability('impersonate'), [$user]);
-
-        /**
-         * @var  \Arcanedev\LaravelImpersonator\Contracts\Impersonatable  $authAdmin
-         * @var  \Arcanedev\LaravelImpersonator\Contracts\Impersonatable  $user
-         */
-        $authAdmin = auth()->user();
-
-        if ($impersonator->start($authAdmin, $user))
-            return redirect()->route('public::index');
-
-        $this->notifyError(
-            __('Impersonation Not Allowed'),
-            __('You\'re not allowed to impersonate this user')
-        );
-
-        return redirect()->back();
     }
 }
