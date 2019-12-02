@@ -9,8 +9,7 @@ use Arcanesoft\Foundation\Auth\Http\Requests\Users\{CreateUserRequest, UpdateUse
 use Arcanesoft\Foundation\Auth\Models\User;
 use Arcanesoft\Foundation\Auth\Policies\UsersPolicy;
 use Arcanesoft\Foundation\Support\Traits\HasNotifications;
-use Illuminate\Http\Request;
-use Arcanesoft\Foundation\Auth\Repositories\{RolesRepository, UsersRepository};
+use Arcanesoft\Foundation\Auth\Repositories\UsersRepository;
 
 /**
  * Class     UsersController
@@ -92,20 +91,15 @@ class UsersController extends Controller
     /**
      * Create a new user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Repositories\RolesRepository  $rolesRepo
-     * @param  \Illuminate\Http\Request                       $request
-     *
      * @return \Illuminate\Contracts\View\View
      */
-    public function create(RolesRepository $rolesRepo, Request $request)
+    public function create()
     {
         $this->authorize(UsersPolicy::ability('create'));
 
-        $roles = $rolesRepo->getFilteredByAuthenticatedUser($request->user());
-
         $this->addBreadcrumb(__('New User'));
 
-        return $this->view('authorization.users.create', compact('roles'));
+        return $this->view('authorization.users.create');
     }
 
     /**
@@ -120,16 +114,12 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability('create'));
 
-        $data = $request->getValidatedData();
-
-        $usersRepo->syncRolesByUuids(
-            $user = $usersRepo->createUser($data),
-            $data['roles'] ?: []
+        $user = $usersRepo->createUser(
+            $request->getValidatedData()
         );
 
         $this->notifySuccess(
-            __('User Created'),
-            __('A new user has been successfully created!')
+            __('User Created'), __('A new user has been successfully created!')
         );
 
         return redirect()->route('admin::auth.users.show', [$user]);
@@ -154,21 +144,17 @@ class UsersController extends Controller
     /**
      * Edit the user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User                   $user
-     * @param  \Arcanesoft\Foundation\Auth\Repositories\RolesRepository  $rolesRepo
-     * @param  \Illuminate\Http\Request                       $request
+     * @param  \Arcanesoft\Foundation\Auth\Models\User  $user
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit(User $user, RolesRepository $rolesRepo, Request $request)
+    public function edit(User $user)
     {
         $this->authorize(UsersPolicy::ability('update'), [$user]);
 
-        $roles = $rolesRepo->getFilteredByAuthenticatedUser($request->user());
-
         $this->addBreadcrumbRoute(__('Edit User'), 'admin::auth.users.edit', [$user]);
 
-        return $this->view('authorization.users.edit', compact('user', 'roles'));
+        return $this->view('authorization.users.edit', compact('user'));
     }
 
     /**
@@ -187,8 +173,7 @@ class UsersController extends Controller
         $usersRepo->updateUser($user, $request->getValidatedData());
 
         $this->notifySuccess(
-            __('User Updated'),
-            __('The user has been successfully updated!')
+            __('User Updated'), __('The user has been successfully updated!')
         );
 
         return redirect()->route('admin::auth.users.show', [$user]);
@@ -208,10 +193,13 @@ class UsersController extends Controller
 
         $usersRepo->toggleActive($user);
 
-        $this->notifySuccess(
-            __($user->isActive() ? 'User Activated' : 'User Deactivated'),
-            __($user->isActive() ? 'The user has been successfully activated!' : 'The user has been successfully deactivated!')
-        );
+        $user->isActive()
+            ? $this->notifySuccess(
+                __( 'User Activated'), __('The user has been successfully activated!')
+            )
+            : $this->notifySuccess(
+                __('User Deactivated'), __('The user has been successfully deactivated!')
+            );
 
         return static::jsonResponseSuccess();
     }
@@ -231,8 +219,7 @@ class UsersController extends Controller
         $usersRepo->deleteUser($user);
 
         $this->notifySuccess(
-            __('User Deleted'),
-            __('The user has been successfully deleted!')
+            __('User Deleted'), __('The user has been successfully deleted!')
         );
 
         return static::jsonResponseSuccess();
@@ -253,8 +240,7 @@ class UsersController extends Controller
         $usersRepo->restoreUser($user);
 
         $this->notifySuccess(
-            __('User Restored'),
-            __('The user has been successfully restored!')
+            __('User Restored'), __('The user has been successfully restored!')
         );
 
         return static::jsonResponseSuccess();
@@ -263,7 +249,7 @@ class UsersController extends Controller
     /**
      * Impersonate a user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User                           $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\User                $user
      * @param  \Arcanedev\LaravelImpersonator\Contracts\Impersonator  $impersonator
      *
      * @return \Illuminate\Http\RedirectResponse
@@ -276,14 +262,13 @@ class UsersController extends Controller
          * @var  \Arcanedev\LaravelImpersonator\Contracts\Impersonatable  $authUser
          * @var  \Arcanedev\LaravelImpersonator\Contracts\Impersonatable  $user
          */
-        $authUser = auth()->user();
+        $admin = auth('admin')->user();
 
-        if ($impersonator->start($authUser, $user))
+        if ($impersonator->start($admin, $user))
             return redirect()->route('public::index');
 
         $this->notifyError(
-            __('Impersonation Not Allowed'),
-            __('You\'re not allowed to impersonate this user')
+            __('Impersonation Not Allowed'), __('You\'re not allowed to impersonate this user')
         );
 
         return redirect()->back();

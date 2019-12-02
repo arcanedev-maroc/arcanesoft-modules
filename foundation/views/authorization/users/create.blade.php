@@ -57,38 +57,6 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="card card-borderless">
-                    <div class="card-header">
-                        @lang('Roles')
-                    </div>
-                    <table class="table table-md mb-0">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>@lang('Name')</th>
-                                <th>@lang('Description')</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($roles as $role)
-                                <?php /** @var  Arcanesoft\Foundation\Auth\Models\Role  $role */ ?>
-                                <tr>
-                                    <td>
-                                        {{ form()->checkbox('roles[]', $role->uuid, in_array($role->uuid, old('roles', []))) }}
-                                    </td>
-                                    <td>{{ $role->name }}</td>
-                                    <td>{{ $role->description }}</td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="3" class="text-center">@lang('The list is empty !')</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
         </div>
     {{ form()->close() }}
 @endsection

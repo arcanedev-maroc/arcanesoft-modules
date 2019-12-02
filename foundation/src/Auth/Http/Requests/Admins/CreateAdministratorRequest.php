@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Http\Requests\Admins;
 
-use Arcanesoft\Foundation\Auth\Http\Routes\UsersRoutes;
 use Arcanesoft\Foundation\Auth\Rules\Users\UserEmailRule;
 
 /**
- * Class     UpdateAdminRequest
+ * Class     CreateAdminRequest
  *
  * @package  Arcanesoft\Foundation\Auth\Http\Requests\Admins
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class UpdateAdminRequest extends AdminFormRequest
+class CreateAdministratorRequest extends AdminFormRequest
 {
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -27,29 +26,12 @@ class UpdateAdminRequest extends AdminFormRequest
      */
     public function rules(): array
     {
-        $user = $this->getCurrentUser();
-
         return [
             'first_name' => ['required', 'string', 'max:50'],
             'last_name'  => ['required', 'string', 'max:50'],
-            'email'      => ['required', 'string', 'email', 'max:255', UserEmailRule::unique()->ignore($user->id)],
+            'email'      => ['required', 'string', 'email', 'max:255', UserEmailRule::unique()],
             'password'   => ['nullable', 'string', 'min:8', 'confirmed'],
             'roles'      => ['array'],
         ];
-    }
-
-    /* -----------------------------------------------------------------
-     |  Other Methods
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Get the current user.
-     *
-     * @return \Arcanesoft\Foundation\Auth\Models\User|mixed
-     */
-    protected function getCurrentUser()
-    {
-        return $this->route()->parameter(UsersRoutes::USER_WILDCARD);
     }
 }

@@ -8,7 +8,6 @@ use Arcanesoft\Foundation\Auth\Auth;
 use Arcanesoft\Foundation\Auth\Events\Admins\{
     ActivatedAdmin, ActivatingAdmin, DeactivatedAdmin, DeactivatingAdmin, SyncedRolesToAdmin, SyncingRolesToAdmin
 };
-use Arcanesoft\Foundation\Auth\Models\Role;
 use Arcanesoft\Foundation\Auth\Models\Admin;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -94,7 +93,7 @@ class AdminsRepository extends AbstractRepository
      *
      * @return \Arcanesoft\Foundation\Auth\Models\Admin
      */
-    public function createAdmin(array $attributes): Admin
+    public function createOne(array $attributes): Admin
     {
         $attributes['password'] = $attributes['password'] ?? Str::random(8);
 

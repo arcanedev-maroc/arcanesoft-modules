@@ -262,7 +262,7 @@ class Admin extends Authenticatable
      */
     public function isDeletable()
     {
-        return true;
+        return ! $this->is(Auth::admin());
     }
 
     /**
@@ -282,8 +282,10 @@ class Admin extends Authenticatable
      */
     public function canImpersonate(): bool
     {
-        return impersonator()->isEnabled()
-            ; // TODO: Check a policy or super admin?
+        if ( ! impersonator()->isEnabled())
+            return false;
+
+        return $this->isSuperAdmin();
     }
 
     /**
@@ -293,8 +295,10 @@ class Admin extends Authenticatable
      */
     public function canBeImpersonated(): bool
     {
-        return impersonator()->isEnabled()
-            ; // TODO: Check a policy or super admin?
+        if ( ! impersonator()->isEnabled())
+            return false;
+
+        return false;
     }
 
     /**

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Http\Controllers;
 
-use Arcanesoft\Foundation\Auth\Http\Requests\Admins\{CreateAdminRequest, UpdateAdminRequest};
+use Arcanesoft\Foundation\Auth\Auth;
+use Arcanesoft\Foundation\Auth\Http\Requests\Admins\{CreateAdministratorRequest, UpdateAdministratorRequest};
 use Arcanesoft\Foundation\Auth\Models\Admin;
 use Arcanesoft\Foundation\Auth\Policies\AdminsPolicy;
 use Arcanesoft\Foundation\Auth\Repositories\{AdminsRepository, RolesRepository};
 use Arcanesoft\Foundation\Support\Traits\HasNotifications;
-use Illuminate\Http\Request;
 
 /**
  * Class     AdminsController
@@ -89,18 +89,17 @@ class AdminsController extends Controller
     }
 
     /**
-     * Create a new user.
+     * Create a new administrator.
      *
      * @param  \Arcanesoft\Foundation\Auth\Repositories\RolesRepository  $rolesRepo
-     * @param  \Illuminate\Http\Request                                  $request
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function create(RolesRepository $rolesRepo, Request $request)
+    public function create(RolesRepository $rolesRepo)
     {
         $this->authorize(AdminsPolicy::ability('create'));
 
-        $roles = $rolesRepo->getFilteredByAuthenticatedUser($request->user());
+        $roles = $rolesRepo->getFilteredByAuthenticatedUser(Auth::admin());
 
         $this->addBreadcrumb(__('New Administrator'));
 
@@ -108,27 +107,26 @@ class AdminsController extends Controller
     }
 
     /**
-     * Persist the new user.
+     * Persist the new administrator.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Http\Requests\Admins\CreateAdminRequest  $request
-     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdminsRepository            $adminsRepo
+     * @param  \Arcanesoft\Foundation\Auth\Http\Requests\Admins\CreateAdministratorRequest  $request
+     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdminsRepository                    $adminsRepo
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(CreateAdminRequest $request, AdminsRepository $adminsRepo)
+    public function store(CreateAdministratorRequest $request, AdminsRepository $adminsRepo)
     {
         $this->authorize(AdminsPolicy::ability('create'));
 
         $data = $request->getValidatedData();
 
         $adminsRepo->syncRolesByUuids(
-            $admin = $adminsRepo->createAdmin($data),
+            $admin = $adminsRepo->createOne($data),
             $data['roles'] ?: []
         );
 
         $this->notifySuccess(
-            __('Administrator Created'),
-            __('A new administrator has been successfully created!')
+            __('Administrator Created'), __('A new administrator has been successfully created!')
         );
 
         return redirect()->route('admin::auth.administrators.show', [$admin]);
@@ -155,15 +153,14 @@ class AdminsController extends Controller
      *
      * @param  \Arcanesoft\Foundation\Auth\Models\Admin                  $admin
      * @param  \Arcanesoft\Foundation\Auth\Repositories\RolesRepository  $rolesRepo
-     * @param  \Illuminate\Http\Request                                  $request
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit(Admin $admin, RolesRepository $rolesRepo, Request $request)
+    public function edit(Admin $admin, RolesRepository $rolesRepo)
     {
         $this->authorize(AdminsPolicy::ability('update'), [$admin]);
 
-        $roles = $rolesRepo->getFilteredByAuthenticatedUser($request->user());
+        $roles = $rolesRepo->getFilteredByAuthenticatedUser(Auth::admin());
 
         $this->addBreadcrumbRoute(__('Edit Administrator'), 'admin::auth.administrators.edit', [$admin]);
 
@@ -173,21 +170,20 @@ class AdminsController extends Controller
     /**
      * Update the user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin                             $admin
-     * @param  \Arcanesoft\Foundation\Auth\Http\Requests\Admins\UpdateAdminRequest  $request
-     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdminsRepository            $adminsRepo
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin                                     $admin
+     * @param  \Arcanesoft\Foundation\Auth\Http\Requests\Admins\UpdateAdministratorRequest  $request
+     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdminsRepository                    $adminsRepo
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Admin $admin, UpdateAdminRequest $request, AdminsRepository $adminsRepo)
+    public function update(Admin $admin, UpdateAdministratorRequest $request, AdminsRepository $adminsRepo)
     {
         $this->authorize(AdminsPolicy::ability('update'), [$admin]);
 
         $adminsRepo->updateAdmin($admin, $request->getValidatedData());
 
         $this->notifySuccess(
-            __('Administrator Updated'),
-            __('The administrator has been successfully updated!')
+            __('Administrator Updated'), __('The administrator has been successfully updated!')
         );
 
         return redirect()->route('admin::auth.administrators.show', [$admin]);
@@ -207,10 +203,13 @@ class AdminsController extends Controller
 
         $adminsRepo->toggleActive($user);
 
-        $this->notifySuccess(
-            __($user->isActive() ? 'Administrator Activated' : 'Administrator Deactivated'),
-            __($user->isActive() ? 'The administrator has been successfully activated!' : 'The administrator has been successfully deactivated!')
-        );
+        $user->isActive()
+            ? $this->notifySuccess(
+                __('Administrator Activated'), __('The administrator has been successfully activated!')
+            )
+            : $this->notifySuccess(
+                __('Administrator Deactivated'), __('The administrator has been successfully deactivated!')
+            );
 
         return static::jsonResponseSuccess();
     }
@@ -230,8 +229,7 @@ class AdminsController extends Controller
         $adminsRepo->deleteAdmin($admin);
 
         $this->notifySuccess(
-            __('Administrator Deleted'),
-            __('The administrator has been successfully deleted!')
+            __('Administrator Deleted'), __('The administrator has been successfully deleted!')
         );
 
         return static::jsonResponseSuccess();
@@ -252,8 +250,7 @@ class AdminsController extends Controller
         $adminsRepo->restoreAdmin($admin);
 
         $this->notifySuccess(
-            __('Administrator Restored'),
-            __('The administrator has been successfully restored!')
+            __('Administrator Restored'), __('The administrator has been successfully restored!')
         );
 
         return static::jsonResponseSuccess();

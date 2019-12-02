@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Repositories;
 
 use Arcanesoft\Foundation\Auth\Auth;
-use Arcanesoft\Foundation\Auth\Models\{Role, Permission, User};
+use Arcanesoft\Foundation\Auth\Models\{
+    Admin,
+    Role,
+    Permission,
+    User};
 use Arcanesoft\Foundation\Auth\Events\Roles\{
     DetachedAllUsersFromRole, DetachedPermissionFromRole, DetachedUserFromRole, DetachingAllPermissionsFromRole,
     DetachedAllPermissionsFromRole, DetachingAllUsersFromRole, DetachingPermissionFromRole, DetachingUserFromRole,
@@ -284,19 +288,21 @@ class RolesRepository extends AbstractRepository
     }
 
     /**
-     * Get the roles filtered by authenticated user.
-     * If the user is a super admin shows all the roles.
+     * Get the roles filtered by authenticated administrator.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
      *
      * @return \Arcanesoft\Foundation\Auth\Models\Role[]|\Illuminate\Support\Collection|iterable
      */
-    public function getFilteredByAuthenticatedUser(User $user): iterable
+    public function getFilteredByAuthenticatedUser(Admin $admin): iterable
     {
-        return $this->get()->filter(function (Role $role) use ($user) {
-            if ($user->isSuperAdmin())
-                return false;
+        $roles = $this->get();
 
+        if ($admin->isSuperAdmin()) {
+            return $roles;
+        }
+
+        return $roles->filter(function (Role $role) {
             return $role->key !== Role::ADMINISTRATOR;
         });
     }

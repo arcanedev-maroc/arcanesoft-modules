@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Http\Controllers\Datatables;
 
+use Arcanesoft\Foundation\Auth\Auth;
 use Arcanesoft\Foundation\Auth\Http\Transformers\RoleTransformer;
 use Arcanesoft\Foundation\Auth\Repositories\RolesRepository;
 use Illuminate\Http\Request;
@@ -22,10 +23,11 @@ class RolesController
      | -----------------------------------------------------------------
      */
 
-    public function index(DataTables $dataTables, RolesRepository $rolesRepo, Request $request)
+    public function index(DataTables $dataTables, RolesRepository $rolesRepo)
     {
-        $query = $rolesRepo->with(['users'])
-                           ->filterByAuthenticatedUser($request->user());
+        $query = $rolesRepo
+            ->with(['users'])
+            ->filterByAuthenticatedUser(Auth::admin());
 
         return $dataTables->eloquent($query)
             ->setTransformer(new RoleTransformer)

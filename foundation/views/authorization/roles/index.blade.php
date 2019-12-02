@@ -61,7 +61,7 @@
     @endcan
 
     {{-- DELETE MODAL --}}
-    @can(Arcanesoft\Foundation\Auth\Policies\UsersPolicy::ability('delete'))
+    @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('delete'))
         <div class="modal modal-danger fade" id="delete-role-modal" data-backdrop="static"
              tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog" role="document">

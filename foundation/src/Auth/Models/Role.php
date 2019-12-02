@@ -164,16 +164,15 @@ class Role extends Model
      * Scope by the authenticated user.
      *
      * @param  \Illuminate\Database\Eloquent\Builder    $query
-     * @param  \Arcanesoft\Foundation\Auth\Models\User  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
      *
      * @return \Illuminate\Database\Eloquent\Builder|mixed
      */
-    public function scopeFilterByAuthenticatedUser(Builder $query, User $user)
+    public function scopeFilterByAuthenticatedUser(Builder $query, Admin $admin)
     {
-        if ($user->isSuperAdmin())
-            return $query;
-
-        return $query->where('key', '!=', static::ADMINISTRATOR);
+        return $query->unless($admin->isSuperAdmin(), function (Builder $q) {
+            $q->where('key', '!=', static::ADMINISTRATOR);
+        });
     }
 
     /**

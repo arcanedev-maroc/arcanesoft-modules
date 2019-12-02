@@ -22,18 +22,17 @@ class UsersController
      | -----------------------------------------------------------------
      */
 
-    public function index(DataTables $dataTables, UsersRepository $usersRepo, Request $request, bool $trash = false)
+    public function index(DataTables $dataTables, UsersRepository $usersRepo, bool $trash = false)
     {
-        $query = $usersRepo->onlyTrashed($trash)
-                           ->filterByAuthenticatedUser($request->user());
+        $query = $usersRepo->onlyTrashed($trash);
 
         return $dataTables->eloquent($query)
             ->setTransformer(new UserTransformer)
             ->make(true);
     }
 
-    public function trash(DataTables $dataTables, UsersRepository $usersRepo, Request $request)
+    public function trash(DataTables $dataTables, UsersRepository $usersRepo)
     {
-        return $this->index($dataTables, $usersRepo, $request, true);
+        return $this->index($dataTables, $usersRepo, true);
     }
 }
