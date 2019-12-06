@@ -33,18 +33,6 @@ class RoleTableSeeder extends RolesSeeder
                 'is_locked'   => true,
             ],
             [
-                'name'        => 'Moderator',
-                'key'         => Role::MODERATOR,
-                'description' => 'The system moderator role',
-                'is_locked'   => true,
-            ],
-            [
-                'name'        => 'Member',
-                'key'         => Role::MEMBER,
-                'description' => 'The member role',
-                'is_locked'   => true,
-            ],
-            [
                 'name'        => 'Auth Moderator',
                 'key'         => 'auth-moderator',
                 'description' => 'The auth moderator role',
@@ -53,9 +41,7 @@ class RoleTableSeeder extends RolesSeeder
         ]);
 
         $this->syncRoles([
-            'auth-moderator' => [
-                'admin::auth.*',
-            ],
+            'auth-moderator' => ['admin::auth.*'],
         ]);
     }
 }

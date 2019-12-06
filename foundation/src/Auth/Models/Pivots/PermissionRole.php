@@ -11,16 +11,13 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  *
  * @package  Arcanesoft\Foundation\Auth\Models\Pivots
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
+ *
+ * @property  int                         permission_id
+ * @property  int                         role_id
+ * @property  \Illuminate\Support\Carbon  created_at
  */
 class PermissionRole extends Pivot
 {
-    /* -----------------------------------------------------------------
-     |  Constants
-     | -----------------------------------------------------------------
-     */
-
-    const UPDATED_AT = null;
-
     /* -----------------------------------------------------------------
      |  Properties
      | -----------------------------------------------------------------
@@ -35,4 +32,19 @@ class PermissionRole extends Pivot
         'permission_id' => 'integer',
         'role_id'       => 'integer',
     ];
+
+    /* -----------------------------------------------------------------
+     |  Getters
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Get the name of the "updated at" column.
+     *
+     * @return string
+     */
+    public function getUpdatedAtColumn()
+    {
+        return null;
+    }
 }

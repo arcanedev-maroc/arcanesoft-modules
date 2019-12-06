@@ -23,23 +23,23 @@ class AdminTransformer extends AbstractTransformer
     */
 
     /**
-     * Transform the users for datatable.
+     * Transform the admins for datatable.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
      *
      * @return array
      */
-    public function transform(Admin $user): array
+    public function transform(Admin $admin): array
     {
-        $actions = static::getActions($user);
+        $actions = static::getActions($admin);
 
         return [
-            'avatar'     => '<span class="avatar" style="background-image: url('.$user->avatar.')" title="'.$user->full_name.'"></span>',
-            'first_name' => $user->first_name,
-            'last_name'  => $user->last_name,
-            'email'      => $user->email,
-            'created_at' => "<small>{$user->created_at->format('Y-m-d H:i:s')}</small>",
-            'status'     => '<span class="status '.($user->isActive() ? 'status-success status-animated' : 'status-secondary').'" data-toggle="tooltip" data-placement="top" title="'.($user->isActive() ? __('Activated') : __('Deactivated')).'"></span>',
+            'avatar'     => '<span class="avatar" style="background-image: url('.$admin->avatar.')" title="'.$admin->full_name.'"></span>',
+            'first_name' => $admin->first_name,
+            'last_name'  => $admin->last_name,
+            'email'      => $admin->email,
+            'created_at' => "<small>{$admin->created_at->format('Y-m-d H:i:s')}</small>",
+            'status'     => '<span class="status '.($admin->isActive() ? 'status-success status-animated' : 'status-secondary').'" data-toggle="tooltip" data-placement="top" title="'.($admin->isActive() ? __('Activated') : __('Deactivated')).'"></span>',
             'actions'    => static::renderActions($actions),
         ];
     }
@@ -50,37 +50,37 @@ class AdminTransformer extends AbstractTransformer
      */
 
     /**
-     * Get the users' actions.
+     * Get the admins' actions.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
      *
      * @return array
      */
-    private static function getActions(Admin $user): array
+    private static function getActions(Admin $admin): array
     {
         $actions = [];
 
-        if (static::can(AdminsPolicy::ability('show'), [$user]))
-            $actions[] = LinkAction::action('show', route('admin::auth.administrators.show', [$user]), false)
+        if (static::can(AdminsPolicy::ability('show'), [$admin]))
+            $actions[] = LinkAction::action('show', route('admin::auth.administrators.show', [$admin]), false)
                 ->size('sm');
 
-        if (static::can(AdminsPolicy::ability('update'), [$user]))
-            $actions[] = LinkAction::action('edit', route('admin::auth.administrators.edit', [$user]), false)
+        if (static::can(AdminsPolicy::ability('update'), [$admin]))
+            $actions[] = LinkAction::action('edit', route('admin::auth.administrators.edit', [$admin]), false)
                 ->size('sm');
 
-        if (static::can(AdminsPolicy::ability('activate'), [$user]))
-            $actions[] = ButtonAction::action($user->isActive() ? 'deactivate' : 'activate', false)
-                ->attributeIf($user->isDeletable(), 'onclick', "Foundation.\$emit('auth::administrators.activate', ".json_encode(['id' => $user->uuid, 'status' => $user->isActive() ? 'activated' : 'deactivated']).")")
+        if (static::can(AdminsPolicy::ability('activate'), [$admin]))
+            $actions[] = ButtonAction::action($admin->isActive() ? 'deactivate' : 'activate', false)
+                ->attributeIf($admin->isDeletable(), 'onclick', "Foundation.\$emit('auth::administrators.activate', ".json_encode(['id' => $admin->uuid, 'status' => $admin->isActive() ? 'activated' : 'deactivated']).")")
                 ->size('sm');
 
-        if (static::can(AdminsPolicy::ability('restore'), [$user]) && $user->trashed())
+        if (static::can(AdminsPolicy::ability('restore'), [$admin]) && $admin->trashed())
             $actions[] = ButtonAction::action('restore', false)
-                ->attribute('onclick', "window.Foundation.\$emit('auth::administrators.restore', ".json_encode(['id' => $user->uuid]).")")
+                ->attribute('onclick', "window.Foundation.\$emit('auth::administrators.restore', ".json_encode(['id' => $admin->uuid]).")")
                 ->size('sm');
 
-        if (static::can(AdminsPolicy::ability('delete'), [$user]))
+        if (static::can(AdminsPolicy::ability('delete'), [$admin]))
             $actions[] = ButtonAction::action('delete', false)
-                ->attributeIf($user->isDeletable(), 'onclick', "window.Foundation.\$emit('auth::administrators.delete', ".json_encode(['id' => $user->uuid]).")")
+                ->attributeIf($admin->isDeletable(), 'onclick', "window.Foundation.\$emit('auth::administrators.delete', ".json_encode(['id' => $admin->uuid]).")")
                 ->size('sm');
 
         return $actions;

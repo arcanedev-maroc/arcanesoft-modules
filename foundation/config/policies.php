@@ -19,6 +19,7 @@ return [
 
     // Auth
     Arcanesoft\Foundation\Auth\Policies\DashboardPolicy::class,
+    Arcanesoft\Foundation\Auth\Policies\AdminsPolicy::class,
     Arcanesoft\Foundation\Auth\Policies\UsersPolicy::class,
     Arcanesoft\Foundation\Auth\Policies\RolesPolicy::class,
     Arcanesoft\Foundation\Auth\Policies\PermissionsPolicy::class,

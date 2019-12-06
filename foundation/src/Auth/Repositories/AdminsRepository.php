@@ -87,11 +87,11 @@ class AdminsRepository extends AbstractRepository
     }
 
     /**
-     * Create a new user.
+     * Create a new administrator.
      *
      * @param  array  $attributes
      *
-     * @return \Arcanesoft\Foundation\Auth\Models\Admin
+     * @return \Arcanesoft\Foundation\Auth\Models\Admin|mixed
      */
     public function createOne(array $attributes): Admin
     {
@@ -103,6 +103,21 @@ class AdminsRepository extends AbstractRepository
             ]);
 
             $admin->save();
+        });
+    }
+
+    /**
+     * Create a new administrator with roles.
+     *
+     * @param  array  $attributes
+     * @param  array  $roles
+     *
+     * @return \Arcanesoft\Foundation\Auth\Models\Admin|mixed
+     */
+    public function createOneWithRoles(array $attributes, array $roles): Admin
+    {
+        return tap($this->createOne($attributes), function ($admin) use ($roles) {
+            $this->syncRolesByUuids($admin, $roles);
         });
     }
 

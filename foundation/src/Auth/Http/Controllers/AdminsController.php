@@ -10,6 +10,7 @@ use Arcanesoft\Foundation\Auth\Models\Admin;
 use Arcanesoft\Foundation\Auth\Policies\AdminsPolicy;
 use Arcanesoft\Foundation\Auth\Repositories\{AdminsRepository, RolesRepository};
 use Arcanesoft\Foundation\Support\Traits\HasNotifications;
+use Illuminate\Support\Facades\Gate;
 
 /**
  * Class     AdminsController
@@ -120,10 +121,7 @@ class AdminsController extends Controller
 
         $data = $request->getValidatedData();
 
-        $adminsRepo->syncRolesByUuids(
-            $admin = $adminsRepo->createOne($data),
-            $data['roles'] ?: []
-        );
+        $admin = $adminsRepo->createOneWithRoles($data, $data['roles'] ?: []);
 
         $this->notifySuccess(
             __('Administrator Created'), __('A new administrator has been successfully created!')

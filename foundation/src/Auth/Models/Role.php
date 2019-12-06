@@ -32,8 +32,6 @@ use Illuminate\Database\Eloquent\Builder;
  * @property  \Illuminate\Database\Eloquent\Collection  permissions
  *
  * @method  static  \Illuminate\Database\Eloquent\Builder|static  admin()
- * @method  static  \Illuminate\Database\Eloquent\Builder|static  moderator()
- * @method  static  \Illuminate\Database\Eloquent\Builder|static  member()
  *
  * @method  static  \Illuminate\Database\Eloquent\Builder|static  filterByAuthenticatedUser(mixed $user)
  */
@@ -185,30 +183,6 @@ class Role extends Model
     public function scopeAdmin(Builder $query): Builder
     {
         return $query->where('key', Role::ADMINISTRATOR);
-    }
-
-    /**
-     * Scope only with moderator role.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeModerator(Builder $query): Builder
-    {
-        return $query->where('key', Role::MODERATOR);
-    }
-
-    /**
-     * Scope only with member role.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeMember(Builder $query): Builder
-    {
-        return $query->where('key', Role::MEMBER);
     }
 
     /* -----------------------------------------------------------------

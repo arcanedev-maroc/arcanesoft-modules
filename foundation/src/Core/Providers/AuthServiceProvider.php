@@ -41,9 +41,9 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::after(function (Admin $user, string $ability) {
-            return $user->isSuperAdmin()
-                || $user->may($ability);
+        Gate::after(function (Admin $admin, string $ability) {
+            return $admin->isSuperAdmin()
+                || $admin->may($ability);
         });
 
         parent::boot();
