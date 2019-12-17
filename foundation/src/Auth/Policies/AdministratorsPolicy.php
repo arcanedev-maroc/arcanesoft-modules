@@ -8,12 +8,12 @@ use Arcanesoft\Foundation\Auth\Models\Admin;
 use Arcanesoft\Foundation\Auth\Models\Admin as AuthenticatedAdmin;
 
 /**
- * Class     AdminsPolicy
+ * Class     AdministratorsPolicy
  *
  * @package  Arcanesoft\Foundation\Auth\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class AdminsPolicy extends AbstractPolicy
+class AdministratorsPolicy extends AbstractPolicy
 {
     /* -----------------------------------------------------------------
      |  Getters

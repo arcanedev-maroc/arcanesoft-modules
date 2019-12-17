@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Http\Routes;
 
 use Arcanesoft\Foundation\Auth\Http\Controllers\Datatables\AdminsController as AdminsDatatablesController;
-use Arcanesoft\Foundation\Auth\Http\Controllers\AdminsController;
-use Arcanesoft\Foundation\Auth\Repositories\AdminsRepository;
+use Arcanesoft\Foundation\Auth\Http\Controllers\AdministratorsController;
+use Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository;
 
 /**
  * Class     AdminsRoutes
@@ -36,52 +36,52 @@ class AdminsRoutes extends AbstractRouteRegistrar
         $this->adminGroup(function () {
             $this->name('administrators.')->prefix('administrators')->group(function () {
                 // admin::auth.administrators.index
-                $this->get('/', [AdminsController::class, 'index'])
+                $this->get('/', [AdministratorsController::class, 'index'])
                      ->name('index');
 
                 // admin::auth.administrators.trash
-                $this->get('trash', [AdminsController::class, 'trash'])
+                $this->get('trash', [AdministratorsController::class, 'trash'])
                      ->name('trash');
 
                 $this->mapDataTablesRoutes();
 
                 // admin::auth.administrators.metrics
-                $this->get('metrics', [AdminsController::class, 'metrics'])
+                $this->get('metrics', [AdministratorsController::class, 'metrics'])
                      ->name('metrics');
 
                 // admin::auth.administrators.create
-                $this->get('create', [AdminsController::class, 'create'])
+                $this->get('create', [AdministratorsController::class, 'create'])
                      ->name('create');
 
                 // admin::auth.administrators.post
-                $this->post('store', [AdminsController::class, 'store'])
+                $this->post('store', [AdministratorsController::class, 'store'])
                      ->name('store');
 
                 $this->prefix('{'.static::ADMIN_WILDCARD.'}')->group(function () {
                     // admin::auth.administrators.show
-                    $this->get('/', [AdminsController::class, 'show'])
+                    $this->get('/', [AdministratorsController::class, 'show'])
                          ->name('show');
 
                     // admin::auth.administrators.edit
-                    $this->get('edit', [AdminsController::class, 'edit'])
+                    $this->get('edit', [AdministratorsController::class, 'edit'])
                          ->name('edit');
 
                     // admin::auth.administrators.update
-                    $this->put('update', [AdminsController::class, 'update'])
+                    $this->put('update', [AdministratorsController::class, 'update'])
                          ->name('update');
 
                     // admin::auth.administrators.activate
-                    $this->put('activate', [AdminsController::class, 'activate'])
+                    $this->put('activate', [AdministratorsController::class, 'activate'])
                          ->middleware(['ajax'])
                          ->name('activate');
 
                     // admin::auth.administrators.delete
-                    $this->delete('delete', [AdminsController::class, 'delete'])
+                    $this->delete('delete', [AdministratorsController::class, 'delete'])
                          ->middleware(['ajax'])
                          ->name('delete');
 
                     // admin::auth.administrators.restore
-                    $this->put('restore', [AdminsController::class, 'restore'])
+                    $this->put('restore', [AdministratorsController::class, 'restore'])
                          ->middleware(['ajax'])
                          ->name('restore');
                 });
@@ -108,9 +108,9 @@ class AdminsRoutes extends AbstractRouteRegistrar
     /**
      * Register the route bindings.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdminsRepository  $repo
+     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository  $repo
      */
-    public function bindings(AdminsRepository $repo): void
+    public function bindings(AdministratorsRepository $repo): void
     {
         $this->bind(static::ADMIN_WILDCARD, function (string $uuid) use ($repo) {
             return $repo->firstWhereUuidOrFail($uuid);

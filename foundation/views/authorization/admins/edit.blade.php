@@ -41,22 +41,6 @@
                                 <span class="invalid-feedback" role="alert">{{ $message }}</span>
                             @enderror
                         </div>
-
-                        <div class="form-group">
-                            <label for="password" class="control-label">@lang('Password') :</label>
-                            {{ form()->password('password', ['class' => 'form-control'.$errors->first('password', ' is-invalid'), 'placeholder' => __('Password')]) }}
-                            @error('password')
-                                <span class="invalid-feedback" role="alert">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label for="password_confirmation" class="control-label">@lang('Confirm Password') :</label>
-                            {{ form()->password('password_confirmation', ['class' => 'form-control'.$errors->first('password_confirmation', ' is-invalid'), 'placeholder' => __('Confirm Password')]) }}
-                            @error('password_confirmation')
-                                <span class="invalid-feedback" role="alert">{{ $message }}</span>
-                            @enderror
-                        </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
                         {{ arcanesoft\ui\action_link('cancel', route('admin::auth.administrators.show', [$admin]))->size('sm') }}

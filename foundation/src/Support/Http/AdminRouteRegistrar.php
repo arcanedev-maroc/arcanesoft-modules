@@ -38,7 +38,7 @@ abstract class AdminRouteRegistrar extends RouteRegistrar
      */
     protected function getAdminMiddleware(): array
     {
-        return ['web', 'auth:admin', 'admin'];
+        return ['web', 'admin'];
     }
 
     /* -----------------------------------------------------------------

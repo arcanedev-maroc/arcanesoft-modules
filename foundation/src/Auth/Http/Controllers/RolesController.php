@@ -79,7 +79,7 @@ class RolesController extends Controller
         $this->authorize(RolesPolicy::ability('create'));
 
         $data = $request->getValidatedData();
-        $role = $rolesRepo->create($data);
+        $role = $rolesRepo->createOne($data);
 
         $rolesRepo->syncPermissionsByUuids($role, $data['permissions'] ?: []);
 

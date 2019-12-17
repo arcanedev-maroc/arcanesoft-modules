@@ -19,7 +19,7 @@ use Illuminate\Support\Str;
  * @package  Arcanesoft\Foundation\Auth\Repositories
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class AdminsRepository extends AbstractRepository
+class AdministratorsRepository extends AbstractRepository
 {
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -122,19 +122,31 @@ class AdminsRepository extends AbstractRepository
     }
 
     /**
-     * Update the given user (+ synced roles).
+     * Update the given administrator.
      *
      * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
      * @param  array                                     $attributes
      *
      * @return bool
      */
-    public function updateAdmin(Admin $admin, array $attributes): bool
+    public function updateOne(Admin $admin, array $attributes): bool
     {
-        $attributes = array_filter($attributes);
+        return $admin->update($attributes);
+    }
 
-        return tap($admin->update($attributes), function () use ($admin, $attributes) {
-            $this->syncRolesByUuids($admin, $attributes['roles'] ?? []);
+    /**
+     * Update the given administrator with roles.
+     *
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
+     * @param  array                                     $attributes
+     * @param  array                                     $roles
+     *
+     * @return bool
+     */
+    public function updateOneWithRoles(Admin $admin, array $attributes, array $roles): bool
+    {
+        return tap($this->updateOne($admin, $attributes), function () use ($admin, $roles) {
+            $this->syncRolesByUuids($admin, $roles);
         });
     }
 
@@ -239,9 +251,9 @@ class AdminsRepository extends AbstractRepository
      */
     public function syncRolesByUuids(Admin $admin, array $uuids): array
     {
-        return $this->syncRoles(
-            $admin, $this->getRolesRepository()->getByUuids($uuids)
-        );
+        $roles = $this->getRolesRepository()->getByUuids($uuids);
+
+        return $this->syncRoles($admin, $roles);
     }
 
     /**

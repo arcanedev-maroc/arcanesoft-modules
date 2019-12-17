@@ -6,7 +6,7 @@
 
 @push('content-nav')
     <div class="mb-3 text-right">
-        @can(Arcanesoft\Foundation\Auth\Policies\AdminsPolicy::ability('metrics'))
+        @can(Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy::ability('metrics'))
             <a href="{{ route('admin::auth.administrators.metrics') }}"
                class="btn btn-sm btn-secondary {{ active(['admin::auth.administrators.metrics']) }}">
                 @lang('Metrics')
@@ -73,7 +73,7 @@
     </div>
 
     {{-- DELETE MODAL --}}
-    @can(Arcanesoft\Foundation\Auth\Policies\AdminsPolicy::ability('delete'))
+    @can(Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy::ability('delete'))
         <div class="modal modal-danger fade" id="delete-user-modal" data-backdrop="static"
              tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -100,7 +100,7 @@
 
     {{-- RESTORE MODAL --}}
     @if ($trash)
-    @can(Arcanesoft\Foundation\Auth\Policies\AdminsPolicy::ability('restore'))
+    @can(Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy::ability('restore'))
         <div class="modal modal-danger fade" id="restore-user-modal" data-backdrop="static"
              tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -147,7 +147,7 @@
             });
 
             {{-- ACTIVATE SCRIPT --}}
-            @can(Arcanesoft\Foundation\Auth\Policies\AdminsPolicy::ability('activate'))
+            @can(Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy::ability('activate'))
             let $activateUserModal = $('div#activate-user-modal'),
                 $activateUserForm  = $('form#activate-user-form'),
                 activateUserAction = $activateUserForm.attr('action');
@@ -204,7 +204,7 @@
             @endcan
 
             {{-- DELETE SCRIPT --}}
-            @can(Arcanesoft\Foundation\Auth\Policies\AdminsPolicy::ability('delete'))
+            @can(Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy::ability('delete'))
             let $deleteUserModal = $('div#delete-user-modal'),
                 $deleteUserForm  = $('form#delete-user-form'),
                 deleteUserAction = $deleteUserForm.attr('action');
@@ -249,7 +249,7 @@
 
             {{-- RESTORE SCRIPT --}}
             @if ($trash)
-            @can(Arcanesoft\Foundation\Auth\Policies\AdminsPolicy::ability('restore'))
+            @can(Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy::ability('restore'))
                 let $restoreUserModal = $('div#restore-user-modal'),
                     $restoreUserForm  = $('form#restore-user-form'),
                     restoreUserAction = $restoreUserForm.attr('action');

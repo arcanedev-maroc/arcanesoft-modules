@@ -6,17 +6,18 @@ namespace Arcanesoft\Blog\Http\Requests\Authors;
 
 use Arcanesoft\Blog\Blog;
 use Arcanesoft\Blog\Http\Requests\FormRequest;
+use Arcanesoft\Blog\Http\Routes\AuthorsRoutes;
 use Arcanesoft\Foundation\Auth\Rules\Users\UserEmailRule;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 /**
- * Class     CreateAuthorRequest
+ * Class     UpdateAuthorRequest
  *
  * @package  Arcanesoft\Blog\Http\Requests\Authors
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class CreateAuthorRequest extends FormRequest
+class UpdateAuthorRequest extends FormRequest
 {
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -30,6 +31,8 @@ class CreateAuthorRequest extends FormRequest
      */
     public function rules()
     {
+        $author = $this->getCurrentAuthor();
+
         return [
             // Author
             'username' => ['required', 'string'],
@@ -39,7 +42,7 @@ class CreateAuthorRequest extends FormRequest
             // User
             'first_name' => ['required', 'string', 'max:50'],
             'last_name'  => ['required', 'string', 'max:50'],
-            'email'      => ['required', 'string', 'email', 'max:255', UserEmailRule::unique()],
+            'email'      => ['required', 'string', 'email', 'max:255', UserEmailRule::unique()->ignore($author->id)],
             'password'   => ['nullable', 'string', 'min:8', 'confirmed'],
         ];
     }
@@ -75,5 +78,20 @@ class CreateAuthorRequest extends FormRequest
             'email',
             'password',
         ]);
+    }
+
+    /* -----------------------------------------------------------------
+     |  Other Methods
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Get the current author.
+     *
+     * @return \Arcanesoft\Blog\Models\Author|mixed
+     */
+    protected function getCurrentAuthor()
+    {
+        return $this->route()->parameter(AuthorsRoutes::AUTHOR_WILDCARD);
     }
 }

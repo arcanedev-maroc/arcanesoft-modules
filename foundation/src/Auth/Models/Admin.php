@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Models;
 
 use App\Notifications\Auth\ResetPassword as ResetPasswordNotification;
+use Arcanedev\LaravelImpersonator\Contracts\Impersonatable;
+use Arcanedev\LaravelImpersonator\Traits\CanImpersonate;
 use Arcanesoft\Foundation\Auth\Auth;
 use Arcanesoft\Foundation\Auth\Events\Admins\{
     CreatedAdmin, CreatingAdmin, DeletedAdmin, DeletingAdmin, ForceDeletedAdmin, ReplicatingAdmin, RestoredAdmin,
@@ -41,7 +43,7 @@ use Illuminate\Support\Collection;
  * @property  \Illuminate\Support\Collection   active_roles
  * @property  \Illuminate\Support\Collection   permissions
  */
-class Admin extends Authenticatable
+class Admin extends Authenticatable implements Impersonatable
 {
     /* -----------------------------------------------------------------
      |  Traits
@@ -49,6 +51,7 @@ class Admin extends Authenticatable
      */
 
     use UserPresenter,
+        CanImpersonate,
         HasRoles,
         Notifiable,
         Activatable,

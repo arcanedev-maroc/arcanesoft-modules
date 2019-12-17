@@ -79,21 +79,21 @@
                     </tbody>
                 </table>
                 <div class="card-footer text-right px-2">
-                    @can(Arcanesoft\Foundation\Auth\Policies\AdminsPolicy::ability('update'), $admin)
-                        {{ arcanesoft\ui\action_link('edit', route('admin::auth.users.edit', [$admin]))->size('sm') }}
+                    @can(Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy::ability('update'), $admin)
+                        {{ arcanesoft\ui\action_link('edit', route('admin::auth.administrators.edit', [$admin]))->size('sm') }}
                     @endcan
 
-                    @can(Arcanesoft\Foundation\Auth\Policies\AdminsPolicy::ability('activate'), $admin)
+                    @can(Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy::ability('activate'), $admin)
                         {{ arcanesoft\ui\action_button($admin->isActive() ? 'deactivate' : 'activate')->attribute('onclick', "window.Foundation.\$emit('auth::users.activate')")->size('sm')->setDisabled($admin->isSuperAdmin()) }}
                     @endcan
 
                     @if ($admin->trashed())
-                        @can(Arcanesoft\Foundation\Auth\Policies\AdminsPolicy::ability('restore'), $admin)
+                        @can(Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy::ability('restore'), $admin)
                         {{ arcanesoft\ui\action_button('restore')->attribute('onclick', "window.Foundation.\$emit('auth::users.restore')")->size('sm') }}
                         @endcan
                     @endif
 
-                    @can(Arcanesoft\Foundation\Auth\Policies\AdminsPolicy::ability('delete'), $admin)
+                    @can(Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy::ability('delete'), $admin)
                         {{ arcanesoft\ui\action_button('delete')->attribute('onclick', "window.Foundation.\$emit('auth::users.delete')")->size('sm')->setDisabled($admin->isNotDeletable()) }}
                     @endcan
                 </div>
@@ -134,11 +134,11 @@
 
 @push('modals')
     {{-- ACIVATE MODAL --}}
-    @can(Arcanesoft\Foundation\Auth\Policies\AdminsPolicy::ability('activate'), $admin)
+    @can(Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy::ability('activate'), $admin)
         <div class="modal modal-danger fade" id="activate-user-modal" data-backdrop="static"
              tabindex="-1" role="dialog" aria-labelledby="activateUserTitle" aria-hidden="true">
             <div class="modal-dialog" role="document">
-                {{ form()->open(['route' => ['admin::auth.users.activate', $admin], 'method' => 'PUT', 'id' => 'activate-user-form']) }}
+                {{ form()->open(['route' => ['admin::auth.administrators.activate', $admin], 'method' => 'PUT', 'id' => 'activate-user-form']) }}
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title" id="activateUserTitle">@lang($admin->isActive() ? 'Deactivate User' : 'Activate User')</h4>
@@ -160,11 +160,11 @@
     @endcan
 
     {{-- DELETE MODAL --}}
-    @can(Arcanesoft\Foundation\Auth\Policies\AdminsPolicy::ability('delete'), $admin)
+    @can(Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy::ability('delete'), $admin)
         <div class="modal modal-danger fade" id="delete-user-modal" data-backdrop="static"
              tabindex="-1" role="dialog" aria-labelledby="deleteUserTitle" aria-hidden="true">
             <div class="modal-dialog" role="document">
-                {{ form()->open(['route' => ['admin::auth.users.delete', $admin], 'method' => 'DELETE', 'id' => 'delete-user-form']) }}
+                {{ form()->open(['route' => ['admin::auth.administrators.delete', $admin], 'method' => 'DELETE', 'id' => 'delete-user-form']) }}
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title" id="deleteUserTitle">@lang('Delete User')</h4>
@@ -187,11 +187,11 @@
 
     {{-- RESTORE MODAL --}}
     @if ($admin->trashed())
-    @can(Arcanesoft\Foundation\Auth\Policies\AdminsPolicy::ability('restore'), $admin)
+    @can(Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy::ability('restore'), $admin)
         <div class="modal modal-danger fade" id="restore-user-modal" data-backdrop="static"
              tabindex="-1" role="dialog" aria-labelledby="restoreUserTitle" aria-hidden="true">
             <div class="modal-dialog" role="document">
-                {{ form()->open(['route' => ['admin::auth.users.restore', ':id'], 'method' => 'PUT', 'id' => 'restore-user-form']) }}
+                {{ form()->open(['route' => ['admin::auth.administrators.restore', ':id'], 'method' => 'PUT', 'id' => 'restore-user-form']) }}
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title" id="restoreUserTitle">@lang('Restore User')</h4>
@@ -218,7 +218,7 @@
     <script>
         window.ready(() => {
             {{-- ACTIVATE SCRIPT --}}
-            @can(Arcanesoft\Foundation\Auth\Policies\AdminsPolicy::ability('activate'), $admin)
+            @can(Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy::ability('activate'), $admin)
             let $activateUserModal = $('div#activate-user-modal'),
                 $activateUserForm  = $('form#activate-user-form');
 
@@ -256,7 +256,7 @@
             @endcan
 
             {{-- DELETE SCRIPT --}}
-            @can(Arcanesoft\Foundation\Auth\Policies\AdminsPolicy::ability('delete'), $admin)
+            @can(Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy::ability('delete'), $admin)
             let $deleteUserModal = $('div#delete-user-modal'),
                 $deleteUserForm  = $('form#delete-user-form');
 
@@ -277,7 +277,7 @@
                           if (response.data.code === 'success') {
                               $deleteUserModal.modal('hide');
                               @if ($admin->trashed())
-                                  location.replace("{{ route('admin::auth.users.index') }}");
+                                  location.replace("{{ route('admin::auth.administrators.index') }}");
                               @else
                                   location.reload();
                               @endif
@@ -298,7 +298,7 @@
             @endcan
 
             {{-- RESTORE SCRIPT --}}
-            @can(Arcanesoft\Foundation\Auth\Policies\AdminsPolicy::ability('restore'), $admin)
+            @can(Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy::ability('restore'), $admin)
             @if ($admin->trashed())
             let $restoreUserModal = $('div#restore-user-modal'),
                 $restoreUserForm  = $('form#restore-user-form');

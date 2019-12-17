@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Blog\Repositories;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Blog\Repositories;
 
 use Arcanesoft\Auth\Repositories\UsersRepository;
 use Arcanesoft\Blog\Blog;
@@ -11,7 +15,7 @@ use Illuminate\Support\Str;
  * @package  Arcanesoft\Blog\Repositories
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class AuthorsRepository
+class AuthorsRepository extends AbstractRepository
 {
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -19,23 +23,13 @@ class AuthorsRepository
      */
 
     /**
-     * Get the model instance.
+     * Get the model FQN class.
      *
-     * @return \Arcanesoft\Blog\Models\Author|\Illuminate\Database\Eloquent\Builder|mixed
+     * @return string
      */
-    public function model()
+    public static function modelClass(): string
     {
         return Blog::makeModel('author');
-    }
-
-    /**
-     * Get the query builder.
-     *
-     * @return \Arcanesoft\Blog\Models\Author|\Illuminate\Database\Eloquent\Builder
-     */
-    public function query()
-    {
-        return $this->model()->newQuery();
     }
 
     /**
@@ -45,7 +39,7 @@ class AuthorsRepository
      *
      * @return \Arcanesoft\Blog\Models\Author
      */
-    public function create(array $attributes)
+    public function createOne(array $attributes)
     {
         $author = $this->model()
             ->forceFill([
@@ -63,11 +57,11 @@ class AuthorsRepository
      * Update the given author.
      *
      * @param  \Arcanesoft\Blog\Models\Author  $author
-     * @param  array                        $attributes
+     * @param  array                           $attributes
      *
      * @return bool
      */
-    public function update(Author $author, array $attributes): bool
+    public function updateOne(Author $author, array $attributes): bool
     {
         return $author->update($attributes);
     }
@@ -79,7 +73,7 @@ class AuthorsRepository
      *
      * @return bool|null
      */
-    public function delete(Author $author)
+    public function deleteOne(Author $author)
     {
         return $author->delete();
     }

@@ -7,7 +7,6 @@ namespace Arcanesoft\Foundation\Auth\Console;
 use Arcanesoft\Foundation\Auth\Repositories\UsersRepository;
 use Closure;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Date;
 
 /**
  * Class     MakeUser
@@ -74,7 +73,7 @@ class MakeUser extends Command
         return function (string $firstName, string $lastName, string $email, string $password) {
             /** @var  \Arcanesoft\Foundation\Auth\Repositories\UsersRepository  $repo */
             $repo = app(UsersRepository::class);
-            $now  = Date::now();
+            $now  = now();
 
             $repo->forceCreate([
                 'first_name'        => $firstName,

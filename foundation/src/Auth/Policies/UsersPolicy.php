@@ -227,8 +227,9 @@ class UsersPolicy extends AbstractPolicy
      */
     public function restore(Admin $admin, User $user = null)
     {
-        if ( ! is_null($user))
+        if ( ! is_null($user)) {
             return $user->trashed();
+        }
     }
 
     /**

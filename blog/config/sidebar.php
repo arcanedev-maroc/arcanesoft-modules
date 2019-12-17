@@ -1,7 +1,5 @@
 <?php
 
-use Arcanesoft\Foundation\Auth\Models\Role;
-
 return [
 
     /* -----------------------------------------------------------------
@@ -14,15 +12,15 @@ return [
             'name'        => 'blog::main',
             'title'       => 'Blog',
             'icon'        => 'fas fa-fw fa-blog',
-            'roles'       => [Role::ADMINISTRATOR],
+            'roles'       => [],
             'permissions' => [],
             'children'    => [
                 [
-                    'name'        => 'blog::main.dashboard',
+                    'name'        => 'blog::maindashboard',
                     'title'       => 'Statistics',
                     'icon'        => 'fa fa-fw fa-tachometer-alt',
                     'route'       => 'admin::blog.index',
-                    'roles'       => [Role::ADMINISTRATOR],
+                    'roles'       => [],
                     'permissions' => [
                         'admin::blog.statistics.index',
                     ],
@@ -32,7 +30,7 @@ return [
                     'title'       => 'Posts',
                     'icon'        => 'far fa-fw fa-newspaper',
                     'route'       => 'admin::blog.posts.index',
-                    'roles'       => [Role::ADMINISTRATOR],
+                    'roles'       => [],
                     'permissions' => [
                         'admin::blog.posts.index',
                     ],
@@ -42,7 +40,7 @@ return [
                     'title'       => 'Tags',
                     'icon'        => 'fas fa-fw fa-tags',
                     'route'       => 'admin::blog.tags.index',
-                    'roles'       => [Role::ADMINISTRATOR],
+                    'roles'       => [],
                     'permissions' => [
                         'admin::blog.tags.index',
                     ],
@@ -52,7 +50,7 @@ return [
                     'title'       => 'Authors',
                     'icon'        => 'fas fa-fw fa-user-edit',
                     'route'       => 'admin::blog.authors.index',
-                    'roles'       => [Role::ADMINISTRATOR],
+                    'roles'       => [],
                     'permissions' => [
                         'admin::blog.authors.index',
                     ],

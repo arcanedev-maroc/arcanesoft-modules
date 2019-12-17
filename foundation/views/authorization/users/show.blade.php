@@ -4,7 +4,7 @@
     <i class="fa fa-fw fa-users"></i> @lang("User's details")
 @endsection
 
-<?php /** @var  Arcanesoft\Foundation\Auth\Models\User  $user */ ?>
+<?php /** @var  App\Models\User|mixed  $user */ ?>
 
 @section('content')
     <div class="row">
@@ -18,11 +18,11 @@
                 <table class="table table-md mb-0">
                     <tbody>
                         <tr>
-                            <th>@lang('Full Name') :</th>
+                            <th class="table-th">@lang('Full Name') :</th>
                             <td class="text-right">{{ $user->full_name }}</td>
                         </tr>
                         <tr>
-                            <th>@lang('Email') :</th>
+                            <th class="table-th">@lang('Email') :</th>
                             <td class="text-right">
                                 @if ($user->hasVerifiedEmail())
                                     <i class="far fa-check-circle text-primary" data-toggle="tooltip" data-placement="top" title="{{ __('Verified') }}"></i>
@@ -32,14 +32,14 @@
                         </tr>
                         @if ($user->hasVerifiedEmail())
                         <tr>
-                            <th>@lang('Email Verified at') :</th>
+                            <th class="table-th">@lang('Email Verified at') :</th>
                             <td class="text-right">
                                 <small class="text-muted">{{ $user->email_verified_at }}</small>
                             </td>
                         </tr>
                         @endif
                         <tr>
-                            <th>@lang('Status') :</th>
+                            <th class="table-th">@lang('Status') :</th>
                             <td class="text-right">
                                 @if ($user->isActive())
                                     <span class="badge badge-outline-success">
@@ -50,28 +50,23 @@
                                         <i class="fa fa-ban"></i> @lang('Deactivated')
                                     </span>
                                 @endif
-                                @if ($user->isAdmin())
-                                    <span class="badge badge-outline-warning" data-toggle="tooltip" data-placement="top" title="{{ __('Administrator') }}">
-                                        <i class="fas fa-crown"></i>
-                                    </span>
-                                @endif
                             </td>
                         </tr>
                         <tr>
-                            <th>@lang('Last activity') :</th>
+                            <th class="table-th">@lang('Last activity') :</th>
                             <td class="text-right"><small class="text-muted">{{ $user->last_activity }}</small></td>
                         </tr>
                         <tr>
-                            <th>@lang('Created at') :</th>
+                            <th class="table-th">@lang('Created at') :</th>
                             <td class="text-right"><small class="text-muted">{{ $user->created_at }}</small></td>
                         </tr>
                         <tr>
-                            <th>@lang('Updated at') :</th>
+                            <th class="table-th">@lang('Updated at') :</th>
                             <td class="text-right"><small class="text-muted">{{ $user->updated_at }}</small></td>
                         </tr>
                         @if ($user->trashed())
                             <tr>
-                                <th>@lang('Deleted at') :</th>
+                                <th class="table-th">@lang('Deleted at') :</th>
                                 <td class="text-right"><small class="text-muted">{{ $user->deleted_at }}</small></td>
                             </tr>
                         @endif
@@ -89,14 +84,12 @@
                     @endcan
 
                     @can(Arcanesoft\Foundation\Auth\Policies\UsersPolicy::ability('activate'), $user)
-                        {{ arcanesoft\ui\action_button($user->isActive() ? 'deactivate' : 'activate')->attribute('onclick', "window.Foundation.\$emit('auth::users.activate')")->size('sm')->setDisabled($user->isSuperAdmin()) }}
+                        {{ arcanesoft\ui\action_button($user->isActive() ? 'deactivate' : 'activate')->attribute('onclick', "window.Foundation.\$emit('auth::users.activate')")->size('sm') }}
                     @endcan
 
-                    @if ($user->trashed())
-                        @can(Arcanesoft\Foundation\Auth\Policies\UsersPolicy::ability('restore'), $user)
+                    @can(Arcanesoft\Foundation\Auth\Policies\UsersPolicy::ability('restore'), $user)
                         {{ arcanesoft\ui\action_button('restore')->attribute('onclick', "window.Foundation.\$emit('auth::users.restore')")->size('sm') }}
-                        @endcan
-                    @endif
+                    @endcan
 
                     @can(Arcanesoft\Foundation\Auth\Policies\UsersPolicy::ability('delete'), $user)
                         {{ arcanesoft\ui\action_button('delete')->attribute('onclick', "window.Foundation.\$emit('auth::users.delete')")->size('sm')->setDisabled($user->isNotDeletable()) }}
@@ -105,34 +98,6 @@
             </div>
         </div>
         <div class="col-lg-7">
-            <div class="card card-borderless shadow-sm mb-3">
-                <div class="card-header p-2">@lang('Roles')</div>
-                <table class="table table-hover table-md mb-0">
-                    <thead>
-                        <tr>
-                            <th>@lang('Name')</th>
-                            <th>@lang('Description')</th>
-                            <th class="text-right">@lang('Actions')</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($user->roles as $role)
-                            <?php /** @var  Arcanesoft\Foundation\Auth\Models\Role  $role */ ?>
-                            <tr>
-                                <td>{{ $role->name }}</td>
-                                <td>{{ $role->description }}</td>
-                                <td class="text-right">
-                                    {{ arcanesoft\ui\action_link_icon('show', route('admin::auth.roles.show', [$role]))->size('sm') }}
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="3" class="text-center">@lang('The list is empty !')</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
         </div>
     </div>
 @endsection
@@ -191,7 +156,6 @@
     @endcan
 
     {{-- RESTORE MODAL --}}
-    @if ($user->trashed())
     @can(Arcanesoft\Foundation\Auth\Policies\UsersPolicy::ability('restore'), $user)
         <div class="modal modal-danger fade" id="restore-user-modal" data-backdrop="static"
              tabindex="-1" role="dialog" aria-labelledby="restoreUserTitle" aria-hidden="true">
@@ -216,7 +180,6 @@
             </div>
         </div>
     @endcan
-    @endif
 @endpush
 
 @push('scripts')
@@ -304,7 +267,6 @@
 
             {{-- RESTORE SCRIPT --}}
             @can(Arcanesoft\Foundation\Auth\Policies\UsersPolicy::ability('restore'), $user)
-            @if ($user->trashed())
             let $restoreUserModal = $('div#restore-user-modal'),
                 $restoreUserForm  = $('form#restore-user-form');
 
@@ -339,7 +301,6 @@
 
                 return false;
             });
-            @endif
             @endcan
         })
     </script>

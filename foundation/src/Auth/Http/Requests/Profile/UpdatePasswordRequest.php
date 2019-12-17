@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Http\Requests\Profile;
 
 use Arcanesoft\Foundation\Auth\Http\Requests\FormRequest;
-use Arcanesoft\Foundation\Auth\Rules\Users\UserEmailRule;
 
 /**
- * Class     UpdateUserAccountRequest
+ * Class     UpdateUserPasswordRequest
  *
  * @package  Arcanesoft\Foundation\Auth\Http\Requests\Profile
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class UpdateUserAccountRequest extends FormRequest
+class UpdatePasswordRequest extends FormRequest
 {
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -28,9 +27,8 @@ class UpdateUserAccountRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => ['required', 'string', 'max:50'],
-            'last_name'  => ['required', 'string', 'max:50'],
-            'email'      => ['required', 'string', 'email', 'max:255', UserEmailRule::unique()->ignore($this->user()->id)],
+            'old_password' => ['required', 'string', 'min:8', 'password'],
+            'password'     => ['required', 'string', 'min:8', 'different:old_password', 'confirmed'],
         ];
     }
 
@@ -42,9 +40,7 @@ class UpdateUserAccountRequest extends FormRequest
     public function getValidatedData(): array
     {
         return $this->all([
-            'first_name',
-            'last_name',
-            'email',
+            'password',
         ]);
     }
 }

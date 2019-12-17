@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Arcanesoft\Blog\Policies;
 
 use Arcanesoft\Blog\Models\Post;
-use ArcanesoftFoundation\AuthModelsUser as AuthenticatedUser;
+use Arcanesoft\Foundation\Auth\Models\Admin;
 
 /**
  * Class     PostsPolicy
@@ -95,11 +95,11 @@ class PostsPolicy extends AbstractPolicy
     /**
      * Allow to list all the posts.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function index(AuthenticatedUser $user)
+    public function index(Admin $admin)
     {
         //
     }
@@ -107,11 +107,11 @@ class PostsPolicy extends AbstractPolicy
     /**
      * Allow to list all the posts' metrics.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function metrics(AuthenticatedUser $user)
+    public function metrics(Admin $admin)
     {
         //
     }
@@ -119,11 +119,11 @@ class PostsPolicy extends AbstractPolicy
     /**
      * Allow to create a post.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function create(AuthenticatedUser $user)
+    public function create(Admin $admin)
     {
         //
     }
@@ -131,12 +131,12 @@ class PostsPolicy extends AbstractPolicy
     /**
      * Allow to show a post details.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
-     * @param  \Arcanesoft\Blog\Models\Post|mixed|null        $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
+     * @param  \Arcanesoft\Blog\Models\Post|mixed|null         $model
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function show(AuthenticatedUser $user, Post $model = null)
+    public function show(Admin $admin, Post $model = null)
     {
         //
     }
@@ -144,12 +144,12 @@ class PostsPolicy extends AbstractPolicy
     /**
      * Allow to update a post.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
-     * @param  \Arcanesoft\Blog\Models\Post|mixed|null        $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
+     * @param  \Arcanesoft\Blog\Models\Post|mixed|null         $model
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function update(AuthenticatedUser $user, Post $model = null)
+    public function update(Admin $admin, Post $model = null)
     {
         //
     }
@@ -157,12 +157,12 @@ class PostsPolicy extends AbstractPolicy
     /**
      * Allow to delete a post.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
-     * @param  \Arcanesoft\Blog\Models\Post|mixed|null        $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
+     * @param  \Arcanesoft\Blog\Models\Post|mixed|null         $model
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function delete(AuthenticatedUser $user, Post $model = null)
+    public function delete(Admin $admin, Post $model = null)
     {
         if ( ! is_null($model))
             return $model->isDeletable();

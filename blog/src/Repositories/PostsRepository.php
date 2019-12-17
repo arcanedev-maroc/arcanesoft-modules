@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Blog\Repositories;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Blog\Repositories;
 
 use Arcanesoft\Blog\Blog;
 use Arcanesoft\Blog\Models\Post;
@@ -10,7 +14,7 @@ use Illuminate\Support\Str;
  * @package  Arcanesoft\Blog\Repositories
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class PostsRepository
+class PostsRepository extends AbstractRepository
 {
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -18,40 +22,27 @@ class PostsRepository
      */
 
     /**
-     * Get the model instance.
+     * Get the model FQN class.
      *
-     * @return \Arcanesoft\Blog\Models\Post|\Illuminate\Database\Eloquent\Builder|mixed
+     * @return string
      */
-    public function model()
+    public static function modelClass(): string
     {
-        return Blog::makeModel('post');
+        return Blog::model('post');
     }
-
-    /**
-     * Get the query builder.
-     *
-     * @return \Arcanesoft\Blog\Models\Post|\Illuminate\Database\Eloquent\Builder
-     */
-    public function query()
-    {
-        return $this->model()->newQuery();
-    }
-
 
     /**
      * Create a new post.
      *
      * @param  array  $attributes
      *
-     * @return \Arcanesoft\Blog\Models\Post
+     * @return \Arcanesoft\Blog\Models\Post|mixed
      */
-    public function create(array $attributes)
+    public function createOne(array $attributes)
     {
-        $post = $this->model()
-            ->forceFill([
-                'uuid' => Str::uuid(),
-            ])
-            ->fill($attributes);
+        $post = $this->model()->forceFill([
+            'uuid' => Str::uuid(),
+        ])->fill($attributes);
 
         $post->save();
 
@@ -59,14 +50,16 @@ class PostsRepository
     }
 
     /**
+     * Update the given post.
+     *
      * @param  \Arcanesoft\Blog\Models\Post  $post
      * @param  array                         $attributes
      *
-     * @return \Arcanesoft\Blog\Models\Post
+     * @return bool
      */
-    public function update(Post $post, array $attributes)
+    public function updateOne(Post $post, array $attributes)
     {
-        return $post;
+        return $post->update($attributes);
     }
 
     /**
@@ -76,7 +69,7 @@ class PostsRepository
      *
      * @return bool|null
      */
-    public function delete(Post $post)
+    public function deleteOne(Post $post)
     {
         return $post->delete();
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Http\Controllers;
 
 use Arcanedev\LaravelImpersonator\Contracts\Impersonator;
+use Arcanesoft\Foundation\Auth\Auth;
 use Arcanesoft\Foundation\Auth\Http\Requests\Users\{CreateUserRequest, UpdateUserRequest};
 use Arcanesoft\Foundation\Auth\Models\User;
 use Arcanesoft\Foundation\Auth\Policies\UsersPolicy;
@@ -114,7 +115,7 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability('create'));
 
-        $user = $usersRepo->createUser(
+        $user = $usersRepo->createOne(
             $request->getValidatedData()
         );
 
@@ -170,7 +171,7 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability('update'), [$user]);
 
-        $usersRepo->updateUser($user, $request->getValidatedData());
+        $usersRepo->updateOne($user, $request->getValidatedData());
 
         $this->notifySuccess(
             __('User Updated'), __('The user has been successfully updated!')
@@ -216,7 +217,7 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability($user->trashed() ? 'force-delete' : 'delete'), [$user]);
 
-        $usersRepo->deleteUser($user);
+        $usersRepo->deleteOne($user);
 
         $this->notifySuccess(
             __('User Deleted'), __('The user has been successfully deleted!')
@@ -237,7 +238,7 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability('restore'), [$user]);
 
-        $usersRepo->restoreUser($user);
+        $usersRepo->restoreOne($user);
 
         $this->notifySuccess(
             __('User Restored'), __('The user has been successfully restored!')
@@ -258,14 +259,9 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability('impersonate'), [$user]);
 
-        /**
-         * @var  \Arcanedev\LaravelImpersonator\Contracts\Impersonatable  $authUser
-         * @var  \Arcanedev\LaravelImpersonator\Contracts\Impersonatable  $user
-         */
-        $admin = auth('admin')->user();
-
-        if ($impersonator->start($admin, $user))
-            return redirect()->route('public::index');
+        if ($impersonator->start(Auth::admin(), $user)) {
+            return redirect()->route('public::index'); // TODO: Extract the route name into a config
+        }
 
         $this->notifyError(
             __('Impersonation Not Allowed'), __('You\'re not allowed to impersonate this user')

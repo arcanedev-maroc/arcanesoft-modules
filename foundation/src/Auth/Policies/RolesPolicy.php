@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Policies;
 
-use Arcanesoft\Foundation\Auth\Models\{
-    Permission, Role, Admin
-};
+use Arcanesoft\Foundation\Auth\Models\{Admin, Permission, Role};
 
 /**
  * Class     RolesPolicy

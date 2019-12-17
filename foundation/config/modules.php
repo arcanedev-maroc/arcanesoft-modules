@@ -8,21 +8,23 @@ return [
      */
 
     'providers' => [
-//        Arcanesoft\Media\MediaServiceProvider::class,
-//        Arcanesoft\Blog\BlogServiceProvider::class,
+        Arcanesoft\Media\MediaServiceProvider::class,
+        Arcanesoft\Blog\BlogServiceProvider::class,
     ],
 
     'commands' => [
         'setup'   => [
 
             'seeders' => [
+                // Foundation
                 Arcanesoft\Foundation\Auth\Seeders\DatabaseSeeder::class,
                 Arcanesoft\Foundation\System\Seeders\DatabaseSeeder::class,
 
-//                Arcanesoft\Blog\Seeders\DatabaseSeeder::class,
-//                Arcanesoft\Backups\Seeders\DatabaseSeeder::class,
-//                Arcanesoft\Media\Seeders\DatabaseSeeder::class,
-//                Arcanesoft\Passport\Seeders\DatabaseSeeder::class,
+                // External
+                Arcanesoft\Blog\Seeders\DatabaseSeeder::class,
+                Arcanesoft\Backups\Seeders\DatabaseSeeder::class,
+                Arcanesoft\Media\Seeders\DatabaseSeeder::class,
+                Arcanesoft\Passport\Seeders\DatabaseSeeder::class,
             ],
 
         ],

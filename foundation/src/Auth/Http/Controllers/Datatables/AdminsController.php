@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Http\Controllers\Datatables;
 
 use Arcanesoft\Foundation\Auth\Http\Transformers\AdminTransformer;
-use Arcanesoft\Foundation\Auth\Repositories\AdminsRepository;
+use Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository;
 use Yajra\DataTables\DataTables;
 
 /**
@@ -21,7 +21,7 @@ class AdminsController
      | -----------------------------------------------------------------
      */
 
-    public function index(DataTables $dataTables, AdminsRepository $usersRepo, bool $trash = false)
+    public function index(DataTables $dataTables, AdministratorsRepository $usersRepo, bool $trash = false)
     {
         $query = $usersRepo->onlyTrashed($trash);
 
@@ -30,7 +30,7 @@ class AdminsController
             ->make(true);
     }
 
-    public function trash(DataTables $dataTables, AdminsRepository $usersRepo)
+    public function trash(DataTables $dataTables, AdministratorsRepository $usersRepo)
     {
         return $this->index($dataTables, $usersRepo, true);
     }

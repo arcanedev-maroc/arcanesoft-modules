@@ -33,7 +33,6 @@ class UpdateAdministratorRequest extends AdminFormRequest
             'first_name' => ['required', 'string', 'max:50'],
             'last_name'  => ['required', 'string', 'max:50'],
             'email'      => ['required', 'string', 'email', 'max:255', UserEmailRule::unique()->ignore($user->id)],
-            'password'   => ['nullable', 'string', 'min:8', 'confirmed'],
             'roles'      => ['array'],
         ];
     }

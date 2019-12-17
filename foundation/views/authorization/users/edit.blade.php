@@ -4,12 +4,7 @@
     <i class="fa fa-fw fa-users"></i> @lang('Edit User')
 @endsection
 
-<?php
-/**
- * @var  Arcanesoft\Foundation\Auth\Models\User  $user
- * @var  Illuminate\Support\ViewErrorBag         $errors
- */
-?>
+<?php /** @var  App\Models\User|mixed  $user */ ?>
 
 @section('content')
     {{ form()->open(['route' => ['admin::auth.users.update', $user], 'method' => 'PUT']) }}
@@ -38,22 +33,6 @@
                             <label for="email" class="control-label">@lang('Email') :</label>
                             {{ form()->email('email', old('email', $user->email), ['class' => 'form-control'.$errors->first('email', ' is-invalid'), 'placeholder' => __('Email'), 'required']) }}
                             @error('email')
-                                <span class="invalid-feedback" role="alert">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label for="password" class="control-label">@lang('Password') :</label>
-                            {{ form()->password('password', ['class' => 'form-control'.$errors->first('password', ' is-invalid'), 'placeholder' => __('Password')]) }}
-                            @error('password')
-                                <span class="invalid-feedback" role="alert">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label for="password_confirmation" class="control-label">@lang('Confirm Password') :</label>
-                            {{ form()->password('password_confirmation', ['class' => 'form-control'.$errors->first('password_confirmation', ' is-invalid'), 'placeholder' => __('Confirm Password')]) }}
-                            @error('password_confirmation')
                                 <span class="invalid-feedback" role="alert">{{ $message }}</span>
                             @enderror
                         </div>

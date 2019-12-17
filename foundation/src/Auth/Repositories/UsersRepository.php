@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Repositories;
 
 use Arcanesoft\Foundation\Auth\Auth;
-use Arcanesoft\Foundation\Auth\Events\Users\{
-    ActivatedUser, ActivatingUser, DeactivatedUser, DeactivatingUser, SyncedRolesToUser, SyncingRolesToUser,
-};
-use Arcanesoft\Foundation\Auth\Models\{Role, User};
+use Arcanesoft\Foundation\Auth\Events\Users\{ActivatedUser, ActivatingUser, DeactivatedUser, DeactivatingUser};
+use Arcanesoft\Foundation\Auth\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\{Collection, Str};
+use Illuminate\Support\Str;
 
 /**
  * Class     UsersRepository
@@ -88,27 +86,13 @@ class UsersRepository extends AbstractRepository
     }
 
     /**
-     * Create a new user with `member` role.
-     *
-     * @param  array  $attributes
-     *
-     * @return \Arcanesoft\Foundation\Auth\Models\User
-     */
-    public function createMember(array $attributes): User
-    {
-        return tap($this->createUser($attributes), function (User $user) {
-            $this->syncRolesByKeys($user, [Role::MEMBER]);
-        });
-    }
-
-    /**
      * Create a new user.
      *
      * @param  array  $attributes
      *
      * @return \Arcanesoft\Foundation\Auth\Models\User
      */
-    public function createUser(array $attributes): User
+    public function createOne(array $attributes): User
     {
         $attributes['password'] = $attributes['password'] ?? Str::random(8);
 
@@ -129,13 +113,9 @@ class UsersRepository extends AbstractRepository
      *
      * @return bool
      */
-    public function updateUser(User $user, array $attributes): bool
+    public function updateOne(User $user, array $attributes): bool
     {
-        $attributes = array_filter($attributes);
-
-        return tap($user->update($attributes), function () use ($user, $attributes) {
-            $this->syncRolesByUuids($user, $attributes['roles'] ?? []);
-        });
+        return $user->update($attributes);
     }
 
     /**
@@ -148,8 +128,8 @@ class UsersRepository extends AbstractRepository
     public function toggleActive(User $user): bool
     {
         return $user->isActive()
-            ? $this->deactivate($user)
-            : $this->activate($user);
+            ? $this->deactivateOne($user)
+            : $this->activateOne($user);
     }
 
     /**
@@ -159,7 +139,7 @@ class UsersRepository extends AbstractRepository
      *
      * @return bool
      */
-    public function activate(User $user)
+    public function activateOne(User $user)
     {
         if ($user->isActive())
             return false;
@@ -178,7 +158,7 @@ class UsersRepository extends AbstractRepository
      *
      * @return bool
      */
-    public function deactivate(User $user): bool
+    public function deactivateOne(User $user): bool
     {
         if ( ! $user->isActive())
             return false;
@@ -197,7 +177,7 @@ class UsersRepository extends AbstractRepository
      *
      * @return bool|null
      */
-    public function deleteUser(User $user)
+    public function deleteOne(User $user)
     {
         return $user->trashed() ? $user->forceDelete() : $user->delete();
     }
@@ -209,59 +189,12 @@ class UsersRepository extends AbstractRepository
      *
      * @return bool|null
      */
-    public function restoreUser(User $user)
+    public function restoreOne(User $user)
     {
+        if ( ! $user->trashed())
+            return null;
+
         return $user->restore();
-    }
-
-    /**
-     * Sync roles by keys.
-     *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User  $user
-     * @param  array                         $keys
-     *
-     * @return array
-     */
-    public function syncRolesByKeys(User $user, array $keys): array
-    {
-        return $this->syncRoles(
-            $user, $this->getRolesRepository()->getByKeys($keys)
-        );
-    }
-
-    /**
-     * Sync roles by uuids.
-     *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User  $user
-     * @param  array                                    $uuids
-     *
-     * @return array
-     */
-    public function syncRolesByUuids(User $user, array $uuids): array
-    {
-        return $this->syncRoles(
-            $user, $this->getRolesRepository()->getByUuids($uuids)
-        );
-    }
-
-    /**
-     * Sync roles with the user.
-     *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User  $user
-     * @param  \Illuminate\Support\Collection           $roles
-     *
-     * @return array
-     */
-    public function syncRoles(User $user, Collection $roles): array
-    {
-        if (empty($roles))
-            return [];
-
-        event(new SyncingRolesToUser($user, $roles));
-        $synced = $user->roles()->sync($roles->pluck('id'));
-        event(new SyncedRolesToUser($user, $roles, $synced));
-
-        return $synced;
     }
 
     /* -----------------------------------------------------------------
@@ -297,20 +230,5 @@ class UsersRepository extends AbstractRepository
     public function trashedCount(): int
     {
         return $this->onlyTrashed()->count();
-    }
-
-    /* -----------------------------------------------------------------
-     |  Other Methods
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Get the roles repository.
-     *
-     * @return \Arcanesoft\Foundation\Auth\Repositories\RolesRepository|mixed
-     */
-    protected function getRolesRepository(): RolesRepository
-    {
-        return static::getRepository(RolesRepository::class);
     }
 }

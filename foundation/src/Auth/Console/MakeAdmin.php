@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Console;
 
 use Arcanesoft\Foundation\Auth\Models\Role;
-use Arcanesoft\Foundation\Auth\Repositories\AdminsRepository;
+use Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository;
 use Closure;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Date;
 
 /**
  * Class     MakeAdmin
@@ -73,18 +72,27 @@ class MakeAdmin extends Command
     protected static function defaultCreateUserCallback(): Closure
     {
         return function (string $firstName, string $lastName, string $email, string $password) {
-            /** @var  \Arcanesoft\Foundation\Auth\Repositories\AdminsRepository  $repo */
-            $repo  = app(AdminsRepository::class);
-
-            $admin = $repo->forceCreate([
+            $attributes = [
                 'first_name'   => $firstName,
                 'last_name'    => $lastName,
                 'email'        => $email,
                 'password'     => $password,
-                'activated_at' => Date::now()
-            ]);
+                'activated_at' => now(),
+            ];
 
-            $repo->syncRolesByKeys($admin, [Role::ADMINISTRATOR]);
+            static::getAdministratorsRepository()->createOneWithRoles($attributes, [
+                Role::ADMINISTRATOR,
+            ]);
         };
+    }
+
+    /**
+     * Get the administrators repository.
+     *
+     * @return \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository
+     */
+    protected static function getAdministratorsRepository(): AdministratorsRepository
+    {
+        return app(AdministratorsRepository::class);
     }
 }

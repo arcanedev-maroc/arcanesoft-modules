@@ -1,12 +1,16 @@
+.table-th,
+.table thead th {
+    font-size: $h6-font-size;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: $text-muted;
+}
+
 .table thead th {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     border-bottom-width: 1px;
     border-top: 0;
-    font-size: $h6-font-size;
-    font-weight: 400;
-    text-transform: uppercase;
-    color: $text-muted;
 }
 
 .table-md {

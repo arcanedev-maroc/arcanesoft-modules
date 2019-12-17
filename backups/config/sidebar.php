@@ -11,7 +11,7 @@ return [
             'title'       => 'Backups',
             'icon'        => 'fas fa-fw fa-database',
             'route'       => 'admin::backups.statuses.index',
-            'roles'       => [Role::ADMINISTRATOR],
+            'roles'       => [],
             'permissions' => [
                 'admin::backups.statuses.index',
             ],

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Http\Transformers;
 
 use Arcanesoft\Foundation\Auth\Models\Admin;
-use Arcanesoft\Foundation\Auth\Policies\AdminsPolicy;
+use Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy;
 use Arcanesoft\Foundation\Helpers\UI\Actions\ButtonAction;
 use Arcanesoft\Foundation\Helpers\UI\Actions\LinkAction;
 
@@ -60,25 +60,25 @@ class AdminTransformer extends AbstractTransformer
     {
         $actions = [];
 
-        if (static::can(AdminsPolicy::ability('show'), [$admin]))
+        if (static::can(AdministratorsPolicy::ability('show'), [$admin]))
             $actions[] = LinkAction::action('show', route('admin::auth.administrators.show', [$admin]), false)
                 ->size('sm');
 
-        if (static::can(AdminsPolicy::ability('update'), [$admin]))
+        if (static::can(AdministratorsPolicy::ability('update'), [$admin]))
             $actions[] = LinkAction::action('edit', route('admin::auth.administrators.edit', [$admin]), false)
                 ->size('sm');
 
-        if (static::can(AdminsPolicy::ability('activate'), [$admin]))
+        if (static::can(AdministratorsPolicy::ability('activate'), [$admin]))
             $actions[] = ButtonAction::action($admin->isActive() ? 'deactivate' : 'activate', false)
                 ->attributeIf($admin->isDeletable(), 'onclick', "Foundation.\$emit('auth::administrators.activate', ".json_encode(['id' => $admin->uuid, 'status' => $admin->isActive() ? 'activated' : 'deactivated']).")")
                 ->size('sm');
 
-        if (static::can(AdminsPolicy::ability('restore'), [$admin]) && $admin->trashed())
+        if (static::can(AdministratorsPolicy::ability('restore'), [$admin]) && $admin->trashed())
             $actions[] = ButtonAction::action('restore', false)
                 ->attribute('onclick', "window.Foundation.\$emit('auth::administrators.restore', ".json_encode(['id' => $admin->uuid]).")")
                 ->size('sm');
 
-        if (static::can(AdminsPolicy::ability('delete'), [$admin]))
+        if (static::can(AdministratorsPolicy::ability('delete'), [$admin]))
             $actions[] = ButtonAction::action('delete', false)
                 ->attributeIf($admin->isDeletable(), 'onclick', "window.Foundation.\$emit('auth::administrators.delete', ".json_encode(['id' => $admin->uuid]).")")
                 ->size('sm');

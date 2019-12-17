@@ -26,7 +26,7 @@ abstract class AdminFormRequest extends FormRequest
      */
     public function getValidatedData(): array
     {
-        return $this->all([
+        return $this->only([
             'first_name',
             'last_name',
             'email',
