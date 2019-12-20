@@ -32,7 +32,6 @@ use Illuminate\Database\Eloquent\Builder;
  * @property  \Illuminate\Database\Eloquent\Collection  permissions
  *
  * @method  static  \Illuminate\Database\Eloquent\Builder|static  admin()
- *
  * @method  static  \Illuminate\Database\Eloquent\Builder|static  filterByAuthenticatedUser(mixed $user)
  */
 class Role extends Model
@@ -43,8 +42,6 @@ class Role extends Model
      */
 
     const ADMINISTRATOR = 'administrator';
-    const MODERATOR     = 'moderator';
-    const MEMBER        = 'member';
 
     /* -----------------------------------------------------------------
      |  Traits

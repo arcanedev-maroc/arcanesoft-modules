@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\System\Policies;
 
-use Arcanesoft\Foundation\Auth\Models\User as AuthenticatedUser;
+use Arcanesoft\Foundation\Auth\Models\Admin;
 
 /**
  * Class     LogViewerPolicy
@@ -82,11 +82,11 @@ class LogViewerPolicy extends AbstractPolicy
     /**
      * Allow to access all the logs & metrics.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function index(AuthenticatedUser $user)
+    public function index(Admin $admin)
     {
         //
     }
@@ -94,11 +94,11 @@ class LogViewerPolicy extends AbstractPolicy
     /**
      * Allow to access the log details.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function show(AuthenticatedUser $user)
+    public function show(Admin $admin)
     {
         //
     }
@@ -106,11 +106,11 @@ class LogViewerPolicy extends AbstractPolicy
     /**
      * Allow to download the log files.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function download(AuthenticatedUser $user)
+    public function download(Admin $admin)
     {
         //
     }
@@ -118,11 +118,11 @@ class LogViewerPolicy extends AbstractPolicy
     /**
      * Allow to delete the log files.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function delete(AuthenticatedUser $user)
+    public function delete(Admin $admin)
     {
         //
     }

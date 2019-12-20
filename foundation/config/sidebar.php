@@ -118,7 +118,7 @@ return [
             ],
         ],
 
-//        'arcanesoft.backups.sidebar.items',
+        'arcanesoft.backups.sidebar.items',
     ],
 
 ];

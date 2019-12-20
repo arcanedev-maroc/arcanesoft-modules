@@ -1,5 +1,15 @@
-<?php namespace Arcanesoft\Foundation\Helpers\Sidebar;
+<?php
 
+declare(strict_types=1);
+
+namespace Arcanesoft\Foundation\Helpers\Sidebar;
+
+/**
+ * Class     Manager
+ *
+ * @package  Arcanesoft\Foundation\Helpers\Sidebar
+ * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
+ */
 class Manager
 {
     /* -----------------------------------------------------------------
@@ -15,6 +25,9 @@ class Manager
      | -----------------------------------------------------------------
      */
 
+    /**
+     * Manager constructor.
+     */
     public function __construct()
     {
         $this->items = new Collection;
@@ -30,7 +43,7 @@ class Manager
      *
      * @return \Arcanesoft\Foundation\Helpers\Sidebar\Collection
      */
-    public function items()
+    public function items(): Collection
     {
         return $this->items;
     }
@@ -42,7 +55,7 @@ class Manager
      *
      * @return $this
      */
-    public function setSelectedItem($name)
+    public function setSelectedItem($name): self
     {
         $this->items->setSelected($name);
 
@@ -63,8 +76,7 @@ class Manager
                 $this->items->pushSidebarItem($item);
             }
             elseif (config()->has($item)) {
-                foreach (config()->get($item) as $config)
-                    $this->items->pushSidebarItem($config);
+                $this->loadFromConfig(config()->get($item));
             }
         }
 
@@ -81,7 +93,7 @@ class Manager
      *
      * @return bool
      */
-    public static function isVisible()
+    public static function isVisible(): bool
     {
         return session()->get('foundation.sidebar.visible', 'true') === 'true';
     }
