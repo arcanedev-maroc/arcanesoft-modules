@@ -33,11 +33,11 @@
                 </table>
                 <div class="card-footer text-right p-2">
                     @can(Arcanesoft\Blog\Policies\TagsPolicy::ability('update'), $tag)
-                        {{ ui\action_link('edit', route('admin::blog.tags.edit', [$tag]))->size('sm') }}
+                        {{ arcanesoft\ui\action_link('edit', route('admin::blog.tags.edit', [$tag]))->size('sm') }}
                     @endcan
 
                     @can(Arcanesoft\Blog\Policies\TagsPolicy::ability('delete'), $tag)
-                        {{ ui\action_button('delete')->size('sm')->setDisabled($tag->isNotDeletable()) }}
+                        {{ arcanesoft\ui\action_button('delete')->size('sm')->setDisabled($tag->isNotDeletable()) }}
                     @endcan
                 </div>
             </div>
@@ -48,8 +48,8 @@
                 <table class="table table-borderless table-hover mb-0">
                     <thead>
                         <tr>
-                            <th>Title</th>
-                            <th class="text-right">Actions</th>
+                            <th>@lang('Title')</th>
+                            <th class="text-right">@lang('Actions')</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -71,4 +71,3 @@
         </div>
     </div>
 @endsection
-

@@ -55,14 +55,14 @@ class UsersPolicy extends AbstractPolicy
 
             // admin::auth.users.metrics
             $this->makeAbility('metrics')->setMetas([
-                'name'        => "List all the users' metrics",
-                'description' => "Ability to list all the users' metrics",
+                'name'        => 'Show the metrics',
+                'description' => 'Ability to show the user\'s metrics',
             ]),
 
             // admin::auth.users.show
             $this->makeAbility('show')->setMetas([
                 'name'        => 'Show a user',
-                'description' => "Ability to show the user's details",
+                'description' => 'Ability to show the user\'s details',
             ]),
 
             // admin::auth.users.create
@@ -127,7 +127,7 @@ class UsersPolicy extends AbstractPolicy
     }
 
     /**
-     * Allow to list all the users' metrics.
+     * Allow to show the user's metrics.
      *
      * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
      *

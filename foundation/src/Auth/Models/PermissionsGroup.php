@@ -5,13 +5,24 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Models;
 
 use Arcanesoft\Foundation\Auth\Auth;
-use Arcanesoft\Foundation\Auth\Events\PermissionsGroups\{
-    AttachedPermissionsToGroup, AttachedPermissionToGroup, AttachingPermissionsToGroup, AttachingPermissionToGroup,
-    CreatedPermissionsGroup, CreatingPermissionsGroup, DeletedPermissionsGroup, DeletingPermissionsGroup,
-    DetachedAllPermissions, DetachedPermissionFromGroup, DetachedPermissionsFromGroup, DetachingAllPermissions,
-    DetachingPermissionFromGroup, DetachingPermissionsFromGroup, SavedPermissionsGroup, SavingPermissionsGroup,
-    UpdatedPermissionsGroup, UpdatingPermissionsGroup
-};
+use Arcanesoft\Foundation\Auth\Events\PermissionsGroups\CreatedPermissionsGroup;
+use Arcanesoft\Foundation\Auth\Events\PermissionsGroups\CreatingPermissionsGroup;
+use Arcanesoft\Foundation\Auth\Events\PermissionsGroups\DeletedPermissionsGroup;
+use Arcanesoft\Foundation\Auth\Events\PermissionsGroups\DeletingPermissionsGroup;
+use Arcanesoft\Foundation\Auth\Events\PermissionsGroups\Permissions\AttachedPermission;
+use Arcanesoft\Foundation\Auth\Events\PermissionsGroups\Permissions\AttachedPermissions;
+use Arcanesoft\Foundation\Auth\Events\PermissionsGroups\Permissions\AttachingPermission;
+use Arcanesoft\Foundation\Auth\Events\PermissionsGroups\Permissions\AttachingPermissions;
+use Arcanesoft\Foundation\Auth\Events\PermissionsGroups\Permissions\DetachedAllPermissions;
+use Arcanesoft\Foundation\Auth\Events\PermissionsGroups\Permissions\DetachedPermission;
+use Arcanesoft\Foundation\Auth\Events\PermissionsGroups\Permissions\DetachedPermissions;
+use Arcanesoft\Foundation\Auth\Events\PermissionsGroups\Permissions\DetachingAllPermissions;
+use Arcanesoft\Foundation\Auth\Events\PermissionsGroups\Permissions\DetachingPermission;
+use Arcanesoft\Foundation\Auth\Events\PermissionsGroups\Permissions\DetachingPermissions;
+use Arcanesoft\Foundation\Auth\Events\PermissionsGroups\SavedPermissionsGroup;
+use Arcanesoft\Foundation\Auth\Events\PermissionsGroups\SavingPermissionsGroup;
+use Arcanesoft\Foundation\Auth\Events\PermissionsGroups\UpdatedPermissionsGroup;
+use Arcanesoft\Foundation\Auth\Events\PermissionsGroups\UpdatingPermissionsGroup;
 use Illuminate\Support\Str;
 
 /**
@@ -162,9 +173,9 @@ class PermissionsGroup extends Model
         if ($this->hasPermission($permission))
             return;
 
-        event(new AttachingPermissionToGroup($this, $permission));
+        event(new AttachingPermission($this, $permission));
         $permission = $this->permissions()->save($permission);
-        event(new AttachedPermissionToGroup($this, $permission));
+        event(new AttachedPermission($this, $permission));
 
         $this->loadPermissions($reload);
     }
@@ -197,9 +208,9 @@ class PermissionsGroup extends Model
      */
     public function attachPermissions($permissions, bool $reload = true): iterable
     {
-        event(new AttachingPermissionsToGroup($this, $permissions));
+        event(new AttachingPermissions($this, $permissions));
         $permissions = $this->permissions()->saveMany($permissions);
-        event(new AttachedPermissionsToGroup($this, $permissions));
+        event(new AttachedPermissions($this, $permissions));
 
         $this->loadPermissions($reload);
 
@@ -219,9 +230,9 @@ class PermissionsGroup extends Model
 
         $permission = $this->getPermissionFromGroup($permission);
 
-        event(new DetachingPermissionFromGroup($this, $permission));
+        event(new DetachingPermission($this, $permission));
         $permission->update(['group_id' => 0]);
-        event(new DetachedPermissionFromGroup($this, $permission));
+        event(new DetachedPermission($this, $permission));
 
         $this->loadPermissions($reload);
     }
@@ -250,9 +261,9 @@ class PermissionsGroup extends Model
      */
     public function detachPermissions(array $ids, bool $reload = true)
     {
-        event(new DetachingPermissionsFromGroup($this, $ids));
+        event(new DetachingPermissions($this, $ids));
         $this->permissions()->whereIn('id', $ids)->update(['group_id' => 0]);
-        event(new DetachedPermissionsFromGroup($this, $ids));
+        event(new DetachedPermissions($this, $ids));
 
         $this->loadPermissions($reload);
     }

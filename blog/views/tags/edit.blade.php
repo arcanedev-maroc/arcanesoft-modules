@@ -29,8 +29,8 @@
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
-                        {{ ui\action_link('cancel', route('admin::blog.tags.show', [$tag]))->size('sm') }}
-                        {{ ui\action_button('update')->size('sm')->submit() }}
+                        {{ arcanesoft\ui\action_link('cancel', route('admin::blog.tags.show', [$tag]))->size('sm') }}
+                        {{ arcanesoft\ui\action_button('update')->size('sm')->submit() }}
                     </div>
                 </div>
             </div>

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Metrics\Users;
 
 use Arcanedev\LaravelMetrics\Metrics\Trend;
+use Arcanesoft\Foundation\Auth\Auth;
+use Arcanesoft\Foundation\Auth\Policies\UsersPolicy;
 use Arcanesoft\Foundation\Auth\Repositories\UsersRepository;
 use Illuminate\Http\Request;
 
@@ -47,5 +49,17 @@ class UsersPerWeek extends Trend
             9  => '9 Weeks',
             12 => '12 Weeks',
         ];
+    }
+
+    /**
+     * Check if the authenticated user is authorized.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return bool
+     */
+    public function authorize(Request $request): bool
+    {
+        return Auth::admin()->can(UsersPolicy::ability('metrics'));
     }
 }

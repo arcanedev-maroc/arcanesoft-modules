@@ -41,10 +41,6 @@ class RolesRoutes extends AbstractRouteRegistrar
 
                 $this->mapDataTablesRoutes();
 
-                // admin::auth.roles.metrics
-                $this->get('metrics', [RolesController::class, 'metrics'])
-                     ->name('metrics');
-
                 // admin::auth.roles.create
                 $this->get('create', [RolesController::class, 'create'])
                      ->name('create');

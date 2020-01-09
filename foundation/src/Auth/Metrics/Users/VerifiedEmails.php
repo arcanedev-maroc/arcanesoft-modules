@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Metrics\Users;
 
 use Arcanedev\LaravelMetrics\Metrics\NullablePartition;
+use Arcanesoft\Foundation\Auth\Auth;
+use Arcanesoft\Foundation\Auth\Policies\UsersPolicy;
 use Arcanesoft\Foundation\Auth\Repositories\UsersRepository;
 use Illuminate\Http\Request;
 
@@ -41,5 +43,17 @@ class VerifiedEmails extends NullablePartition
                         1 => '#007BFF',
                     ])
                     ->sort('desc');
+    }
+
+    /**
+     * Check if the authenticated user is authorized.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return mixed
+     */
+    public function authorize(Request $request)
+    {
+        return Auth::admin()->can(UsersPolicy::ability('metrics'));
     }
 }

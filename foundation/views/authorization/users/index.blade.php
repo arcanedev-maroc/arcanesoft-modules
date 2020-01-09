@@ -6,10 +6,6 @@
 
 @push('content-nav')
     <div class="mb-3 text-right">
-        @can(Arcanesoft\Foundation\Auth\Policies\UsersPolicy::ability('metrics'))
-            <a href="{{ route('admin::auth.users.metrics') }}" class="btn btn-sm btn-secondary {{ active(['admin::auth.users.metrics']) }}">@lang('Metrics')</a>
-        @endcan
-
         <div class="btn-group ml-auto mr-1" role="group" aria-label="Basic example">
             <a href="{{ route('admin::auth.users.index') }}" class="btn btn-sm btn-secondary {{ active(['admin::auth.users.index']) }}">@lang('All')</a>
             <a href="{{ route('admin::auth.users.trash') }}" class="btn btn-sm btn-secondary {{ active(['admin::auth.users.trash']) }}">@lang('Trash')</a>

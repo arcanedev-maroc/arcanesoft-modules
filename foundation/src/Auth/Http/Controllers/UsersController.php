@@ -58,6 +58,8 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability('index'));
 
+        $this->selectMetrics('arcanesoft.foundation.metrics.selected.auth-users');
+
         return $this->view('authorization.users.index', compact('trash'));
     }
 
@@ -71,22 +73,6 @@ class UsersController extends Controller
         $this->authorize(UsersPolicy::ability('index'));
 
         return $this->index(true);
-    }
-
-    /**
-     * Show the metrics.
-     *
-     * @return \Illuminate\Contracts\View\View
-     */
-    public function metrics()
-    {
-        $this->authorize(UsersPolicy::ability('metrics'));
-
-        $this->addBreadcrumbRoute(__('Metrics'), 'admin::auth.users.metrics');
-
-        $this->selectMetrics('arcanesoft.foundation.metrics.selected.auth-users');
-
-        return $this->view('authorization.users.metrics');
     }
 
     /**

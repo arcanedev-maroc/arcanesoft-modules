@@ -5,11 +5,21 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Models;
 
 use Arcanesoft\Foundation\Auth\Auth;
-use Arcanesoft\Foundation\Auth\Events\Roles\{
-    AttachedPermissionToRole, AttachedUserToRole, AttachingPermissionToRole, AttachingUserToRole, CreatedRole,
-    CreatingRole, DeletedRole, DeletingRole, DetachedUserFromRole, DetachingUserFromRole, RetrievedRole, SavedRole,
-    SavingRole, UpdatedRole, UpdatingRole,
-};
+use Arcanesoft\Foundation\Auth\Events\Roles\CreatedRole;
+use Arcanesoft\Foundation\Auth\Events\Roles\CreatingRole;
+use Arcanesoft\Foundation\Auth\Events\Roles\DeletedRole;
+use Arcanesoft\Foundation\Auth\Events\Roles\DeletingRole;
+use Arcanesoft\Foundation\Auth\Events\Roles\Permissions\AttachedPermission;
+use Arcanesoft\Foundation\Auth\Events\Roles\Permissions\AttachingPermission;
+use Arcanesoft\Foundation\Auth\Events\Roles\RetrievedRole;
+use Arcanesoft\Foundation\Auth\Events\Roles\SavedRole;
+use Arcanesoft\Foundation\Auth\Events\Roles\SavingRole;
+use Arcanesoft\Foundation\Auth\Events\Roles\UpdatedRole;
+use Arcanesoft\Foundation\Auth\Events\Roles\UpdatingRole;
+use Arcanesoft\Foundation\Auth\Events\Roles\Users\AttachedUser;
+use Arcanesoft\Foundation\Auth\Events\Roles\Users\AttachingUser;
+use Arcanesoft\Foundation\Auth\Events\Roles\Users\DetachedUser;
+use Arcanesoft\Foundation\Auth\Events\Roles\Users\DetachingUser;
 use Arcanesoft\Foundation\Auth\Models\Concerns\Activatable;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -275,9 +285,9 @@ class Role extends Model
         if ($this->hasUser($user))
             return;
 
-        event(new AttachingUserToRole($this, $user));
+        event(new AttachingUser($this, $user));
         $this->users()->attach($user);
-        event(new AttachedUserToRole($this, $user));
+        event(new AttachedUser($this, $user));
 
         $this->loadUsers($reload);
     }
@@ -294,9 +304,9 @@ class Role extends Model
      */
     public function detachUser($user, bool $reload = true)
     {
-        event(new DetachingUserFromRole($this, $user));
+        event(new DetachingUser($this, $user));
         $results = $this->users()->detach($user);
-        event(new DetachedUserFromRole($this, $user, $results));
+        event(new DetachedUser($this, $user, $results));
 
         $this->loadUsers($reload);
 
@@ -316,9 +326,9 @@ class Role extends Model
         if ($this->hasPermission($permission))
             return;
 
-        event(new AttachingPermissionToRole($this, $permission));
+        event(new AttachingPermission($this, $permission));
         $this->permissions()->attach($permission);
-        event(new AttachedPermissionToRole($this, $permission));
+        event(new AttachedPermission($this, $permission));
 
         $this->loadPermissions($reload);
     }

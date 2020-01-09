@@ -28,7 +28,7 @@ class Socialite
      */
     public static function getAcceptedProviders(): array
     {
-        return Auth::config('socialite.drivers', []);
+        return Auth::config('authentication.socialite.drivers', []);
     }
 
     /**
@@ -94,7 +94,7 @@ class Socialite
      */
     public static function isEnabled(): bool
     {
-        return (bool) Auth::config('socialite.enabled', false);
+        return (bool) Auth::config('authentication.socialite.enabled', false);
     }
 
     /**

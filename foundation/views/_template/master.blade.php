@@ -30,9 +30,9 @@
                 <section class="content-wrapper">
                     @include(Arcanesoft\Foundation\Core\ViewComposers\NotificationsComposer::VIEW)
 
-                    @stack('content-nav')
-
                     @include(Arcanesoft\Foundation\Core\ViewComposers\MetricsComposer::VIEW)
+
+                    @stack('content-nav')
 
                     @yield('content')
                 </section>
@@ -48,9 +48,6 @@
 
     {{-- SCRIPTS --}}
     <script src="{{ asset(mix('js/arcanesoft.js', 'assets')) }}"></script>
-    <script>
-        window.Foundation = new CreateFoundation;
-    </script>
 
     @stack('scripts')
 

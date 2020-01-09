@@ -6,7 +6,7 @@ namespace Arcanesoft\Foundation\Auth\Repositories;
 
 use Arcanesoft\Foundation\Auth\Auth;
 use Arcanesoft\Foundation\Auth\Events\Admins\{
-    ActivatedAdmin, ActivatingAdmin, DeactivatedAdmin, DeactivatingAdmin, SyncedRolesToAdmin, SyncingRolesToAdmin
+    ActivatedAdmin, ActivatingAdmin, DeactivatedAdmin, DeactivatingAdmin, Roles\SyncedRoles, Roles\SyncingRoles
 };
 use Arcanesoft\Foundation\Auth\Models\Admin;
 use Illuminate\Database\Eloquent\Builder;
@@ -209,7 +209,7 @@ class AdministratorsRepository extends AbstractRepository
      *
      * @return bool|null
      */
-    public function deleteAdmin(Admin $admin)
+    public function deleteOne(Admin $admin)
     {
         return $admin->trashed() ? $admin->forceDelete() : $admin->delete();
     }
@@ -221,7 +221,7 @@ class AdministratorsRepository extends AbstractRepository
      *
      * @return bool|null
      */
-    public function restoreAdmin(Admin $admin)
+    public function restoreOne(Admin $admin)
     {
         return $admin->restore();
     }
@@ -269,9 +269,9 @@ class AdministratorsRepository extends AbstractRepository
         if (empty($roles))
             return [];
 
-        event(new SyncingRolesToAdmin($admin, $roles));
+        event(new SyncingRoles($admin, $roles));
         $synced = $admin->roles()->sync($roles->pluck('id'));
-        event(new SyncedRolesToAdmin($admin, $roles, $synced));
+        event(new SyncedRoles($admin, $roles, $synced));
 
         return $synced;
     }
@@ -323,6 +323,6 @@ class AdministratorsRepository extends AbstractRepository
      */
     protected function getRolesRepository(): RolesRepository
     {
-        return static::getRepository(RolesRepository::class);
+        return static::makeRepository(RolesRepository::class);
     }
 }

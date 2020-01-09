@@ -6,9 +6,9 @@
 
 @push('content-nav')
     <div class="mb-3 text-right">
-        <a href="{{ route('admin::blog.tags.metrics') }}" class="btn btn-sm btn-secondary {{ active(['admin::blog.tags.metrics']) }}">{{ __('Metrics') }}</a>
-        <a href="{{ route('admin::blog.tags.index') }}" class="btn btn-sm btn-secondary {{ active(['admin::blog.tags.index']) }}">{{ __('All') }}</a>
-        {{ ui\action_link('add', route('admin::blog.tags.create'))->size('sm') }}
+        <a href="{{ route('admin::blog.tags.metrics') }}" class="btn btn-sm btn-secondary {{ active(['admin::blog.tags.metrics']) }}">@lang('Metrics')</a>
+        <a href="{{ route('admin::blog.tags.index') }}" class="btn btn-sm btn-secondary {{ active(['admin::blog.tags.index']) }}">@lang('All')</a>
+        {{ arcanesoft\ui\action_link('add', route('admin::blog.tags.create'))->size('sm') }}
     </div>
 @endpush
 
@@ -17,12 +17,12 @@
         <div class="table-responsive">
             <table id="tags-table" class="table table-hover table-md mb-0">
                 <thead>
-                <tr>
-                    <th>{{ __('Name') }}</th>
-                    <th class="text-center">{{ __('Posts') }}</th>
-                    <th class="text-center">{{ __('Created at') }}</th>
-                    <th class="text-right">{{ __('Actions') }}</th>
-                </tr>
+                    <tr>
+                        <th>@lang('Name')</th>
+                        <th class="text-center">@lang('Posts')</th>
+                        <th class="text-center">@lang('Created at')</th>
+                        <th class="text-right">@lang('Actions')</th>
+                    </tr>
                 </thead>
             </table>
         </div>

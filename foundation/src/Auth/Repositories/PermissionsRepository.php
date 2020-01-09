@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Repositories;
 
 use Arcanesoft\Foundation\Auth\Auth;
-use Arcanesoft\Foundation\Auth\Events\Permissions\{DetachedRoleFromPermission, DetachingRoleFromPermission};
+use Arcanesoft\Foundation\Auth\Events\Permissions\{
+    Roles\DetachedRole, Roles\DetachingRole};
 use Arcanesoft\Foundation\Auth\Models\{Permission, Role};
 use Illuminate\Support\Collection;
 
@@ -96,9 +97,9 @@ class PermissionsRepository extends AbstractRepository
      */
     public function detachRole(Permission $permission, Role $role): int
     {
-        event(new DetachingRoleFromPermission($permission, $role));
+        event(new DetachingRole($permission, $role));
         $detached = $permission->roles()->detach($role);
-        event(new DetachedRoleFromPermission($permission, $role, $detached));
+        event(new DetachedRole($permission, $role, $detached));
 
         return $detached;
     }

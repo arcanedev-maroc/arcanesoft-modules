@@ -6,22 +6,11 @@
 
 @push('content-nav')
     <div class="mb-3 text-right">
-        @can(Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy::ability('metrics'))
-            <a href="{{ route('admin::auth.administrators.metrics') }}"
-               class="btn btn-sm btn-secondary {{ active(['admin::auth.administrators.metrics']) }}">
-                @lang('Metrics')
-            </a>
-        @endcan
-
         <div class="btn-group ml-auto mr-1" role="group" aria-label="Basic example">
             <a href="{{ route('admin::auth.administrators.index') }}"
-               class="btn btn-sm btn-secondary {{ active(['admin::auth.administrators.index']) }}">
-                @lang('All')
-            </a>
+               class="btn btn-sm btn-secondary {{ active(['admin::auth.administrators.index']) }}">@lang('All')</a>
             <a href="{{ route('admin::auth.administrators.trash') }}"
-               class="btn btn-sm btn-secondary {{ active(['admin::auth.administrators.trash']) }}">
-                @lang('Trash')
-            </a>
+               class="btn btn-sm btn-secondary {{ active(['admin::auth.administrators.trash']) }}">@lang('Trash')</a>
         </div>
         {{ arcanesoft\ui\action_link('add', route('admin::auth.administrators.create'))->size('sm') }}
     </div>
@@ -124,7 +113,7 @@
             </div>
         </div>
     @endcan
-    @endcan
+    @endif
 @endpush
 
 @push('scripts')

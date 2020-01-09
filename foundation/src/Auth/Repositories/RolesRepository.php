@@ -11,9 +11,9 @@ use Arcanesoft\Foundation\Auth\Models\{
     Permission,
     User};
 use Arcanesoft\Foundation\Auth\Events\Roles\{
-    DetachedAllUsersFromRole, DetachedPermissionFromRole, DetachedUserFromRole, DetachingAllPermissionsFromRole,
-    DetachedAllPermissionsFromRole, DetachingAllUsersFromRole, DetachingPermissionFromRole, DetachingUserFromRole,
-    SyncedPermissionsToRole, SyncingPermissionsToRole
+    Users\DetachedAllUsers, Permissions\DetachedPermission, Users\DetachedUser, Permissions\DetachingAllPermissions,
+    Permissions\DetachedAllPermissions, Users\DetachingAllUsers, Permissions\DetachingPermission, Users\DetachingUser,
+    Permissions\SyncedPermissions, Permissions\SyncingPermissions
 };
 
 /**
@@ -65,8 +65,7 @@ class RolesRepository extends AbstractRepository
      */
     public function firstWithKeyOrFail(string $key): Role
     {
-        return $this->where('key', '=', $key)
-                    ->firstOrFail();
+        return $this->where('key', '=', $key)->firstOrFail();
     }
 
     /**
@@ -78,8 +77,7 @@ class RolesRepository extends AbstractRepository
      */
     public function firstWithUuidOrFail(string $uuid): Role
     {
-        return $this->where('uuid', '=', $uuid)
-                    ->firstOrFail();
+        return $this->where('uuid', '=', $uuid)->firstOrFail();
     }
 
     /**
@@ -138,6 +136,20 @@ class RolesRepository extends AbstractRepository
     }
 
     /**
+     * Create a new role.
+     *
+     * @param  array  $attributes
+     *
+     * @return \Arcanesoft\Foundation\Auth\Models\Role|mixed
+     */
+    public function createOne(array $attributes)
+    {
+        return tap($this->create($attributes), function (Role $role) use ($attributes) {
+            $this->syncPermissionsByUuids($role, $attributes['permissions'] ?: []);
+        });
+    }
+
+    /**
      * Update the given role.
      *
      * @param  \Arcanesoft\Foundation\Auth\Models\Role  $role
@@ -145,7 +157,7 @@ class RolesRepository extends AbstractRepository
      *
      * @return bool
      */
-    public function update(Role $role, array $attributes): bool
+    public function updateOne(Role $role, array $attributes): bool
     {
         return $role->update($attributes);
     }
@@ -160,7 +172,7 @@ class RolesRepository extends AbstractRepository
      */
     public function syncPermissionsByUuids(Role $role, array $uuids): array
     {
-        $ids = static::getRepository(PermissionsRepository::class)
+        $ids = static::makeRepository(PermissionsRepository::class)
             ->getIdsWhereInUuid($uuids)
             ->toArray();
 
@@ -180,9 +192,9 @@ class RolesRepository extends AbstractRepository
         if (empty($ids))
             return [];
 
-        event(new SyncingPermissionsToRole($role, $ids));
+        event(new SyncingPermissions($role, $ids));
         $synced = $role->permissions()->sync($ids);
-        event(new SyncedPermissionsToRole($role, $ids, $synced));
+        event(new SyncedPermissions($role, $ids, $synced));
 
         return $synced;
     }
@@ -197,9 +209,9 @@ class RolesRepository extends AbstractRepository
      */
     public function detachPermission(Role $role, Permission $permission): int
     {
-        event(new DetachingPermissionFromRole($role, $permission));
+        event(new DetachingPermission($role, $permission));
         $detached = $role->permissions()->detach($permission);
-        event(new DetachedPermissionFromRole($role, $permission, $detached));
+        event(new DetachedPermission($role, $permission, $detached));
 
         return $detached;
     }
@@ -213,9 +225,9 @@ class RolesRepository extends AbstractRepository
      */
     public function detachAllPermissions(Role $role): int
     {
-        event(new DetachingAllPermissionsFromRole($role));
+        event(new DetachingAllPermissions($role));
         $detached = $role->permissions()->detach();
-        event(new DetachedAllPermissionsFromRole($role, $detached));
+        event(new DetachedAllPermissions($role, $detached));
 
         return $detached;
     }
@@ -230,9 +242,9 @@ class RolesRepository extends AbstractRepository
      */
     public function detachUser(Role $role, User $user): int
     {
-        event(new DetachingUserFromRole($role, $user));
+        event(new DetachingUser($role, $user));
         $detached = $role->users()->detach($user);
-        event(new DetachedUserFromRole($role, $user, $detached));
+        event(new DetachedUser($role, $user, $detached));
 
         return $detached;
     }
@@ -246,9 +258,9 @@ class RolesRepository extends AbstractRepository
      */
     public function detachAllUsers(Role $role): int
     {
-        event(new DetachingAllUsersFromRole($role));
+        event(new DetachingAllUsers($role));
         $detached = $role->users()->detach();
-        event(new DetachedAllUsersFromRole($role, $detached));
+        event(new DetachedAllUsers($role, $detached));
 
         return $detached;
     }
@@ -282,7 +294,7 @@ class RolesRepository extends AbstractRepository
      *
      * @return bool|null
      */
-    public function delete(Role $role)
+    public function deleteOne(Role $role)
     {
         return $role->delete();
     }

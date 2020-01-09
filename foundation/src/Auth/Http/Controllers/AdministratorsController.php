@@ -47,7 +47,7 @@ class AdministratorsController extends Controller
      */
 
     /**
-     * List all the admins.
+     * List all the administrators.
      *
      * @param  bool  $trash
      *
@@ -57,11 +57,13 @@ class AdministratorsController extends Controller
     {
         $this->authorize(AdministratorsPolicy::ability('index'));
 
+        $this->selectMetrics('arcanesoft.foundation.metrics.selected.auth-admins');
+
         return $this->view('authorization.admins.index', compact('trash'));
     }
 
     /**
-     * List all the deleted admins.
+     * List all the deleted administrators.
      *
      * @return \Illuminate\Contracts\View\View
      */
@@ -69,23 +71,9 @@ class AdministratorsController extends Controller
     {
         $this->authorize(AdministratorsPolicy::ability('index'));
 
-        return $this->index(true);
-    }
-
-    /**
-     * Show the metrics.
-     *
-     * @return \Illuminate\Contracts\View\View
-     */
-    public function metrics()
-    {
-        $this->authorize(AdministratorsPolicy::ability('metrics'));
-
-        $this->addBreadcrumbRoute(__('Metrics'), 'admin::auth.administrators.metrics');
-
         $this->selectMetrics('arcanesoft.foundation.metrics.selected.auth-admins');
 
-        return $this->view('authorization.admins.metrics');
+        return $this->index(true);
     }
 
     /**
@@ -110,7 +98,7 @@ class AdministratorsController extends Controller
      * Persist the new administrator.
      *
      * @param  \Arcanesoft\Foundation\Auth\Http\Requests\Admins\CreateAdministratorRequest  $request
-     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository                    $adminsRepo
+     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository            $adminsRepo
      *
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -118,8 +106,7 @@ class AdministratorsController extends Controller
     {
         $this->authorize(AdministratorsPolicy::ability('create'));
 
-        $data = $request->getValidatedData();
-
+        $data  = $request->getValidatedData();
         $admin = $adminsRepo->createOneWithRoles($data, $data['roles'] ?: []);
 
         $this->notifySuccess(
@@ -130,7 +117,7 @@ class AdministratorsController extends Controller
     }
 
     /**
-     * Show the user's details.
+     * Show the administrator's details.
      *
      * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
      *
@@ -146,7 +133,7 @@ class AdministratorsController extends Controller
     }
 
     /**
-     * Edit the user.
+     * Edit the administrator.
      *
      * @param  \Arcanesoft\Foundation\Auth\Models\Admin                  $admin
      * @param  \Arcanesoft\Foundation\Auth\Repositories\RolesRepository  $rolesRepo
@@ -165,11 +152,11 @@ class AdministratorsController extends Controller
     }
 
     /**
-     * Update the user.
+     * Update the administrator.
      *
      * @param  \Arcanesoft\Foundation\Auth\Models\Admin                                     $admin
      * @param  \Arcanesoft\Foundation\Auth\Http\Requests\Admins\UpdateAdministratorRequest  $request
-     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository                    $adminsRepo
+     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository            $adminsRepo
      *
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -189,9 +176,9 @@ class AdministratorsController extends Controller
     }
 
     /**
-     * Activate/Deactivate the user.
+     * Activate/Deactivate an administrator.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin                   $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin                           $user
      * @param  \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository  $adminsRepo
      *
      * @return \Illuminate\Http\JsonResponse
@@ -214,9 +201,9 @@ class AdministratorsController extends Controller
     }
 
     /**
-     * Delete a user.
+     * Delete an administrator.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin                   $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin                           $admin
      * @param  \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository  $adminsRepo
      *
      * @return \Illuminate\Http\JsonResponse
@@ -225,7 +212,7 @@ class AdministratorsController extends Controller
     {
         $this->authorize(AdministratorsPolicy::ability($admin->trashed() ? 'force-delete' : 'delete'), [$admin]);
 
-        $adminsRepo->deleteAdmin($admin);
+        $adminsRepo->deleteOne($admin);
 
         $this->notifySuccess(
             __('Administrator Deleted'), __('The administrator has been successfully deleted!')
@@ -235,9 +222,9 @@ class AdministratorsController extends Controller
     }
 
     /**
-     * Restore a deleted user.
+     * Restore a deleted administrator.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin                   $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin                           $admin
      * @param  \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository  $adminsRepo
      *
      * @return \Illuminate\Http\JsonResponse
@@ -246,7 +233,7 @@ class AdministratorsController extends Controller
     {
         $this->authorize(AdministratorsPolicy::ability('restore'), [$admin]);
 
-        $adminsRepo->restoreAdmin($admin);
+        $adminsRepo->restoreOne($admin);
 
         $this->notifySuccess(
             __('Administrator Restored'), __('The administrator has been successfully restored!')

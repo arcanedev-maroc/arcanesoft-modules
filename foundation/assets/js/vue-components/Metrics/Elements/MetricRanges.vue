@@ -3,7 +3,7 @@
         <option v-for="range in ranges"
                 :key="range.value"
                 :value="range.value"
-                :selected="range.value === selected">
+                :selected="isSelected(range.value)">
             {{ range.label }}
         </option>
     </select>
@@ -25,13 +25,19 @@
         },
 
         methods: {
-            changeSelectedRange(event) {
-                this.$emit('selected-range-changed', event.target.value)
+            changeSelectedRange(event): void {
+                let selected = parseInt(event.target.value, 10)
+
+                this.$emit('selected-range-changed', selected)
+            },
+
+            isSelected(value): Boolean {
+                return this.selected === value
             },
         },
 
         computed: {
-            hasRanges() {
+            hasRanges(): Boolean {
                 return this.ranges.length > 0
             },
         },

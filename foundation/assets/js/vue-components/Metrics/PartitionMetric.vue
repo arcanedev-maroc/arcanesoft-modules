@@ -3,7 +3,9 @@
         <div class="card-body p-3" v-if="isReady">
             <MetricTitle :title="metric.title" :total="total"/>
 
-            <div class="d-flex justify-content-between flex-nowrap">
+            <div v-if="isEmpty">No data</div>
+
+            <div v-else class="d-flex justify-content-between flex-nowrap">
                 <ul class="list-unstyled mb-0">
                     <li v-for="item in this.formattedItems">
                         <span class="status" :style="`background-color: ${item.color};`"></span>
@@ -43,15 +45,17 @@
         },
 
         methods: {
-            mapItems(callback) {
+            mapItems(callback): Object {
                 return this.result.value.map(callback)
             },
 
-            getColor(item, index) {
-                return typeof item.color === 'string' ? item.color : this.getColorByIndex(index)
+            getColor(item, index): String {
+                return typeof item.color === 'string'
+                    ? item.color
+                    : this.getColorByIndex(index)
             },
 
-            getColorByIndex(index) {
+            getColorByIndex(index): String {
                 const colors = [
                     '#007BFF',
                     '#6610F2',
@@ -72,19 +76,19 @@
         },
 
         computed: {
-            values() {
+            values(): Object {
                 return this.mapItems(item => item.value)
             },
 
-            labels() {
+            labels(): Object {
                 return this.mapItems(item => item.label)
             },
 
-            colors() {
+            colors(): Object {
                 return this.mapItems((item, index) => this.getColor(item, index))
             },
 
-            formattedItems() {
+            formattedItems(): Object {
                 return this.mapItems((item, index) => {
                     return {
                         label: item.label,
@@ -94,10 +98,17 @@
                 })
             },
 
-            total() {
+            total(): Number {
+                if (this.isEmpty)
+                    return 0
+
                 return this.values.reduce((accumulator, value) => accumulator + value)
             },
-        }
+
+            isEmpty(): Boolean {
+                return this.values.length === 0
+            },
+        },
     }
 </script>
 

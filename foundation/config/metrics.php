@@ -11,6 +11,12 @@ return [
 
     'registered' => [
 
+        // Auth - Administrators
+        Arcanesoft\Foundation\Auth\Metrics\Administrators\TotalAdministrators::class,
+        Arcanesoft\Foundation\Auth\Metrics\Administrators\NewAdministrators::class,
+        Arcanesoft\Foundation\Auth\Metrics\Administrators\ActivatedAdministrators::class,
+        Arcanesoft\Foundation\Auth\Metrics\Administrators\AdministratorsPerDay::class,
+
         // Auth - Users
         Arcanesoft\Foundation\Auth\Metrics\Users\ActivatedUsers::class,
         Arcanesoft\Foundation\Auth\Metrics\Users\NewUsers::class,
@@ -49,6 +55,14 @@ return [
                 Arcanesoft\Foundation\Auth\Metrics\Users\TotalUsers::class,
                 Arcanesoft\Foundation\Auth\Metrics\Users\UsersPerDay::class,
             ],
+        ],
+
+        // Auth - Admins
+        'auth-admins' => [
+            Arcanesoft\Foundation\Auth\Metrics\Administrators\TotalAdministrators::class,
+            Arcanesoft\Foundation\Auth\Metrics\Administrators\NewAdministrators::class,
+            Arcanesoft\Foundation\Auth\Metrics\Administrators\ActivatedAdministrators::class,
+            Arcanesoft\Foundation\Auth\Metrics\Administrators\AdministratorsPerDay::class,
         ],
 
         // Auth - Users

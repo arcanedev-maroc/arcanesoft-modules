@@ -109,7 +109,7 @@ class SocialiteUsersRepository extends AbstractRepository
      */
     protected function getUsersRepository(): UsersRepository
     {
-        return static::getRepository(UsersRepository::class);
+        return static::makeRepository(UsersRepository::class);
     }
 
     /**

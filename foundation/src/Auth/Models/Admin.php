@@ -8,10 +8,19 @@ use App\Notifications\Auth\ResetPassword as ResetPasswordNotification;
 use Arcanedev\LaravelImpersonator\Contracts\Impersonatable;
 use Arcanedev\LaravelImpersonator\Traits\CanImpersonate;
 use Arcanesoft\Foundation\Auth\Auth;
-use Arcanesoft\Foundation\Auth\Events\Admins\{
-    CreatedAdmin, CreatingAdmin, DeletedAdmin, DeletingAdmin, ForceDeletedAdmin, ReplicatingAdmin, RestoredAdmin,
-    RestoringAdmin, RetrievedAdmin, SavedAdmin, SavingAdmin, UpdatedAdmin, UpdatingAdmin
-};
+use Arcanesoft\Foundation\Auth\Events\Admins\CreatedAdmin;
+use Arcanesoft\Foundation\Auth\Events\Admins\CreatingAdmin;
+use Arcanesoft\Foundation\Auth\Events\Admins\DeletedAdmin;
+use Arcanesoft\Foundation\Auth\Events\Admins\DeletingAdmin;
+use Arcanesoft\Foundation\Auth\Events\Admins\ForceDeletedAdmin;
+use Arcanesoft\Foundation\Auth\Events\Admins\ReplicatingAdmin;
+use Arcanesoft\Foundation\Auth\Events\Admins\RestoredAdmin;
+use Arcanesoft\Foundation\Auth\Events\Admins\RestoringAdmin;
+use Arcanesoft\Foundation\Auth\Events\Admins\RetrievedAdmin;
+use Arcanesoft\Foundation\Auth\Events\Admins\SavedAdmin;
+use Arcanesoft\Foundation\Auth\Events\Admins\SavingAdmin;
+use Arcanesoft\Foundation\Auth\Events\Admins\UpdatedAdmin;
+use Arcanesoft\Foundation\Auth\Events\Admins\UpdatingAdmin;
 use Arcanesoft\Foundation\Auth\Models\Concerns\{Activatable, HasRoles};
 use Arcanesoft\Foundation\Auth\Models\Presenters\UserPresenter;
 use Illuminate\Database\Eloquent\SoftDeletes;

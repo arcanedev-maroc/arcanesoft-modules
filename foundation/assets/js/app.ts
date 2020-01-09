@@ -1,11 +1,8 @@
 import Foundation from './Foundation'
 
 import './plugins'
-
 import './helpers'
-
 import './modules'
-
 import './vue-components'
 
 /**
@@ -14,15 +11,7 @@ import './vue-components'
 
 import store from './store'
 
-const defaultConfig = {
+window["Foundation"] = new Foundation({
     el: '#foundation',
     store,
-}
-
-;(function() {
-    this.CreateFoundation = function(config) {
-        return new Foundation(
-            window["_"].merge({}, config, defaultConfig)
-        )
-    }
-}.call(window))
+})

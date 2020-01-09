@@ -45,10 +45,6 @@ class AdminsRoutes extends AbstractRouteRegistrar
 
                 $this->mapDataTablesRoutes();
 
-                // admin::auth.administrators.metrics
-                $this->get('metrics', [AdministratorsController::class, 'metrics'])
-                     ->name('metrics');
-
                 // admin::auth.administrators.create
                 $this->get('create', [AdministratorsController::class, 'create'])
                      ->name('create');

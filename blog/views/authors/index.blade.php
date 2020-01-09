@@ -1,14 +1,14 @@
 @extends(arcanesoft\foundation()->template())
 
 @section('page-title')
-    <i class="far fa-fw fa-user-edit"></i> {{ __('Authors') }}
+    <i class="far fa-fw fa-user-edit"></i> @lang('Authors')
 @endsection
 
 @push('content-nav')
     <div class="mb-3 text-right">
-        <a href="{{ route('admin::blog.authors.metrics') }}" class="btn btn-sm btn-secondary {{ active(['admin::blog.authors.metrics']) }}">{{ __('Metrics') }}</a>
-        <a href="{{ route('admin::blog.authors.index') }}" class="btn btn-sm btn-secondary {{ active(['admin::blog.authors.index']) }}">{{ __('All') }}</a>
-        {{ ui\action_link('add', route('admin::blog.authors.create'))->size('sm') }}
+        <a href="{{ route('admin::blog.authors.metrics') }}" class="btn btn-sm btn-secondary {{ active(['admin::blog.authors.metrics']) }}">@lang('Metrics')</a>
+        <a href="{{ route('admin::blog.authors.index') }}" class="btn btn-sm btn-secondary {{ active(['admin::blog.authors.index']) }}">@lang('All')</a>
+        {{ arcanesoft\ui\action_link('add', route('admin::blog.authors.create'))->size('sm') }}
     </div>
 @endpush
 
@@ -18,10 +18,10 @@
             <table id="authors-table" class="table table-hover table-md mb-0">
                 <thead>
                     <tr>
-                        <th>{{ __('Username') }}</th>
-                        <th class="text-center">{{ __('Posts') }}</th>
-                        <th class="text-center">{{ __('Created at') }}</th>
-                        <th class="text-right">{{ __('Actions') }}</th>
+                        <th>@lang('Username')</th>
+                        <th class="text-center">@lang('Posts')</th>
+                        <th class="text-center">@lang('Created at')</th>
+                        <th class="text-right">@lang('Actions')</th>
                     </tr>
                 </thead>
             </table>

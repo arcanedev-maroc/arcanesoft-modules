@@ -56,14 +56,14 @@ class AdministratorsPolicy extends AbstractPolicy
 
             // admin::auth.admins.metrics
             $this->makeAbility('metrics')->setMetas([
-                'name'        => "List all the admins' metrics",
-                'description' => "Ability to list all the admins' metrics",
+                'name'        => 'Show the metrics',
+                'description' => 'Ability to show the administrator\'s metrics',
             ]),
 
             // admin::auth.admins.show
             $this->makeAbility('show')->setMetas([
                 'name'        => 'Show an admin',
-                'description' => "Ability to show the admin's details",
+                'description' => 'Ability to show the admin\'s details',
             ]),
 
             // admin::auth.admins.create

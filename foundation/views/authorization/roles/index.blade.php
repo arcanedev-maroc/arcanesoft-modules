@@ -6,10 +6,6 @@
 
 @push('content-nav')
     <div class="mb-3 text-right">
-        @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('metrics'))
-        <a href="{{ route('admin::auth.roles.metrics') }}" class="btn btn-sm btn-secondary {{ active(['admin::auth.roles.metrics']) }}">@lang('Metrics')</a>
-        @endcan
-        <a href="{{ route('admin::auth.roles.index') }}" class="btn btn-sm btn-secondary {{ active(['admin::auth.roles.index']) }}">@lang('Roles')</a>
         {{ arcanesoft\ui\action_link('add', route('admin::auth.roles.create'))->size('sm') }}
     </div>
 @endpush

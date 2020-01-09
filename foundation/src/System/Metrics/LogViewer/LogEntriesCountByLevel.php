@@ -61,7 +61,7 @@ class LogEntriesCountByLevel extends Partition
             }
 
             return $count;
-        });
+        }) ?: [];
     }
 
     /**

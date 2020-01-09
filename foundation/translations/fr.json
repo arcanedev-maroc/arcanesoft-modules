@@ -7,6 +7,8 @@
     "Trash": "Corbeille",
     "Page :current of :last": "Page :current sur :last",
 
+    "Name": "Nom",
+    "Description": "Description",
     "Created at": "Date création",
     "Updated at": "Date modification",
     "Deleted at": "Date suppression",
@@ -26,6 +28,10 @@
     "Locked": "Verrouillé",
     "Unlocked": "Déverrouillé",
 
+    "No data": "Aucune donnée",
+    "Today": "Aujourd'hui",
+    ":days Days": ":days Jours",
+
     "Authorization": "Autorisation",
 
     "Users": "Utilisateurs",
@@ -38,6 +44,9 @@
     "Status": "Status",
     "Last activity": "Dernière activité",
     "Email Verified at": "Email vérifié le",
+
+    "Total Users": "Total des utilisateurs",
+    "New Users": "Nouveaux utilisateurs",
 
     "Roles": "Rôles",
     "Role's details": "Détails du rôle",
