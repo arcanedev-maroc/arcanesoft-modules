@@ -116,17 +116,33 @@
                     </div>
 
                     @if ($entry->hasStack())
-                        <a class="btn btn-sm btn-light ml-auto" role="button" data-toggle="collapse" href="#log-entry-stack-{{ $key }}" aria-expanded="false" aria-controls="log-stack-{{ $key }}">
+                        <a class="btn btn-sm btn-light ml-auto" role="button" data-toggle="collapse"
+                           href="#log-entry-stack-{{ $key }}" aria-expanded="false" aria-controls="log-stack-{{ $key }}">
                             <i class="fa fa-toggle-on"></i> @lang('Stack')
+                        </a>
+                    @endif
+
+                    @if ($entry->hasContext())
+                        <a class="btn btn-sm btn-light ml-auto" role="button" data-toggle="collapse"
+                           href="#log-entry-context-{{ $key }}" aria-expanded="false" aria-controls="log-context-{{ $key }}">
+                            <i class="fa fa-toggle-on"></i> @lang('Context')
                         </a>
                     @endif
                 </div>
                 <div class="card-body p-3">
                     {{ $entry->header }}
 
+                    @if ($entry->hasStack())
                     <div id="log-entry-stack-{{ $key }}" class="log-entry-stack-content small collapse">
                         {{ $entry->stack() }}
                     </div>
+                    @endif
+
+                    @if ($entry->hasContext())
+                    <div id="log-entry-context-{{ $key }}" class="log-entry-context-content small collapse">
+                        <pre>{{ json_encode($entry->context(), JSON_PRETTY_PRINT) }}</pre>
+                    </div>
+                    @endif
                 </div>
             </div>
         @endforeach

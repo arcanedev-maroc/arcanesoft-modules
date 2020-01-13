@@ -13,7 +13,7 @@ use Arcanesoft\Foundation\Auth\Models\Admin;
  * @package  Arcanesoft\Blog\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class AuthorsPolicy extends AbstractPolicy
+class AuthorsPolicy extends Policy
 {
     /* -----------------------------------------------------------------
      |  Getters

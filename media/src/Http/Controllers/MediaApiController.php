@@ -19,6 +19,11 @@ class MediaApiController extends Controller
      | -----------------------------------------------------------------
      */
 
+    /**
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function all(Request $request)
     {
         // TODO: Add authorization check
@@ -29,23 +34,38 @@ class MediaApiController extends Controller
             return static::jsonResponseError(['message' => 'Location not found'], 404);
 
         return static::jsonResponse(
-            $this->manager->all($location)->values()
+            $this->manager->all($location)->values()->toArray()
         );
     }
 
+    /**
+     * Get all the directories based on the given location.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function directories(Request $request)
     {
         // TODO: Add authorization check
         $location = $request->get('location', '/');
 
-        if ( ! $this->manager->exists($location))
-            return static::jsonResponseError(['message' => 'Location not found'], 404);
+        if ($this->manager->exists($location)) {
+            return static::jsonResponse(
+                $this->manager->directories($location)->values()->toArray()
+            );
+        }
 
-        return static::jsonResponse(
-            $this->manager->directories($location)->values()
-        );
+        return static::jsonResponseError(['message' => 'Location not found'], 404);
     }
 
+    /**
+     * Upload a media.
+     *
+     * @param  \Arcanesoft\Media\Http\Requests\UploadMediaRequest  $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function upload(UploadMediaRequest $request)
     {
         // TODO: Add authorization check
@@ -55,11 +75,16 @@ class MediaApiController extends Controller
             $request->file('files')[0]
         );
 
-        return static::jsonResponse(
-            compact('url')
-        );
+        return static::jsonResponse(compact('url'));
     }
 
+    /**
+     * Create a new folder.
+     *
+     * @param  \Arcanesoft\Media\Http\Requests\NewFolderRequest  $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function newFolder(NewFolderRequest $request)
     {
         // TODO: Add authorization check
@@ -68,11 +93,16 @@ class MediaApiController extends Controller
             $path = $request->get('path')
         );
 
-        return static::jsonResponse(
-            compact('path')
-        );
+        return static::jsonResponse(compact('path'));
     }
 
+    /**
+     * Move a media.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function move(Request $request)
     {
         $from        = $request->get('path');
@@ -87,6 +117,13 @@ class MediaApiController extends Controller
         return static::jsonResponse();
     }
 
+    /**
+     * Rename a media.
+     *
+     * @param  \Arcanesoft\Media\Http\Requests\RenameMediaRequest  $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function rename(RenameMediaRequest $request)
     {
         // TODO: Add authorization check
@@ -99,6 +136,13 @@ class MediaApiController extends Controller
         return static::jsonResponse();
     }
 
+    /**
+     * Delete a media.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function delete(Request $request)
     {
         // TODO: Add authorization check
@@ -106,10 +150,12 @@ class MediaApiController extends Controller
         $type = $request->get('type');
         $path = $request->get('path');
 
-        if ($type === MediaItem::TYPE_FILE)
+        if ($type === MediaItem::TYPE_FILE){
             $this->manager->deleteFile($path);
-        elseif ($type === MediaItem::TYPE_DIRECTORY)
+        }
+        elseif ($type === MediaItem::TYPE_DIRECTORY) {
             $this->manager->deleteDirectory($path);
+        }
         else {
             // TODO: Throw an exception ?
         }

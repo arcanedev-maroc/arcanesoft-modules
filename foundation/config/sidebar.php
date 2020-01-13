@@ -79,6 +79,14 @@ return [
                     'roles'       => ['auth-moderator'],
                     'permissions' => [],
                 ],
+                [
+                    'name'        => 'auth::authorization.settings',
+                    'title'       => 'Settings',
+                    'icon'        => 'fas fa-fw fa-cog',
+                    'route'       => 'admin::auth.settings.index',
+                    'roles'       => ['auth-moderator'],
+                    'permissions' => [],
+                ],
             ],
         ],
 

@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Arcanesoft\Blog\Policies;
+namespace Arcanesoft\Foundation\Auth\Policies;
 
 use Arcanesoft\Foundation\Auth\Models\Admin;
 
 /**
- * Class     DashboardPolicy
+ * Class     SettingsPolicy
  *
- * @package  Arcanesoft\Blog\Policies
+ * @package  Arcanesoft\Foundation\Auth\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class DashboardPolicy extends Policy
+class SettingsPolicy extends AbstractPolicy
 {
     /* -----------------------------------------------------------------
      |  Getters
@@ -26,7 +26,7 @@ class DashboardPolicy extends Policy
      */
     protected static function prefix(): string
     {
-        return 'admin::blog.statistics.';
+        return 'admin::auth.settings.';
     }
 
     /* -----------------------------------------------------------------
@@ -42,28 +42,27 @@ class DashboardPolicy extends Policy
     public function abilities(): iterable
     {
         $this->setMetas([
-            'category' => 'Dashboard',
+            'category' => 'Settings',
         ]);
 
         return [
 
-            // admin::blog.statistics.index
+            // admin::auth.settings.index
             $this->makeAbility('index')->setMetas([
-                'name'        => 'Show all the statistics',
-                'description' => 'Ability to show all the statistics',
+                'name'        => 'List all the settings',
+                'description' => 'Ability to list all the settings',
             ]),
 
         ];
     }
 
-
     /* -----------------------------------------------------------------
-     |  Policies
+     |  Abilities
      | -----------------------------------------------------------------
      */
 
     /**
-     * Allow to access all the auth stats.
+     * Allow to list all the settings.
      *
      * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
      *

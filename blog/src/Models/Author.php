@@ -1,9 +1,13 @@
-<?php namespace Arcanesoft\Blog\Models;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Blog\Models;
 
 use Arcanesoft\Auth\Auth;
-use Arcanesoft\Auth\Models\User;
-use Arcanesoft\Blog\Base\Model;
+use Arcanesoft\Foundation\Auth\Models\Admin;
 use Arcanesoft\Blog\Blog;
+use Arcanesoft\Foundation\Support\Traits\Deletable;
 
 /**
  * Class     Author
@@ -12,7 +16,8 @@ use Arcanesoft\Blog\Blog;
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  *
  * @property  int                         id
- * @property  int                         user_id
+ * @property  int                         creator_id
+ * @property  string                      creator_type
  * @property  string                      username
  * @property  string                      slug
  * @property  string                      bio
@@ -20,7 +25,7 @@ use Arcanesoft\Blog\Blog;
  * @property  \Illuminate\Support\Carbon  created_at
  * @property  \Illuminate\Support\Carbon  updated_at
  *
- * @property-read  \App\Models\User|\Arcanesoft\Auth\Models\User  $user
+ * @property-read  \Arcanesoft\Foundation\Auth\Models\Admin|\App\Models\User|mixed  $creator
  */
 class Author extends Model
 {
@@ -29,7 +34,8 @@ class Author extends Model
      | -----------------------------------------------------------------
      */
 
-    use Presenters\AuthorPresenter;
+    use Presenters\AuthorPresenter,
+        Deletable;
 
     /* -----------------------------------------------------------------
      |  Properties
@@ -55,8 +61,9 @@ class Author extends Model
      * @var array
      */
     protected $casts = [
-        'id'   => 'integer',
-        'meta' => 'array',
+        'id'         => 'integer',
+        'creator_id' => 'integer',
+        'meta'       => 'array',
     ];
 
     /* -----------------------------------------------------------------
@@ -82,16 +89,13 @@ class Author extends Model
      */
 
     /**
-     * User's relationship.
+     * Admin's relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user()
+    public function creator()
     {
-        return $this->belongsTo(
-            Auth::model('user', User::class),
-            'user_id'
-        );
+        return $this->morphTo();
     }
 
     /**
@@ -101,10 +105,7 @@ class Author extends Model
      */
     public function posts()
     {
-        return $this->hasMany(
-            Blog::model('post'),
-            'author_id'
-        );
+        return $this->hasMany(Blog::model('post'), 'author_id');
     }
 
     /* -----------------------------------------------------------------
@@ -134,16 +135,6 @@ class Author extends Model
      */
     public function isDeletable(): bool
     {
-        return $this->user->isDeletable();
-    }
-
-    /**
-     * Check if the author is not deletable.
-     *
-     * @return bool
-     */
-    public function isNotDeletable(): bool
-    {
-        return ! $this->isDeletable();
+        return $this->creator->isDeletable();
     }
 }

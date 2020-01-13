@@ -23,6 +23,7 @@ use Arcanesoft\Foundation\Auth\Events\Admins\UpdatedAdmin;
 use Arcanesoft\Foundation\Auth\Events\Admins\UpdatingAdmin;
 use Arcanesoft\Foundation\Auth\Models\Concerns\{Activatable, HasRoles};
 use Arcanesoft\Foundation\Auth\Models\Presenters\UserPresenter;
+use Arcanesoft\Foundation\Support\Traits\Deletable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -64,7 +65,8 @@ class Admin extends Authenticatable implements Impersonatable
         HasRoles,
         Notifiable,
         Activatable,
-        SoftDeletes;
+        SoftDeletes,
+        Deletable;
 
     /* -----------------------------------------------------------------
      |  Properties
@@ -275,16 +277,6 @@ class Admin extends Authenticatable implements Impersonatable
     public function isDeletable()
     {
         return ! $this->is(Auth::admin());
-    }
-
-    /**
-     * Check if the model is not deletable.
-     *
-     * @return bool
-     */
-    public function isNotDeletable()
-    {
-        return ! $this->isDeletable();
     }
 
     /**

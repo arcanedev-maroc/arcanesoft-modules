@@ -34,6 +34,10 @@ class RequiredPhpExtensionsComposer
     public function compose(View $view): void
     {
         $view->with('requiredPhpExtensions', static::getRequiredExtensions([
+            'bcmath',
+            'ctype',
+            'cURL',
+            'JSON',
             'mbstring',
             'openssl',
             'pdo',

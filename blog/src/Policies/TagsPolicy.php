@@ -11,7 +11,7 @@ use Arcanesoft\Foundation\Auth\Models\Admin;
  * @package  Arcanesoft\Blog\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class TagsPolicy extends AbstractPolicy
+class TagsPolicy extends Policy
 {
     /* -----------------------------------------------------------------
      |  Getters

@@ -11,13 +11,13 @@
 
             @can(Arcanesoft\Backups\Policies\StatusesPolicy::ability('create'))
                 <a href="#run-backups-modal" class="btn btn-xs btn-success">
-                    <i class="fa fa-fw fa-floppy-o"></i> @lang('Run Backup')
+                    <i class="far fa-fw fa-save"></i> @lang('Run Backup')
                 </a>
             @endcan
 
             @can(Arcanesoft\Backups\Policies\StatusesPolicy::ability('delete'))
                 <a href="#clear-backups-modal" class="btn btn-xs btn-warning">
-                    <i class="fa fa-fw fa-eraser"></i> @lang('Clear Backups')
+                    <i class="fas fa-fw fa-eraser"></i> @lang('Clear Backups')
                 </a>
             @endcan
         </div>
@@ -100,19 +100,17 @@
                 {{ form()->open(['route' => 'admin::backups.statuses.backup', 'method' => 'POST', 'id' => 'run-backups-form', 'class' => '', 'autocomplete' => 'off']) }}
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" id="modelTitleId">{{ trans('backups::statuses.modals.backup.title') }}</h4>
+                        <h4 class="modal-title" id="modelTitleId">@lang('Run Backup')</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        {!! trans('backups::statuses.modals.backup.message') !!}
+                        @lang('Are you sure you want to run the backup ?')
                     </div>
                     <div class="modal-footer justify-content-between">
-                        {{ \arcanesoft\ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
-                        <button class="btn btn-success" type="submit">
-                            @lang('Run Backup')
-                        </button>
+                        {{ arcanesoft\ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
+                        <button class="btn btn-success" type="submit">@lang('Backup')</button>
                     </div>
                 </div>
                 {{ form()->close() }}
@@ -126,19 +124,17 @@
                 {{ form()->open(['route' => 'admin::backups.statuses.clear', 'method' => 'POST', 'id' => 'clear-backups-form', 'class' => '', 'autocomplete' => 'off']) }}
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" id="modelTitleId">{{ trans('backups::statuses.modals.clear.title') }}</h4>
+                        <h4 class="modal-title" id="modelTitleId">@lang('Cleanup Backups')</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        {!! trans('backups::statuses.modals.clear.message') !!}
+                        @lang('Are you sure you want to cleanup the backups ?')
                     </div>
                     <div class="modal-footer justify-content-between">
-                        {{ \arcanesoft\ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
-                        <button class="btn btn-warning" type="submit">
-                            @lang('Cleanup')
-                        </button>
+                        {{ arcanesoft\ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
+                        <button class="btn btn-warning" type="submit">@lang('Cleanup')</button>
                     </div>
                 </div>
                 {{ form()->close() }}

@@ -43,14 +43,14 @@ class CreateBlogAuthorsTable extends Migration
         $this->createSchema(function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->uuid('uuid');
-            $table->unsignedBigInteger('user_id');
+            $table->morphs('creator');
             $table->string('username');
             $table->string('slug')->unique();
             $table->text('bio');
             $table->text('meta')->nullable();
             $table->timestamps();
 
-            $table->index(['uuid', 'user_id', 'slug']);
+            $table->index(['uuid', 'slug']);
         });
     }
 }

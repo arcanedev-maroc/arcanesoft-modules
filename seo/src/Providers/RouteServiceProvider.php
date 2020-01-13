@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Arcanesoft\Foundation\Auth\Providers;
+namespace Arcanesoft\Seo\Providers;
 
-use Arcanesoft\Foundation\Auth\Http\Routes;
+use Arcanesoft\Seo\Http\Routes;
 use Arcanesoft\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 /**
  * Class     RouteServiceProvider
  *
- * @package  Arcanesoft\Foundation\Auth\Providers
+ * @package  Arcanesoft\Seo\Providers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class RouteServiceProvider extends ServiceProvider
@@ -27,12 +27,5 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected $routeClasses = [
         Routes\DashboardRoutes::class,
-        Routes\UsersRoutes::class,
-        Routes\AdminsRoutes::class,
-        Routes\RolesRoutes::class,
-        Routes\PermissionsRoutes::class,
-        Routes\PasswordResetsRoutes::class,
-        Routes\SettingsRoutes::class,
-        Routes\ProfileRoutes::class,
     ];
 }

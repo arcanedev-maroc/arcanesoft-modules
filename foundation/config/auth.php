@@ -14,10 +14,12 @@ return [
 
         'register' => [
             'enabled' => true,
+
+            'login-after-registered' => true,
         ],
 
         'socialite' => [
-            'enabled' => true,
+            'enabled' => false,
 
             'drivers' => [
                 'facebook',
