@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Blog\Http\Requests;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Blog\Http\Requests;
 
 use Arcanedev\Support\Http\FormRequest as BaseFormRequest;
 

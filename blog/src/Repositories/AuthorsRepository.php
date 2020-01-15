@@ -7,6 +7,7 @@ namespace Arcanesoft\Blog\Repositories;
 use Arcanesoft\Auth\Repositories\UsersRepository;
 use Arcanesoft\Blog\Blog;
 use Arcanesoft\Blog\Models\Author;
+use Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository;
 use Illuminate\Support\Str;
 
 /**
@@ -29,7 +30,7 @@ class AuthorsRepository extends AbstractRepository
      */
     public static function modelClass(): string
     {
-        return Blog::makeModel('author');
+        return Blog::model('author');
     }
 
     /**
@@ -41,12 +42,12 @@ class AuthorsRepository extends AbstractRepository
      */
     public function createOne(array $attributes)
     {
-        $author = $this->model()
-            ->forceFill([
-                'uuid'    => Str::uuid(),
-                'user_id' => $this->createUser($attributes)->getKey()
-            ])
-            ->fill($attributes);
+        /** @var  \Arcanesoft\Blog\Models\Author  $author */
+        $author = $this->model()->fill($attributes)->forceFill([
+            'uuid' => Str::uuid(),
+        ]);
+
+        $author->creator()->associate($this->createBlogModerator($attributes));
 
         $author->save();
 
@@ -78,17 +79,23 @@ class AuthorsRepository extends AbstractRepository
         return $author->delete();
     }
 
+    /* -----------------------------------------------------------------
+     |  Relationship's Methods
+     | -----------------------------------------------------------------
+     */
+
     /**
-     * Create a new user.
+     * Create a new blog moderator.
      *
      * @param  array  $attributes
      *
-     * @return \App\Models\User|\Arcanesoft\Auth\Models\User|mixed
+     * @return \Arcanesoft\Foundation\Auth\Models\Admin|mixed
      */
-    private function createUser(array $attributes)
+    protected function createBlogModerator(array $attributes)
     {
         $attributes['roles'] = ['blog-author'];
 
-        return (new UsersRepository)->create($attributes);
+        return $this->makeRepository(AdministratorsRepository::class)
+            ->createOne($attributes);
     }
 }

@@ -68,13 +68,15 @@ class PostsController extends Controller
         $this->addBreadcrumb(__('New Post'));
 
         return $this->view('posts.create', [
-            'tags' => $repo->getSelectData(),
+            'tags' => $repo->getSelectData(false),
         ]);
     }
 
     public function store(CreatePostRequest $request, PostsRepository $postsRepository)
     {
         $this->authorize(PostsPolicy::ability('create'));
+
+        dd($request->user());
 
         $post = $postsRepository->createOne($request->getValidatedData());
 

@@ -40,11 +40,14 @@ class PostsRepository extends AbstractRepository
      */
     public function createOne(array $attributes)
     {
-        $post = $this->model()->forceFill([
+        /** @var  \Arcanesoft\Blog\Models\Post  $post */
+        $post = $this->model()->fill($attributes)->forceFill([
             'uuid' => Str::uuid(),
-        ])->fill($attributes);
+        ]);
 
         $post->save();
+
+        $this->syncTagsByUuid($post, $attributes['tags']);
 
         return $post;
     }
@@ -72,5 +75,35 @@ class PostsRepository extends AbstractRepository
     public function deleteOne(Post $post)
     {
         return $post->delete();
+    }
+
+    /* -----------------------------------------------------------------
+     |  Relationship's Methods
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * @param  \Arcanesoft\Blog\Models\Post  $post
+     * @param  array                         $uuids
+     *
+     * @return array
+     */
+    public function syncTagsByUuid(Post $post, array $uuids): array
+    {
+        $ids = $this->getTagsRepository()
+            ->whereIn('uuid', $uuids)
+            ->pluck('id');
+
+        return $post->tags()->sync($ids);
+    }
+
+    /**
+     * Get the tags repository.
+     *
+     * @return \Arcanesoft\Blog\Repositories\TagsRepository
+     */
+    protected function getTagsRepository(): TagsRepository
+    {
+        return $this->makeRepository(TagsRepository::class);
     }
 }

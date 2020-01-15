@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Blog\Console;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Blog\Console;
 
 use Arcanesoft\Blog\Seeders\DatabaseSeeder;
 use Illuminate\Console\Command;

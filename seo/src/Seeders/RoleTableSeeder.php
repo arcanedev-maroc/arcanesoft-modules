@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Arcanesoft\Blog\Seeders;
+namespace Arcanesoft\Seo\Seeders;
 
 use Arcanesoft\Foundation\Auth\Database\Seeders\RolesSeeder;
 
 /**
  * Class     RoleTableSeeder
  *
- * @package  Arcanesoft\Blog\Seeders
+ * @package  Arcanesoft\Seo\Seeders
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class RoleTableSeeder extends RolesSeeder
@@ -26,26 +26,16 @@ class RoleTableSeeder extends RolesSeeder
     {
         $this->seedMany([
             [
-                'name'        => 'Blog Moderator',
-                'key'         => 'blog-moderator',
-                'description' => 'The blog moderator role',
-                'is_locked'   => true,
-            ],
-            [
-                'name'        => 'Blog Author',
-                'key'         => 'blog-author',
-                'description' => 'The blog author role',
+                'name'        => 'SEO Moderator',
+                'key'         => 'seo-moderator',
+                'description' => 'The SEO moderator role',
                 'is_locked'   => true,
             ],
         ]);
 
         $this->syncRoles([
             'blog-moderator' => [
-                'admin::blog.*',
-            ],
-            'blog-author'    => [
-                'admin::blog.posts.*',
-                'admin::blog.tags.*',
+                'admin::seo.*'
             ],
         ]);
     }

@@ -45,9 +45,9 @@ class CreateBlogPostsTable extends Migration
             $table->uuid('uuid');
             $table->unsignedBigInteger('author_id');
             $table->string('locale', 5)->default(app()->getLocale());
-            $table->string('title');
-            $table->string('slug')->unique();
-            $table->text('excerpt');
+            $table->string('title', 255);
+            $table->string('slug', 255)->unique();
+            $table->string('excerpt', 255);
             $table->text('body');
             $table->string('thumbnail')->nullable();
             $table->string('thumbnail_caption');

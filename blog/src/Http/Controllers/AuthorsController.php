@@ -47,6 +47,8 @@ class AuthorsController extends Controller
     {
         $this->authorize(AuthorsPolicy::ability('index'));
 
+        $this->selectMetrics('arcanesoft.blog.metrics.authors');
+
         return $this->view('authors.index');
     }
 
@@ -55,8 +57,6 @@ class AuthorsController extends Controller
         $this->authorize(AuthorsPolicy::ability('metrics'));
 
         $this->addBreadcrumbRoute(__('Metrics'), 'admin::blog.authors.metrics');
-
-        $this->selectMetrics('arcanesoft.blog.metrics.posts');
 
         return $this->view('authors.metrics');
     }

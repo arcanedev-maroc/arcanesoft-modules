@@ -22,7 +22,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="slug" class="control-label">@lang('Slug') :</label>
-                            {{ form()->text('slug', old('slug'), ['class' => 'form-control'.$errors->first('slug', ' is-invalid'), 'placeholder' => __('Slug'), 'required']) }}
+                            {{ form()->text('slug', old('slug'), ['class' => 'form-control'.$errors->first('slug', ' is-invalid'), 'placeholder' => __('Slug')]) }}
                             @error('slug')
                             <span class="invalid-feedback" role="alert">{{ $message }}</span>
                             @enderror
@@ -40,7 +40,7 @@
 
                 <div class="form-group">
                     <label for="body" class="control-label">@lang('Body') :</label>
-                    {{ form()->textarea('body', old('body'), ['class' => 'form-control'.$errors->first('body', ' is-invalid'), 'placeholder' => __('Body'), 'required']) }}
+                    <tui-editor name="body" value="{{ old('body') }}"></tui-editor>
                     @error('body')
                     <span class="invalid-feedback" role="alert">{{ $message }}</span>
                     @enderror
@@ -55,8 +55,8 @@
                 </div>
             </div>
             <div class="card-footer d-flex justify-content-between">
-                {{ ui\action_link('cancel', route('admin::blog.posts.index'))->size('sm') }}
-                {{ ui\action_button('create')->size('sm')->submit() }}
+                {{ arcanesoft\ui\action_link('cancel', route('admin::blog.posts.index'))->size('sm') }}
+                {{ arcanesoft\ui\action_button('create')->size('sm')->submit() }}
             </div>
         </div>
     {{ form()->close() }}
@@ -65,7 +65,7 @@
 @push('scripts')
     <script>
         window.ready(() => {
-
+            //
         })
     </script>
 @endpush

@@ -1,7 +1,7 @@
 @extends(arcanesoft\foundation()->template())
 
 @section('page-title')
-    <i class="far fa-fw fa-user-edit"></i> @lang('Authors')
+    <i class="fas fa-fw fa-user-edit"></i> @lang('Authors')
 @endsection
 
 @push('content-nav')
