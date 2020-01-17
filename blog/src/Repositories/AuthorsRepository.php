@@ -47,7 +47,7 @@ class AuthorsRepository extends AbstractRepository
             'uuid' => Str::uuid(),
         ]);
 
-        $author->creator()->associate($this->createBlogModerator($attributes));
+        $this->addCreator($author, $attributes);
 
         $author->save();
 
@@ -64,7 +64,14 @@ class AuthorsRepository extends AbstractRepository
      */
     public function updateOne(Author $author, array $attributes): bool
     {
-        return $author->update($attributes);
+        // Filter/Remove nullable attributes like password
+        $attributes = array_filter($attributes);
+
+        $updated = $author->update($attributes);
+
+        $this->updateCreator($author, $attributes);
+
+        return $updated;
     }
 
     /**
@@ -85,17 +92,43 @@ class AuthorsRepository extends AbstractRepository
      */
 
     /**
-     * Create a new blog moderator.
+     * Create a new `creator/authenticatable` user associated to the author.
      *
-     * @param  array  $attributes
+     * @param  \Arcanesoft\Blog\Models\Author  $author
+     * @param  array                           $attributes
      *
-     * @return \Arcanesoft\Foundation\Auth\Models\Admin|mixed
+     * @return \Illuminate\Database\Eloquent\Model|mixed
      */
-    protected function createBlogModerator(array $attributes)
+    protected function addCreator(Author $author, array $attributes)
     {
-        $attributes['roles'] = ['blog-author'];
+        $repo    = static::getAdminRepository();
+        $creator = $repo->createOne($attributes);
+        $repo->syncRolesByKeys($creator, ['blog-author']);
 
-        return $this->makeRepository(AdministratorsRepository::class)
-            ->createOne($attributes);
+        return $author->creator()->associate($creator);
+    }
+
+    /**
+     * Update the associated creator.
+     *
+     * @param  \Arcanesoft\Blog\Models\Author  $author
+     * @param  array                           $attributes
+     *
+     * @return bool
+     */
+    protected function updateCreator(Author $author, $attributes)
+    {
+        return static::getAdminRepository()
+                     ->updateOne($author->creator, $attributes);
+    }
+
+    /**
+     * Get the `administrator` repository.
+     *
+     * @return \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository|mixed
+     */
+    protected static function getAdminRepository(): AdministratorsRepository
+    {
+        return static::makeRepository(AdministratorsRepository::class);
     }
 }

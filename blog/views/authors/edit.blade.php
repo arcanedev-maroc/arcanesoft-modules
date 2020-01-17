@@ -5,6 +5,7 @@
 @endsection
 
 <?php /** @var  Arcanesoft\Blog\Models\Author  $author */ ?>
+
 @section('content')
     {{ form()->open(['route' => ['admin::blog.authors.update', $author], 'method' => 'PUT']) }}
     <div class="row">
@@ -38,7 +39,7 @@
                 </div>
                 <div class="card-footer d-flex justify-content-between">
                     {{ arcanesoft\ui\action_link('cancel', route('admin::blog.authors.index'))->size('sm') }}
-                    {{ arcanesoft\ui\action_button('create')->size('sm')->submit() }}
+                    {{ arcanesoft\ui\action_button('update')->size('sm')->submit() }}
                 </div>
             </div>
         </div>

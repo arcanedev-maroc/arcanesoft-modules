@@ -47,7 +47,7 @@ class DashboardPolicy extends AbstractPolicy
 
         return [
 
-            // admin::foundation.dashboard.index
+            // admin::dashboard.index
             $this->makeAbility('index')->setMetas([
                 'name'        => 'Access the main dashboard',
                 'description' => 'Ability to access the main dashboard',
@@ -64,11 +64,11 @@ class DashboardPolicy extends AbstractPolicy
     /**
      * Allow to access all the system information.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function index(Admin $user)
+    public function index(Admin $admin)
     {
         //
     }

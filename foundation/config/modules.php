@@ -17,6 +17,7 @@ return [
 
             'seeders' => [
                 // Foundation
+                Arcanesoft\Foundation\Core\Seeders\DatabaseSeeder::class,
                 Arcanesoft\Foundation\Auth\Seeders\DatabaseSeeder::class,
                 Arcanesoft\Foundation\System\Seeders\DatabaseSeeder::class,
 

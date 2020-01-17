@@ -16,25 +16,19 @@
                 <table class="table table-md table-borderless mb-0">
                     <tbody>
                         <tr>
-                            <th>@lang('Username') :</th>
+                            <th class="table-th">@lang('Username') :</th>
                             <td class="text-right">{{ $author->username }}</td>
                         </tr>
                         <tr>
-                            <th>@lang('Slug') :</th>
+                            <th class="table-th">@lang('Slug') :</th>
                             <td class="text-right">{{ $author->slug }}</td>
                         </tr>
                         <tr>
-                            <th colspan="2">@lang('Bio') :</th>
-                        </tr>
-                        <tr>
-                            <td>{{ $author->bio }}</td>
-                        </tr>
-                        <tr>
-                            <th>@lang('Created at') :</th>
+                            <th class="table-th">@lang('Created at') :</th>
                             <td class="text-right"><small class="text-muted">{{ $author->created_at }}</small></td>
                         </tr>
                         <tr>
-                            <th>@lang('Updated at') :</th>
+                            <th class="table-th">@lang('Updated at') :</th>
                             <td class="text-right"><small class="text-muted">{{ $author->updated_at }}</small></td>
                         </tr>
                     </tbody>
@@ -49,9 +43,21 @@
                     @endcan
                 </div>
             </div>
+            <div class="card card-borderless shadow-sm mb-3">
+                <div class="card-header">@lang('Bio')</div>
+                <div class="card-body">
+                    {{ $author->bio }}
+                </div>
+            </div>
         </div>
         <div class="col-md-6">
             @include('foundation::authorization._partials.admin-card-details', ['admin' => $author->creator])
         </div>
     </div>
 @endsection
+
+@push('modals')
+@endpush
+
+@push('scripts')
+@endpush

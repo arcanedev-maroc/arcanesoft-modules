@@ -15,7 +15,9 @@ return [
             'icon'        => 'fa fa-fw fa-tachometer-alt',
             'route'       => 'admin::index',
             'roles'       => [],
-            'permissions' => [],
+            'permissions' => [
+                'admin::dashboard.index',
+            ],
         ],
 
         // Modules' sidebar items

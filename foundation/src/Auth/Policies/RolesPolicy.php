@@ -83,10 +83,10 @@ class RolesPolicy extends AbstractPolicy
                 'description' => 'Ability to delete a role',
             ]),
 
-            // admin::auth.roles.permissions.detach
-            $this->makeAbility('users.detach', 'detachUser')->setMetas([
-                'name'        => 'Detach a user',
-                'description' => 'Ability to detach the related user from role',
+            // admin::auth.roles.administrators.detach
+            $this->makeAbility('administrators.detach', 'detachAdmin')->setMetas([
+                'name'        => 'Detach an administrator',
+                'description' => 'Ability to detach the related administrator from role',
             ]),
 
             // admin::auth.roles.permissions.detach
@@ -190,7 +190,7 @@ class RolesPolicy extends AbstractPolicy
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function detachUser(Admin $admin, Role $model = null, Admin $related = null)
+    public function detachAdmin(Admin $admin, Role $model = null, Admin $related = null)
     {
         if (static::isRoleLocked($model))
             return false;

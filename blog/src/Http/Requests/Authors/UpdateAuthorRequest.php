@@ -36,7 +36,7 @@ class UpdateAuthorRequest extends FormRequest
         return [
             // Author
             'username' => ['required', 'string'],
-            'slug'     => ['required', 'string', Rule::unique(Blog::table('authors', 'slug'))],
+            'slug'     => ['required', 'string', Rule::unique(Blog::table('authors', 'slug'))->ignore($author->id)],
             'bio'      => ['required', 'string'],
 
             // User

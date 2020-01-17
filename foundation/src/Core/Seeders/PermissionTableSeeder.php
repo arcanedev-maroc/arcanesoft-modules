@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Arcanesoft\Foundation\System\Seeders;
+namespace Arcanesoft\Foundation\Core\Seeders;
 
 use Arcanesoft\Foundation\Auth\Database\Seeders\PermissionsSeeder;
 
 /**
  * Class     PermissionTableSeeder
  *
- * @package  Arcanesoft\Foundation\System\Seeders
+ * @package  Arcanesoft\Foundation\Core\Seeders
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class PermissionTableSeeder extends PermissionsSeeder
@@ -25,9 +25,11 @@ class PermissionTableSeeder extends PermissionsSeeder
     public function run(): void
     {
         $this->seed([
-            'name'        => 'System',
-            'slug'        => 'system',
-            'description' => 'System permissions group',
-        ], $this->getPermissionsFromPolicyManager('admin::system.'));
+            'name'        => 'Core',
+            'slug'        => 'core',
+            'description' => 'Core permissions group',
+        ], $this->getPermissionsFromPolicyManager([
+            'admin::dashboard.index',
+        ]));
     }
 }

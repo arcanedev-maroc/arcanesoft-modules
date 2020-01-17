@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Console;
 
+use Arcanesoft\Foundation\Auth\Models\Admin;
 use Arcanesoft\Foundation\Auth\Models\Role;
 use Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository;
 use Closure;
@@ -72,15 +73,17 @@ class MakeAdmin extends Command
     protected static function defaultCreateUserCallback(): Closure
     {
         return function (string $firstName, string $lastName, string $email, string $password) {
-            $attributes = [
+            $repo  = static::getAdministratorsRepository();
+
+            $admin = $repo->createOne([
                 'first_name'   => $firstName,
                 'last_name'    => $lastName,
                 'email'        => $email,
                 'password'     => $password,
                 'activated_at' => now(),
-            ];
+            ]);
 
-            static::getAdministratorsRepository()->createOneWithRoles($attributes, [
+            $repo->syncRolesByKeys($admin, [
                 Role::ADMINISTRATOR,
             ]);
         };

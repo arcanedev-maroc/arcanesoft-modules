@@ -41,9 +41,11 @@ class RoleTableSeeder extends RolesSeeder
 
         $this->syncRoles([
             'blog-moderator' => [
+                'admin::dashboard.index',
                 'admin::blog.*',
             ],
             'blog-author'    => [
+                'admin::dashboard.index',
                 'admin::blog.posts.*',
                 'admin::blog.tags.*',
             ],

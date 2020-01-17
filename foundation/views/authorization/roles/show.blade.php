@@ -136,9 +136,9 @@
         </div>
     </div>
 
-    {{-- USERS --}}
+    {{-- ADMINISTRATORS --}}
     <div class="card card-borderless shadow-sm">
-        <div class="card-header">@lang('Users')</div>
+        <div class="card-header">@lang('Administrators')</div>
         <div class="table-responsive">
             <table id="users-table" class="table table-hover table-md mb-0">
                 <thead>
@@ -153,28 +153,28 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($role->users as $user)
-                        <?php /** @var Arcanesoft\Foundation\Auth\Models\User  $user */ ?>
+                    @forelse($role->users as $admin)
+                        <?php /** @var Arcanesoft\Foundation\Auth\Models\Admin  $admin */ ?>
                         <tr>
                             <td>
-                                <span class="avatar" title="{{ $user->full_name }}" style="background-image: url({{ $user->avatar }});"></span>
+                                <span class="avatar" title="{{ $admin->full_name }}" style="background-image: url({{ $admin->avatar }});"></span>
                             </td>
-                            <td>{{ $user->first_name }}</td>
-                            <td>{{ $user->last_name }}</td>
-                            <td>{{ $user->email }}</td>
-                            <td class="text-center">{{ $user->created_at }}</td>
+                            <td>{{ $admin->first_name }}</td>
+                            <td>{{ $admin->last_name }}</td>
+                            <td>{{ $admin->email }}</td>
+                            <td class="text-center">{{ $admin->created_at }}</td>
                             <td class="text-center">
-                                <span class="status {{ $user->isActive() ? 'status-success status-animated' : 'status-secondary' }}" data-toggle="tooltip" data-placement="top" title="{{ $user->isActive() ? __('Activated') : __('Deactivated') }}"></span>
+                                <span class="status {{ $admin->isActive() ? 'status-success status-animated' : 'status-secondary' }}" data-toggle="tooltip" data-placement="top" title="{{ $admin->isActive() ? __('Activated') : __('Deactivated') }}"></span>
                             </td>
                             <td class="text-right">
-                                @can(Arcanesoft\Foundation\Auth\Policies\UsersPolicy::ability('show'))
-                                    {{ arcanesoft\ui\action_link_icon('show', route('admin::auth.users.show', [$user]))->size('sm') }}
+                                @can(Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy::ability('show'))
+                                    {{ arcanesoft\ui\action_link_icon('show', route('admin::auth.administrators.show', [$admin]))->size('sm') }}
                                 @endcan
 
-                                @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('users.detach'), [$role, $user])
+                                @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('administrators.detach'), [$role, $admin])
                                     <button class="btn btn-sm btn-danger"
                                             data-toggle="tooltip" data-placement="top" title="@lang('Detach')"
-                                            onclick="window.Foundation.$emit('auth::roles.users.detach', {{ json_encode(['id' => $user->getRouteKey(), 'name' => $user->full_name]) }})">
+                                            onclick="window.Foundation.$emit('auth::roles.users.detach', {{ json_encode(['id' => $admin->getRouteKey(), 'name' => $admin->full_name]) }})">
                                         <i class="fas fa-fw fa-unlink"></i>
                                     </button>
                                 @endcan

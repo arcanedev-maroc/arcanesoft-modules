@@ -16,11 +16,14 @@ return [
             'permissions' => [],
             'children'    => [
                 [
-                    'name'        => 'blog::maindashboard',
+                    'name'        => 'blog::main.dashboard',
                     'title'       => 'Statistics',
                     'icon'        => 'fa fa-fw fa-tachometer-alt',
                     'route'       => 'admin::blog.index',
-                    'roles'       => [],
+                    'roles'       => [
+                        'blog-author',
+                        'blog-moderator',
+                    ],
                     'permissions' => [
                         'admin::blog.statistics.index',
                     ],
@@ -30,7 +33,10 @@ return [
                     'title'       => 'Posts',
                     'icon'        => 'far fa-fw fa-newspaper',
                     'route'       => 'admin::blog.posts.index',
-                    'roles'       => [],
+                    'roles'       => [
+                        'blog-author',
+                        'blog-moderator',
+                    ],
                     'permissions' => [
                         'admin::blog.posts.index',
                     ],
@@ -40,7 +46,10 @@ return [
                     'title'       => 'Tags',
                     'icon'        => 'fas fa-fw fa-tags',
                     'route'       => 'admin::blog.tags.index',
-                    'roles'       => [],
+                    'roles'       => [
+                        'blog-author',
+                        'blog-moderator',
+                    ],
                     'permissions' => [
                         'admin::blog.tags.index',
                     ],
@@ -50,7 +59,9 @@ return [
                     'title'       => 'Authors',
                     'icon'        => 'fas fa-fw fa-user-edit',
                     'route'       => 'admin::blog.authors.index',
-                    'roles'       => [],
+                    'roles'       => [
+                        'blog-moderator',
+                    ],
                     'permissions' => [
                         'admin::blog.authors.index',
                     ],

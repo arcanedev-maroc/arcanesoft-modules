@@ -6,8 +6,6 @@
 
 @push('content-nav')
     <div class="mb-3 text-right">
-        <a href="{{ route('admin::blog.authors.metrics') }}" class="btn btn-sm btn-secondary {{ active(['admin::blog.authors.metrics']) }}">@lang('Metrics')</a>
-        <a href="{{ route('admin::blog.authors.index') }}" class="btn btn-sm btn-secondary {{ active(['admin::blog.authors.index']) }}">@lang('All')</a>
         {{ arcanesoft\ui\action_link('add', route('admin::blog.authors.create'))->size('sm') }}
     </div>
 @endpush
@@ -18,6 +16,7 @@
             <table id="authors-table" class="table table-hover table-md mb-0">
                 <thead>
                     <tr>
+                        <th>@lang('Full Name')</th>
                         <th>@lang('Username')</th>
                         <th class="text-center">@lang('Posts')</th>
                         <th class="text-center">@lang('Created at')</th>
@@ -37,6 +36,7 @@
                 serverSide: true,
                 processing: true,
                 columns: [
+                    { data: 'full_name', orderable: false, searchable: false },
                     { data: 'username' },
                     { data: 'posts', class: 'text-center', orderable: false, searchable: false },
                     { data: 'created_at', class: 'text-center'},

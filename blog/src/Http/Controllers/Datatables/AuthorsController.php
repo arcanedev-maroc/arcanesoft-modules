@@ -1,7 +1,12 @@
-<?php namespace Arcanesoft\Blog\Http\Controllers\Datatables;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Blog\Http\Controllers\Datatables;
 
 use Arcanesoft\Blog\Http\Transformers\AuthorTransformer;
 use Arcanesoft\Blog\Repositories\AuthorsRepository;
+use Yajra\DataTables\DataTables;
 
 /**
  * Class     AuthorsController
@@ -16,13 +21,14 @@ class AuthorsController
      | -----------------------------------------------------------------
      */
 
-    public function index(AuthorsRepository $authorsRepo)
+    public function index(DataTables $dataTables, AuthorsRepository $authorsRepo)
     {
         $query = $authorsRepo->query()
-            ->with(['user'])
+            ->with(['creator'])
             ->withCount(['posts']);
 
-        return datatables()->eloquent($query)
+        return $dataTables
+            ->eloquent($query)
             ->setTransformer(new AuthorTransformer)
             ->make(true);
     }

@@ -210,6 +210,24 @@ class Item
         return $this->selected;
     }
 
+    /**
+     * Check if can see the item.
+     *
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed|null  $user
+     *
+     * @return bool
+     */
+    public function canSee($user = null): bool
+    {
+        /** @var  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin */
+        $admin = $admin ?? auth()->user();
+
+        return $admin->isSuperAdmin()
+            || $this->checkHasRole($admin)
+            || $this->checkHasPermission($admin)
+            || $this->checkCanSeeChildren($admin);
+    }
+
     /* -----------------------------------------------------------------
      |  Other Methods
      | -----------------------------------------------------------------
@@ -235,29 +253,46 @@ class Item
     }
 
     /**
-     * Check if can see the item.
+     * Check if the authenticated admin has the allowed role.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed|null  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
      *
      * @return bool
      */
-    public function canSee($user = null): bool
+    protected function checkHasRole($admin): bool
     {
-        /** @var  \Arcanesoft\Foundation\Auth\Models\Admin  $user */
-        $user = $user ?? auth()->user();
+        return $admin->isOne($this->roles);
+    }
 
-        if ($user->isSuperAdmin() || $user->isOne($this->roles)) {
-            return true;
-        }
-
+    /**
+     * Check if the authenticated admin has the allowed permission.
+     *
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
+     *
+     * @return bool
+     */
+    protected function checkHasPermission($admin): bool
+    {
         foreach ($this->permissions as $permission) {
-            if ($user->can($permission)) {
+            if ($admin->can($permission)) {
                 return true;
             }
         }
 
-        return $this->children->filter(function (Item $item) use ($user) {
-            return $item->canSee($user);
+        return false;
+    }
+
+    /**
+     * Check if the authenticated admin can access the item's children.
+     *
+     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
+     *
+     * @return bool
+     */
+    protected function checkCanSeeChildren($admin): bool
+    {
+        return $this->children->filter(function (Item $child) use ($admin) {
+            return $child->canSee($admin);
         })->isNotEmpty();
     }
 }

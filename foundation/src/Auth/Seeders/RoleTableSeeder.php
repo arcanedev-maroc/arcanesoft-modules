@@ -41,7 +41,10 @@ class RoleTableSeeder extends RolesSeeder
         ]);
 
         $this->syncRoles([
-            'auth-moderator' => ['admin::auth.*'],
+            'auth-moderator' => [
+                'admin::dashboard.index',
+                'admin::auth.*',
+            ],
         ]);
     }
 }
