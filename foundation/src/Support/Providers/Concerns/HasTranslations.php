@@ -43,9 +43,7 @@ trait HasTranslations
      */
 
     /**
-     * Publish and load the translations if $load argument is true.
-     *
-     * @param  bool  $load
+     * Publish the translations.
      */
     protected function publishTranslations(): void
     {

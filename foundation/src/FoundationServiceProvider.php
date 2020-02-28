@@ -54,6 +54,10 @@ class FoundationServiceProvider extends PackageServiceProvider
         $this->loadViews();
         $this->loadTranslations();
 
+        if ($this->app->runningUnitTests()) {
+            $this->loadFactories();
+        }
+
         if ($this->app->runningInConsole()) {
             $this->publishMultipleConfig();
             $this->publishViews();

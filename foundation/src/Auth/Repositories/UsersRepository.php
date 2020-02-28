@@ -98,6 +98,7 @@ class UsersRepository extends AbstractRepository
 
         return tap($this->model()->fill($attributes), function (User $user) use ($attributes) {
             $user->forceFill([
+                'uuid'         => $attributes['uuid'] ?? Str::uuid(),
                 'activated_at' => $attributes['activated_at'] ?? now(), // TODO: Add a setting to change this
             ]);
 

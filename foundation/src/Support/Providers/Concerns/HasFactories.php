@@ -43,6 +43,14 @@ trait HasFactories
      */
 
     /**
+     * Load the factories.
+     */
+    protected function loadFactories(): void
+    {
+        $this->loadFactoriesFrom($this->factoriesPath());
+    }
+
+    /**
      * Publish the factories.
      */
     protected function publishFactories(): void

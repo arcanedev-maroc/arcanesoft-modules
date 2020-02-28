@@ -22,9 +22,7 @@ return [
 
     Arcanesoft\Foundation\Auth\Events\Users\RetrievedUser::class => [],
 
-    Arcanesoft\Foundation\Auth\Events\Users\CreatingUser::class => [
-        Arcanesoft\Foundation\Auth\Listeners\Users\GeneratesUuid::class
-    ],
+    Arcanesoft\Foundation\Auth\Events\Users\CreatingUser::class => [],
     Arcanesoft\Foundation\Auth\Events\Users\CreatedUser::class => [],
 
     Arcanesoft\Foundation\Auth\Events\Users\UpdatingUser::class => [],
