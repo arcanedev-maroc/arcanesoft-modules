@@ -26,6 +26,13 @@ class BlogServiceProvider extends PackageServiceProvider
      */
     protected $package = 'blog';
 
+    /**
+     * Merge multiple config files into one instance (package name as root key)
+     *
+     * @var bool
+     */
+    protected $multiConfigs = true;
+
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
@@ -36,7 +43,7 @@ class BlogServiceProvider extends PackageServiceProvider
      */
     public function register(): void
     {
-        $this->registerMultipleConfig();
+        $this->registerConfig();
 
         $this->registerProviders([
             Providers\AuthServiceProvider::class,
@@ -56,15 +63,17 @@ class BlogServiceProvider extends PackageServiceProvider
      */
     public function boot(): void
     {
-        $this->loadViews();
         $this->loadTranslations();
+        $this->loadViews();
 
         if ($this->app->runningInConsole()) {
-            $this->publishMultipleConfig();
-            $this->publishViews(false);
-            $this->publishTranslations(false);
+            $this->publishConfig();
+            $this->publishTranslations();
+            $this->publishViews();
 
-            Blog::$runsMigrations ? $this->loadMigrations() : $this->publishMigrations();
+            Blog::$runsMigrations
+                ? $this->loadMigrations()
+                : $this->publishMigrations();
         }
     }
 }

@@ -41,14 +41,12 @@ class CreateAuthRolesTable extends Migration
     public function up(): void
     {
         $this->createSchema(function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->uuid('uuid');
-
             $table->string('name');
             $table->string('key')->unique();
             $table->string('description')->nullable();
             $table->boolean('is_locked')->default(false);
-
             $table->timestamps();
             $table->timestamp('activated_at')->nullable();
 

@@ -1,7 +1,11 @@
-<?php namespace Arcanesoft\Backups\Console;
+<?php
 
-use Arcanedev\Support\Bases\Command;
+declare(strict_types=1);
+
+namespace Arcanesoft\Backups\Console;
+
 use Arcanesoft\Backups\Seeds\DatabaseSeeder;
+use Illuminate\Console\Command;
 
 /**
  * Class     InstallCommand

@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation;
 
+use Arcanesoft\Foundation\Auth\AuthServiceProvider;
+use Arcanesoft\Foundation\Core\CoreServiceProvider;
 use Arcanesoft\Foundation\Support\Providers\PackageServiceProvider;
+use Arcanesoft\Foundation\System\SystemServiceProvider;
 
 /**
  * Class     FoundationServiceProvider
@@ -26,6 +29,13 @@ class FoundationServiceProvider extends PackageServiceProvider
      */
     protected $package = 'foundation';
 
+    /**
+     * Merge multiple config files into one instance (package name as root key).
+     *
+     * @var bool
+     */
+    protected $multiConfigs = true;
+
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
@@ -36,13 +46,13 @@ class FoundationServiceProvider extends PackageServiceProvider
      */
     public function register(): void
     {
-        $this->registerMultipleConfig();
+        $this->registerConfig();
 
         $this->registerProviders([
             // Foundation's Modules
-            Auth\AuthServiceProvider::class,
-            Core\CoreServiceProvider::class,
-            System\SystemServiceProvider::class,
+            CoreServiceProvider::class,
+            AuthServiceProvider::class,
+            SystemServiceProvider::class,
         ]);
     }
 
@@ -51,21 +61,23 @@ class FoundationServiceProvider extends PackageServiceProvider
      */
     public function boot(): void
     {
-        $this->loadViews();
         $this->loadTranslations();
+        $this->loadViews();
 
         if ($this->app->runningUnitTests()) {
             $this->loadFactories();
         }
 
         if ($this->app->runningInConsole()) {
-            $this->publishMultipleConfig();
-            $this->publishViews();
-            $this->publishTranslations();
             $this->publishAssets();
+            $this->publishConfig();
             $this->publishFactories();
+            $this->publishTranslations();
+            $this->publishViews();
 
-            Foundation::$runsMigrations ? $this->loadMigrations() : $this->publishMigrations();
+            Foundation::$runsMigrations
+                ? $this->loadMigrations()
+                : $this->publishMigrations();
         }
     }
 }

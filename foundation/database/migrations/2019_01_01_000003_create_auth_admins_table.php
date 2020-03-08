@@ -41,7 +41,7 @@ class CreateAuthAdminsTable extends Migration
     public function up(): void
     {
         $this->createSchema(function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->uuid('uuid');
             $table->string('first_name', 30)->nullable();
             $table->string('last_name', 30)->nullable();

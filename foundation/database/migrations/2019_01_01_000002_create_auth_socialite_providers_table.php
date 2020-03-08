@@ -41,7 +41,7 @@ class CreateAuthSocialiteProvidersTable extends Migration
     public function up(): void
     {
         $this->createSchema(function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('user_id')->index();
             $table->string('provider_type', 50);
             $table->text('provider_id');

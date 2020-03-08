@@ -41,12 +41,10 @@ class CreateAuthPermissionsGroupsTable extends Migration
     public function up(): void
     {
         $this->createSchema(function (Blueprint $table) {
-            $table->increments('id');
-
+            $table->id();
             $table->string('name');
             $table->string('slug');
             $table->string('description')->nullable();
-
             $table->timestamps();
 
             $table->unique(['slug']);

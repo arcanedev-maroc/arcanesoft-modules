@@ -7,12 +7,12 @@ namespace Arcanesoft\Foundation\Support\Providers\Concerns;
 use Arcanedev\LaravelPolicies\Contracts\PolicyManager;
 
 /**
- * Trait     HasPolicies
+ * Trait     HasPolicyClasses
  *
  * @package  Arcanesoft\Foundation\Support\Providers\Concerns
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-trait HasPolicies
+trait HasPolicyClasses
 {
     /* -----------------------------------------------------------------
      |  Properties

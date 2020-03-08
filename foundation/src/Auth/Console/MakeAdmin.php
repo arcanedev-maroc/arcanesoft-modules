@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Console;
 
-use Arcanesoft\Foundation\Auth\Models\Admin;
-use Arcanesoft\Foundation\Auth\Models\Role;
+use Arcanesoft\Foundation\Auth\Models\{Admin, Role};
 use Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository;
 use Closure;
 use Illuminate\Console\Command;

@@ -43,7 +43,6 @@ class CreateAuthAdminRolePivotTable extends Migration
         $this->createSchema(function (Blueprint $table) {
             $table->unsignedBigInteger('admin_id');
             $table->unsignedInteger('role_id');
-
             $table->timestamp('created_at')->nullable();
 
             $table->primary(['admin_id', 'role_id']);

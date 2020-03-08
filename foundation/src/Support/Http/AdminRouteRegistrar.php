@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Support\Http;
 
+use Arcanedev\Support\Routing\RouteRegistrar;
 use Closure;
 
 /**

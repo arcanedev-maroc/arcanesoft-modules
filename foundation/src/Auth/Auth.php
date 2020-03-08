@@ -130,17 +130,16 @@ class Auth
     /**
      * Get a config value of this module.
      *
-     * @param  string|null  $name
+     * @param  string|null  $key
      * @param  mixed|null   $default
      *
      * @return mixed
      */
-    public static function config(?string $name, $default = null)
+    public static function config(?string $key, $default = null)
     {
-        return config()->get(
-            is_null($name) ? "arcanesoft.foundation.auth" : "arcanesoft.foundation.auth.{$name}",
-            $default
-        );
+        $key = is_null($key) ? 'arcanesoft.foundation.auth' : "arcanesoft.foundation.auth.{$key}";
+
+        return config()->get($key, $default);
     }
 
     /* -----------------------------------------------------------------
