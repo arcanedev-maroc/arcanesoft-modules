@@ -6,9 +6,7 @@ namespace Arcanesoft\Foundation\Core\Http\Middleware;
 
 use Arcanesoft\Foundation\Auth\Models\Admin;
 use Closure;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Factory as Auth;
-use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Contracts\Auth\{Authenticatable, Factory, Guard};
 
 /**
  * Class     EnsureIsAdmin
@@ -45,7 +43,7 @@ class EnsureIsAdmin
      *
      * @param  \Illuminate\Contracts\Auth\Factory  $auth
      */
-    public function __construct(Auth $auth)
+    public function __construct(Factory $auth)
     {
         $this->auth = $auth;
     }
