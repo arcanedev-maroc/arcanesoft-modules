@@ -28,7 +28,7 @@ class RouteServiceProvider extends ServiceProvider
     protected $routeClasses = [
         Routes\DashboardRoutes::class,
         Routes\UsersRoutes::class,
-        Routes\AdminsRoutes::class,
+        Routes\AdministratorsRoutes::class,
         Routes\RolesRoutes::class,
         Routes\PermissionsRoutes::class,
         Routes\PasswordResetsRoutes::class,

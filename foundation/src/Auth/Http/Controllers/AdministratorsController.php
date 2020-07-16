@@ -69,10 +69,6 @@ class AdministratorsController extends Controller
      */
     public function trash()
     {
-        $this->authorize(AdministratorsPolicy::ability('index'));
-
-        $this->selectMetrics('arcanesoft.foundation.metrics.selected.auth-admins');
-
         return $this->index(true);
     }
 

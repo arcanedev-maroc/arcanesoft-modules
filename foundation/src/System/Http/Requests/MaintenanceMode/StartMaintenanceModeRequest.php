@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\System\Http\Requests\MaintenanceMode;
 
-use Arcanesoft\Foundation\Support\Http\FormRequest;
+use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * Class     StartMaintenanceModeRequest
@@ -42,10 +42,8 @@ class StartMaintenanceModeRequest extends FormRequest
 
     /**
      * Prepare the data for validation.
-     *
-     * @return void
      */
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         $this->merge([
             'ips' => $this->parseIPs(),

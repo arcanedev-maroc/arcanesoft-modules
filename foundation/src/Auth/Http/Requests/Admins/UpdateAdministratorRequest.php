@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Http\Requests\Admins;
 
-use Arcanesoft\Foundation\Auth\Http\Routes\AdminsRoutes;
+use Arcanesoft\Foundation\Auth\Http\Routes\AdministratorsRoutes;
 use Arcanesoft\Foundation\Auth\Rules\Users\UserEmailRule;
 
 /**
@@ -49,6 +49,6 @@ class UpdateAdministratorRequest extends AdminFormRequest
      */
     protected function getCurrentAdministrator()
     {
-        return $this->route()->parameter(AdminsRoutes::ADMIN_WILDCARD);
+        return $this->route()->parameter(AdministratorsRoutes::ADMIN_WILDCARD);
     }
 }

@@ -9,12 +9,12 @@ use Arcanesoft\Foundation\Auth\Http\Controllers\AdministratorsController;
 use Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository;
 
 /**
- * Class     AdminsRoutes
+ * Class     AdministratorsRoutes
  *
  * @package  Arcanesoft\Foundation\Auth\Http\Routes
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class AdminsRoutes extends AbstractRouteRegistrar
+class AdministratorsRoutes extends AbstractRouteRegistrar
 {
     /* -----------------------------------------------------------------
      |  Constants

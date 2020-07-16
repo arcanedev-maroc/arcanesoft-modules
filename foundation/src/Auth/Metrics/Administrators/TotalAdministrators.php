@@ -7,7 +7,7 @@ namespace Arcanesoft\Foundation\Auth\Metrics\Administrators;
 use Arcanedev\LaravelMetrics\Metrics\Value;
 use Arcanesoft\Foundation\Auth\Auth;
 use Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy;
-use Arcanesoft\Foundation\Auth\Repositories\UsersRepository;
+use Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository;
 use Illuminate\Http\Request;
 
 /**
@@ -21,12 +21,12 @@ class TotalAdministrators extends Value
     /**
      * Calculate the value of the metric.
      *
-     * @param  \Illuminate\Http\Request                                  $request
-     * @param  \Arcanesoft\Foundation\Auth\Repositories\UsersRepository  $repo
+     * @param  \Illuminate\Http\Request                                           $request
+     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository  $repo
      *
      * @return \Arcanedev\LaravelMetrics\Results\Result|mixed
      */
-    public function calculate(Request $request, UsersRepository $repo)
+    public function calculate(Request $request, AdministratorsRepository $repo)
     {
         return $this->count($repo->query());
     }

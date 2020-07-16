@@ -48,6 +48,8 @@
     "Total Users": "Total des utilisateurs",
     "New Users": "Nouveaux utilisateurs",
 
+    "Administrators": "Administrateurs",
+
     "Roles": "Rôles",
     "Role's details": "Détails du rôle",
     "Role": "Rôle",
@@ -59,5 +61,7 @@
     "Group": "Groupe",
     "Category": "Catégorie",
 
-    "Password Resets": "Réinitialisation du mot de passe"
+    "Password Resets": "Réinitialisation du mot de passe",
+
+    "Settings": "Réglages"
 }
