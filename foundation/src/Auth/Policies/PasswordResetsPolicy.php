@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Policies;
 
-use Arcanesoft\Foundation\Auth\Models\Admin;
+use Arcanesoft\Foundation\Auth\Models\Administrator;
 
 /**
  * Class     PasswordResetsPolicy
@@ -64,7 +64,7 @@ class PasswordResetsPolicy extends AbstractPolicy
                 'name'        => 'Delete a password reset',
                 'description' => 'Ability to delete a password reset',
             ]),
-            
+
         ];
     }
 
@@ -76,11 +76,11 @@ class PasswordResetsPolicy extends AbstractPolicy
     /**
      * Allow to list all the password resets.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function index(Admin $admin)
+    public function index(Administrator $administrator)
     {
         //
     }
@@ -88,11 +88,11 @@ class PasswordResetsPolicy extends AbstractPolicy
     /**
      * Allow to access the password resets' metrics.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function metrics(Admin $admin)
+    public function metrics(Administrator $administrator)
     {
         //
     }
@@ -100,11 +100,11 @@ class PasswordResetsPolicy extends AbstractPolicy
     /**
      * Allow to delete a password reset.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function delete(Admin $admin)
+    public function delete(Administrator $administrator)
     {
         //
     }

@@ -1,32 +1,34 @@
-import {merge as _merge} from 'lodash'
+import config from './config'
+import {request} from '../../mixins'
 
-const config = {
-    endpoint: '/admin/metrics/process'
-}
-
-const mixins = {
+export default {
     props: {
         metric: {
             type: Object,
             required: true,
-        }
+        },
     },
 
-    data: () => ({
+    mixins: [
+        request,
+    ],
+
+    data: (): Object => ({
         loading: true,
         allowed: true,
         result: {},
     }),
 
     methods: {
-        fetch(metric, options = {}) {
+        fetch(metric, options = {}): Promise<any> {
             this.loading = true;
 
-            options = _merge(options, {
+            options = window['_'].merge(options, {
                 params: {metric}
             })
 
-            return window['Foundation'].request().get(config.endpoint, options)
+            return this.request()
+                .get(config.endpoint, options)
                 .then((response) => {
                     this.result  = response.data
                     this.loading = false
@@ -43,22 +45,20 @@ const mixins = {
     },
 
     computed: {
-        isLoading() {
+        isLoading(): boolean {
             return this.loading
         },
 
-        isReady() {
+        isReady(): boolean {
             return ! this.isLoading
         },
 
-        isAllowed() {
+        isAllowed(): boolean {
             return this.allowed
         },
 
-        isNotAllowed() {
+        isNotAllowed(): boolean {
             return ! this.isAllowed
         },
-    }
+    },
 }
-
-export default mixins

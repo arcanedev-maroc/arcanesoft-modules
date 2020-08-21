@@ -1,4 +1,4 @@
-<?php /** @var  Arcanesoft\Foundation\Auth\Models\Admin  $admin */ ?>
+<?php /** @var  Arcanesoft\Foundation\Auth\Models\Administrator  $admin */ ?>
 
 <div class="card card-borderless shadow-sm mb-3">
     <div class="card-body d-flex justify-content-center p-3">

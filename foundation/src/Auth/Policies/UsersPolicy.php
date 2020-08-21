@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Policies;
 
-use Arcanesoft\Foundation\Auth\Models\{Admin, User};
+use Arcanesoft\Foundation\Auth\Models\{Administrator, User};
 
 /**
  * Class     UsersPolicy
@@ -117,11 +117,11 @@ class UsersPolicy extends AbstractPolicy
     /**
      * Allow to list all the users.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function index(Admin $admin)
+    public function index(Administrator $administrator)
     {
         //
     }
@@ -129,11 +129,11 @@ class UsersPolicy extends AbstractPolicy
     /**
      * Allow to show the user's metrics.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function metrics(Admin $admin)
+    public function metrics(Administrator $administrator)
     {
         //
     }
@@ -141,12 +141,12 @@ class UsersPolicy extends AbstractPolicy
     /**
      * Allow to show a user details.
      *
-     * @param \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
-     * @param \Arcanesoft\Foundation\Auth\Models\User|null    $user
+     * @param \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param \Arcanesoft\Foundation\Auth\Models\User|null            $user
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function show(Admin $admin, User $user = null)
+    public function show(Administrator $administrator, User $user = null)
     {
         //
     }
@@ -154,11 +154,11 @@ class UsersPolicy extends AbstractPolicy
     /**
      * Allow to create a user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function create(Admin $admin)
+    public function create(Administrator $administrator)
     {
         //
     }
@@ -166,12 +166,12 @@ class UsersPolicy extends AbstractPolicy
     /**
      * Allow to update a user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|null    $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|null            $user
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function update(Admin $admin, User $user = null)
+    public function update(Administrator $administrator, User $user = null)
     {
         //
     }
@@ -179,12 +179,12 @@ class UsersPolicy extends AbstractPolicy
     /**
      * Allow to update a user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|null    $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|null            $user
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function activate(Admin $admin, User $user = null)
+    public function activate(Administrator $administrator, User $user = null)
     {
         //
     }
@@ -192,12 +192,12 @@ class UsersPolicy extends AbstractPolicy
     /**
      * Allow to delete a user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|null    $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|null            $user
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function delete(Admin $admin, User $user = null)
+    public function delete(Administrator $administrator, User $user = null)
     {
         if ( ! is_null($user))
             return $user->isDeletable();
@@ -206,12 +206,12 @@ class UsersPolicy extends AbstractPolicy
     /**
      * Allow to force delete a user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|null    $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|null            $user
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function forceDelete(Admin $admin, User $user = null)
+    public function forceDelete(Administrator $administrator, User $user = null)
     {
         if ( ! is_null($user))
             return $user->isDeletable();
@@ -220,12 +220,12 @@ class UsersPolicy extends AbstractPolicy
     /**
      * Allow to restore a user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|null    $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|null            $user
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function restore(Admin $admin, User $user = null)
+    public function restore(Administrator $administrator, User $user = null)
     {
         if ( ! is_null($user)) {
             return $user->trashed();
@@ -235,12 +235,12 @@ class UsersPolicy extends AbstractPolicy
     /**
      * Allow to impersonate a user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|null    $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|null            $user
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function impersonate(Admin $admin, User $user)
+    public function impersonate(Administrator $administrator, User $user)
     {
         //
     }

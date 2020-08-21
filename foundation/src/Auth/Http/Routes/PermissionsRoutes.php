@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Http\Routes;
 
-use Arcanesoft\Foundation\Auth\Http\Controllers\Datatables\PermissionsController as PermissionsDataTableController;
 use Arcanesoft\Foundation\Auth\Http\Controllers\PermissionsController;
 use Arcanesoft\Foundation\Auth\Repositories\PermissionsRepository;
 
@@ -39,8 +38,6 @@ class PermissionsRoutes extends AbstractRouteRegistrar
                 $this->get('/', [PermissionsController::class, 'index'])
                      ->name('index');
 
-                $this->mapDataTableRoutes();
-
                 $this->prefix('{'.self::PERMISSION_WILDCARD.'}')->group(function () {
                     // admin::auth.permissions.show
                     $this->get('/', [PermissionsController::class, 'show'])
@@ -57,19 +54,9 @@ class PermissionsRoutes extends AbstractRouteRegistrar
     }
 
     /**
-     * Map datatable routes.
-     */
-    protected function mapDataTableRoutes(): void
-    {
-        $this->dataTableGroup(function () {
-            // admin::auth.permissions.datatables.index
-            $this->get('/', [PermissionsDataTableController::class, 'index'])
-                 ->name('index');
-        });
-    }
-
-    /**
      * Register the route bindings.
+     *
+     * @param  \Arcanesoft\Foundation\Auth\Repositories\PermissionsRepository  $repo
      */
     public function bindings(PermissionsRepository $repo): void
     {

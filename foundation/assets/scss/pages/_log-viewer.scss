@@ -1,5 +1,5 @@
 $log-levels: (
-    'empty':     var(--skin-surface-bg-color),
+    'empty':     var(--skin-surface-1-bg-color),
     'all':       #605CA8,
     'emergency': #B71C1C,
     'alert':     #D32F2F,
@@ -19,7 +19,7 @@ $log-levels: (
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: var(--skin-surface-bg-color);
+        background-color: var(--skin-surface-1-bg-color);
         font-size: 1.25rem;
 
         &.bg-log-level-empty {

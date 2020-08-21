@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Support\Providers;
 
-use Arcanesoft\Foundation\Support\Http\Concerns\HasRouteClasses;
 use Arcanedev\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 /**

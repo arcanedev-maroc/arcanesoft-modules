@@ -1,38 +1,38 @@
-<nav class="main-navbar navbar flex-row p-0 shadow-sm">
-    <div class="navbar-menu-wrapper d-flex align-items-stretch justify-content-between flex-grow-1">
-        <sidebar-toggler-component></sidebar-toggler-component>
-
+<nav class="main-navbar navbar navbar-expand-md fixed-top d-flex justify-content-between p-0 shadow-sm">
+    <div class="brand-container d-flex align-items-center">
+        <v-sidebar-toggler></v-sidebar-toggler>
+        <a href="{{ route('admin::index') }}"
+           class="brand navbar-link-item flex-grow-1 justify-content-center h4 text-uppercase m-0">
+            {{ config('app.name') }}
+        </a>
+    </div>
+    <div class="navbar-menu-wrapper">
         <ul class="navbar-nav flex-row align-items-center navbar-nav-right">
             <li class="nav-item d-none d-lg-block">
-                <fullscreen-toggler-component></fullscreen-toggler-component>
+                <v-fullscreen-toggler></v-fullscreen-toggler>
             </li>
 
-            @include('foundation::_partials.navbar-messages')
-
             <li class="nav-item dropdown">
-                <notifications-navbar-component></notifications-navbar-component>
+                <v-notifications-navbar></v-notifications-navbar>
             </li>
 
             <li class="nav-item">
-                <skin-mode-toggler-component></skin-mode-toggler-component>
+                <v-skin-mode-toggler></v-skin-mode-toggler>
             </li>
 
             <li class="nav-item dropdown">
-                <?php
-                    /** @var  Arcanesoft\Foundation\Auth\Models\User|mixed  $user */
-                    $user = auth()->user();
-                ?>
-                <a class="nav-link profile-dropdown-menu dropdown-toggle" id="profile-dropdown-menu"
+                @php($user = Arcanesoft\Foundation\Auth\Auth::admin())
+                <a class="navbar-link-item profile-dropdown-menu dropdown-toggle" id="profile-dropdown-menu"
                    href="#" data-toggle="dropdown" aria-expanded="false">
                     <div class="avatar">
-                        <img src="{{ $user->avatar }}" alt="{{ $user->full_name }}">
-                        <span class="status status-success"></span>
+                        <img src="{{ $user->avatar }}" alt="{{ $user->full_name }}" class="rounded-circle bg-light">
+                        <span class="status bg-success"></span>
                     </div>
                     <div class="d-none d-sm-inline-block ml-sm-2">
                         <span class="user-name">{{ $user->full_name }}</span>
                     </div>
                 </a>
-                <div class="dropdown-menu navbar-dropdown" aria-labelledby="profile-dropdown-menu">
+                <div class="dropdown-menu dropdown-menu-right mt-0" aria-labelledby="profile-dropdown-menu">
                     <a href="{{ route('admin::auth.profile.index') }}" class="dropdown-item">
                         <i class="fa fa-fw fa-user mr-2"></i> @lang('Profile')
                     </a>

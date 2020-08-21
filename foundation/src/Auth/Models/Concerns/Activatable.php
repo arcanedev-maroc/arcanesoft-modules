@@ -46,7 +46,7 @@ trait Activatable
      *
      * @return bool
      */
-    public function getIsActiveAttribute()
+    public function getIsActiveAttribute(): bool
     {
         return $this->isActive();
     }
@@ -61,7 +61,7 @@ trait Activatable
      *
      * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return ! is_null($this->activated_at);
     }

@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Policies;
 
-use Arcanesoft\Foundation\Auth\Models\Admin;
-use Arcanesoft\Foundation\Auth\Models\Admin as AuthenticatedAdmin;
+use Arcanesoft\Foundation\Auth\Models\Administrator;
 
 /**
  * Class     AdministratorsPolicy
@@ -27,7 +26,7 @@ class AdministratorsPolicy extends AbstractPolicy
      */
     protected static function prefix(): string
     {
-        return 'admin::auth.admins.';
+        return 'admin::auth.administrators.';
     }
 
     /* -----------------------------------------------------------------
@@ -48,55 +47,55 @@ class AdministratorsPolicy extends AbstractPolicy
 
         return [
 
-            // admin::auth.admins.index
+            // admin::auth.administrators.index
             $this->makeAbility('index')->setMetas([
                 'name'        => 'List all the admins',
                 'description' => 'Ability to list all the admins'
             ]),
 
-            // admin::auth.admins.metrics
+            // admin::auth.administrators.metrics
             $this->makeAbility('metrics')->setMetas([
                 'name'        => 'Show the metrics',
                 'description' => 'Ability to show the administrator\'s metrics',
             ]),
 
-            // admin::auth.admins.show
+            // admin::auth.administrators.show
             $this->makeAbility('show')->setMetas([
                 'name'        => 'Show an admin',
                 'description' => 'Ability to show the admin\'s details',
             ]),
 
-            // admin::auth.admins.create
+            // admin::auth.administrators.create
             $this->makeAbility('create')->setMetas([
                 'name'        => 'Create a new admin',
                 'description' => 'Ability to create a new admin',
             ]),
 
-            // admin::auth.admins.update
+            // admin::auth.administrators.update
             $this->makeAbility('update')->setMetas([
                 'name'        => 'Update a admin',
                 'description' => 'Ability to update a admin',
             ]),
 
-            // admin::auth.admins.activate
+            // admin::auth.administrators.activate
             $this->makeAbility('activate')->setMetas([
                 'name'        => 'Activate/Deactivate a admin',
                 'description' => 'Ability to activate/deactivate a admin',
             ]),
 
-            // admin::auth.admins.delete
+            // admin::auth.administrators.delete
             $this->makeAbility('delete')->setMetas([
                 'name'        => 'Delete a admin',
                 'description' => 'Ability to delete a admin',
             ]),
 
-            // admin::auth.admins.force-delete
+            // admin::auth.administrators.force-delete
             $this->makeAbility('force-delete')->setMetas([
                 'name'        => 'Force Delete a admin',
                 'description' => 'Ability to force delete a admin',
             ]),
 
-            // admin::auth.admins.restore
+            // admin::auth.administrators.restore
             $this->makeAbility('restore')->setMetas([
                 'name'        => 'Restore a admin',
                 'description' => 'Ability to restore a admin',
@@ -112,11 +111,11 @@ class AdministratorsPolicy extends AbstractPolicy
     /**
      * Allow to list all the admins.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function index(AuthenticatedAdmin $admin)
+    public function index(Administrator $administrator)
     {
         //
     }
@@ -124,11 +123,11 @@ class AdministratorsPolicy extends AbstractPolicy
     /**
      * Allow to list all the admins' metrics.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function metrics(AuthenticatedAdmin $admin)
+    public function metrics(Administrator $administrator)
     {
         //
     }
@@ -136,25 +135,25 @@ class AdministratorsPolicy extends AbstractPolicy
     /**
      * Allow to show a admin details.
      *
-     * @param \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
-     * @param \Arcanesoft\Foundation\Auth\Models\Admin|null   $model
+     * @param \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param \Arcanesoft\Foundation\Auth\Models\Administrator|null   $model
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function show(AuthenticatedAdmin $admin, Admin $model = null)
+    public function show(Administrator $administrator, Administrator $model = null)
     {
-        if ($model && $model->isSuperAdmin() && ! $admin->isSuperAdmin())
+        if ($model && $model->isSuperAdmin() && ! $administrator->isSuperAdmin())
             return false;
     }
 
     /**
      * Allow to create a admin.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function create(AuthenticatedAdmin $admin)
+    public function create(Administrator $administrator)
     {
         //
     }
@@ -162,12 +161,12 @@ class AdministratorsPolicy extends AbstractPolicy
     /**
      * Allow to update a admin.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|null   $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|null   $model
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function update(AuthenticatedAdmin $admin, Admin $model = null)
+    public function update(Administrator $administrator, Administrator $model = null)
     {
         //
     }
@@ -175,14 +174,14 @@ class AdministratorsPolicy extends AbstractPolicy
     /**
      * Allow to update a admin.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|null   $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|null   $model
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function activate(AuthenticatedAdmin $admin, Admin $model = null)
+    public function activate(Administrator $administrator, Administrator $model = null)
     {
-        if ($admin->is($model))
+        if ($administrator->is($model))
             return false;
 
         if ( ! is_null($model) && $model->isSuperAdmin())
@@ -192,14 +191,14 @@ class AdministratorsPolicy extends AbstractPolicy
     /**
      * Allow to delete a admin.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|null   $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|null   $model
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function delete(AuthenticatedAdmin $admin, Admin $model = null)
+    public function delete(Administrator $administrator, Administrator $model = null)
     {
-        if ($admin->is($model))
+        if ($administrator->is($model))
             return false;
 
         if ( ! is_null($model))
@@ -209,12 +208,12 @@ class AdministratorsPolicy extends AbstractPolicy
     /**
      * Allow to force delete a admin.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|null   $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|null   $model
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function forceDelete(AuthenticatedAdmin $admin, Admin $model = null)
+    public function forceDelete(Administrator $administrator, Administrator $model = null)
     {
         if ( ! is_null($model))
             return $model->isDeletable();
@@ -223,12 +222,12 @@ class AdministratorsPolicy extends AbstractPolicy
     /**
      * Allow to restore a admin.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|null   $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|null   $model
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function restore(AuthenticatedAdmin $admin, Admin $model = null)
+    public function restore(Administrator $administrator, Administrator $model = null)
     {
         if ( ! is_null($model))
             return $model->trashed();

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Http\Routes;
 
-use Arcanesoft\Foundation\Auth\Http\Controllers\Datatables\AdminsController as AdminsDatatablesController;
 use Arcanesoft\Foundation\Auth\Http\Controllers\AdministratorsController;
 use Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository;
 
@@ -43,7 +42,9 @@ class AdministratorsRoutes extends AbstractRouteRegistrar
                 $this->get('trash', [AdministratorsController::class, 'trash'])
                      ->name('trash');
 
-                $this->mapDataTablesRoutes();
+                // admin::auth.administrators.metrics
+                $this->get('metrics', [AdministratorsController::class, 'metrics'])
+                     ->name('metrics');
 
                 // admin::auth.administrators.create
                 $this->get('create', [AdministratorsController::class, 'create'])
@@ -82,22 +83,6 @@ class AdministratorsRoutes extends AbstractRouteRegistrar
                          ->name('restore');
                 });
             });
-        });
-    }
-
-    /**
-     * Map the datatables routes.
-     */
-    protected function mapDataTablesRoutes(): void
-    {
-        $this->dataTableGroup(function () {
-            // admin::auth.administrators.datatables.index
-            $this->get('/', [AdminsDataTablesController::class, 'index'])
-                 ->name('index');
-
-            // admin::auth.administrators.datatables.trash
-            $this->get('trash', [AdminsDataTablesController::class, 'trash'])
-                 ->name('trash');
         });
     }
 

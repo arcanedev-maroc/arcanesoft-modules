@@ -32,10 +32,8 @@ class RoutesViewerController extends Controller
      | -----------------------------------------------------------------
      */
 
-    public function index(RouteViewer $routeViewer)
+    public function index()
     {
-        $routes = $routeViewer->all();
-
-        return $this->view('system.routes-viewer.index', compact('routes'));
+        return $this->view('system.routes-viewer.index');
     }
 }

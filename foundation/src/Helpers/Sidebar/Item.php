@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Helpers\Sidebar;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\HtmlString;
+use Arcanesoft\Foundation\Auth\Auth;
+use Illuminate\Support\{Arr, HtmlString};
 
 /**
  * Class     SidebarItem
@@ -213,19 +213,18 @@ class Item
     /**
      * Check if can see the item.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed|null  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed|null  $administrator
      *
      * @return bool
      */
-    public function canSee($user = null): bool
+    public function canSee($administrator = null): bool
     {
-        /** @var  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin */
-        $admin = $admin ?? auth()->user();
+        $administrator = $administrator ?? Auth::admin();
 
-        return $admin->isSuperAdmin()
-            || $this->checkHasRole($admin)
-            || $this->checkHasPermission($admin)
-            || $this->checkCanSeeChildren($admin);
+        return $administrator->isSuperAdmin()
+            || $this->checkHasRole($administrator)
+            || $this->checkHasPermission($administrator)
+            || $this->checkCanSeeChildren($administrator);
     }
 
     /* -----------------------------------------------------------------
@@ -237,8 +236,6 @@ class Item
      * Parse the url attribute.
      *
      * @param  array  $attributes
-     *
-     * @return void
      */
     protected function parseUrl(array $attributes) : void
     {
@@ -255,19 +252,19 @@ class Item
     /**
      * Check if the authenticated admin has the allowed role.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $administrator
      *
      * @return bool
      */
-    protected function checkHasRole($admin): bool
+    protected function checkHasRole($administrator): bool
     {
-        return $admin->isOne($this->roles);
+        return $administrator->isOne($this->roles);
     }
 
     /**
      * Check if the authenticated admin has the allowed permission.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $admin
      *
      * @return bool
      */
@@ -285,14 +282,14 @@ class Item
     /**
      * Check if the authenticated admin can access the item's children.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $administrator
      *
      * @return bool
      */
-    protected function checkCanSeeChildren($admin): bool
+    protected function checkCanSeeChildren($administrator): bool
     {
-        return $this->children->filter(function (Item $child) use ($admin) {
-            return $child->canSee($admin);
+        return $this->children->filter(function (Item $child) use ($administrator) {
+            return $child->canSee($administrator);
         })->isNotEmpty();
     }
 }

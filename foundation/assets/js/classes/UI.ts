@@ -6,22 +6,43 @@ export default class {
         window['Foundation'].$emit(toastEvents.UI_TOASTS_NOTIFY, toast)
     }
 
-    initToasts() {
-        // window['$']('.toast').toast()
+    initToasts(dom: Document|Element): any[] {
+        return Array
+            .from(dom.querySelectorAll('.toast'))
+            .map((elt) => new window['twbs'].Toast(elt))
     }
 
-    initTooltips() {
-        window['$']('body').tooltip({
-            selector: '[data-toggle="tooltip"]',
-            boundary: 'window'
-        });
+    initTooltips(dom: Document|Element): any[] {
+        return Array
+            .from(dom.querySelectorAll('[data-toggle="tooltip"]'))
+            .map((elt) => new window['twbs'].Tooltip(elt, {boundary: 'window'}))
     }
 
-    loadingButton(elt) {
-        return new LoadingButton(
-            typeof elt === 'string'
-                ? document.querySelector(elt)
-                : elt
-        );
+    loadingButton(elt: Element|string): LoadingButton {
+        if (typeof elt === 'string')
+            elt = document.querySelector(elt)
+
+        return new LoadingButton(elt)
+    }
+
+    initPageScrolled(): void {
+        const className = 'page-scrolled'
+        let previousScrollPosition = window.pageYOffset;
+
+        window.addEventListener('scroll', (e) => {
+            let currentScrollPosition = window.pageYOffset;
+
+            const body = document.querySelector('body');
+
+            previousScrollPosition > currentScrollPosition
+                ? body.classList.remove(className)
+                : body.classList.add(className)
+
+            previousScrollPosition = currentScrollPosition;
+        })
+    }
+
+    initTextAutosize() {
+        return window['plugins'].autosize('textarea')
     }
 }

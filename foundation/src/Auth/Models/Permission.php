@@ -34,9 +34,9 @@ use Illuminate\Support\Str;
  * @property  string                      description
  * @property  \Illuminate\Support\Carbon  created_at
  *
- * @property  \Illuminate\Database\Eloquent\Collection                  roles
- * @property  \Arcanesoft\Foundation\Auth\Models\PermissionsGroup       group
- * @property  \Arcanesoft\Foundation\Auth\Models\Pivots\PermissionRole  permission_role
+ * @property  \Arcanesoft\Foundation\Auth\Models\PermissionsGroup                               group
+ * @property  \Arcanesoft\Foundation\Auth\Models\Role|\Illuminate\Database\Eloquent\Collection  roles
+ * @property  \Arcanesoft\Foundation\Auth\Models\Pivots\PermissionRole                          permission_role
  */
 class Permission extends Model
 {

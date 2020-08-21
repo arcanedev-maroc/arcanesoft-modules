@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Http\Requests\Profile;
 
 use Arcanesoft\Foundation\Auth\Http\Requests\FormRequest;
-use Arcanesoft\Foundation\Auth\Rules\Users\UserEmailRule;
+use Arcanesoft\Foundation\Auth\Rules\Users\EmailRule;
 
 /**
  * Class     UpdateUserAccountRequest
@@ -30,7 +30,7 @@ class UpdateAccountRequest extends FormRequest
         return [
             'first_name' => ['required', 'string', 'max:50'],
             'last_name'  => ['required', 'string', 'max:50'],
-            'email'      => ['required', 'string', 'email', 'max:255', UserEmailRule::unique()->ignore($this->user()->id)],
+            'email'      => ['required', 'string', 'email', 'max:255', EmailRule::unique()->ignore($this->user()->id)],
         ];
     }
 

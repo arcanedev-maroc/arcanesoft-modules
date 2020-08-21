@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Repositories;
 
 use Arcanesoft\Foundation\Auth\Auth;
-use Arcanesoft\Foundation\Auth\Events\Permissions\{
-    Roles\DetachedRole, Roles\DetachingRole};
-use Arcanesoft\Foundation\Auth\Models\{Permission, Role};
+use Arcanesoft\Foundation\Auth\Events\Permissions\{Roles\DetachedRole, Roles\DetachingRole};
+use Arcanesoft\Foundation\Auth\Models\{Administrator, Permission, Role};
 use Illuminate\Support\Collection;
 
 /**
@@ -102,5 +101,21 @@ class PermissionsRepository extends AbstractRepository
         event(new DetachedRole($permission, $role, $detached));
 
         return $detached;
+    }
+
+    /**
+     * Get the filtered roles by the given authenticated administrator.
+     *
+     * @param  \Arcanesoft\Foundation\Auth\Models\Permission     $permission
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $administrator
+     *
+     * @return \Arcanesoft\Foundation\Auth\Models\Role[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function getFilteredRolesByAuthenticatedAdministrator(Permission $permission, Administrator $administrator)
+    {
+        return $permission
+            ->roles()
+            ->filterByAuthenticatedAdministrator($administrator)
+            ->get();
     }
 }

@@ -3,6 +3,8 @@
 use Arcanesoft\Blog\Blog;
 use Arcanesoft\Blog\Http\Requests\FormRequest;
 use Arcanesoft\Blog\Http\Routes\TagsRoutes;
+use Arcanesoft\Blog\Rules\Tags\NameRule;
+use Arcanesoft\Blog\Rules\Tags\SlugRule;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
@@ -29,35 +31,29 @@ class UpdateTagRequest extends FormRequest
         $tag = $this->getCurrentTag();
 
         return [
-            'name' => ['required', 'string', Rule::unique(Blog::table('tags'), 'name')->ignore($tag->id)],
-            'slug' => ['required', 'string', Rule::unique(Blog::table('tags'), 'slug')->ignore($tag->id)],
+            'name' => [
+                'required',
+                'string',
+                NameRule::unique()->ignore($tag->getRouteKey(), $tag->getRouteKeyName()),
+            ],
+            'slug' => [
+                'required',
+                'string',
+                SlugRule::unique()->ignore($tag->getRouteKey(), $tag->getRouteKeyName()),
+            ],
         ];
     }
 
     /**
      * Prepare the data for validation.
-     *
-     * @return void
      */
     protected function prepareForValidation(): void
     {
-        if ( ! $this->get('slug'))
+        if (is_null($this->get('slug'))) {
             $this->merge([
                 'slug' => Str::slug($this->get('name')),
             ]);
-    }
-
-    /**
-     * Get the validated data.
-     *
-     * @return array
-     */
-    public function getValidatedData(): array
-    {
-        return $this->all([
-            'name',
-            'slug',
-        ]);
+        }
     }
 
     /**

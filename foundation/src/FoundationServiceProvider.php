@@ -8,6 +8,7 @@ use Arcanesoft\Foundation\Auth\AuthServiceProvider;
 use Arcanesoft\Foundation\Core\CoreServiceProvider;
 use Arcanesoft\Foundation\Support\Providers\PackageServiceProvider;
 use Arcanesoft\Foundation\System\SystemServiceProvider;
+use Arcanesoft\Foundation\Views\ViewsServiceProvider;
 
 /**
  * Class     FoundationServiceProvider
@@ -53,6 +54,7 @@ class FoundationServiceProvider extends PackageServiceProvider
             CoreServiceProvider::class,
             AuthServiceProvider::class,
             SystemServiceProvider::class,
+            ViewsServiceProvider::class,
         ]);
     }
 

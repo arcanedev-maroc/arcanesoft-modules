@@ -1,9 +1,11 @@
-<div class="card card-borderless shadow-sm mb-3">
-    <div class="card-header p-2">@lang('Folders Permissions')</div>
-    <table class="table table-md mb-0">
+<div class="card card-borderless shadow-sm">
+    <div class="card-header px-2 font-weight-light text-uppercase text-muted">
+        @lang('Folders Permissions')
+    </div>
+    <table class="table table-borderless mb-0">
         @foreach($foldersPermissions as $folder => $permission)
         <tr>
-            <th>{{ $folder }}</th>
+            <td class="font-weight-light text-monospace text-muted small">{{ $folder }}</td>
             <td class="text-right">
                 @if ($permission['writable'])
                     <span class="badge badge-outline-success">{{ $permission['chmod'] }}</span>

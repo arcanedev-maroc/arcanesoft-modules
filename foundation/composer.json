@@ -13,25 +13,23 @@
         }
     ],
     "require": {
-        "php":                              "^7.2.5",
-        "ext-json":                         "*",
-        "arcanedev/breadcrumbs":            "^5.0",
-        "arcanedev/laravel-active":         "^3.0",
-        "arcanedev/laravel-html":           "^7.0",
-        "arcanedev/gravatar":               "^4.0",
-        "arcanedev/laravel-impersonator":   "^3.0",
-        "arcanedev/laravel-metrics":        "^2.0",
-        "arcanedev/laravel-policies":       "^2.0",
-        "arcanedev/log-viewer":             "^7.0",
-        "arcanedev/notify":                 "^6.0",
-        "arcanedev/route-viewer":           "^3.0",
-        "arcanedev/support":                "^7.1.1",
-        "yajra/laravel-datatables-fractal": "^1.5",
-        "yajra/laravel-datatables-oracle":  "^9.9"
+        "php":                            "^7.2.5",
+        "ext-json":                       "*",
+        "arcanedev/breadcrumbs":          "^5.0",
+        "arcanedev/laravel-active":       "^3.0",
+        "arcanedev/laravel-html":         "^7.0",
+        "arcanedev/gravatar":             "^4.0",
+        "arcanedev/laravel-impersonator": "^3.0",
+        "arcanedev/laravel-metrics":      "^2.0",
+        "arcanedev/laravel-policies":     "^2.0",
+        "arcanedev/log-viewer":           "^7.0",
+        "arcanedev/notify":               "^6.0",
+        "arcanedev/route-viewer":         "^3.0",
+        "arcanedev/support":              "^7.1.1"
     },
     "require-dev": {
         "orchestra/testbench": "^5.0",
-        "phpunit/phpunit":     "^8.5|^9.0"
+        "phpunit/phpunit":     "^8.5"
     },
     "autoload": {
         "psr-4": {

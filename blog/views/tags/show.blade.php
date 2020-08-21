@@ -7,58 +7,60 @@
 <?php /** @var  \Arcanesoft\Blog\Models\Tag  $tag */ ?>
 
 @section('content')
-    <div class="row">
+    <div class="row g-4">
         <div class="col-md-4">
-            <div class="card card-borderless shadow-sm mb-3">
-                <div class="card-header">@lang('Tag')</div>
-                <table class="table table-md table-borderless mb-0">
+            <div class="card card-borderless shadow-sm">
+                <div class="card-header px-2">@lang('Tag')</div>
+                <table class="table table-borderless mb-0">
                     <tbody>
                         <tr>
-                            <th class="text-muted">@lang('Name') :</th>
-                            <td class="text-right">{{ $tag->name }}</td>
+                            <td class="font-weight-light text-uppercase text-muted">@lang('Name')</td>
+                            <td class="text-right small">{{ $tag->name }}</td>
                         </tr>
                         <tr>
-                            <th class="text-muted">@lang('Slug') :</th>
-                            <td class="text-right">{{ $tag->slug }}</td>
+                            <td class="font-weight-light text-uppercase text-muted">@lang('Slug')</td>
+                            <td class="text-right small">{{ $tag->slug }}</td>
                         </tr>
                         <tr>
-                            <th class="text-muted">@lang('Created At') :</th>
-                            <td class="text-right"><small>{{ $tag->created_at }}</small></td>
+                            <td class="font-weight-light text-uppercase text-muted">@lang('Created at')</td>
+                            <td class="text-right small">{{ $tag->created_at }}</td>
                         </tr>
                         <tr>
-                            <th class="text-muted">@lang('Updated At') :</th>
-                            <td class="text-right"><small>{{ $tag->updated_at }}</small></td>
+                            <td class="font-weight-light text-uppercase text-muted">@lang('Updated at')</td>
+                            <td class="text-right small">{{ $tag->updated_at }}</td>
                         </tr>
                     </tbody>
                 </table>
-                <div class="card-footer text-right p-2">
-                    @can(Arcanesoft\Blog\Policies\TagsPolicy::ability('update'), $tag)
-                        {{ arcanesoft\ui\action_link('edit', route('admin::blog.tags.edit', [$tag]))->size('sm') }}
+                <div class="card-footer text-right px-2">
+                    @can(Arcanesoft\Blog\Policies\TagsPolicy::ability('update'), [$tag])
+                        <a href="{{ route('admin::blog.tags.edit', [$tag]) }}" type="button" class="btn btn-sm btn-light">
+                            <i class="far fa-fw fa-edit"></i> @lang('Edit')
+                        </a>
                     @endcan
 
-                    @can(Arcanesoft\Blog\Policies\TagsPolicy::ability('delete'), $tag)
-                        {{ arcanesoft\ui\action_button('delete')->size('sm')->setDisabled($tag->isNotDeletable()) }}
+                    @can(Arcanesoft\Blog\Policies\TagsPolicy::ability('delete'), [$tag])
+                        <button type="button" class="btn btn-sm btn-light text-danger">
+                            <i class="far fa-fw fa-trash-alt"></i> @lang('Delete')
+                        </button>
                     @endcan
                 </div>
             </div>
         </div>
         <div class="col-md-8">
-            <div class="card card-borderless shadow-sm mb-3">
-                <div class="card-header">@lang('Posts')</div>
+            <div class="card card-borderless shadow-sm">
+                <div class="card-header px-2">@lang('Posts')</div>
                 <table class="table table-borderless table-hover mb-0">
                     <thead>
                         <tr>
-                            <th>@lang('Title')</th>
-                            <th class="text-right">@lang('Actions')</th>
+                            <th class="font-weight-light text-uppercase text-muted">@lang('Title')</th>
+                            <th class="font-weight-light text-uppercase text-muted text-right">@lang('Actions')</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($tag->posts as $post)
-                            <?php /** @var  Arcanesoft\Blog\Models\Post  $post */ ?>
                             <tr>
-                                <td>{{ $post->title }}</td>
-                                <td class="text-right">
-                                </td>
+                                <td class="small">{{ $post->title }}</td>
+                                <td class="text-right"></td>
                             </tr>
                         @empty
                             <tr>

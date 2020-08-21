@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\System\Http\Controllers;
 
 use Arcanedev\LogViewer\Contracts\LogViewer;
-use Arcanedev\LogViewer\Entities\{
-    LogEntry,
-    LogEntryCollection};
+use Arcanedev\LogViewer\Entities\{LogEntry, LogEntryCollection};
 use Arcanedev\LogViewer\Exceptions\LogNotFoundException;
 use Arcanesoft\Foundation\Support\Traits\HasNotifications;
 use Arcanesoft\Foundation\System\Metrics\LogViewer\LogEntriesCountByLevel;
@@ -15,9 +13,7 @@ use Arcanesoft\Foundation\System\Metrics\LogViewer\LogFilesCount;
 use Arcanesoft\Foundation\System\Policies\LogViewerPolicy;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\{
-    Collection,
-    Str};
+use Illuminate\Support\{Collection, Str};
 
 /**
  * Class     LogViewerController

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Blog\Policies;
 
-use Arcanesoft\Foundation\Auth\Models\Admin;
+use Arcanesoft\Foundation\Auth\Models\Administrator;
 
 /**
  * Class     DashboardPolicy
@@ -65,11 +65,11 @@ class DashboardPolicy extends Policy
     /**
      * Allow to access all the auth stats.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function index(Admin $admin)
+    public function index(Administrator $administrator)
     {
         //
     }

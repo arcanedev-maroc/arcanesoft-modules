@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Providers;
 
+use Arcanesoft\Foundation\Auth\Views\Components\{
+    AdministratorsDatatable, PasswordResetsDatatable, PermissionsDatatable, RolesDatatable, UsersDatatable
+};
 use Arcanesoft\Foundation\Support\Providers\ViewServiceProvider as ServiceProvider;
 
 /**
@@ -20,11 +23,15 @@ class ViewServiceProvider extends ServiceProvider
      */
 
     /**
-     * The view composers.
+     * The view components.
      *
      * @var array
      */
-    protected $composers = [
-        //
+    protected $components = [
+        AdministratorsDatatable::NAME => AdministratorsDatatable::class,
+        UsersDatatable::NAME          => UsersDatatable::class,
+        RolesDatatable::NAME          => RolesDatatable::class,
+        PermissionsDatatable::NAME    => PermissionsDatatable::class,
+        PasswordResetsDatatable::NAME => PasswordResetsDatatable::class,
     ];
 }

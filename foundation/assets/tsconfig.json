@@ -1,9 +1,16 @@
 {
     "compilerOptions": {
-        "target": "es5",
-        "lib": ["dom", "esnext"],
         "module": "es2015",
+        "target": "es2015",
+        "lib": ["dom", "esnext"],
         "moduleResolution": "node",
-        "noEmit": false
-    }
+        "noEmit": false,
+        "allowJs": true,
+        "allowSyntheticDefaultImports": true
+    },
+    "include": [
+        "js/**/*",
+        "tests/**/*.test.ts",
+        "../../node_modules/@types"
+    ]
 }
