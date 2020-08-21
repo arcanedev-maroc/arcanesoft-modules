@@ -6,6 +6,9 @@
     "All": "Tous",
     "Trash": "Corbeille",
     "Page :current of :last": "Page :current sur :last",
+    "Per page": "Par page",
+    "Search...": "Recherche...",
+    "Showing :first to :last out of :total results": "Afficher :first à :last sur :total résultats",
 
     "Name": "Nom",
     "Description": "Description",
@@ -24,9 +27,14 @@
     "Deactivate": "Désactiver",
     "Cancel": "Annuler",
     "Download": "Télécharger",
+    "Detach": "Détacher",
+    "Save": "Enregistrer",
 
     "Locked": "Verrouillé",
     "Unlocked": "Déverrouillé",
+    "Verified": "Vérifié",
+    "Activated": "Activé",
+    "Deactivated": "Désactivé",
 
     "No data": "Aucune donnée",
     "Today": "Aujourd'hui",
@@ -39,7 +47,7 @@
     "New User": "Nouvel utilisateur",
     "User's details": "Fiche utilisateur",
     "Edit User": "Modifier utilisateur",
-    "Full Name": "Nom complet",
+    "Full name": "Nom complet",
     "Email": "Email",
     "Status": "Status",
     "Last activity": "Dernière activité",
@@ -47,6 +55,8 @@
 
     "Total Users": "Total des utilisateurs",
     "New Users": "Nouveaux utilisateurs",
+
+    "Administrators": "Administrateurs",
 
     "Roles": "Rôles",
     "Role's details": "Détails du rôle",
@@ -59,5 +69,7 @@
     "Group": "Groupe",
     "Category": "Catégorie",
 
-    "Password Resets": "Réinitialisation du mot de passe"
+    "Password Resets": "Réinitialisation du mot de passe",
+
+    "Settings": "Réglages"
 }

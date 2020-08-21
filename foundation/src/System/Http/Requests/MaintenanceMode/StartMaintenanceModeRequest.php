@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\System\Http\Requests\MaintenanceMode;
 
-use Arcanesoft\Foundation\Support\Http\FormRequest;
+use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * Class     StartMaintenanceModeRequest
@@ -27,11 +27,26 @@ class StartMaintenanceModeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'message'          => ['nullable', 'string'],
-            'retry'            => ['nullable', 'integer', 'min:0'],
-            'allowed'          => ['nullable', 'string'],
-            'allow_current_ip' => ['boolean'],
-            'ips.*'            => ['nullable', 'ip'],
+            'message'          => [
+                'nullable',
+                'string',
+            ],
+            'retry'            => [
+                'nullable',
+                'integer',
+                'min:0',
+            ],
+            'allowed'          => [
+                'nullable',
+                'string',
+            ],
+            'allow_current_ip' => [
+                'boolean',
+            ],
+            'ips.*'            => [
+                'nullable',
+                'ip',
+            ],
         ];
     }
 
@@ -42,10 +57,8 @@ class StartMaintenanceModeRequest extends FormRequest
 
     /**
      * Prepare the data for validation.
-     *
-     * @return void
      */
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         $this->merge([
             'ips' => $this->parseIPs(),
@@ -59,9 +72,9 @@ class StartMaintenanceModeRequest extends FormRequest
      */
     private function parseIPs(): array
     {
-        $ips = explode(PHP_EOL, $this->get('allowed', ''));
+        $ips = explode(PHP_EOL, (string) $this->input('allowed'));
 
-        if ((bool) $this->get('allow_current_ip'))
+        if ((bool) $this->input('allow_current_ip'))
             $ips[] = $this->ip();
 
         return array_unique(array_filter($ips));

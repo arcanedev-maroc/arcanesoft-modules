@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-use Arcanesoft\Foundation\Auth\Models\Admin;
+use Arcanesoft\Foundation\Auth\Models\Administrator;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
@@ -12,9 +12,9 @@ use Illuminate\Support\Str;
  | -----------------------------------------------------------------
  */
 
-/** @var  \Illuminate\Database\Eloquent\Factory $factory */
+/** @var  \Illuminate\Database\Eloquent\Factory  $factory */
 
-$factory->define(Admin::class, function (Faker $faker) {
+$factory->define(Administrator::class, function (Faker $faker) {
     return [
         'uuid'           => Str::uuid(),
         'first_name'     => $faker->firstName,

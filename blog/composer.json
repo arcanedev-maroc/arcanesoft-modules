@@ -13,13 +13,12 @@
         }
     ],
     "require": {
-        "php":                        ">=7.2.0",
+        "php":                        "^7.2.5",
         "arcanesoft/foundation":      "@dev",
-        "arcanedev/laravel-markdown": "~3.0"
+        "arcanedev/laravel-markdown": "~4.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.0",
-        "phpunit/phpcov":  "^6.0"
+        "phpunit/phpunit": "^8.5|^9.0"
     },
     "autoload": {
         "psr-4": {

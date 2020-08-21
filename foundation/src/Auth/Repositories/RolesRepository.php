@@ -5,15 +5,12 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Repositories;
 
 use Arcanesoft\Foundation\Auth\Auth;
-use Arcanesoft\Foundation\Auth\Models\{
-    Admin,
-    Role,
-    Permission,
-    User};
+use Arcanesoft\Foundation\Auth\Models\{Administrator, Role, Permission};
 use Arcanesoft\Foundation\Auth\Events\Roles\{
-    Users\DetachedAllUsers, Permissions\DetachedPermission, Users\DetachedUser, Permissions\DetachingAllPermissions,
-    Permissions\DetachedAllPermissions, Users\DetachingAllUsers, Permissions\DetachingPermission, Users\DetachingUser,
-    Permissions\SyncedPermissions, Permissions\SyncingPermissions
+    Administrators\DetachedAdministrator, Administrators\DetachedAllAdministrators, Administrators\DetachingAdministrator,
+    Administrators\DetachingAllAdministrators, Permissions\DetachedPermission, Permissions\DetachingAllPermissions,
+    Permissions\DetachedAllPermissions, Permissions\DetachingPermission, Permissions\SyncedPermissions,
+    Permissions\SyncingPermissions
 };
 
 /**
@@ -86,11 +83,11 @@ class RolesRepository extends AbstractRepository
      * @param  \Arcanesoft\Foundation\Auth\Models\Role  $role
      * @param  string                                   $uuid
      *
-     * @return \Arcanesoft\Foundation\Auth\Models\User|mixed
+     * @return \Arcanesoft\Foundation\Auth\Models\Administrator|mixed
      */
-    public function firstUserWithUuidOrFail(Role $role, string $uuid): User
+    public function firstAdministratorWithUuidOrFail(Role $role, string $uuid): Administrator
     {
-        return $role->users()
+        return $role->administrators()
                     ->where('uuid', '=', $uuid)
                     ->withTrashed() // Get also trashed records
                     ->firstOrFail();
@@ -142,7 +139,7 @@ class RolesRepository extends AbstractRepository
      *
      * @return \Arcanesoft\Foundation\Auth\Models\Role|mixed
      */
-    public function createOne(array $attributes)
+    public function createOne(array $attributes): Role
     {
         return tap($this->create($attributes), function (Role $role) use ($attributes) {
             $this->syncPermissionsByUuids($role, $attributes['permissions'] ?: []);
@@ -235,16 +232,16 @@ class RolesRepository extends AbstractRepository
     /**
      * Detach the given user from role.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Role  $role
-     * @param  \Arcanesoft\Foundation\Auth\Models\User  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Role           $role
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $administrator
      *
      * @return int
      */
-    public function detachUser(Role $role, User $user): int
+    public function detachAdministrator(Role $role, Administrator $administrator): int
     {
-        event(new DetachingUser($role, $user));
-        $detached = $role->users()->detach($user);
-        event(new DetachedUser($role, $user, $detached));
+        event(new DetachingAdministrator($role, $administrator));
+        $detached = $role->administrators()->detach($administrator);
+        event(new DetachedAdministrator($role, $administrator, $detached));
 
         return $detached;
     }
@@ -256,11 +253,11 @@ class RolesRepository extends AbstractRepository
      *
      * @return int
      */
-    public function detachAllUsers(Role $role): int
+    public function detachAllAdministrators(Role $role): int
     {
-        event(new DetachingAllUsers($role));
-        $detached = $role->users()->detach();
-        event(new DetachedAllUsers($role, $detached));
+        event(new DetachingAllAdministrators($role));
+        $detached = $role->administrators()->detach();
+        event(new DetachedAllAdministrators($role, $detached));
 
         return $detached;
     }
@@ -302,20 +299,19 @@ class RolesRepository extends AbstractRepository
     /**
      * Get the roles filtered by authenticated administrator.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $admin
      *
      * @return \Arcanesoft\Foundation\Auth\Models\Role[]|\Illuminate\Support\Collection|iterable
      */
-    public function getFilteredByAuthenticatedUser(Admin $admin): iterable
+    public function getFilteredByAuthenticatedAdministrator(Administrator $admin): iterable
     {
         $roles = $this->get();
 
-        if ($admin->isSuperAdmin()) {
+        if ($admin->isSuperAdmin())
             return $roles;
-        }
 
-        return $roles->filter(function (Role $role) {
-            return $role->key !== Role::ADMINISTRATOR;
+        return $roles->reject(function (Role $role) {
+            return $role->isAdministrator();
         });
     }
 }

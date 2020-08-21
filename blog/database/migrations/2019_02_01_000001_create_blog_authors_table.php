@@ -41,7 +41,7 @@ class CreateBlogAuthorsTable extends Migration
     public function up(): void
     {
         $this->createSchema(function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->uuid('uuid');
             $table->morphs('creator');
             $table->string('username');

@@ -1,6 +1,6 @@
 // VARIABLES
 
-$timeline-line-color: var(--skin-surface-bg-color) !default;
+$timeline-line-color: var(--skin-surface-1-bg-color) !default;
 $timeline-line-width: 0.25rem;
 
 $timeline-dot-border-width: 0.25rem;
@@ -35,7 +35,7 @@ $timeline-item-margin-left: 3.5rem;
             width: $timeline-dot-size;
             height: $timeline-dot-size;
             background-color: #D1D1D1;
-            border: $timeline-dot-border-width solid var(--skin-surface-bg-color);
+            border: $timeline-dot-border-width solid var(--skin-surface-1-bg-color);
             border-radius: 50%;
 
             @extend .d-flex, .justify-content-center, .align-items-center;

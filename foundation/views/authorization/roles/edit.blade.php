@@ -1,75 +1,84 @@
 @extends(arcanesoft\foundation()->template())
 
-@section('page-title')
-    <i class="fas fa-fw fa-user-tag"></i> @lang('Edit Role')
-@endsection
+<?php
+/**
+ * @var  Arcanesoft\Foundation\Auth\Models\Role                                                   $role
+ * @var  Arcanesoft\Foundation\Auth\Models\Permission[]|\Illuminate\Database\Eloquent\Collection  $permissions
+ */
+?>
 
-<?php /** @var  Arcanesoft\Foundation\Auth\Models\Role  $role */ ?>
+@section('page-title')
+    <i class="fas fa-fw fa-user-tag"></i> @lang('Roles') <small>@lang('Edit Role')</small>
+@endsection
 
 @section('content')
     {{ form()->open(['route' => ['admin::auth.roles.update', $role], 'method' => 'PUT']) }}
-        {{-- ROLE --}}
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
+                {{-- ROLE --}}
                 <div class="card card-borderless shadow-sm mb-3">
                     <div class="card-header">@lang('Role')</div>
                     <div class="card-body">
-                        <div class="form-group">
-                            <label for="name" class="control-label">@lang('Name') :</label>
-                            {{ form()->text('name', old('name', $role->name), ['class' => 'form-control'.$errors->first('name', ' is-invalid'), 'placeholder' => __('Name'), 'required']) }}
+                        {{-- NAME --}}
+                        <div class="mb-3">
+                            <label for="name" class="form-label">@lang('Name')</label>
+                            {{ form()->text('name', old('name', $role->name), ['class' => 'form-control'.$errors->first('name', ' is-invalid'), 'required']) }}
                             @error('name')
                                 <span class="invalid-feedback" role="alert">{{ $message }}</span>
                             @enderror
                         </div>
 
-                        <div class="form-group">
-                            <label for="description" class="control-label">@lang('Description') :</label>
-                            {{ form()->text('description', old('description', $role->description), ['class' => 'form-control'.$errors->first('description', ' is-invalid'), 'placeholder' => __('Description'), 'required']) }}
+                        {{-- DESCRIPTION --}}
+                        <div>
+                            <label for="description" class="form-label">@lang('Description')</label>
+                            {{ form()->text('description', old('description', $role->description), ['class' => 'form-control'.$errors->first('description', ' is-invalid'), 'required']) }}
                             @error('description')
                                 <span class="invalid-feedback" role="alert">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
-                        {{ arcanesoft\ui\action_link('cancel', route('admin::auth.roles.show', [$role]))->size('sm') }}
-                        {{ arcanesoft\ui\action_button('update')->size('sm')->submit() }}
+                        <a href="{{ route('admin::auth.roles.show', [$role]) }}" class="btn btn-sm btn-light">@lang('Cancel')</a>
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            @lang('Save')
+                        </button>
                     </div>
                 </div>
             </div>
-        </div>
-
-        {{-- PERMISSIONS --}}
-        <div class="card card-borderless shadow-sm mb-3">
-            <div class="card-header">@lang('Permissions')</div>
-            <table class="table table-hover table-md mb-0">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>@lang('Group')</th>
-                        <th>@lang('Category')</th>
-                        <th>@lang('Name')</th>
-                        <th>@lang('Description')</th>
-                    </tr>
-                </thead>
-                <tbody>
-                @forelse($permissions as $permission)
-                    <?php /** @var  Arcanesoft\Foundation\Auth\Models\Permission  $permission */ ?>
-                    <tr>
-                        <td>
-                            {{ form()->checkbox('permissions[]', $permission->uuid, in_array($permission->uuid, old('permissions', $role->permissions->pluck('uuid')->toArray()))) }}
-                        </td>
-                        <td>{{ $permission->group->name }}</td>
-                        <td>{{ $permission->category }}</td>
-                        <td>{{ $permission->name }}</td>
-                        <td><small>{{ $permission->description }}</small></td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="text-center">@lang('The list is empty!')</td>
-                    </tr>
-                @endforelse
-                </tbody>
-            </table>
+            <div class="col-md-8">
+                {{-- PERMISSIONS --}}
+                <div class="card card-borderless shadow-sm mb-3">
+                    <div class="card-header px-2">@lang('Permissions')</div>
+                    <table class="table table-borderless table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th class="font-weight-light text-uppercase text-muted">#</th>
+                                <th class="font-weight-light text-uppercase text-muted">@lang('Group')</th>
+                                <th class="font-weight-light text-uppercase text-muted">@lang('Category')</th>
+                                <th class="font-weight-light text-uppercase text-muted">@lang('Name')</th>
+                                <th class="font-weight-light text-uppercase text-muted">@lang('Description')</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @forelse($permissions as $permission)
+                            <tr>
+                                <td>
+                                    {{ form()->checkbox('permissions[]', $permission->getRouteKey(), in_array($permission->getRouteKey(), old('permissions', $role->permissions->pluck($permission->getRouteKeyName())->toArray()))) }}
+                                </td>
+                                <td class="small">{{ $permission->group->name }}</td>
+                                <td class="small">{{ $permission->category }}</td>
+                                <td class="small">{{ $permission->name }}</td>
+                                <td class="small">{{ $permission->description }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center">@lang('The list is empty!')</td>
+                            </tr>
+                        @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     {{ form()->close() }}
 @endsection

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Http\Controllers;
 
 use Arcanesoft\Foundation\Auth\Auth;
-use Arcanesoft\Foundation\Auth\Http\Requests\Admins\{CreateAdministratorRequest, UpdateAdministratorRequest};
-use Arcanesoft\Foundation\Auth\Models\Admin;
+use Arcanesoft\Foundation\Auth\Http\Requests\Administrators\{CreateAdministratorRequest, UpdateAdministratorRequest};
+use Arcanesoft\Foundation\Auth\Models\Administrator;
 use Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy;
 use Arcanesoft\Foundation\Auth\Repositories\{AdministratorsRepository, RolesRepository};
 use Arcanesoft\Foundation\Support\Traits\HasNotifications;
@@ -57,9 +57,7 @@ class AdministratorsController extends Controller
     {
         $this->authorize(AdministratorsPolicy::ability('index'));
 
-        $this->selectMetrics('arcanesoft.foundation.metrics.selected.auth-admins');
-
-        return $this->view('authorization.admins.index', compact('trash'));
+        return $this->view('authorization.administrators.index', compact('trash'));
     }
 
     /**
@@ -69,11 +67,23 @@ class AdministratorsController extends Controller
      */
     public function trash()
     {
-        $this->authorize(AdministratorsPolicy::ability('index'));
-
-        $this->selectMetrics('arcanesoft.foundation.metrics.selected.auth-admins');
-
         return $this->index(true);
+    }
+
+    /**
+     * Show all the metrics.
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function metrics()
+    {
+        $this->authorize(AdministratorsPolicy::ability('metrics'));
+
+        $this->addBreadcrumbRoute(__('Metrics'), 'admin::auth.administrators.metrics');
+
+        $this->selectMetrics('arcanesoft.foundation.metrics.selected.authorization.administrators');
+
+        return $this->view('authorization.administrators.metrics');
     }
 
     /**
@@ -87,30 +97,34 @@ class AdministratorsController extends Controller
     {
         $this->authorize(AdministratorsPolicy::ability('create'));
 
-        $roles = $rolesRepo->getFilteredByAuthenticatedUser(Auth::admin());
+        $roles = $rolesRepo->getFilteredByAuthenticatedAdministrator(Auth::admin());
 
         $this->addBreadcrumb(__('New Administrator'));
 
-        return $this->view('authorization.admins.create', compact('roles'));
+        return $this->view('authorization.administrators.create', compact('roles'));
     }
 
     /**
      * Persist the new administrator.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Http\Requests\Admins\CreateAdministratorRequest  $request
-     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository            $adminsRepo
+     * @param  \Arcanesoft\Foundation\Auth\Http\Requests\Administrators\CreateAdministratorRequest  $request
+     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository                    $repo
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(CreateAdministratorRequest $request, AdministratorsRepository $adminsRepo)
+    public function store(CreateAdministratorRequest $request, AdministratorsRepository $repo)
     {
         $this->authorize(AdministratorsPolicy::ability('create'));
 
-        $data  = $request->getValidatedData();
-        $admin = $adminsRepo->createOneWithRoles($data, $data['roles'] ?: []);
+        $attributes = $request->validated();
+
+        $attributes['roles'] = $attributes['roles'] ?? [];
+
+        $admin = $repo->createOneWithRoles($attributes);
 
         $this->notifySuccess(
-            __('Administrator Created'), __('A new administrator has been successfully created!')
+            __('Administrator Created'),
+            __('A new administrator has been successfully created!')
         );
 
         return redirect()->route('admin::auth.administrators.show', [$admin]);
@@ -119,83 +133,87 @@ class AdministratorsController extends Controller
     /**
      * Show the administrator's details.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $administrator
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function show(Admin $admin)
+    public function show(Administrator $administrator)
     {
-        $this->authorize(AdministratorsPolicy::ability('show'), [$admin]);
+        $this->authorize(AdministratorsPolicy::ability('show'), [$administrator]);
 
-        $this->addBreadcrumbRoute(__("Administrator's details"), 'admin::auth.administrators.show', [$admin]);
+        $this->addBreadcrumbRoute(__("Administrator's details"), 'admin::auth.administrators.show', [$administrator]);
 
-        return $this->view('authorization.admins.show', compact('admin'));
+        return $this->view('authorization.administrators.show', compact('administrator'));
     }
 
     /**
      * Edit the administrator.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin                  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator          $administrator
      * @param  \Arcanesoft\Foundation\Auth\Repositories\RolesRepository  $rolesRepo
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit(Admin $admin, RolesRepository $rolesRepo)
+    public function edit(Administrator $administrator, RolesRepository $rolesRepo)
     {
-        $this->authorize(AdministratorsPolicy::ability('update'), [$admin]);
+        $this->authorize(AdministratorsPolicy::ability('update'), [$administrator]);
 
-        $roles = $rolesRepo->getFilteredByAuthenticatedUser(Auth::admin());
+        $administrator->load(['roles']);
 
-        $this->addBreadcrumbRoute(__('Edit Administrator'), 'admin::auth.administrators.edit', [$admin]);
+        $roles = $rolesRepo->getFilteredByAuthenticatedAdministrator(Auth::admin());
 
-        return $this->view('authorization.admins.edit', compact('admin', 'roles'));
+        $this->addBreadcrumbRoute(__('Edit Administrator'), 'admin::auth.administrators.edit', [$administrator]);
+
+        return $this->view('authorization.administrators.edit', compact('administrator', 'roles'));
     }
 
     /**
      * Update the administrator.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin                                     $admin
-     * @param  \Arcanesoft\Foundation\Auth\Http\Requests\Admins\UpdateAdministratorRequest  $request
-     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository            $adminsRepo
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator                             $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Http\Requests\Administrators\UpdateAdministratorRequest  $request
+     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository            $repo
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Admin $admin, UpdateAdministratorRequest $request, AdministratorsRepository $adminsRepo)
+    public function update(Administrator $administrator, UpdateAdministratorRequest $request, AdministratorsRepository $repo)
     {
-        $this->authorize(AdministratorsPolicy::ability('update'), [$admin]);
+        $this->authorize(AdministratorsPolicy::ability('update'), [$administrator]);
 
-        $data = $request->getValidatedData();
+        $attributes = $request->validated();
 
-        $adminsRepo->updateOneWithRoles($admin, $data, $data['roles'] ?: []);
+        $attributes['roles'] = $attributes['roles'] ?? [];
+
+        $repo->updateOneWithRoles($administrator, $attributes);
 
         $this->notifySuccess(
-            __('Administrator Updated'), __('The administrator has been successfully updated!')
+            __('Administrator Updated'),
+            __('The administrator has been successfully updated!')
         );
 
-        return redirect()->route('admin::auth.administrators.show', [$admin]);
+        return redirect()->route('admin::auth.administrators.show', [$administrator]);
     }
 
     /**
      * Activate/Deactivate an administrator.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin                           $user
-     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository  $adminsRepo
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator                   $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository  $repo
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function activate(Admin $user, AdministratorsRepository $adminsRepo)
+    public function activate(Administrator $administrator, AdministratorsRepository $repo)
     {
-        $this->authorize(AdministratorsPolicy::ability('activate'), [$user]);
+        $this->authorize(AdministratorsPolicy::ability('activate'), [$administrator]);
 
-        $adminsRepo->toggleActive($user);
+        $repo->toggleActive($administrator);
 
-        $user->isActive()
-            ? $this->notifySuccess(
-                __('Administrator Activated'), __('The administrator has been successfully activated!')
-            )
-            : $this->notifySuccess(
-                __('Administrator Deactivated'), __('The administrator has been successfully deactivated!')
-            );
+        $activated = $administrator->isActive();
+
+        $this->notifySuccess(
+            __($activated ? 'Administrator Activated' : 'Administrator Deactivated'),
+            __($activated ? 'The administrator has been successfully activated!' : 'The administrator has been successfully deactivated!')
+        );
 
         return static::jsonResponseSuccess();
     }
@@ -203,19 +221,23 @@ class AdministratorsController extends Controller
     /**
      * Delete an administrator.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin                           $admin
-     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository  $adminsRepo
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator                   $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository  $repo
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function delete(Admin $admin, AdministratorsRepository $adminsRepo)
+    public function delete(Administrator $administrator, AdministratorsRepository $repo)
     {
-        $this->authorize(AdministratorsPolicy::ability($admin->trashed() ? 'force-delete' : 'delete'), [$admin]);
+        $this->authorize(
+            AdministratorsPolicy::ability($administrator->trashed() ? 'force-delete' : 'delete'),
+            [$administrator]
+        );
 
-        $adminsRepo->deleteOne($admin);
+        $repo->deleteOne($administrator);
 
         $this->notifySuccess(
-            __('Administrator Deleted'), __('The administrator has been successfully deleted!')
+            __('Administrator Deleted'),
+            __('The administrator has been successfully deleted!')
         );
 
         return static::jsonResponseSuccess();
@@ -224,19 +246,20 @@ class AdministratorsController extends Controller
     /**
      * Restore a deleted administrator.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin                           $admin
-     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository  $adminsRepo
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator                   $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository  $repo
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function restore(Admin $admin, AdministratorsRepository $adminsRepo)
+    public function restore(Administrator $administrator, AdministratorsRepository $repo)
     {
-        $this->authorize(AdministratorsPolicy::ability('restore'), [$admin]);
+        $this->authorize(AdministratorsPolicy::ability('restore'), [$administrator]);
 
-        $adminsRepo->restoreOne($admin);
+        $repo->restoreOne($administrator);
 
         $this->notifySuccess(
-            __('Administrator Restored'), __('The administrator has been successfully restored!')
+            __('Administrator Restored'),
+            __('The administrator has been successfully restored!')
         );
 
         return static::jsonResponseSuccess();

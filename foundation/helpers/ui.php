@@ -73,12 +73,12 @@ if ( ! function_exists(__NAMESPACE__.'\count_pill')) {
     {
         if (is_null($condition)) {
             $condition = function ($count) {
-                return $count > 0 ? 'badge-outline-info' : 'badge-outline-light';
+                return $count > 0 ? 'rounded-pill border border-info' : '';
             };
         }
 
         return Span::make()
-            ->class(['badge', 'badge-pill', $condition($count)])
+            ->class(['badge', 'text-muted', $condition($count)])
             ->text($count);
     }
 }

@@ -14,24 +14,5 @@ use Arcanesoft\Foundation\Auth\Http\Requests\FormRequest;
  */
 abstract class UserFormRequest extends FormRequest
 {
-    /* -----------------------------------------------------------------
-     |  Main Methods
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Get the validated data.
-     *
-     * @return array
-     */
-    public function getValidatedData(): array
-    {
-        return $this->all([
-            'first_name',
-            'last_name',
-            'email',
-            'password',
-            'roles',
-        ]);
-    }
+    //
 }

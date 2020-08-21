@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Support\Providers;
 
-use Arcanesoft\Foundation\Support\Providers\Concerns\HasPolicies;
+use Arcanesoft\Foundation\Support\Providers\Concerns\HasPolicyClasses;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 /**
@@ -20,7 +20,7 @@ abstract class AuthServiceProvider extends ServiceProvider
      | -----------------------------------------------------------------
      */
 
-    use HasPolicies;
+    use HasPolicyClasses;
 
     /* -----------------------------------------------------------------
      |  Main Methods

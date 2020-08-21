@@ -1,8 +1,5 @@
 <?php /** @var  \Arcanesoft\Foundation\Helpers\Sidebar\Manager  $sidebar */ ?>
 <aside id="sidebar-container" class="sidebar-container">
-    <div class="sidebar-brand-container">
-        <a class="brand-logo" href="{{ route('admin::index') }}">ARCANESOFT</a>
-    </div>
     <nav id="sidebar-nav-container" class="sidebar-nav-container">
         @foreach($sidebar->items() as $sidebarItem)
             <?php /** @var  \Arcanesoft\Foundation\Helpers\Sidebar\Item  $sidebarItem */ ?>

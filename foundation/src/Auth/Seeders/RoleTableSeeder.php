@@ -23,13 +23,19 @@ class RoleTableSeeder extends RolesSeeder
     /**
      * Run the database seeds.
      */
-    public function run(): void 
+    public function run(): void
     {
         $this->seedMany([
             [
                 'name'        => 'Administrator',
                 'key'         => Role::ADMINISTRATOR,
                 'description' => 'The system administrator role',
+                'is_locked'   => true,
+            ],
+            [
+                'name'        => 'Moderator',
+                'key'         => 'moderator',
+                'description' => 'The moderator role',
                 'is_locked'   => true,
             ],
             [
@@ -40,7 +46,10 @@ class RoleTableSeeder extends RolesSeeder
             ],
         ]);
 
-        $this->syncRoles([
+        $this->syncRolesWithPermissions([
+            'moderator'      => [
+                'admin::dashboard.index',
+            ],
             'auth-moderator' => [
                 'admin::dashboard.index',
                 'admin::auth.*',

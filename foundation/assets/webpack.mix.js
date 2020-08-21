@@ -15,5 +15,7 @@ mix.setResourceRoot(options.resourceRoot);
  |--------------------------------------------------------------------------
  */
 
-mix.ts(`${__dirname}/js/app.ts`, 'js/arcanesoft.js');
-mix.sass(`${__dirname}/scss/app.scss`, 'css/arcanesoft.css');
+mix.ts(`${__dirname}/js/main.ts`, 'js/arcanesoft.js');
+mix.sass(`${__dirname}/scss/main.scss`, 'css/arcanesoft.css');
+
+mix.copyDirectory(`${__dirname}/svg`, `${options.assetsPath}/svg/arcanesoft`);

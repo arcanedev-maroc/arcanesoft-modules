@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Http\Requests;
 
-use Arcanedev\Support\Http\FormRequest as BaseFormRequest;
+use Illuminate\Foundation\Http\FormRequest as IlluminateFormRequest;
 
 /**
  * Class     FormRequest
@@ -12,7 +12,7 @@ use Arcanedev\Support\Http\FormRequest as BaseFormRequest;
  * @package  Arcanesoft\Foundation\Auth\Http\Requests
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-abstract class FormRequest extends BaseFormRequest
+abstract class FormRequest extends IlluminateFormRequest
 {
     //
 }

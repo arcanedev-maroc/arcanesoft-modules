@@ -26,6 +26,13 @@ class MediaServiceProvider extends PackageServiceProvider
      */
     protected $package = 'media';
 
+    /**
+     * Merge multiple config files into one instance (package name as root key).
+     *
+     * @var bool
+     */
+    protected $multiConfigs = true;
+
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
@@ -36,7 +43,7 @@ class MediaServiceProvider extends PackageServiceProvider
      */
     public function register(): void
     {
-        $this->registerMultipleConfig();
+        $this->registerConfig();
 
         $this->registerProviders([
             Providers\AuthServiceProvider::class,
@@ -63,14 +70,14 @@ class MediaServiceProvider extends PackageServiceProvider
      */
     public function boot(): void
     {
-        $this->loadViews();
         $this->loadTranslations();
+        $this->loadViews();
 
         if ($this->app->runningInConsole()) {
-            $this->publishMultipleConfig();
-            $this->publishViews();
-            $this->publishTranslations();
             $this->publishAssets();
+            $this->publishConfig();
+            $this->publishTranslations();
+            $this->publishViews();
         }
     }
 }

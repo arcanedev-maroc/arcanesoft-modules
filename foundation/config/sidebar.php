@@ -39,7 +39,7 @@ return [
                     'icon'        => 'fas fa-fw fa-tachometer-alt',
                     'route'       => 'admin::auth.index',
                     'roles'       => ['auth-moderator'],
-                    'permissions' => [],
+                    'permissions' => ['admin::auth.index'],
                 ],
                 [
                     'name'        => 'auth::authorization.users',
@@ -47,7 +47,7 @@ return [
                     'icon'        => 'fas fa-fw fa-users',
                     'route'       => 'admin::auth.users.index',
                     'roles'       => ['auth-moderator'],
-                    'permissions' => [],
+                    'permissions' => ['admin::auth.users.index'],
                 ],
                 [
                     'name'        => 'auth::authorization.administrators',
@@ -55,7 +55,7 @@ return [
                     'icon'        => 'fas fa-fw fa-user-secret',
                     'route'       => 'admin::auth.administrators.index',
                     'roles'       => ['auth-moderator'],
-                    'permissions' => [],
+                    'permissions' => ['admin::auth.administrators.index'],
                 ],
                 [
                     'name'        => 'auth::authorization.roles',
@@ -63,7 +63,7 @@ return [
                     'icon'        => 'fas fa-fw fa-user-tag',
                     'route'       => 'admin::auth.roles.index',
                     'roles'       => ['auth-moderator'],
-                    'permissions' => [],
+                    'permissions' => ['admin::auth.roles.index'],
                 ],
                 [
                     'name'        => 'auth::authorization.permissions',
@@ -71,7 +71,7 @@ return [
                     'icon'        => 'fas fa-fw fa-shield-alt',
                     'route'       => 'admin::auth.permissions.index',
                     'roles'       => ['auth-moderator'],
-                    'permissions' => [],
+                    'permissions' => ['admin::auth.permissions.index'],
                 ],
                 [
                     'name'        => 'auth::authorization.password-resets',
@@ -79,7 +79,7 @@ return [
                     'icon'        => 'fas fa-fw fa-sync',
                     'route'       => 'admin::auth.password-resets.index',
                     'roles'       => ['auth-moderator'],
-                    'permissions' => [],
+                    'permissions' => ['admin::auth.password-resets.index'],
                 ],
                 [
                     'name'        => 'auth::authorization.settings',
@@ -87,7 +87,7 @@ return [
                     'icon'        => 'fas fa-fw fa-cog',
                     'route'       => 'admin::auth.settings.index',
                     'roles'       => ['auth-moderator'],
-                    'permissions' => [],
+                    'permissions' => ['admin::auth.settings.index'],
                 ],
             ],
         ],

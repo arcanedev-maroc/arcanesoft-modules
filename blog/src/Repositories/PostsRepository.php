@@ -42,7 +42,7 @@ class PostsRepository extends AbstractRepository
     {
         /** @var  \Arcanesoft\Blog\Models\Post  $post */
         $post = $this->model()->fill($attributes)->forceFill([
-            'uuid' => Str::uuid(),
+            'uuid' => Str::uuid(), // TODO: Move to Event/Listener
         ]);
 
         $post->save();

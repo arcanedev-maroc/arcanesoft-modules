@@ -27,6 +27,13 @@ class BackupsServiceProvider extends PackageServiceProvider
      */
     protected $package = 'backups';
 
+    /**
+     * Merge multiple config files into one instance (package name as root key)
+     *
+     * @var bool
+     */
+    protected $multiConfigs = true;
+
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
@@ -37,7 +44,7 @@ class BackupsServiceProvider extends PackageServiceProvider
      */
     public function register(): void
     {
-        $this->registerMultipleConfig();
+        $this->registerConfig();
 
         $this->registerProviders([
             Providers\AuthServiceProvider::class,
@@ -55,13 +62,13 @@ class BackupsServiceProvider extends PackageServiceProvider
      */
     public function boot(): void
     {
-        $this->loadViews();
         $this->loadTranslations();
+        $this->loadViews();
 
         if ($this->app->runningInConsole()) {
-            $this->publishMultipleConfig();
-            $this->publishViews(false);
-            $this->publishTranslations(false);
+            $this->publishConfig();
+            $this->publishTranslations();
+            $this->publishViews();
         }
     }
 }

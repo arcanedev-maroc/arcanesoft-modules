@@ -3,7 +3,7 @@
 namespace Arcanesoft\Blog\Policies;
 
 use Arcanesoft\Blog\Models\Tag;
-use Arcanesoft\Foundation\Auth\Models\Admin;
+use Arcanesoft\Foundation\Auth\Models\Administrator;
 
 /**
  * Class     TagsPolicy
@@ -93,11 +93,11 @@ class TagsPolicy extends Policy
     /**
      * Allow to list all the tags.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function index(Admin $admin)
+    public function index(Administrator $administrator)
     {
         //
     }
@@ -105,11 +105,11 @@ class TagsPolicy extends Policy
     /**
      * Allow to list all the tags' metrics.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function metrics(Admin $admin)
+    public function metrics(Administrator $administrator)
     {
         //
     }
@@ -117,11 +117,11 @@ class TagsPolicy extends Policy
     /**
      * Allow to create a tag.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function create(Admin $admin)
+    public function create(Administrator $administrator)
     {
         //
     }
@@ -129,12 +129,12 @@ class TagsPolicy extends Policy
     /**
      * Allow to show a tag details.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
-     * @param  \Arcanesoft\Blog\Models\Tag|mixed|null          $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Blog\Models\Tag|mixed|null                  $tag
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function show(Admin $admin, Tag $model = null)
+    public function show(Administrator $administrator, Tag $tag = null)
     {
         //
     }
@@ -142,12 +142,12 @@ class TagsPolicy extends Policy
     /**
      * Allow to update a tag.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
-     * @param  \Arcanesoft\Blog\Models\Tag|mixed|null          $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Blog\Models\Tag|mixed|null                  $tag
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function update(Admin $admin, Tag $model = null)
+    public function update(Administrator $administrator, Tag $tag = null)
     {
         //
     }
@@ -155,14 +155,14 @@ class TagsPolicy extends Policy
     /**
      * Allow to delete a tag.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
-     * @param  \Arcanesoft\Blog\Models\Tag|mixed|null          $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Blog\Models\Tag|mixed|null                  $tag
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function delete(Admin $admin, Tag $model = null)
+    public function delete(Administrator $administrator, Tag $tag = null)
     {
-        if ( ! is_null($model))
-            return $model->isDeletable();
+        if ( ! is_null($tag))
+            return $tag->isDeletable();
     }
 }

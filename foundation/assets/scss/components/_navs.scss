@@ -1,3 +1,5 @@
+@import "~bootstrap/scss/nav";
+
 .nav-tabs {
     .nav-link {
         background: $nav-tabs-link-bg;
@@ -47,13 +49,13 @@
 
     &.nav-tabs-vertical-custom {
         @extend .nav-tabs-vertical;
-        background: theme-color("primary");
+        background: $primary;
         border-radius: $nav-tabs-border-radius;
 
         .nav-link {
             background: transparent;
             border-color: rgba($white, .2);
-            color: darken(theme-color("primary"), 30%);
+            color: darken($primary, 30%);
             padding: 1.75rem;
 
             &.active {

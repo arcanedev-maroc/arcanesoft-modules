@@ -20,7 +20,8 @@ use Illuminate\Support\Str;
  * @property  \Illuminate\Support\Carbon  created_at
  * @property  \Illuminate\Support\Carbon  updated_at
  *
- * @property-read  \Illuminate\Database\Eloquent\Collection  $posts
+ * @property-read  \Arcanesoft\Blog\Models\Post[]|\Illuminate\Database\Eloquent\Collection  $posts
+ * @property-read  int                                                                      $posts_count
  */
 class Tag extends Model
 {

@@ -7,6 +7,7 @@ namespace Arcanesoft\Foundation\Auth\Http\Controllers;
 use Arcanesoft\Foundation\Auth\Http\Requests\Roles\{CreateRoleRequest, UpdateRoleRequest};
 use Arcanesoft\Foundation\Auth\Models\Role;
 use Arcanesoft\Foundation\Auth\Policies\RolesPolicy;
+use Illuminate\Http\Request;
 use Arcanesoft\Foundation\Auth\Repositories\{PermissionsRepository, RolesRepository};
 use Arcanesoft\Foundation\Support\Traits\HasNotifications;
 
@@ -54,9 +55,23 @@ class RolesController extends Controller
     {
         $this->authorize(RolesPolicy::ability('index'));
 
-        $this->selectMetrics('arcanesoft.foundation.metrics.selected.auth-roles');
-
         return $this->view('authorization.roles.index');
+    }
+
+    /**
+     * Show all the metrics.
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function metrics()
+    {
+        $this->authorize(RolesPolicy::ability('metrics'));
+
+        $this->addBreadcrumbRoute(__('Metrics'), 'admin::auth.roles.metrics');
+
+        $this->selectMetrics('arcanesoft.foundation.metrics.selected.authorization.roles');
+
+        return $this->view('authorization.roles.metrics');
     }
 
     /**
@@ -99,18 +114,23 @@ class RolesController extends Controller
      * Show the role's details.
      *
      * @param  \Arcanesoft\Foundation\Auth\Models\Role  $role
+     * @param  \Illuminate\Http\Request                 $request
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function show(Role $role)
+    public function show(Role $role, Request $request)
     {
         $this->authorize(RolesPolicy::ability('show'), [$role]);
 
-        $role->load(['users', 'permissions.group']);
+        $tab = (string) $request->query('tab', 'administrators');
+
+        abort_unless(in_array($tab, ['administrators', 'permissions']), 404);
+
+        $role->load(['administrators', 'permissions.group']);
 
         $this->addBreadcrumbRoute($role->name, 'admin::auth.roles.show', [$role]);
 
-        return $this->view('authorization.roles.show', compact('role'));
+        return $this->view('authorization.roles.show', compact('role', 'tab'));
     }
 
     /**

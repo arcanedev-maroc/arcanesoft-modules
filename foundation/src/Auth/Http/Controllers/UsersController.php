@@ -58,8 +58,6 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability('index'));
 
-        $this->selectMetrics('arcanesoft.foundation.metrics.selected.auth-users');
-
         return $this->view('authorization.users.index', compact('trash'));
     }
 
@@ -70,9 +68,21 @@ class UsersController extends Controller
      */
     public function trash()
     {
-        $this->authorize(UsersPolicy::ability('index'));
-
         return $this->index(true);
+    }
+
+    /**
+     * List all the deleted users.
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function metrics()
+    {
+        $this->authorize(UsersPolicy::ability('metrics'));
+
+        $this->selectMetrics('arcanesoft.foundation.metrics.selected.authorization.users');
+
+        return $this->view('authorization.users.metrics');
     }
 
     /**
@@ -101,9 +111,7 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability('create'));
 
-        $user = $usersRepo->createOne(
-            $request->getValidatedData()
-        );
+        $user = $usersRepo->createOne($request->validated());
 
         $this->notifySuccess(
             __('User Created'), __('A new user has been successfully created!')
@@ -157,7 +165,7 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability('update'), [$user]);
 
-        $usersRepo->updateOne($user, $request->getValidatedData());
+        $usersRepo->updateOne($user, $request->validated());
 
         $this->notifySuccess(
             __('User Updated'), __('The user has been successfully updated!')
@@ -180,13 +188,12 @@ class UsersController extends Controller
 
         $usersRepo->toggleActive($user);
 
-        $user->isActive()
-            ? $this->notifySuccess(
-                __( 'User Activated'), __('The user has been successfully activated!')
-            )
-            : $this->notifySuccess(
-                __('User Deactivated'), __('The user has been successfully deactivated!')
-            );
+        $activated = $user->isActive();
+
+        $this->notifySuccess(
+            __($activated ? 'User Activated' : 'User Deactivated'),
+            __($activated ? 'The user has been successfully activated!' : 'The user has been successfully deactivated!')
+        );
 
         return static::jsonResponseSuccess();
     }
@@ -206,7 +213,8 @@ class UsersController extends Controller
         $usersRepo->deleteOne($user);
 
         $this->notifySuccess(
-            __('User Deleted'), __('The user has been successfully deleted!')
+            __('User Deleted'),
+            __('The user has been successfully deleted!')
         );
 
         return static::jsonResponseSuccess();
@@ -227,7 +235,8 @@ class UsersController extends Controller
         $usersRepo->restoreOne($user);
 
         $this->notifySuccess(
-            __('User Restored'), __('The user has been successfully restored!')
+            __('User Restored'),
+            __('The user has been successfully restored!')
         );
 
         return static::jsonResponseSuccess();
@@ -245,12 +254,13 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability('impersonate'), [$user]);
 
-        if ($impersonator->start(Auth::admin(), $user)) {
+        if ($impersonator->start(Auth::admin(), $user, 'web')) {
             return redirect()->route('public::index'); // TODO: Extract the route name into a config
         }
 
         $this->notifyError(
-            __('Impersonation Not Allowed'), __('You\'re not allowed to impersonate this user')
+            __('Impersonation Not Allowed'),
+            __('You\'re not allowed to impersonate this user')
         );
 
         return redirect()->back();

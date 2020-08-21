@@ -25,4 +25,11 @@ class PassportServiceProvider extends PackageServiceProvider
      * @var string
      */
     protected $package = 'passport';
+
+    /**
+     * Merge multiple config files into one instance (package name as root key).
+     *
+     * @var bool
+     */
+    protected $multiConfigs = true;
 }

@@ -7,9 +7,7 @@ namespace Arcanesoft\Blog\Http\Requests\Posts;
 use Arcanesoft\Blog\Blog;
 use Arcanesoft\Blog\Http\Requests\FormRequest;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Exists;
-use Illuminate\Validation\Rules\Unique;
+use Illuminate\Validation\Rules\{Exists, Unique};
 
 /**
  * Class     CreatePostRequest
@@ -48,22 +46,6 @@ class CreatePostRequest extends FormRequest
     {
         $this->merge([
             'slug' => Str::slug($this->get('slug') ?: $this->get('title')),
-        ]);
-    }
-
-    /**
-     * Get the validated data.
-     *
-     * @return array
-     */
-    public function getValidatedData(): array
-    {
-        return $this->all([
-            'title',
-            'slug',
-            'excerpt',
-            'body',
-            'tags',
         ]);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Support\Http;
 
+use Arcanedev\Support\Routing\RouteRegistrar;
 use Closure;
 
 /**
@@ -32,13 +33,26 @@ abstract class AdminRouteRegistrar extends RouteRegistrar
     }
 
     /**
+     * Get the admin name.
+     *
+     * @return string
+     */
+    protected function getAdminName(): string
+    {
+        return 'admin::';
+    }
+
+    /**
      * Get the admin middleware.
      *
      * @return array
      */
     protected function getAdminMiddleware(): array
     {
-        return ['web', 'admin'];
+        return [
+            'web',
+            'arcanesoft',
+        ];
     }
 
     /* -----------------------------------------------------------------
@@ -55,21 +69,8 @@ abstract class AdminRouteRegistrar extends RouteRegistrar
     {
         $this->prefix($this->getAdminPrefix())
              ->middleware($this->getAdminMiddleware())
-             ->name('admin::')
+             ->name($this->getAdminName())
              ->group($this->prepareModuleCallback($callback));
-    }
-
-    /**
-     * Group the route under the datatables stack.
-     *
-     * @param  \Closure  $callback
-     */
-    protected function dataTableGroup(Closure $callback)
-    {
-        $this->prefix('datatables')
-             ->name('datatables.')
-             ->middleware(['ajax'])
-             ->group($callback);
     }
 
     /**

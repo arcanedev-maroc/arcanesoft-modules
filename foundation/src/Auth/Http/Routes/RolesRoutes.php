@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Http\Routes;
 
-use Arcanesoft\Foundation\Auth\Http\Controllers\Datatables\RolesController as RolesDataTablesController;
 use Arcanesoft\Foundation\Auth\Http\Controllers\RolesController;
 use Arcanesoft\Foundation\Auth\Repositories\RolesRepository;
 
@@ -39,7 +38,9 @@ class RolesRoutes extends AbstractRouteRegistrar
                 $this->get('/', [RolesController::class, 'index'])
                      ->name('index');
 
-                $this->mapDataTablesRoutes();
+                // admin::auth.roles.metrics
+                $this->get('metrics', [RolesController::class, 'metrics'])
+                     ->name('metrics');
 
                 // admin::auth.roles.create
                 $this->get('create', [RolesController::class, 'create'])
@@ -74,24 +75,12 @@ class RolesRoutes extends AbstractRouteRegistrar
 
                     $this->namespace('Roles')->group(function () {
                         static::mapRouteClasses([
+                            Roles\AdministratorsRoutes::class,
                             Roles\PermissionsRoutes::class,
-                            Roles\UsersRoutes::class,
                         ]);
                     });
                 });
             });
-        });
-    }
-
-    /**
-     * Map datatables routes.
-     */
-    protected function mapDataTablesRoutes(): void
-    {
-        $this->dataTableGroup(function () {
-            // admin::auth.roles.datatables.index
-            $this->get('/', [RolesDataTablesController::class, 'index'])
-                 ->name('index');
         });
     }
 
@@ -108,7 +97,7 @@ class RolesRoutes extends AbstractRouteRegistrar
 
         static::bindRouteClasses([
             Roles\PermissionsRoutes::class,
-            Roles\UsersRoutes::class,
+            Roles\AdministratorsRoutes::class,
         ]);
     }
 }

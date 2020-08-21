@@ -7,7 +7,8 @@ namespace Arcanesoft\Foundation\Auth\Database\Seeders;
 use Arcanesoft\Foundation\Auth\Auth;
 use Arcanesoft\Foundation\Auth\Repositories\{PermissionsRepository, RolesRepository};
 use Arcanesoft\Foundation\Support\Database\Seeder;
-use Illuminate\Support\{Arr, Collection, Facades\Date, Str};
+use Illuminate\Support\{Arr, Collection, Str};
+use Illuminate\Support\Facades\Date;
 
 /**
  * Class     RolesSeeder
@@ -99,11 +100,11 @@ abstract class RolesSeeder extends Seeder
     }
 
     /**
-     * Sync the roles.
+     * Sync the roles with permissions.
      *
      * @param  array  $roles
      */
-    protected function syncRoles(array $roles): void
+    protected function syncRolesWithPermissions(array $roles): void
     {
         $rolesRepo   = $this->getRolesRepository();
         $permissions = $this->getPermissionsRepository()->pluck('ability', 'id');

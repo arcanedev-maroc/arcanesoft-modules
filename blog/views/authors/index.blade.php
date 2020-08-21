@@ -16,11 +16,11 @@
             <table id="authors-table" class="table table-hover table-md mb-0">
                 <thead>
                     <tr>
-                        <th>@lang('Full Name')</th>
-                        <th>@lang('Username')</th>
-                        <th class="text-center">@lang('Posts')</th>
-                        <th class="text-center">@lang('Created at')</th>
-                        <th class="text-right">@lang('Actions')</th>
+                        <th class="font-weight-light text-uppercase text-muted">@lang('Full Name')</th>
+                        <th class="font-weight-light text-uppercase text-muted">@lang('Username')</th>
+                        <th class="font-weight-light text-uppercase text-muted text-center">@lang('Posts')</th>
+                        <th class="font-weight-light text-uppercase text-muted text-center">@lang('Created at')</th>
+                        <th class="font-weight-light text-uppercase text-muted text-right">@lang('Actions')</th>
                     </tr>
                 </thead>
             </table>
@@ -30,19 +30,5 @@
 
 @push('scripts')
     <script>
-        ready(() => {
-            window.plugins.datatable('table#authors-table', {
-                ajax: "{{ route('admin::blog.authors.datatables.index') }}",
-                serverSide: true,
-                processing: true,
-                columns: [
-                    { data: 'full_name', orderable: false, searchable: false },
-                    { data: 'username' },
-                    { data: 'posts', class: 'text-center', orderable: false, searchable: false },
-                    { data: 'created_at', class: 'text-center'},
-                    { data: 'actions', class: 'text-right', orderable: false, searchable: false }
-                ],
-            })
-        })
     </script>
 @endpush

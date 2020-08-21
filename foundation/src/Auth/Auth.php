@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth;
 
-use Arcanesoft\Foundation\Auth\Models\Admin;
+use Arcanesoft\Foundation\Auth\Models\Administrator;
 use Illuminate\Support\Str;
 
 /**
@@ -15,6 +15,13 @@ use Illuminate\Support\Str;
  */
 class Auth
 {
+    /* -----------------------------------------------------------------
+     |  Constants
+     | -----------------------------------------------------------------
+     */
+
+    const GUARD_NAME = 'administrator';
+
     /* -----------------------------------------------------------------
      |  Properties
      | -----------------------------------------------------------------
@@ -48,11 +55,11 @@ class Auth
     /**
      * Get the authenticated administrator.
      *
-     * @return \Arcanesoft\Foundation\Auth\Models\Admin|mixed
+     * @return \Arcanesoft\Foundation\Auth\Models\Administrator|mixed
      */
-    public static function admin(): Admin
+    public static function admin(): Administrator
     {
-        return auth('admin')->user();
+        return auth(static::GUARD_NAME)->user();
     }
 
     /**
@@ -130,17 +137,16 @@ class Auth
     /**
      * Get a config value of this module.
      *
-     * @param  string|null  $name
+     * @param  string|null  $key
      * @param  mixed|null   $default
      *
      * @return mixed
      */
-    public static function config(?string $name, $default = null)
+    public static function config(?string $key, $default = null)
     {
-        return config()->get(
-            is_null($name) ? "arcanesoft.foundation.auth" : "arcanesoft.foundation.auth.{$name}",
-            $default
-        );
+        $key = is_null($key) ? 'arcanesoft.foundation.auth' : "arcanesoft.foundation.auth.{$key}";
+
+        return config()->get($key, $default);
     }
 
     /* -----------------------------------------------------------------
@@ -151,16 +157,18 @@ class Auth
     /**
      * Check if the given user is a super admin.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $user
      *
      * @return bool
      */
-    public static function isSuperAdmin(Admin $user): bool
+    public static function isSuperAdmin(Administrator $user): bool
     {
-        $emails = static::config('admins.emails', []);
+        $emails = (array) static::config('administrators.emails');
 
-        return ! empty($emails)
-            && in_array($user->email, $emails);
+        if (empty($emails))
+            return false;
+
+        return in_array($user->email, $emails);
     }
 
     /**

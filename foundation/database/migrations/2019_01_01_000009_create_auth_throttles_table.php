@@ -42,7 +42,7 @@ class CreateAuthThrottlesTable extends Migration
             return;
 
         $this->createSchema(function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
 
             $table->string('type');

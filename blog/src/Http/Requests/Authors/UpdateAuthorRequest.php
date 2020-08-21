@@ -7,7 +7,7 @@ namespace Arcanesoft\Blog\Http\Requests\Authors;
 use Arcanesoft\Blog\Blog;
 use Arcanesoft\Blog\Http\Requests\FormRequest;
 use Arcanesoft\Blog\Http\Routes\AuthorsRoutes;
-use Arcanesoft\Foundation\Auth\Rules\Users\UserEmailRule;
+use Arcanesoft\Foundation\Auth\Rules\Users\EmailRule;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
@@ -42,7 +42,7 @@ class UpdateAuthorRequest extends FormRequest
             // User
             'first_name' => ['required', 'string', 'max:50'],
             'last_name'  => ['required', 'string', 'max:50'],
-            'email'      => ['required', 'string', 'email', 'max:255', UserEmailRule::unique()->ignore($author->id)],
+            'email'      => ['required', 'string', 'email', 'max:255', EmailRule::unique()->ignore($author->id)],
             'password'   => ['nullable', 'string', 'min:8', 'confirmed'],
         ];
     }

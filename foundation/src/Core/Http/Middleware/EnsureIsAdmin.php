@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Core\Http\Middleware;
 
-use Arcanesoft\Foundation\Auth\Models\Admin;
+use Arcanesoft\Foundation\Auth\Auth;
+use Arcanesoft\Foundation\Auth\Models\Administrator;
 use Closure;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Factory as Auth;
-use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Contracts\Auth\Factory;
 
 /**
  * Class     EnsureIsAdmin
@@ -30,11 +29,6 @@ class EnsureIsAdmin
      */
     protected $auth;
 
-    /**
-     * @var string
-     */
-    protected $guard = 'admin';
-
     /* -----------------------------------------------------------------
      |  Constructor
      | -----------------------------------------------------------------
@@ -45,7 +39,7 @@ class EnsureIsAdmin
      *
      * @param  \Illuminate\Contracts\Auth\Factory  $auth
      */
-    public function __construct(Auth $auth)
+    public function __construct(Factory $auth)
     {
         $this->auth = $auth;
     }
@@ -65,21 +59,11 @@ class EnsureIsAdmin
      */
     public function handle($request, Closure $next)
     {
-        $user = $this->guard()->user();
+        $user = $this->auth->guard(Auth::GUARD_NAME)->user();
 
-        $this->check($user);
+        abort_unless($this->isAdministrator($user), 403);
 
         return $next($request);
-    }
-
-    /**
-     * Get the auth guard.
-     *
-     * @return \Illuminate\Contracts\Auth\Guard
-     */
-    protected function guard(): Guard
-    {
-        return $this->auth->guard($this->guard);
     }
 
     /* -----------------------------------------------------------------
@@ -88,48 +72,14 @@ class EnsureIsAdmin
      */
 
     /**
-     * Check the user.
-     *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable|mixed|null  $user
-     */
-    protected function check(?Authenticatable $user)
-    {
-        $this->ensureIsAuthenticated($user);
-        $this->ensureIsAdministrator($user);
-        $this->ensureAccountIsActivated($user);
-    }
-
-    /**
-     * Check if authenticated.
-     *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $user
-     */
-    protected function ensureIsAuthenticated($user)
-    {
-        abort_if(is_null($user), 404);
-
-        if ($this->guard()->check()) {
-            $this->auth->shouldUse($this->guard);
-        }
-    }
-
-    /**
      * Check the authenticated user is an administrator.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $user
-     */
-    protected function ensureIsAdministrator($user)
-    {
-        abort_unless($user instanceof Admin, 403, 'Forbidden');
-    }
-
-    /**
-     * Check the authenticated admin has an active account.
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $user
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $user
+     * @return bool
      */
-    protected function ensureAccountIsActivated($user)
+    private function isAdministrator($user): bool
     {
-        abort_unless($user->isActive(), 403, 'Account not activated');
+        return $user instanceof Administrator;
     }
 }

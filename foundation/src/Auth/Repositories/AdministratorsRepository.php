@@ -5,19 +5,21 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Repositories;
 
 use Arcanesoft\Foundation\Auth\Auth;
-use Arcanesoft\Foundation\Auth\Events\Admins\{
-    ActivatedAdmin, ActivatingAdmin, DeactivatedAdmin, DeactivatingAdmin, Roles\SyncedRoles, Roles\SyncingRoles
+use Arcanesoft\Foundation\Auth\Events\Administrators\{
+    ActivatedAdministrator, ActivatingAdministrator, DeactivatedAdministrator, DeactivatingAdministrator,
+    Roles\SyncedRoles, Roles\SyncingRoles
 };
-use Arcanesoft\Foundation\Auth\Models\Admin;
+use Arcanesoft\Foundation\Auth\Models\Administrator;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
+use Illuminate\Support\{Collection, Str};
 
 /**
  * Class     AdminsRepository
  *
  * @package  Arcanesoft\Foundation\Auth\Repositories
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
+ *
+ * @mixin \Arcanesoft\Foundation\Auth\Models\Administrator
  */
 class AdministratorsRepository extends AbstractRepository
 {
@@ -33,7 +35,7 @@ class AdministratorsRepository extends AbstractRepository
      */
     public static function modelClass(): string
     {
-        return Auth::model('admin', Admin::class);
+        return Auth::model('admin', Administrator::class);
     }
 
     /* -----------------------------------------------------------------
@@ -58,7 +60,7 @@ class AdministratorsRepository extends AbstractRepository
      *
      * @param  bool  $condition
      *
-     * @return \Arcanesoft\Foundation\Auth\Models\Admin|\Illuminate\Database\Eloquent\Builder
+     * @return \Arcanesoft\Foundation\Auth\Models\Administrator|\Illuminate\Database\Eloquent\Builder
      */
     public function onlyTrashed(bool $condition = true)
     {
@@ -77,11 +79,12 @@ class AdministratorsRepository extends AbstractRepository
      *
      * @param  string  $uuid
      *
-     * @return \Arcanesoft\Foundation\Auth\Models\Admin|mixed
+     * @return \Arcanesoft\Foundation\Auth\Models\Administrator|mixed
      */
-    public function firstWhereUuidOrFail(string $uuid): Admin
+    public function firstWhereUuidOrFail(string $uuid): Administrator
     {
-        return $this->where('uuid', '=', $uuid)
+        return $this
+            ->where('uuid', '=', $uuid)
             ->withTrashed() // Get also trashed records
             ->firstOrFail();
     }
@@ -91,18 +94,18 @@ class AdministratorsRepository extends AbstractRepository
      *
      * @param  array  $attributes
      *
-     * @return \Arcanesoft\Foundation\Auth\Models\Admin|mixed
+     * @return \Arcanesoft\Foundation\Auth\Models\Administrator|mixed
      */
-    public function createOne(array $attributes): Admin
+    public function createOne(array $attributes): Administrator
     {
         $attributes['password'] = $attributes['password'] ?? Str::random(8);
 
-        return tap($this->model()->fill($attributes), function (Admin $admin) use ($attributes) {
-            $admin->forceFill([
+        return tap($this->model()->fill($attributes), function (Administrator $administrator) use ($attributes) {
+            $administrator->forceFill([
                 'activated_at' => $attributes['activated_at'] ?? now(), // TODO: Add a setting to change this
             ]);
 
-            $admin->save();
+            $administrator->save();
         });
     }
 
@@ -110,75 +113,77 @@ class AdministratorsRepository extends AbstractRepository
      * Create a new administrator with roles.
      *
      * @param  array  $attributes
-     * @param  array  $roles
      *
-     * @return \Arcanesoft\Foundation\Auth\Models\Admin|mixed
+     * @return \Arcanesoft\Foundation\Auth\Models\Administrator|mixed
      */
-    public function createOneWithRoles(array $attributes, array $roles): Admin
+    public function createOneWithRoles(array $attributes): Administrator
     {
-        return tap($this->createOne($attributes), function ($admin) use ($roles) {
-            $this->syncRolesByUuids($admin, $roles);
+        $roles = $attributes['roles'];
+
+        return tap($this->createOne($attributes), function ($administrator) use ($roles) {
+            $this->syncRolesByUuids($administrator, $roles);
         });
     }
 
     /**
      * Update the given administrator.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
-     * @param  array                                     $attributes
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $administrator
+     * @param  array                                             $attributes
      *
      * @return bool
      */
-    public function updateOne(Admin $admin, array $attributes): bool
+    public function updateOne(Administrator $administrator, array $attributes): bool
     {
-        return $admin->update($attributes);
+        return $administrator->update($attributes);
     }
 
     /**
      * Update the given administrator with roles.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
-     * @param  array                                     $attributes
-     * @param  array                                     $roles
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $administrator
+     * @param  array                                             $attributes
      *
      * @return bool
      */
-    public function updateOneWithRoles(Admin $admin, array $attributes, array $roles): bool
+    public function updateOneWithRoles(Administrator $administrator, array $attributes): bool
     {
-        return tap($this->updateOne($admin, $attributes), function () use ($admin, $roles) {
-            $this->syncRolesByUuids($admin, $roles);
+        $roles = $attributes['roles'];
+
+        return tap($this->updateOne($administrator, $attributes), function () use ($administrator, $roles) {
+            $this->syncRolesByUuids($administrator, $roles);
         });
     }
 
     /**
      * Activate/Deactivate a user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $administrator
      *
      * @return bool
      */
-    public function toggleActive(Admin $admin): bool
+    public function toggleActive(Administrator $administrator): bool
     {
-        return $admin->isActive()
-            ? $this->deactivate($admin)
-            : $this->activate($admin);
+        return $administrator->isActive()
+            ? $this->deactivate($administrator)
+            : $this->activate($administrator);
     }
 
     /**
      * Activate the given user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $administrator
      *
      * @return bool
      */
-    public function activate(Admin $admin)
+    public function activate(Administrator $administrator)
     {
-        if ($admin->isActive())
+        if ($administrator->isActive())
             return false;
 
-        event(new ActivatingAdmin($admin));
-        $result = $admin->forceFill(['activated_at' => $admin->freshTimestamp()])->save();
-        event(new ActivatedAdmin($admin));
+        event(new ActivatingAdministrator($administrator));
+        $result = $administrator->forceFill(['activated_at' => $administrator->freshTimestamp()])->save();
+        event(new ActivatedAdministrator($administrator));
 
         return $result;
     }
@@ -186,18 +191,18 @@ class AdministratorsRepository extends AbstractRepository
     /**
      * Deactivate the given user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $administrator
      *
      * @return bool
      */
-    public function deactivate(Admin $admin): bool
+    public function deactivate(Administrator $administrator): bool
     {
-        if ( ! $admin->isActive())
+        if ( ! $administrator->isActive())
             return false;
 
-        event(new DeactivatingAdmin($admin));
-        $result = $admin->forceFill(['activated_at' => null])->save();
-        event(new DeactivatedAdmin($admin));
+        event(new DeactivatingAdministrator($administrator));
+        $result = $administrator->forceFill(['activated_at' => null])->save();
+        event(new DeactivatedAdministrator($administrator));
 
         return $result;
     }
@@ -205,73 +210,73 @@ class AdministratorsRepository extends AbstractRepository
     /**
      * Delete or Force delete a user if trashed.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $administrator
      *
      * @return bool|null
      */
-    public function deleteOne(Admin $admin)
+    public function deleteOne(Administrator $administrator)
     {
-        return $admin->trashed() ? $admin->forceDelete() : $admin->delete();
+        return $administrator->trashed() ? $administrator->forceDelete() : $administrator->delete();
     }
 
     /**
      * Restore a user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $administrator
      *
      * @return bool|null
      */
-    public function restoreOne(Admin $admin)
+    public function restoreOne(Administrator $administrator)
     {
-        return $admin->restore();
+        return $administrator->restore();
     }
 
     /**
      * Sync roles by keys.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
-     * @param  array                                           $keys
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  array                                                   $keys
      *
      * @return array
      */
-    public function syncRolesByKeys(Admin $admin, array $keys): array
+    public function syncRolesByKeys(Administrator $administrator, array $keys): array
     {
         return $this->syncRoles(
-            $admin, $this->getRolesRepository()->getByKeys($keys)
+            $administrator, $this->getRolesRepository()->getByKeys($keys)
         );
     }
 
     /**
      * Sync roles by uuids.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
-     * @param  array                                     $uuids
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $administrator
+     * @param  array                                             $uuids
      *
      * @return array
      */
-    public function syncRolesByUuids(Admin $admin, array $uuids): array
+    public function syncRolesByUuids(Administrator $administrator, array $uuids): array
     {
         $roles = $this->getRolesRepository()->getByUuids($uuids);
 
-        return $this->syncRoles($admin, $roles);
+        return $this->syncRoles($administrator, $roles);
     }
 
     /**
      * Sync roles with the user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
-     * @param  \Illuminate\Support\Collection            $roles
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $administrator
+     * @param  \Illuminate\Support\Collection                    $roles
      *
      * @return array
      */
-    public function syncRoles(Admin $admin, Collection $roles): array
+    public function syncRoles(Administrator $administrator, Collection $roles): array
     {
         if (empty($roles))
             return [];
 
-        event(new SyncingRoles($admin, $roles));
-        $synced = $admin->roles()->sync($roles->pluck('id'));
-        event(new SyncedRoles($admin, $roles, $synced));
+        event(new SyncingRoles($administrator, $roles));
+        $synced = $administrator->roles()->sync($roles->pluck('id'));
+        event(new SyncedRoles($administrator, $roles, $synced));
 
         return $synced;
     }

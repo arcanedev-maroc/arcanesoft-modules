@@ -74,7 +74,7 @@ class TagsController extends Controller
     {
         $this->authorize(TagsPolicy::ability('create'));
 
-        $tag = $repo->createOne($request->getValidatedData());
+        $tag = $repo->createOne($request->validated());
 
         $this->notifySuccess(
             __('Tag Created'),
@@ -106,7 +106,7 @@ class TagsController extends Controller
     {
         $this->authorize(TagsPolicy::ability('update'), [$tag]);
 
-        $repo->updateOne($tag, $request->getValidatedData());
+        $repo->updateOne($tag, $request->validated());
 
         $this->notifySuccess(
             __('Tag Updated'),

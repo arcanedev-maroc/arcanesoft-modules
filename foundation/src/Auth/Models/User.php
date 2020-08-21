@@ -7,21 +7,16 @@ namespace Arcanesoft\Foundation\Auth\Models;
 use Arcanedev\LaravelImpersonator\Contracts\Impersonatable;
 use Arcanedev\LaravelImpersonator\Traits\CanImpersonate;
 use Arcanesoft\Foundation\Auth\Auth;
-use Arcanesoft\Foundation\Auth\Events\Users\CreatedUser;
-use Arcanesoft\Foundation\Auth\Events\Users\CreatingUser;
-use Arcanesoft\Foundation\Auth\Events\Users\DeletedUser;
-use Arcanesoft\Foundation\Auth\Events\Users\DeletingUser;
-use Arcanesoft\Foundation\Auth\Events\Users\ForceDeletedUser;
-use Arcanesoft\Foundation\Auth\Events\Users\ReplicatingUser;
-use Arcanesoft\Foundation\Auth\Events\Users\RestoredUser;
-use Arcanesoft\Foundation\Auth\Events\Users\RestoringUser;
-use Arcanesoft\Foundation\Auth\Events\Users\RetrievedUser;
-use Arcanesoft\Foundation\Auth\Events\Users\SavedUser;
-use Arcanesoft\Foundation\Auth\Events\Users\SavingUser;
-use Arcanesoft\Foundation\Auth\Events\Users\UpdatedUser;
-use Arcanesoft\Foundation\Auth\Events\Users\UpdatingUser;
+use Arcanesoft\Foundation\Auth\Contracts\CanBeActivated;
+use Arcanesoft\Foundation\Auth\Models\Concerns\CanResetPassword;
+use Arcanesoft\Foundation\Auth\Models\Concerns\CanVerifyEmail;
+use Arcanesoft\Foundation\Auth\Events\Users\{
+    CreatedUser, CreatingUser, DeletedUser, DeletingUser, ForceDeletedUser, ReplicatingUser, RestoredUser, RestoringUser,
+    RetrievedUser, SavedUser, SavingUser, UpdatedUser, UpdatingUser
+};
 use Arcanesoft\Foundation\Auth\Models\Concerns\Activatable;
 use Arcanesoft\Foundation\Auth\Models\Presenters\UserPresenter;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\{Builder, Relations\HasMany, SoftDeletes};
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -51,7 +46,7 @@ use Illuminate\Notifications\Notifiable;
  * @method  static|\Illuminate\Database\Eloquent\Builder  filterByAuthenticatedUser(User $user)
  * @method  static|\Illuminate\Database\Eloquent\Builder  verifiedEmail()
  */
-class User extends Authenticatable implements Impersonatable
+class User extends Authenticatable implements Impersonatable, MustVerifyEmail, CanBeActivated
 {
     /* -----------------------------------------------------------------
      |  Traits
@@ -62,6 +57,8 @@ class User extends Authenticatable implements Impersonatable
         Notifiable,
         Activatable,
         CanImpersonate,
+        CanResetPassword,
+        CanVerifyEmail,
         SoftDeletes;
 
     /* -----------------------------------------------------------------

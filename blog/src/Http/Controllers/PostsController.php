@@ -76,9 +76,7 @@ class PostsController extends Controller
     {
         $this->authorize(PostsPolicy::ability('create'));
 
-        dd($request->user());
-
-        $post = $postsRepository->createOne($request->getValidatedData());
+        $post = $postsRepository->createOne($request->validated());
 
         $this->notifySuccess(
             __('Post Created'),

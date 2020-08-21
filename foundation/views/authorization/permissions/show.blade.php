@@ -1,102 +1,101 @@
 @extends(arcanesoft\foundation()->template())
 
-@section('page-title')
-    <i class="fas fa-fw fa-shield-alt"></i> @lang("Permission's details")
-@endsection
-
 <?php /** @var  Arcanesoft\Foundation\Auth\Models\Permission  $permission */ ?>
+
+@section('page-title')
+    <i class="fas fa-fw fa-shield-alt"></i> @lang('Permissions') <small>@lang("Permission's details")</small>
+@endsection
 
 @section('content')
     <div class="row">
         <div class="col-md-5 col-lg-4">
+            {{-- Permission --}}
             <div class="card card-borderless shadow-sm mb-3">
-                <div class="card-header p-2">@lang('Permission')</div>
-                <table class="table table-borderless table-md mb-0">
+                <div class="card-header px-2">@lang('Permission')</div>
+                <table class="table table-borderless mb-0">
                     <tbody>
                         <tr>
-                            <th class="text-muted">@lang('Group') :</th>
-                            <td class="text-right">{{ $permission->group->name }}</td>
+                            <td class="font-weight-light text-uppercase text-muted">@lang('Group')</td>
+                            <td class="text-right small">{{ $permission->group->name }}</td>
                         </tr>
                         <tr>
-                            <th class="text-muted">@lang('Category') :</th>
-                            <td class="text-right">{{ $permission->category }}</td>
+                            <td class="font-weight-light text-uppercase text-muted">@lang('Category')</td>
+                            <td class="text-right small">{{ $permission->category }}</td>
                         </tr>
                         <tr>
-                            <th class="text-muted">@lang('Name') :</th>
-                            <td class="text-right">{{ $permission->name }}</td>
+                            <td class="font-weight-light text-uppercase text-muted">@lang('Name')</td>
+                            <td class="text-right small">{{ $permission->name }}</td>
                         </tr>
                         <tr>
-                            <th class="text-muted">@lang('Description') :</th>
-                            <td class="text-right"><small>{{ $permission->description }}</small></td>
+                            <td class="font-weight-light text-uppercase text-muted">@lang('Description')</td>
+                            <td class="text-right small">{{ $permission->description }}</td>
                         </tr>
                         <tr>
-                            <th class="text-muted">@lang('Roles') :</th>
-                            <td class="text-right">
-                                {{ arcanesoft\ui\count_pill($roles->count()) }}
-                            </td>
+                            <td class="font-weight-light text-uppercase text-muted">@lang('Roles')</td>
+                            <td class="text-right">{{ arcanesoft\ui\count_pill($roles->count()) }}</td>
                         </tr>
                         <tr>
-                            <th class="text-muted">@lang('Created at') :</th>
-                            <td class="text-right"><small class="text-muted">{{ $permission->created_at }}</small></td>
+                            <td class="font-weight-light text-uppercase text-muted">@lang('Created at')</td>
+                            <td class="text-right small text-muted">{{ $permission->created_at }}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
+            {{-- Gate --}}
             @can(Arcanesoft\Foundation\System\Policies\AbilitiesPolicy::ability('show'))
             <div class="card card-borderless shadow-sm mb-3">
-                <div class="card-header p-2">@lang('Gate')</div>
-                <table class="table table-borderless table-md mb-0">
+                <div class="card-header px-2">@lang('Gate')</div>
+                <table class="table table-borderless mb-0">
                     <tbody>
                         <tr>
-                            <th class="text-muted">@lang('Ability') :</th>
+                            <td class="font-weight-light text-uppercase text-muted">@lang('Ability')</td>
                             <td class="text-right">
                                 <div class="badge badge-outline-dark">{{ $permission->ability }}</div>
                             </td>
                         </tr>
                         <tr>
-                            <th class="text-muted">@lang('Registered') :</th>
+                            <td class="font-weight-light text-uppercase text-muted">@lang('Registered')</td>
                             <td class="text-right">
                                 @if ($permission->isAbilityRegistered())
-                                    <span class="badge badge-outline-success" data-toggle="tooltip" data-original-title="@lang('Yes')">
-                                        <i class="fas fa-fw fa-check"></i>
-                                    </span>
+                                    <i class="fas fa-fw fa-check text-success" data-toggle="tooltip" title="@lang('Yes')"></i>
                                 @else
-                                    <span class="badge badge-outline-secondary" data-toggle="tooltip" data-original-title="@lang('No')">
-                                        <i class="fas fa-fw fa-ban"></i>
-                                    </span>
+                                    <i class="fas fa-fw fa-ban text-secondary" data-toggle="tooltip" title="@lang('No')"></i>
                                 @endif
                             </td>
                         </tr>
                     </tbody>
                 </table>
                 <div class="card-footer text-right px-2">
-                    {{ arcanesoft\ui\action_link('show', route('admin::system.abilities.show', $permission->ability))->size('sm') }}
+                    <a href="{{ route('admin::system.abilities.show', $permission->ability) }}" class="btn btn-sm btn-light">
+                        @lang('Show')
+                    </a>
                 </div>
             </div>
             @endcan
         </div>
         <div class="col-md-7 col-lg-8">
+            {{-- ROLES --}}
+            @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('index'))
             <div class="card card-borderless shadow-sm mb-3">
-                <div class="card-header p-2">@lang('Roles')</div>
-                <table class="table table-borderless table-md mb-0">
+                <div class="card-header px-2">@lang('Roles')</div>
+                <table class="table table-borderless table-hover mb-0">
                     <thead>
                         <tr>
-                            <th>@lang('Name')</th>
-                            <th>@lang('Description')</th>
-                            <th class="text-center">@lang('Users')</th>
-                            <th class="text-center">@lang('Locked')</th>
-                            <th class="text-center">@lang('Status')</th>
-                            <th class="text-right">@lang('Actions')</th>
+                            <th class="font-weight-light text-uppercase text-muted ">@lang('Name')</th>
+                            <th class="font-weight-light text-uppercase text-muted ">@lang('Description')</th>
+                            <th class="font-weight-light text-uppercase text-muted text-center">@lang('Users')</th>
+                            <th class="font-weight-light text-uppercase text-muted text-center">@lang('Locked')</th>
+                            <th class="font-weight-light text-uppercase text-muted text-center">@lang('Status')</th>
+                            <th class="font-weight-light text-uppercase text-muted text-right">@lang('Actions')</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($roles as $role)
-                            <?php /** @var  \Arcanesoft\Foundation\Auth\Models\Role  $role */ ?>
+                        @foreach($roles as $role)
                             <tr>
-                                <td>{{ $role->name }}</td>
-                                <td>{{ $role->description }}</td>
-                                <td class="text-center">{{ arcanesoft\ui\count_pill($role->users->count()) }}</td>
+                                <td class="small">{{ $role->name }}</td>
+                                <td class="small">{{ $role->description }}</td>
+                                <td class="text-center">{{ arcanesoft\ui\count_pill($role->administrators->count()) }}</td>
                                 <td class="text-center">
                                     @if($role->isLocked())
                                         <span class="status status-danger" data-toggle="tooltip" data-placement="top" title="@lang('Locked')"></span>
@@ -113,36 +112,33 @@
                                 </td>
                                 <td class="text-right">
                                     @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('show'), [$role])
-                                        {{ arcanesoft\ui\action_link_icon('show', route('admin::auth.roles.show', [$role]))->size('sm') }}
+                                        <a href="{{ route('admin::auth.roles.show', [$role]) }}" class="btn btn-sm btn-light" data-toggle="tooltip" title="@lang('Show')">
+                                            <i class="far fa-fw fa-eye"></i>
+                                        </a>
                                     @endcan
 
-                                    @unless($role->isLocked())
-                                        @can(Arcanesoft\Foundation\Auth\Policies\PermissionsPolicy::ability('roles.detach'), $permission)
-                                            <button class="btn btn-sm btn-danger"
-                                                    data-toggle="tooltip" data-placement="top" title="@lang('Detach')"
-                                                    onclick="window.Foundation.$emit('auth::permissions.detach-role', {{ json_encode(['id' => $role->getRouteKey(), 'name' => $role->name]) }})">
-                                                <i class="fas fa-fw fa-unlink"></i>
-                                            </button>
-                                        @endcan
-                                    @endunless
+                                    @can(Arcanesoft\Foundation\Auth\Policies\PermissionsPolicy::ability('roles.detach'), [$permission, $role])
+                                        <button class="btn btn-sm btn-danger"
+                                                data-toggle="tooltip" data-placement="top" title="@lang('Detach')"
+                                                onclick="Foundation.$emit('auth::permissions.detach-role', {id: '{{ $role->getRouteKey() }}', name: '{{ $role->name }}'})">
+                                            <i class="fas fa-fw fa-unlink"></i>
+                                        </button>
+                                    @endcan
                                 </td>
                             </tr>
-                        @empty
-                            <tr>
-                                <td colspan="6">@lang('The list is empty!')</td>
-                            </tr>
-                        @endforelse
+                        @endforeach
                     </tbody>
                 </table>
             </div>
+            @endcan
         </div>
     </div>
 @endsection
 
-@push('modals')
-    {{-- DETACH ROLE MODAL --}}
-    @can(Arcanesoft\Foundation\Auth\Policies\PermissionsPolicy::ability('roles.detach'), $permission)
-        <div class="modal modal-danger fade" id="detach-role-modal" data-backdrop="static"
+{{-- DETACH ROLE MODAL/SCRIPT --}}
+@can(Arcanesoft\Foundation\Auth\Policies\PermissionsPolicy::ability('roles.detach'), $permission)
+    @push('modals')
+        <div class="modal fade" id="detach-role-modal" data-backdrop="static"
              tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 {{ form()->open(['route' => ['admin::auth.permissions.roles.detach', $permission, ':id'], 'method' => 'DELETE', 'id' => 'detach-role-form']) }}
@@ -165,57 +161,52 @@
                 {{ form()->close() }}
             </div>
         </div>
-    @endcan
-@endpush
 
-@push('scripts')
-    {{-- DETACH ROLE SCRIPT --}}
-    @can(Arcanesoft\Foundation\Auth\Policies\PermissionsPolicy::ability('roles.detach'), $permission)
-    <script>
-        window.ready(() => {
-            let $detachRoleModal = $('div#detach-role-modal'),
-                $detachRoleForm  = $('form#detach-role-form'),
-                detachRoleAction = $detachRoleForm.attr('action');
+    @endpush
 
-            window.Foundation.$on('auth::permissions.detach-role', ({id, name}) => {
-                $detachRoleForm.attr('action', detachRoleAction.replace(':id', id));
+    @push('scripts')
+        <script>
+            let detachRoleModal = twbs.Modal.make('div#detach-role-modal')
+            let detachRoleForm  = Form.make('form#detach-role-form')
+            let detachRoleAction = detachRoleForm.getAction()
 
-                $detachRoleModal.find('.modal-body').html("@lang('Are you sure you want to detach role: :name ?')".replace(':name', name));
+            Foundation.$on('auth::permissions.detach-role', ({id, name}) => {
+                detachRoleForm.setAction(detachRoleAction.replace(':id', id))
 
-                $detachRoleModal.modal('show');
+                detachRoleModal._element.querySelector('.modal-body').innerHTML = "@lang('Are you sure you want to detach role: :name ?')".replace(':name', name)
+
+                detachRoleModal.show();
             });
 
-            $detachRoleForm.on('submit', (event) => {
-                event.preventDefault();
+            detachRoleForm.on('submit', (event) => {
+                event.preventDefault()
 
-                let submitBtn = window.Foundation.ui.loadingButton(
-                    $detachRoleForm[0].querySelector('button[type="submit"]:not([style*="display: none"])')
-                );
-                submitBtn.loading();
+                let submitBtn = Foundation.ui.loadingButton(
+                    detachRoleForm.elt().querySelector('button[type="submit"]')
+                )
+                submitBtn.loading()
 
-                window.request().delete($detachRoleForm.attr('action'))
+                request()
+                    .delete(detachRoleForm.getAction())
                     .then((response) => {
                         if (response.data.code === 'success') {
-                            $detachRoleModal.modal('hide');
-                            location.reload();
+                            detachRoleModal.hide()
+                            location.reload()
                         }
                         else {
-                            alert('ERROR ! Check the console !');
-                            submitBtn.reset();
+                            alert('ERROR ! Check the console !')
+                            submitBtn.reset()
                         }
                     })
                     .catch((error) => {
-                        alert('AJAX ERROR ! Check the console !');
-                        submitBtn.reset();
-                    });
-
-                return false;
+                        alert('AJAX ERROR ! Check the console !')
+                        submitBtn.reset()
+                    })
             });
 
-            $detachRoleModal.on('hidden.bs.modal', () => {
-                $detachRoleForm.attr('action', detachRoleAction);
+            detachRoleModal.on('hidden', () => {
+                detachRoleForm.setAction(detachRoleAction);
             });
-        });
-    </script>
-    @endcan
-@endpush
+        </script>
+    @endpush
+@endcan

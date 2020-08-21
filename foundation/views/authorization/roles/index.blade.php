@@ -6,33 +6,24 @@
 
 @push('content-nav')
     <div class="mb-3 text-right">
-        {{ arcanesoft\ui\action_link('add', route('admin::auth.roles.create'))->size('sm') }}
+        @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('metrics'))
+            <a href="{{ route('admin::auth.roles.metrics') }}" class="btn btn-sm btn-secondary {{ active(['admin::auth.roles.metrics']) }}">@lang('Metrics')</a>
+        @endcan
+
+        @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('create'))
+            {{ arcanesoft\ui\action_link('add', route('admin::auth.roles.create'))->size('sm') }}
+        @endcan
     </div>
 @endpush
 
 @section('content')
-    <div class="card card-borderless shadow-sm mb-3">
-        <div class="table-responsive">
-            <table id="roles-table" class="table table-md table-hover mb-0">
-                <thead>
-                    <tr>
-                        <th>@lang('Name')</th>
-                        <th>@lang('Description')</th>
-                        <th class="text-center">@lang('Users')</th>
-                        <th class="text-center">@lang('Locked')</th>
-                        <th class="text-center">@lang('Status')</th>
-                        <th class="text-right">@lang('Actions')</th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
-    </div>
+    <v-datatable name="{{ Arcanesoft\Foundation\Auth\Views\Components\RolesDatatable::NAME }}"></v-datatable>
 @endsection
 
 @push('modals')
     {{-- ACIVATE MODAL --}}
     @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('activate'))
-        <div class="modal modal-danger fade" id="activate-role-modal" data-backdrop="static"
+        <div class="modal fade" id="activate-role-modal" data-backdrop="static"
              tabindex="-1" role="dialog" aria-labelledby="activateRoleTitle" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 {{ form()->open(['route' => ['admin::auth.roles.activate', ':id'], 'method' => 'PUT', 'id' => 'activate-role-form']) }}
@@ -58,7 +49,7 @@
 
     {{-- DELETE MODAL --}}
     @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('delete'))
-        <div class="modal modal-danger fade" id="delete-role-modal" data-backdrop="static"
+        <div class="modal fade" id="delete-role-modal" data-backdrop="static"
              tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 {{ form()->open(['route' => ['admin::auth.roles.delete', ':id'], 'method' => 'DELETE', 'id' => 'delete-role-form']) }}
@@ -84,123 +75,108 @@
 @endpush
 
 @push('scripts')
-    <script>
-        window.ready(() => {
-            {{-- DATATABLE --}}
-            window.plugins.datatable('table#roles-table', {
-                ajax: "{{ route('admin::auth.roles.datatables.index') }}",
-                serverSide: true,
-                processing: true,
-                columns: [
-                    { data: 'name' },
-                    { data: 'description' },
-                    { data: 'users_count', searchable: false, class: 'text-center'},
-                    { data: 'locked', orderable: false, searchable: false, class: 'text-center' },
-                    { data: 'status', orderable: false, searchable: false, class: 'text-center' },
-                    { data: 'actions', orderable: false, searchable: false, class: 'text-right' }
-                ],
+    <script defer>
+        {{-- ACTIVATE SCRIPT --}}
+        @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('activate'))
+            let activateRoleModal  = twbs.Modal.make(document.querySelector('div#activate-role-modal'))
+            let activateRoleForm   = Form.make('form#activate-role-form')
+            let activateRoleAction = activateRoleForm.getAction()
+
+            Foundation.$on('auth::roles.activate', ({id, status}) => {
+                activateRoleForm.setAction(activateRoleAction.replace(':id', id))
+
+                const modal = activateRoleModal._element;
+
+                if (status === 'deactivated') {
+                    modal.querySelector('.modal-title').innerHTML = "@lang('Activate Role')"
+                    modal.querySelector('.modal-body').innerHTML = "@lang('Are you sure you want to activate role ?')"
+                    modal.querySelector('#activateRoleBtn').style.display = ''
+                    modal.querySelector('#deactivateRoleBtn').style.display = 'none'
+                }
+                else if (status === 'activated') {
+                    modal.querySelector('.modal-title').innerHTML = "@lang('Deactivate Role')"
+                    modal.querySelector('.modal-body').innerHTML = "@lang('Are you sure you want to deactivate role ?')"
+                    modal.querySelector('#activateRoleBtn').style.display = 'none'
+                    modal.querySelector('#deactivateRoleBtn').style.display = ''
+                }
+
+                activateRoleModal.show()
             })
 
-            {{-- ACTIVATE SCRIPT --}}
-            @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('activate'))
-                let $activateRoleModal = $('div#activate-role-modal'),
-                    $activateRoleForm  = $('form#activate-role-form'),
-                    activateRoleAction = $activateRoleForm.attr('action');
+            activateRoleForm.on('submit', (event) => {
+                event.preventDefault()
 
-                window.Foundation.$on('auth::roles.activate', ({id, status}) => {
-                    $activateRoleForm.attr('action', activateRoleAction.replace(':id', id));
+                let submitBtn = Foundation.ui.loadingButton(
+                    activateRoleForm
+                        .elt()
+                        .querySelector('button[type="submit"]:not([style*="display: none"])')
+                )
+                submitBtn.loading()
 
-                    if (status === 'deactivated') {
-                        $activateRoleModal.find('.modal-title').html("@lang('Activate Role')");
-                        $activateRoleModal.find('.modal-body').html("@lang('Are you sure you want to activate role ?')");
-                        $activateRoleModal.find('#activateRoleBtn').show();
-                        $activateRoleModal.find('#deactivateRoleBtn').hide();
-                    }
-                    else if (status === 'activated') {
-                        $activateRoleModal.find('.modal-title').html("@lang('Deactivate Role')");
-                        $activateRoleModal.find('.modal-body').html("@lang('Are you sure you want to deactivate role ?')");
-                        $activateRoleModal.find('#activateRoleBtn').hide();
-                        $activateRoleModal.find('#deactivateRoleBtn').show();
-                    }
+                request()
+                    .put(activateRoleForm.getAction())
+                    .then((response) => {
+                        if (response.data.code === 'success') {
+                            activateRoleModal.hide()
+                            location.reload()
+                        }
+                        else {
+                            alert('ERROR ! Check the console !')
+                            submitBtn.reset()
+                        }
+                    })
+                    .catch((error) => {
+                        alert('AJAX ERROR ! Check the console !')
+                        submitBtn.reset()
+                    })
+            })
 
-                    $activateRoleModal.modal('show');
-                });
+            activateRoleModal.on('hidden', () => {
+                activateRoleForm.setAction(activateRoleAction)
+            })
+        @endcan
 
-                $activateRoleForm.on('submit', (event) => {
-                    event.preventDefault();
+        {{-- DELETE SCRIPT --}}
+        @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('delete'))
+            let deleteRoleModal  = twbs.Modal.make('div#delete-role-modal')
+            let deleteRoleForm   = Form.make('form#delete-role-form')
+            let deleteRoleAction = deleteRoleForm.getAction()
 
-                    let submitBtn = window.Foundation.ui.loadingButton(
-                        $activateRoleForm[0].querySelector('button[type="submit"]:not([style*="display: none"])')
-                    );
-                    submitBtn.loading();
+            Foundation.$on('auth::roles.delete', ({id}) => {
+                deleteRoleForm.setAction(deleteRoleAction.replace(':id', id))
+                deleteRoleModal.show()
+            })
 
-                    window.request().put($activateRoleForm.attr('action'))
-                        .then((response) => {
-                            if (response.data.code === 'success') {
-                                $activateRoleModal.modal('hide');
-                                location.reload();
-                            }
-                            else {
-                                alert('ERROR ! Check the console !');
-                                submitBtn.reset();
-                            }
-                        })
-                        .catch((error) => {
-                            alert('AJAX ERROR ! Check the console !');
-                            submitBtn.reset();
-                        });
+            deleteRoleForm.on('submit', (event) => {
+                event.preventDefault()
 
-                    return false;
-                });
+                let submitBtn = Foundation.ui.loadingButton(
+                    deleteRoleForm.elt().querySelector('button[type="submit"]')
+                )
+                submitBtn.loading()
 
-                $activateRoleModal.on('hidden.bs.modal', () => {
-                    $activateRoleForm.attr('action', activateRoleAction);
-                });
-            @endcan
+                request()
+                    .delete(deleteRoleForm.getAction())
+                    .then((response) => {
+                        if (response.data.code === 'success') {
+                            deleteRoleModal.modal('hide')
+                            location.reload()
+                        }
+                        else {
+                            alert('ERROR ! Check the console !')
+                            submitBtn.button('reset')
+                        }
+                    })
+                    .catch((error) => {
+                        alert('AJAX ERROR ! Check the console !')
+                        console.log(error)
+                        submitBtn.button('reset')
+                    })
+            })
 
-            {{-- DELETE SCRIPT --}}
-            @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('delete'))
-                let $deleteRoleModal = $('div#delete-role-modal'),
-                    $deleteRoleForm  = $('form#delete-role-form'),
-                    deleteRoleAction = $deleteRoleForm.attr('action');
-
-                window.Foundation.$on('auth::roles.delete', ({id}) => {
-                    $deleteRoleForm.attr('action', deleteRoleAction.replace(':id', id));
-                    $deleteRoleModal.modal('show');
-                })
-
-                $deleteRoleForm.on('submit', (event) => {
-                    event.preventDefault();
-
-                    let submitBtn = window.Foundation.ui.loadingButton(
-                        $deleteRoleForm[0].querySelector('button[type="submit"]')
-                    );
-                    submitBtn.loading();
-
-                    window.request().delete($deleteRoleForm.attr('action'))
-                        .then((response) => {
-                            if (response.data.code === 'success') {
-                                $deleteRoleModal.modal('hide');
-                                location.reload();
-                            }
-                            else {
-                                alert('ERROR ! Check the console !');
-                                submitBtn.button('reset');
-                            }
-                        })
-                        .catch((error) => {
-                            alert('AJAX ERROR ! Check the console !');
-                            console.log(error);
-                            submitBtn.button('reset');
-                        });
-
-                    return false;
-                });
-
-                $deleteRoleModal.on('hidden.bs.modal', () => {
-                    $deleteRoleForm.attr('action', deleteRoleAction);
-                });
-            @endcan
-        });
+            deleteRoleModal.on('hidden', () => {
+                deleteRoleForm.setAction(deleteRoleAction)
+            })
+        @endcan
     </script>
 @endpush

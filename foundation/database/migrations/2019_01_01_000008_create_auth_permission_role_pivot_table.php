@@ -43,7 +43,6 @@ class CreateAuthPermissionRolePivotTable extends Migration
         $this->createSchema(function (Blueprint $table) {
             $table->unsignedInteger('permission_id');
             $table->unsignedInteger('role_id');
-
             $table->timestamp('created_at')->nullable();
 
             $table->primary(['permission_id', 'role_id']);
