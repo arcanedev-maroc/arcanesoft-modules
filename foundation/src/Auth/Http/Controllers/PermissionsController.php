@@ -6,6 +6,7 @@ namespace Arcanesoft\Foundation\Auth\Http\Controllers;
 
 use Arcanesoft\Foundation\Auth\Models\Permission;
 use Arcanesoft\Foundation\Auth\Policies\PermissionsPolicy;
+use Arcanesoft\Foundation\Auth\Repositories\PermissionsRepository;
 use Illuminate\Http\Request;
 
 /**
@@ -40,18 +41,17 @@ class PermissionsController extends Controller
     {
         $this->authorize(PermissionsPolicy::ability('index'));
 
-        return $this->view('auth.permissions.index');
+        return $this->view('authorization.permissions.index');
     }
 
-    public function show(Permission $permission, Request $request)
+    public function show(Permission $permission, PermissionsRepository $repo, Request $request)
     {
         $this->authorize(PermissionsPolicy::ability('show'));
 
-        // TODO: Use a repo instead
-        $roles = $permission->roles()->filterByAuthenticatedUser($request->user())->get();
+        $roles = $repo->getFilteredRolesByAuthenticatedAdministrator($permission, $request->user());
 
         $this->addBreadcrumbRoute(__("Permission's details"), 'admin::auth.permissions.show', [$permission]);
 
-        return $this->view('auth.permissions.show', compact('permission', 'roles'));
+        return $this->view('authorization.permissions.show', compact('permission', 'roles'));
     }
 }

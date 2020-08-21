@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Http\Controllers;
 
 use Arcanedev\LaravelImpersonator\Contracts\Impersonator;
+use Arcanesoft\Foundation\Auth\Auth;
 use Arcanesoft\Foundation\Auth\Http\Requests\Users\{CreateUserRequest, UpdateUserRequest};
 use Arcanesoft\Foundation\Auth\Models\User;
 use Arcanesoft\Foundation\Auth\Policies\UsersPolicy;
 use Arcanesoft\Foundation\Support\Traits\HasNotifications;
-use Illuminate\Http\Request;
-use Arcanesoft\Foundation\Auth\Repositories\{RolesRepository, UsersRepository};
+use Arcanesoft\Foundation\Auth\Repositories\UsersRepository;
 
 /**
  * Class     UsersController
@@ -58,7 +58,7 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability('index'));
 
-        return $this->view('auth.users.index', compact('trash'));
+        return $this->view('authorization.users.index', compact('trash'));
     }
 
     /**
@@ -68,13 +68,11 @@ class UsersController extends Controller
      */
     public function trash()
     {
-        $this->authorize(UsersPolicy::ability('index'));
-
         return $this->index(true);
     }
 
     /**
-     * Show the metrics.
+     * List all the deleted users.
      *
      * @return \Illuminate\Contracts\View\View
      */
@@ -82,30 +80,23 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability('metrics'));
 
-        $this->addBreadcrumbRoute(__('Metrics'), 'admin::auth.users.metrics');
+        $this->selectMetrics('arcanesoft.foundation.metrics.selected.authorization.users');
 
-        $this->selectMetrics('arcanesoft.foundation.metrics.selected.auth-users');
-
-        return $this->view('auth.users.metrics');
+        return $this->view('authorization.users.metrics');
     }
 
     /**
      * Create a new user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Repositories\RolesRepository  $rolesRepo
-     * @param  \Illuminate\Http\Request                       $request
-     *
      * @return \Illuminate\Contracts\View\View
      */
-    public function create(RolesRepository $rolesRepo, Request $request)
+    public function create()
     {
         $this->authorize(UsersPolicy::ability('create'));
 
-        $roles = $rolesRepo->getFilteredByAuthenticatedUser($request->user());
-
         $this->addBreadcrumb(__('New User'));
 
-        return $this->view('auth.users.create', compact('roles'));
+        return $this->view('authorization.users.create');
     }
 
     /**
@@ -120,16 +111,10 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability('create'));
 
-        $data = $request->getValidatedData();
-
-        $usersRepo->syncRolesByUuids(
-            $user = $usersRepo->createUser($data),
-            $data['roles'] ?: []
-        );
+        $user = $usersRepo->createOne($request->validated());
 
         $this->notifySuccess(
-            __('User Created'),
-            __('A new user has been successfully created!')
+            __('User Created'), __('A new user has been successfully created!')
         );
 
         return redirect()->route('admin::auth.users.show', [$user]);
@@ -148,27 +133,23 @@ class UsersController extends Controller
 
         $this->addBreadcrumbRoute(__("User's details"), 'admin::auth.users.show', [$user]);
 
-        return $this->view('auth.users.show', compact('user'));
+        return $this->view('authorization.users.show', compact('user'));
     }
 
     /**
      * Edit the user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User                   $user
-     * @param  \Arcanesoft\Foundation\Auth\Repositories\RolesRepository  $rolesRepo
-     * @param  \Illuminate\Http\Request                       $request
+     * @param  \Arcanesoft\Foundation\Auth\Models\User  $user
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit(User $user, RolesRepository $rolesRepo, Request $request)
+    public function edit(User $user)
     {
         $this->authorize(UsersPolicy::ability('update'), [$user]);
 
-        $roles = $rolesRepo->getFilteredByAuthenticatedUser($request->user());
-
         $this->addBreadcrumbRoute(__('Edit User'), 'admin::auth.users.edit', [$user]);
 
-        return $this->view('auth.users.edit', compact('user', 'roles'));
+        return $this->view('authorization.users.edit', compact('user'));
     }
 
     /**
@@ -184,11 +165,10 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability('update'), [$user]);
 
-        $usersRepo->updateUser($user, $request->getValidatedData());
+        $usersRepo->updateOne($user, $request->validated());
 
         $this->notifySuccess(
-            __('User Updated'),
-            __('The user has been successfully updated!')
+            __('User Updated'), __('The user has been successfully updated!')
         );
 
         return redirect()->route('admin::auth.users.show', [$user]);
@@ -208,9 +188,11 @@ class UsersController extends Controller
 
         $usersRepo->toggleActive($user);
 
+        $activated = $user->isActive();
+
         $this->notifySuccess(
-            __($user->isActive() ? 'User Activated' : 'User Deactivated'),
-            __($user->isActive() ? 'The user has been successfully activated!' : 'The user has been successfully deactivated!')
+            __($activated ? 'User Activated' : 'User Deactivated'),
+            __($activated ? 'The user has been successfully activated!' : 'The user has been successfully deactivated!')
         );
 
         return static::jsonResponseSuccess();
@@ -228,7 +210,7 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability($user->trashed() ? 'force-delete' : 'delete'), [$user]);
 
-        $usersRepo->deleteUser($user);
+        $usersRepo->deleteOne($user);
 
         $this->notifySuccess(
             __('User Deleted'),
@@ -250,7 +232,7 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability('restore'), [$user]);
 
-        $usersRepo->restoreUser($user);
+        $usersRepo->restoreOne($user);
 
         $this->notifySuccess(
             __('User Restored'),
@@ -263,7 +245,7 @@ class UsersController extends Controller
     /**
      * Impersonate a user.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User                           $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\User                $user
      * @param  \Arcanedev\LaravelImpersonator\Contracts\Impersonator  $impersonator
      *
      * @return \Illuminate\Http\RedirectResponse
@@ -272,14 +254,9 @@ class UsersController extends Controller
     {
         $this->authorize(UsersPolicy::ability('impersonate'), [$user]);
 
-        /**
-         * @var  \Arcanedev\LaravelImpersonator\Contracts\Impersonatable  $authUser
-         * @var  \Arcanedev\LaravelImpersonator\Contracts\Impersonatable  $user
-         */
-        $authUser = auth()->user();
-
-        if ($impersonator->start($authUser, $user))
-            return redirect()->route('public::index');
+        if ($impersonator->start(Auth::admin(), $user, 'web')) {
+            return redirect()->route('public::index'); // TODO: Extract the route name into a config
+        }
 
         $this->notifyError(
             __('Impersonation Not Allowed'),

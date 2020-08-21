@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Blog\Repositories;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Blog\Repositories;
 
 use Arcanesoft\Blog\Blog;
 use Arcanesoft\Blog\Models\Post;
@@ -10,7 +14,7 @@ use Illuminate\Support\Str;
  * @package  Arcanesoft\Blog\Repositories
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class PostsRepository
+class PostsRepository extends AbstractRepository
 {
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -18,55 +22,47 @@ class PostsRepository
      */
 
     /**
-     * Get the model instance.
+     * Get the model FQN class.
      *
-     * @return \Arcanesoft\Blog\Models\Post|\Illuminate\Database\Eloquent\Builder|mixed
+     * @return string
      */
-    public function model()
+    public static function modelClass(): string
     {
-        return Blog::makeModel('post');
+        return Blog::model('post');
     }
-
-    /**
-     * Get the query builder.
-     *
-     * @return \Arcanesoft\Blog\Models\Post|\Illuminate\Database\Eloquent\Builder
-     */
-    public function query()
-    {
-        return $this->model()->newQuery();
-    }
-
 
     /**
      * Create a new post.
      *
      * @param  array  $attributes
      *
-     * @return \Arcanesoft\Blog\Models\Post
+     * @return \Arcanesoft\Blog\Models\Post|mixed
      */
-    public function create(array $attributes)
+    public function createOne(array $attributes)
     {
-        $post = $this->model()
-            ->forceFill([
-                'uuid' => Str::uuid(),
-            ])
-            ->fill($attributes);
+        /** @var  \Arcanesoft\Blog\Models\Post  $post */
+        $post = $this->model()->fill($attributes)->forceFill([
+            'uuid' => Str::uuid(), // TODO: Move to Event/Listener
+        ]);
 
         $post->save();
+
+        $this->syncTagsByUuid($post, $attributes['tags']);
 
         return $post;
     }
 
     /**
+     * Update the given post.
+     *
      * @param  \Arcanesoft\Blog\Models\Post  $post
      * @param  array                         $attributes
      *
-     * @return \Arcanesoft\Blog\Models\Post
+     * @return bool
      */
-    public function update(Post $post, array $attributes)
+    public function updateOne(Post $post, array $attributes)
     {
-        return $post;
+        return $post->update($attributes);
     }
 
     /**
@@ -76,8 +72,38 @@ class PostsRepository
      *
      * @return bool|null
      */
-    public function delete(Post $post)
+    public function deleteOne(Post $post)
     {
         return $post->delete();
+    }
+
+    /* -----------------------------------------------------------------
+     |  Relationship's Methods
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * @param  \Arcanesoft\Blog\Models\Post  $post
+     * @param  array                         $uuids
+     *
+     * @return array
+     */
+    public function syncTagsByUuid(Post $post, array $uuids): array
+    {
+        $ids = $this->getTagsRepository()
+            ->whereIn('uuid', $uuids)
+            ->pluck('id');
+
+        return $post->tags()->sync($ids);
+    }
+
+    /**
+     * Get the tags repository.
+     *
+     * @return \Arcanesoft\Blog\Repositories\TagsRepository
+     */
+    protected function getTagsRepository(): TagsRepository
+    {
+        return $this->makeRepository(TagsRepository::class);
     }
 }

@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Foundation\Helpers\Sidebar;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Foundation\Helpers\Sidebar;
 
 use Illuminate\Support\Collection as BaseCollection;
 

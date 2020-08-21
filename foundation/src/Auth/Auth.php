@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth;
 
+use Arcanesoft\Foundation\Auth\Models\Administrator;
 use Illuminate\Support\Str;
 
 /**
@@ -14,6 +15,13 @@ use Illuminate\Support\Str;
  */
 class Auth
 {
+    /* -----------------------------------------------------------------
+     |  Constants
+     | -----------------------------------------------------------------
+     */
+
+    const GUARD_NAME = 'administrator';
+
     /* -----------------------------------------------------------------
      |  Properties
      | -----------------------------------------------------------------
@@ -45,6 +53,16 @@ class Auth
      */
 
     /**
+     * Get the authenticated administrator.
+     *
+     * @return \Arcanesoft\Foundation\Auth\Models\Administrator|mixed
+     */
+    public static function admin(): Administrator
+    {
+        return auth(static::GUARD_NAME)->user();
+    }
+
+    /**
      * Get the auth table name.
      *
      * @param  string       $name
@@ -57,7 +75,9 @@ class Auth
     {
         $name = static::config("database.tables.{$name}", $default);
 
-        return $prefixed ? static::prefixTable($name) : $name;
+        return $prefixed
+            ? static::prefixTable($name)
+            : $name;
     }
 
     /**
@@ -117,23 +137,39 @@ class Auth
     /**
      * Get a config value of this module.
      *
-     * @param  string|null  $name
+     * @param  string|null  $key
      * @param  mixed|null   $default
      *
      * @return mixed
      */
-    public static function config(?string $name, $default = null)
+    public static function config(?string $key, $default = null)
     {
-        return config()->get(
-            is_null($name) ? "arcanesoft.foundation.auth" : "arcanesoft.foundation.auth.{$name}",
-            $default
-        );
+        $key = is_null($key) ? 'arcanesoft.foundation.auth' : "arcanesoft.foundation.auth.{$key}";
+
+        return config()->get($key, $default);
     }
 
     /* -----------------------------------------------------------------
      |  Check Methods
      | -----------------------------------------------------------------
      */
+
+    /**
+     * Check if the given user is a super admin.
+     *
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $user
+     *
+     * @return bool
+     */
+    public static function isSuperAdmin(Administrator $user): bool
+    {
+        $emails = (array) static::config('administrators.emails');
+
+        if (empty($emails))
+            return false;
+
+        return in_array($user->email, $emails);
+    }
 
     /**
      * Check if the registration feature is enabled.
@@ -143,15 +179,5 @@ class Auth
     public static function isRegistrationEnabled(): bool
     {
         return static::config('authentication.register.enabled', true);
-    }
-
-    /**
-     * Check if socialite is enabled.
-     *
-     * @return bool
-     */
-    public static function isSocialiteEnabled(): bool
-    {
-        return static::config('socialite.enabled');
     }
 }

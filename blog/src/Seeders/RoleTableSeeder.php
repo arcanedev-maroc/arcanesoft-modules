@@ -36,14 +36,16 @@ class RoleTableSeeder extends RolesSeeder
                 'key'         => 'blog-author',
                 'description' => 'The blog author role',
                 'is_locked'   => true,
-            ]
+            ],
         ]);
 
-        $this->syncRoles([
+        $this->syncRolesWithPermissions([
             'blog-moderator' => [
-                'admin::blog.*'
+                'admin::dashboard.index',
+                'admin::blog.*',
             ],
             'blog-author'    => [
+                'admin::dashboard.index',
                 'admin::blog.posts.*',
                 'admin::blog.tags.*',
             ],

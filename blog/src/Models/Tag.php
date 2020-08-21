@@ -1,6 +1,9 @@
-<?php namespace Arcanesoft\Blog\Models;
+<?php
 
-use Arcanesoft\Blog\Base\Model;
+declare(strict_types=1);
+
+namespace Arcanesoft\Blog\Models;
+
 use Arcanesoft\Blog\Blog;
 use Illuminate\Support\Str;
 
@@ -17,7 +20,8 @@ use Illuminate\Support\Str;
  * @property  \Illuminate\Support\Carbon  created_at
  * @property  \Illuminate\Support\Carbon  updated_at
  *
- * @property-read  \Illuminate\Database\Eloquent\Collection  $posts
+ * @property-read  \Arcanesoft\Blog\Models\Post[]|\Illuminate\Database\Eloquent\Collection  $posts
+ * @property-read  int                                                                      $posts_count
  */
 class Tag extends Model
 {

@@ -1,6 +1,9 @@
-<?php namespace Arcanesoft\Blog\Models;
+<?php
 
-use Arcanesoft\Blog\Base\Model;
+declare(strict_types=1);
+
+namespace Arcanesoft\Blog\Models;
+
 use Arcanesoft\Blog\Blog;
 
 /**

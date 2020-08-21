@@ -1,6 +1,10 @@
-<?php namespace Arcanesoft\Blog\Http\Requests;
+<?php
 
-use Arcanedev\Support\Http\FormRequest as BaseFormRequest;
+declare(strict_types=1);
+
+namespace Arcanesoft\Blog\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest as IlluminateFormRequest;
 
 /**
  * Class     FormRequest
@@ -8,7 +12,7 @@ use Arcanedev\Support\Http\FormRequest as BaseFormRequest;
  * @package  Arcanesoft\Blog\Http\Requests
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-abstract class FormRequest extends BaseFormRequest
+abstract class FormRequest extends IlluminateFormRequest
 {
     //
 }

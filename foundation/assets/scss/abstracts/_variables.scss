@@ -4,60 +4,15 @@
 
 // PATHS
 
-$theme-base-path:   "..";
-$theme-images-path: "#{$theme-base-path}/images";
-$theme-fonts-path:  "#{$theme-base-path}/fonts";
-$fa-font-path:      "~@fortawesome/fontawesome-free/webfonts";
-$mdi-font-path:     "~@mdi/font/fonts";
+$base-path:     "..";
+$images-path:   "#{$base-path}/images";
+$fonts-path:    "#{$base-path}/fonts";
+$fa-font-path:  "~@fortawesome/fontawesome-free/webfonts";
+$mdi-font-path: "~@mdi/font/fonts";
 
 // COLORS
 
-$white:            #FFF;
-$gray-100:         #F8F9FA;
-$gray-200:         #E9ECEF;
-$gray-300:         #DEE2E6;
-$gray-400:         #CED4DA;
-$gray-500:         #ADB5BD;
-$gray-600:         #6C757D;
-$gray-700:         #495057;
-$gray-800:         #343A40;
-$gray-900:         #212529;
-$black:            #000;
-
-$blue:             #007BFF;
-$indigo:           #6610F2;
-$purple:           #6F42C1;
-$pink:             #E83E8C;
-$red:              #DC3545;
-$orange:           #FD7E14;
-$yellow:           #FFC107;
-$green:            #28A745;
-$teal:             #20C997;
-$cyan:             #17A2B8;
-
-$colors: (
-    "gray":          #434A54,
-    "gray-light":    #AAB2BD,
-    "gray-lighter":  #E8EFF4,
-    "gray-lightest": #E6E9ED,
-    "gray-dark":     $gray-900,
-);
-
-// SOCIAL COLORS
-
-$social-colors: (
-    "behance":   #1769FF,
-    "dribbble":  #EA4C89,
-    "facebook":  #3B579D,
-    "github":    #333333,
-    "google":    #DC4A38,
-    "instagram": #E1306C,
-    "linkedin":  #0177B5,
-    "pinterest": #CC2127,
-    "reddit":    #FF4500,
-    "twitter":   #2CAAE1,
-    "youtube":   #E52D27,
-);
+@import "variables/colors";
 
 // Layout VARIABLES
 
@@ -71,10 +26,9 @@ $grid-breakpoints: (
     xxxl: 2000px,
 );
 
-$body-bg:    var(--skin-body-bg-color);
+$body-bg:    #E9ECEF;
 $body-color: var(--skin-body-font-color);
-
-$content-bg: $body-bg;
+$link-color: $gray-600;
 
 // FONTS
 
@@ -87,6 +41,8 @@ $font-size-lg:   1rem !default;
 $font-size-sm:   0.75rem !default;
 
 // COMPONENTS
+
+$component-active-bg: #34314F;
 
 $border-width:   1px;
 $border-color:   rgba($black, 0.125);
@@ -162,7 +118,7 @@ $horizontal-full-width-menu-color:     #9C9FA6;
 
 // NAVBAR
 
-$navbar-height:         60px;
+$navbar-height:         4rem;
 $navbar-menu-color:     #9C9FA6;
 $navbar-font-size:      0.875rem;
 $navbar-icon-font-size: 1.25rem;
@@ -196,10 +152,12 @@ $input-color:             var(--skin-input-font-color);
 $input-border-radius:     $border-radius;
 $input-border-color:      var(--skin-input-border-color);
 $input-placeholder-color: var(--skin-input-placeholder-color);
+$input-group-addon-bg:    var(--skin-input-bg-color);
+$input-disabled-bg:       transparent;
 
 // DROPDOWN
 
-$dropdown-bg:             var(--skin-surface-bg-color);
+$dropdown-bg:             var(--skin-surface-1-bg-color);
 $dropdown-border-color:   $border-color;
 $dropdown-divider-bg:     $border-color;
 $dropdown-link-color:     $body-color;
@@ -260,20 +218,47 @@ $modal-xl:                   90%;
 
 // CARDS
 
-$card-bg: var(--skin-surface-bg-color);
+$card-bg: var(--skin-surface-1-bg-color);
 
 // TABLE
 
-$table-dark-color: var(--skin-body-font-color);
+$table-dark-color:            var(--skin-body-font-color);
+$table-group-separator-color: $gray-300;
+
+// PAGINATION
+
+$pagination-bg:           var(--skin-surface-1-bg-color);
+$pagination-border-color: var(--skin-surface-2-bg-color);
+
+$pagination-hover-bg:           var(--skin-surface-2-bg-color);
+$pagination-hover-color:        var(--skin-body-font-color);
+$pagination-hover-border-color: var(--skin-surface-2-bg-color);
+
+$pagination-disabled-bg:           var(--skin-surface-1-bg-color);
+$pagination-disabled-color:        $gray-600;
+$pagination-disabled-border-color: var(--skin-surface-2-bg-color);
+
+// AVATARS
+
+$avatar-sizes: (
+    "sm":  1.5rem,
+    "md":  2.5rem,
+    "lg":  4rem,
+    "xl":  6rem,
+    "xxl": 8rem,
+) !default;
 
 // SKINS
 
 $skins: (
     light:   (
         body-bg-color:                #E9ECEF,
-        body-text-color:              $gray-800,
+        body-font-color:              $gray-800,
 
-        surface-bg-color:             $white,
+        link-color:                   $primary,
+
+        surface-1-bg-color:           $white,
+        surface-2-bg-color:           $gray-300,
         surface-text-normal-color:    $gray-700,
         surface-text-hover-color:     $gray-600,
         surface-text-muted-color:     $gray-600,
@@ -296,15 +281,18 @@ $skins: (
         breadcrumbs-divider-color:    $gray-600,
     ),
     dark:   (
-        body-bg-color:                #222831,
-        body-text-color:              $gray-200,
+        body-bg-color:                #181818,
+        body-font-color:              $gray-200,
 
-        surface-bg-color:             $gray-800,
+        link-color:                   $gray-200,
+
+        surface-1-bg-color:           #202020,
+        surface-2-bg-color:           #313131,
         surface-text-normal-color:    $gray-300,
         surface-text-hover-color:     $gray-400,
         surface-text-muted-color:     $gray-500,
 
-        accent-bg-color:              #34314F,
+        accent-bg-color:              #202020,
         accent-text-normal-color:     $gray-400,
         accent-text-hover-color:      $gray-200,
 
@@ -322,3 +310,7 @@ $skins: (
         breadcrumbs-divider-color:    $gray-500,
     ),
 );
+
+// Bootstrap Variables
+// -----------------------------------------------
+@import "~bootstrap/scss/variables";

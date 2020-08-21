@@ -4,18 +4,20 @@
     @include skin-mode($mode) {
         // COLORS
         --skin-body-bg-color:             #{map-get($skin-colors, "body-bg-color")};
-        --skin-body-font-color:           #{map-get($skin-colors, "body-text-color")};
+        --skin-body-font-color:           #{map-get($skin-colors, "body-font-color")};
+        --skin-link-color:                #{map-get($skin-colors, "link-color")};
 
         // Surface
-        --skin-surface-bg-color:          #{map-get($skin-colors, "surface-bg-color")};
+        --skin-surface-1-bg-color:        #{map-get($skin-colors, "surface-1-bg-color")};
+        --skin-surface-2-bg-color:        #{map-get($skin-colors, "surface-2-bg-color")};
         --skin-surface-text-normal-color: #{map-get($skin-colors, "surface-text-normal-color")};
         --skin-surface-text-hover-color:  #{map-get($skin-colors, "surface-text-hover-color")};
         --skin-surface-text-muted-color:  #{map-get($skin-colors, "surface-text-muted-color")};
 
         // Layouts
-        --skin-navbar-bg-color:           var(--skin-surface-bg-color);
-        --skin-page-header-bg-color:      var(--skin-surface-bg-color);
-        --skin-footer-bg-color:           var(--skin-surface-bg-color);
+        --skin-navbar-bg-color:           var(--skin-surface-1-bg-color);
+        --skin-page-header-bg-color:      var(--skin-surface-1-bg-color);
+        --skin-footer-bg-color:           var(--skin-surface-1-bg-color);
         --skin-footer-text-normal-color:  var(--skin-surface-text-normal-color);
 
         // SIDEBAR

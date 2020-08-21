@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Blog\Models\Pivots;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Blog\Models\Pivots;
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
 

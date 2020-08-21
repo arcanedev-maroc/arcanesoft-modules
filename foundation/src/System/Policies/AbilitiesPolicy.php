@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\System\Policies;
 
-use Arcanesoft\Foundation\Auth\Models\User as AuthenticatedUser;
+use Arcanesoft\Foundation\Auth\Models\Administrator;
 use Arcanedev\LaravelPolicies\Ability;
 
 /**
@@ -71,11 +71,11 @@ class AbilitiesPolicy extends AbstractPolicy
     /**
      * Allow to access all the abilities.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function index(AuthenticatedUser $user)
+    public function index(Administrator $administrator)
     {
         //
     }
@@ -83,12 +83,12 @@ class AbilitiesPolicy extends AbstractPolicy
     /**
      * Allow to access all the abilities.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
-     * @param  \Arcanedev\LaravelPolicies\Ability|null        $ability
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanedev\LaravelPolicies\Ability|null                 $ability
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function show(AuthenticatedUser $user, Ability $ability = null)
+    public function show(Administrator $administrator, Ability $ability = null)
     {
         //
     }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Blog\Policies;
 
-use ArcanesoftFoundation\AuthModelsUser as AuthenticatedUser;
+use Arcanesoft\Foundation\Auth\Models\Administrator;
 
 /**
  * Class     DashboardPolicy
@@ -12,7 +12,7 @@ use ArcanesoftFoundation\AuthModelsUser as AuthenticatedUser;
  * @package  Arcanesoft\Blog\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class DashboardPolicy extends AbstractPolicy
+class DashboardPolicy extends Policy
 {
     /* -----------------------------------------------------------------
      |  Getters
@@ -65,11 +65,11 @@ class DashboardPolicy extends AbstractPolicy
     /**
      * Allow to access all the auth stats.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function index(AuthenticatedUser $user)
+    public function index(Administrator $administrator)
     {
         //
     }

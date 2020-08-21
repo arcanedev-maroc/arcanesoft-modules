@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-100">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -11,51 +11,45 @@
     @stack('head')
 </head>
 <?php
-    $classes = [
-        'navbar-fixed',
-    ];
+    $attributes = new Illuminate\View\ComponentAttributeBag([
+        'data-skin-mode'       => session()->get('foundation.skin.mode', 'light'),
+        'data-sidebar-visible' => Arcanesoft\Foundation\Helpers\Sidebar\Manager::isVisible() ? 'true' : 'false',
+    ]);
 ?>
-<body data-skin-mode="{{ session()->get('foundation.skin.mode', 'light') }}"
-      data-sidebar-visible="{{ Arcanesoft\Foundation\Helpers\Sidebar\Manager::isVisible() ? 'true' : 'false' }}"
-      class="{{ implode(' ', $classes) }}">
-    <div id="foundation" class="app-container">
-        <div class="wrapper">
-            @include(Arcanesoft\Foundation\Core\ViewComposers\SidebarComposer::VIEW)
+<body {{ $attributes->merge(['class' => 'h-100']) }}>
+    {{-- APP CONTAINER --}}
+    <div id="arcanesoft" class="app-container h-100">
+        @include('foundation::_template.navbar')
 
-            <main class="main-container">
-                @include('foundation::_template.navbar')
+        @include(Arcanesoft\Foundation\Core\Views\Composers\SidebarComposer::VIEW)
 
+        <main class="main-container d-flex flex-column h-100">
+            <div class="page-container flex-shrink-0">
                 @include('foundation::_template.page-header')
 
-                <section class="content-wrapper">
-                    @include(Arcanesoft\Foundation\Core\ViewComposers\NotificationsComposer::VIEW)
-
+                <section class="content-wrapper p-3">
                     @stack('content-nav')
 
-                    @include(Arcanesoft\Foundation\Core\ViewComposers\MetricsComposer::VIEW)
+                    @include(Arcanesoft\Foundation\Core\Views\Composers\NotificationsComposer::VIEW)
+
+                    @include(Arcanesoft\Foundation\Core\Views\Composers\MetricsComposer::VIEW)
 
                     @yield('content')
                 </section>
+            </div>
 
-                @include('foundation::_template.footer')
-            </main>
-        </div>
+            @include('foundation::_template.footer')
+        </main>
 
         <toasts-manager-component></toasts-manager-component>
     </div>
 
+    {{-- MODALS --}}
     @stack('modals')
 
     {{-- SCRIPTS --}}
     <script src="{{ asset(mix('js/arcanesoft.js', 'assets')) }}"></script>
-    <script>
-        window.Foundation = new CreateFoundation;
-    </script>
-
     @stack('scripts')
-
-    <script>
-        window.Foundation.run()
-    </script>
+    <script defer>Foundation.run()</script>
 </body>
 </html>

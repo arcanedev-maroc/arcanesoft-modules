@@ -46,7 +46,7 @@ class PasswordResetsController extends Controller
     {
         $this->authorize(PasswordResetsPolicy::ability('index'));
 
-        return $this->view('auth.password-resets.index');
+        return $this->view('authorization.password-resets.index');
     }
 
     public function metrics()
@@ -55,8 +55,8 @@ class PasswordResetsController extends Controller
 
         $this->addBreadcrumbRoute(__('Metrics'), 'admin::auth.password-resets.metrics');
 
-        $this->selectMetrics('arcanesoft.foundation.metrics.selected.auth-password-resets');
+        $this->selectMetrics('arcanesoft.foundation.metrics.selected.authorization.password-resets');
 
-        return $this->view('auth.password-resets.metrics');
+        return $this->view('authorization.password-resets.metrics');
     }
 }

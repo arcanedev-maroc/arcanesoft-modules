@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Core\Providers;
 
+use Arcanesoft\Foundation\Auth\Models\Administrator;
 use Arcanesoft\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -27,7 +28,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function policyClasses(): array
     {
-        return $this->app['config']->get('arcanesoft.foundation.policies', []);
+        return $this->app['config']['arcanesoft.foundation.policies'] ?: [];
     }
 
     /* -----------------------------------------------------------------
@@ -40,10 +41,9 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::after(function ($user, string $ability) {
-            /** @var  \App\Models\User  $user */
-            return $user->isAdmin()
-                || $user->may($ability);
+        Gate::after(function (Administrator $admin, string $ability) {
+            return $admin->isSuperAdmin()
+                || $admin->may($ability);
         });
 
         parent::boot();

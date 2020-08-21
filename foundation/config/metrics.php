@@ -11,6 +11,12 @@ return [
 
     'registered' => [
 
+        // Auth - Administrators
+        Arcanesoft\Foundation\Auth\Metrics\Administrators\TotalAdministrators::class,
+        Arcanesoft\Foundation\Auth\Metrics\Administrators\NewAdministrators::class,
+        Arcanesoft\Foundation\Auth\Metrics\Administrators\ActivatedAdministrators::class,
+        Arcanesoft\Foundation\Auth\Metrics\Administrators\AdministratorsPerDay::class,
+
         // Auth - Users
         Arcanesoft\Foundation\Auth\Metrics\Users\ActivatedUsers::class,
         Arcanesoft\Foundation\Auth\Metrics\Users\NewUsers::class,
@@ -43,33 +49,41 @@ return [
 
     'selected' => [
 
-        // Auth - Dashboard
-        'auth-dashboard' => [
-            'index' => [
+        // Authorization
+        //------------------------------------
+
+        'authorization' => [
+            'dashboard' => [
+                'index' => [
+                    Arcanesoft\Foundation\Auth\Metrics\Users\TotalUsers::class,
+                    Arcanesoft\Foundation\Auth\Metrics\Users\UsersPerDay::class,
+                ],
+            ],
+
+            'users' => [
                 Arcanesoft\Foundation\Auth\Metrics\Users\TotalUsers::class,
+                Arcanesoft\Foundation\Auth\Metrics\Users\NewUsers::class,
+                Arcanesoft\Foundation\Auth\Metrics\Users\VerifiedEmails::class,
+                Arcanesoft\Foundation\Auth\Metrics\Users\ActivatedUsers::class,
                 Arcanesoft\Foundation\Auth\Metrics\Users\UsersPerDay::class,
             ],
-        ],
 
-        // Auth - Users
-        'auth-users' => [
-            Arcanesoft\Foundation\Auth\Metrics\Users\TotalUsers::class,
-            Arcanesoft\Foundation\Auth\Metrics\Users\NewUsers::class,
-            Arcanesoft\Foundation\Auth\Metrics\Users\VerifiedEmails::class,
-            Arcanesoft\Foundation\Auth\Metrics\Users\ActivatedUsers::class,
-            Arcanesoft\Foundation\Auth\Metrics\Users\UsersPerDay::class,
-        ],
+            'administrators' => [
+                Arcanesoft\Foundation\Auth\Metrics\Administrators\TotalAdministrators::class,
+                Arcanesoft\Foundation\Auth\Metrics\Administrators\NewAdministrators::class,
+                Arcanesoft\Foundation\Auth\Metrics\Administrators\ActivatedAdministrators::class,
+                Arcanesoft\Foundation\Auth\Metrics\Administrators\AdministratorsPerDay::class,
+            ],
 
-        // Auth - Roles
-        'auth-roles' => [
-            Arcanesoft\Foundation\Auth\Metrics\Roles\TotalUsersByRoles::class,
-            Arcanesoft\Foundation\Auth\Metrics\Roles\TotalRoles::class,
-        ],
+            'roles' => [
+                Arcanesoft\Foundation\Auth\Metrics\Roles\TotalUsersByRoles::class,
+                Arcanesoft\Foundation\Auth\Metrics\Roles\TotalRoles::class,
+            ],
 
-        // Auth - Password resets
-        'auth-password-resets' => [
-            Arcanesoft\Foundation\Auth\Metrics\PasswordResets\TotalPasswordResets::class,
-            Arcanesoft\Foundation\Auth\Metrics\PasswordResets\PasswordResetsPerDay::class,
+            'password-resets' => [
+                Arcanesoft\Foundation\Auth\Metrics\PasswordResets\TotalPasswordResets::class,
+                Arcanesoft\Foundation\Auth\Metrics\PasswordResets\PasswordResetsPerDay::class,
+            ],
         ],
     ],
 

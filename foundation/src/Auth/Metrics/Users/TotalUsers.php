@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Metrics\Users;
 
 use Arcanedev\LaravelMetrics\Metrics\Value;
+use Arcanesoft\Foundation\Auth\Auth;
 use Arcanesoft\Foundation\Auth\Policies\UsersPolicy;
 use Arcanesoft\Foundation\Auth\Repositories\UsersRepository;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class TotalUsers extends Value
     /**
      * Calculate the value of the metric.
      *
-     * @param  \Illuminate\Http\Request                       $request
+     * @param  \Illuminate\Http\Request                                  $request
      * @param  \Arcanesoft\Foundation\Auth\Repositories\UsersRepository  $repo
      *
      * @return \Arcanedev\LaravelMetrics\Results\Result|mixed
@@ -36,14 +37,14 @@ class TotalUsers extends Value
     }
 
     /**
-     * Check if the current user is authorized.
+     * Check if the authenticated user is authorized.
      *
      * @param  \Illuminate\Http\Request  $request
      *
-     * @return mixed
+     * @return bool
      */
-    public function authorize(Request $request)
+    public function authorize(Request $request): bool
     {
-        return $request->user()->can(UsersPolicy::ability('metrics'));
+        return Auth::admin()->can(UsersPolicy::ability('metrics'));
     }
 }

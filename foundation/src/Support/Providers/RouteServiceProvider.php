@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Support\Providers;
 
-use Arcanesoft\Foundation\Support\Http\Concerns\HasRouteClasses;
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Arcanedev\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 /**
  * Class     RouteServiceProvider
@@ -15,13 +14,6 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
  */
 abstract class RouteServiceProvider extends ServiceProvider
 {
-    /* -----------------------------------------------------------------
-     |  Traits
-     | -----------------------------------------------------------------
-     */
-
-    use HasRouteClasses;
-
     /* -----------------------------------------------------------------
      |  Properties
      | -----------------------------------------------------------------
@@ -59,9 +51,9 @@ abstract class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        static::bindRouteClasses($this->routeClasses());
-
         parent::boot();
+
+        static::bindRouteClasses($this->routeClasses());
     }
 
     /**

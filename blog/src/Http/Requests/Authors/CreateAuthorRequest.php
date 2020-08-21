@@ -1,8 +1,12 @@
-<?php namespace Arcanesoft\Blog\Http\Requests\Authors;
+<?php
 
-use Arcanesoft\Auth\Rules\Users\UserEmailRule;
+declare(strict_types=1);
+
+namespace Arcanesoft\Blog\Http\Requests\Authors;
+
 use Arcanesoft\Blog\Blog;
 use Arcanesoft\Blog\Http\Requests\FormRequest;
+use Arcanesoft\Foundation\Auth\Rules\Users\EmailRule;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
@@ -35,17 +39,15 @@ class CreateAuthorRequest extends FormRequest
             // User
             'first_name' => ['required', 'string', 'max:50'],
             'last_name'  => ['required', 'string', 'max:50'],
-            'email'      => ['required', 'string', 'email', 'max:255', UserEmailRule::unique()],
+            'email'      => ['required', 'string', 'email', 'max:255', EmailRule::unique()],
             'password'   => ['nullable', 'string', 'min:8', 'confirmed'],
         ];
     }
 
     /**
      * Prepare the data for validation.
-     *
-     * @return void
      */
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         $this->merge([
             'slug' => Str::slug($this->get('slug') ?? $this->get('username')),

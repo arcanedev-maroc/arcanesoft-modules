@@ -1,7 +1,5 @@
 <?php
 
-use Arcanesoft\Foundation\Auth\Models\Role;
-
 return [
     'items' => [
         // Media
@@ -10,7 +8,7 @@ return [
             'title'       => 'Media',
             'icon'        => 'far fa-fw fa-images',
             'route'       => 'admin::media.index',
-            'roles'       => [Role::ADMINISTRATOR],
+            'roles'       => [],
             'permissions' => [],
         ],
     ],

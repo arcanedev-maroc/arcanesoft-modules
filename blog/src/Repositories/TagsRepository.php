@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Blog\Repositories;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Blog\Repositories;
 
 use Arcanesoft\Blog\Blog;
 use Arcanesoft\Blog\Models\Tag;
@@ -11,7 +15,7 @@ use Illuminate\Support\Str;
  * @package  Arcanesoft\Blog\Repositories
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class TagsRepository
+class TagsRepository extends AbstractRepository
 {
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -19,24 +23,19 @@ class TagsRepository
      */
 
     /**
-     * Get the model instance.
+     * Get the model FQN class.
      *
-     * @return \Arcanesoft\Blog\Models\Tag|\Illuminate\Database\Eloquent\Builder|mixed
+     * @return string
      */
-    public function model()
+    public static function modelClass(): string
     {
-        return Blog::makeModel('tag');
+        return Blog::model('tag', Tag::class);
     }
 
-    /**
-     * Get the query builder.
-     *
-     * @return \Arcanesoft\Blog\Models\Tag|\Illuminate\Database\Eloquent\Builder
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
-    public function query()
-    {
-        return $this->model()->newQuery();
-    }
 
     /**
      * Create a new tag.
@@ -45,13 +44,11 @@ class TagsRepository
      *
      * @return \Arcanesoft\Blog\Models\Tag
      */
-    public function create(array $attributes)
+    public function createOne(array $attributes)
     {
-        $tag = $this->model()
-            ->forceFill([
-                'uuid' => Str::uuid(),
-            ])
-            ->fill($attributes);
+        $tag = $this->model()->forceFill([
+            'uuid' => Str::uuid(),
+        ])->fill($attributes);
 
         $tag->save();
 
@@ -66,7 +63,7 @@ class TagsRepository
      *
      * @return bool
      */
-    public function update(Tag $tag, array $attributes): bool
+    public function updateOne(Tag $tag, array $attributes): bool
     {
         return $tag->update($attributes);
     }
@@ -78,7 +75,7 @@ class TagsRepository
      *
      * @return bool|null
      */
-    public function delete(Tag $tag)
+    public function deleteOne(Tag $tag)
     {
         return $tag->delete();
     }
@@ -90,7 +87,7 @@ class TagsRepository
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getSelectData(bool $placeholder = true)
+    public function getSelectData(bool $placeholder = true): Collection
     {
         return $this->query()
             ->pluck('name', 'uuid')

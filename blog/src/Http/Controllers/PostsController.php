@@ -67,16 +67,16 @@ class PostsController extends Controller
 
         $this->addBreadcrumb(__('New Post'));
 
-        $tags = $repo->getSelectData();
-
-        return $this->view('posts.create', compact('tags'));
+        return $this->view('posts.create', [
+            'tags' => $repo->getSelectData(false),
+        ]);
     }
 
     public function store(CreatePostRequest $request, PostsRepository $postsRepository)
     {
         $this->authorize(PostsPolicy::ability('create'));
 
-        $post = $postsRepository->create($request->getValidatedData());
+        $post = $postsRepository->createOne($request->validated());
 
         $this->notifySuccess(
             __('Post Created'),
@@ -110,7 +110,7 @@ class PostsController extends Controller
     {
         $this->authorize(PostsPolicy::ability('update'), [$post]);
 
-        $postRepository->update($post, $request->getValidatedData());
+        $postRepository->updateOne($post, $request->getValidatedData());
 
         $this->notifySuccess(
             __('Post Updated'),
@@ -124,7 +124,7 @@ class PostsController extends Controller
     {
         $this->authorize(PostsPolicy::ability('delete'), [$post]);
 
-        $postRepository->delete($post);
+        $postRepository->deleteOne($post);
 
         $this->notifySuccess(
             __('Post Deleted'),

@@ -5,10 +5,15 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Models;
 
 use Arcanesoft\Foundation\Auth\Auth;
-use Arcanesoft\Foundation\Auth\Events\Permissions\{
-    CreatedPermission, CreatingPermission, DeletedPermission, DeletingPermission, RetrievedPermission,
-    SavedPermission, SavingPermission, UpdatedPermission, UpdatingPermission,
-};
+use Arcanesoft\Foundation\Auth\Events\Permissions\CreatedPermission;
+use Arcanesoft\Foundation\Auth\Events\Permissions\CreatingPermission;
+use Arcanesoft\Foundation\Auth\Events\Permissions\DeletedPermission;
+use Arcanesoft\Foundation\Auth\Events\Permissions\DeletingPermission;
+use Arcanesoft\Foundation\Auth\Events\Permissions\RetrievedPermission;
+use Arcanesoft\Foundation\Auth\Events\Permissions\SavedPermission;
+use Arcanesoft\Foundation\Auth\Events\Permissions\SavingPermission;
+use Arcanesoft\Foundation\Auth\Events\Permissions\UpdatedPermission;
+use Arcanesoft\Foundation\Auth\Events\Permissions\UpdatingPermission;
 use Arcanesoft\Foundation\Auth\Models\Concerns\HasRoles;
 use Arcanesoft\Foundation\Auth\Models\Presenters\PermissionPresenter;
 use Illuminate\Support\Facades\Gate;
@@ -29,9 +34,9 @@ use Illuminate\Support\Str;
  * @property  string                      description
  * @property  \Illuminate\Support\Carbon  created_at
  *
- * @property  \Illuminate\Database\Eloquent\Collection                  roles
- * @property  \Arcanesoft\Foundation\Auth\Models\PermissionsGroup       group
- * @property  \Arcanesoft\Foundation\Auth\Models\Pivots\PermissionRole  permission_role
+ * @property  \Arcanesoft\Foundation\Auth\Models\PermissionsGroup                               group
+ * @property  \Arcanesoft\Foundation\Auth\Models\Role|\Illuminate\Database\Eloquent\Collection  roles
+ * @property  \Arcanesoft\Foundation\Auth\Models\Pivots\PermissionRole                          permission_role
  */
 class Permission extends Model
 {

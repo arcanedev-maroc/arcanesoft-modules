@@ -7,16 +7,19 @@ namespace Arcanesoft\Foundation\Auth\Models;
 use Arcanedev\LaravelImpersonator\Contracts\Impersonatable;
 use Arcanedev\LaravelImpersonator\Traits\CanImpersonate;
 use Arcanesoft\Foundation\Auth\Auth;
+use Arcanesoft\Foundation\Auth\Contracts\CanBeActivated;
+use Arcanesoft\Foundation\Auth\Models\Concerns\CanResetPassword;
+use Arcanesoft\Foundation\Auth\Models\Concerns\CanVerifyEmail;
 use Arcanesoft\Foundation\Auth\Events\Users\{
-    CreatedUser, CreatingUser, DeletedUser, DeletingUser, ForceDeletedUser, ReplicatingUser, RestoredUser,
-    RestoringUser, RetrievedUser, SavedUser, SavingUser, UpdatedUser, UpdatingUser,
+    CreatedUser, CreatingUser, DeletedUser, DeletingUser, ForceDeletedUser, ReplicatingUser, RestoredUser, RestoringUser,
+    RetrievedUser, SavedUser, SavingUser, UpdatedUser, UpdatingUser
 };
-use Arcanesoft\Foundation\Auth\Models\Concerns\{Activatable, HasRoles};
+use Arcanesoft\Foundation\Auth\Models\Concerns\Activatable;
 use Arcanesoft\Foundation\Auth\Models\Presenters\UserPresenter;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\{Builder, Relations\HasMany, SoftDeletes};
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Collection;
 
 /**
  * Class     User
@@ -33,7 +36,6 @@ use Illuminate\Support\Collection;
  * @property  string                      password
  * @property  string                      avatar
  * @property  string                      remember_token
- * @property  boolean                     is_admin
  * @property  \Illuminate\Support\Carbon  last_activity_at
  * @property  \Illuminate\Support\Carbon  created_at
  * @property  \Illuminate\Support\Carbon  updated_at
@@ -44,7 +46,7 @@ use Illuminate\Support\Collection;
  * @method  static|\Illuminate\Database\Eloquent\Builder  filterByAuthenticatedUser(User $user)
  * @method  static|\Illuminate\Database\Eloquent\Builder  verifiedEmail()
  */
-class User extends Authenticatable implements Impersonatable
+class User extends Authenticatable implements Impersonatable, MustVerifyEmail, CanBeActivated
 {
     /* -----------------------------------------------------------------
      |  Traits
@@ -52,10 +54,11 @@ class User extends Authenticatable implements Impersonatable
      */
 
     use UserPresenter,
-        HasRoles,
         Notifiable,
         Activatable,
         CanImpersonate,
+        CanResetPassword,
+        CanVerifyEmail,
         SoftDeletes;
 
     /* -----------------------------------------------------------------
@@ -142,37 +145,6 @@ class User extends Authenticatable implements Impersonatable
      */
 
     /**
-     * The roles' relationship.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function roles()
-    {
-        $related = Auth::model('role', Role::class);
-        $table   = Auth::table('role-user', 'role_user');
-
-        return $this->belongsToMany($related, $table)
-                    ->using(Pivots\RoleUser::class)
-                    ->as('role_user')
-                    ->withPivot(['created_at']);
-    }
-
-    /**
-     * Get all user's permissions (active roles).
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public function getPermissionsAttribute()
-    {
-        return $this->active_roles
-            ->pluck('permissions')
-            ->flatten()
-            ->unique(function (Permission $permission) {
-                return $permission->getKey();
-            });
-    }
-
-    /**
      * Get the socialite providers' relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -186,22 +158,6 @@ class User extends Authenticatable implements Impersonatable
      |  Scopes
      | -----------------------------------------------------------------
      */
-
-    /**
-     * Scope by the authenticated user.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder    $query
-     * @param  \Arcanesoft\Foundation\Auth\Models\User  $user
-     *
-     * @return \Illuminate\Database\Eloquent\Builder|mixed
-     */
-    public function scopeFilterByAuthenticatedUser(Builder $query, User $user)
-    {
-        if ($user->isSuperAdmin())
-            return $query;
-
-        return $query->where('is_admin', '!=', true);
-    }
 
     /**
      * Scope only verified email users.
@@ -231,75 +187,6 @@ class User extends Authenticatable implements Impersonatable
     }
 
     /* -----------------------------------------------------------------
-     |  Permission Check Methods
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Check if the user has a permission.
-     *
-     * @param  string  $ability
-     *
-     * @return bool
-     */
-    public function may($ability)
-    {
-        return $this->permissions->filter(function (Permission $permission) use ($ability) {
-            return $permission->hasAbility($ability);
-        })->isNotEmpty();
-    }
-
-    /**
-     * Check if the user has at least one permission.
-     *
-     * @param  \Illuminate\Support\Collection|array  $permissions
-     * @param  \Illuminate\Support\Collection        &$failed
-     *
-     * @return bool
-     */
-    public function mayOne($permissions, &$failed = null)
-    {
-        $permissions = $permissions instanceof Collection
-            ? $permissions
-            : $this->newCollection($permissions);
-
-        $failed = $permissions->reject(function ($permission) {
-            return $this->may($permission);
-        })->values();
-
-        return $permissions->count() !== $failed->count();
-    }
-
-    /**
-     * Check if the user has all permissions.
-     *
-     * @param  \Illuminate\Support\Collection|array  $permissions
-     * @param  \Illuminate\Support\Collection        &$failed
-     *
-     * @return bool
-     */
-    public function mayAll($permissions, &$failed = null)
-    {
-        $this->mayOne($permissions, $failed);
-
-        return $failed instanceof Collection
-            ? $failed->isEmpty()
-            : false;
-    }
-
-    /**
-     * Update the user's last activity.
-     *
-     * @return bool
-     */
-    public function updateLastActivity()
-    {
-        return $this->forceFill([
-            'last_activity_at' => $this->freshTimestamp(),
-        ])->save();
-    }
-
-    /* -----------------------------------------------------------------
      |  Check Methods
      | -----------------------------------------------------------------
      */
@@ -311,7 +198,7 @@ class User extends Authenticatable implements Impersonatable
      */
     public function isDeletable()
     {
-        return ! $this->isSuperAdmin();
+        return true;
     }
 
     /**
@@ -325,55 +212,15 @@ class User extends Authenticatable implements Impersonatable
     }
 
     /**
-     * Check if the user is a super admin.
-     *
-     * @return bool
-     */
-    public function isSuperAdmin()
-    {
-        return $this->is_admin;
-    }
-
-    /**
-     * Check if the user is an admin.
-     *
-     * @return bool
-     */
-    public function isAdmin()
-    {
-        return $this->isSuperAdmin()
-            || $this->hasRoleKey(Role::ADMINISTRATOR);
-    }
-
-    /**
-     * Check if user is a moderator.
-     *
-     * @return bool
-     */
-    public function isModerator()
-    {
-        return $this->hasRoleKey(Role::MODERATOR);
-    }
-
-    /**
-     * Check if user is a member.
-     *
-     * @return bool
-     */
-    public function isMember()
-    {
-        return ! $this->isAdmin();
-    }
-
-    /**
      * Check if the current modal can impersonate other models.
      *
      * @return  bool
      */
     public function canImpersonate(): bool
     {
-        return impersonator()->isEnabled() && $this->isAdmin();
+        return false;
     }
+
     /**
      * Check if the current model can be impersonated.
      *
@@ -381,7 +228,7 @@ class User extends Authenticatable implements Impersonatable
      */
     public function canBeImpersonated(): bool
     {
-        return impersonator()->isEnabled() && ! $this->isAdmin();
+        return impersonator()->isEnabled();
     }
 
     /**

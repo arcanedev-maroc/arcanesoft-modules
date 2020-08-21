@@ -67,7 +67,7 @@ class SocialiteUsersRepository extends AbstractRepository
 
             //TODO: Add Activated + Confirmed
 
-            $user = $usersRepo->createMember([
+            $user = $usersRepo->createOne([
                 'first_name'  => $nameParts['first_name'],
                 'last_name'   => $nameParts['last_name'],
                 'email'       => $email,
@@ -82,7 +82,7 @@ class SocialiteUsersRepository extends AbstractRepository
             $user->providers()->update([
                 'token' => $userData->token,
             ]);
-            $usersRepo->updateUser($user, [
+            $usersRepo->updateOne($user, [
                 'avatar' => $userData->getAvatar(),
             ]);
         }
@@ -109,7 +109,7 @@ class SocialiteUsersRepository extends AbstractRepository
      */
     protected function getUsersRepository(): UsersRepository
     {
-        return static::getRepository(UsersRepository::class);
+        return static::makeRepository(UsersRepository::class);
     }
 
     /**

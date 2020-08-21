@@ -38,15 +38,29 @@ class PermissionsGroupsRepository extends AbstractRepository
      */
 
     /**
-     * Save permissions to the group.
+     * Create a new permissions' group.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\PermissionsGroup       $group
-     * @param  \Arcanesoft\Foundation\Auth\Models\Permission[]|iterable  $permissions
+     * @param  array  $attributes
      *
-     * @return iterable
+     * @return \Arcanesoft\Foundation\Auth\Models\PermissionsGroup|mixed
      */
-    public function savePermissions(PermissionsGroup $group, iterable $permissions)
+    public function createOne(array $attributes)
     {
-        return $group->permissions()->saveMany($permissions);
+        return $this->create($attributes);
+    }
+
+    /**
+     * Create a new group with permissions.
+     *
+     * @param  array     $attributes
+     * @param  iterable  $permissions
+     *
+     * @return \Arcanesoft\Foundation\Auth\Models\PermissionsGroup|mixed
+     */
+    public function createOneWithPermissions(array $attributes, iterable $permissions)
+    {
+        return tap($this->createOne($attributes), function (PermissionsGroup $group) use ($permissions) {
+            $group->permissions()->saveMany($permissions);
+        });
     }
 }

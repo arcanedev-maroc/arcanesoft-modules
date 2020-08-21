@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Models\Concerns;
 
 use Arcanesoft\Foundation\Auth\Models\Role;
+use Illuminate\Support\Collection;
 
 /**
  * Trait     HasRoles
@@ -88,9 +89,9 @@ trait HasRoles
      *
      * @return bool
      */
-    public function isOne($roles, &$failed = null): bool
+    public function isOne(iterable $roles, &$failed = null): bool
     {
-        $roles = is_array($roles) ? collect($roles) : $roles;
+        $roles = is_array($roles) ? new Collection($roles) : $roles;
 
         $failed = $roles->reject(function ($role) {
             return $this->hasRoleKey($role);

@@ -1,14 +1,12 @@
 @extends(arcanesoft\foundation()->template())
 
 @section('page-title')
-    <i class="far fa-fw fa-user-edit"></i> {{ __('Authors') }}
+    <i class="fas fa-fw fa-user-edit"></i> @lang('Authors')
 @endsection
 
 @push('content-nav')
     <div class="mb-3 text-right">
-        <a href="{{ route('admin::blog.authors.metrics') }}" class="btn btn-sm btn-secondary {{ active(['admin::blog.authors.metrics']) }}">{{ __('Metrics') }}</a>
-        <a href="{{ route('admin::blog.authors.index') }}" class="btn btn-sm btn-secondary {{ active(['admin::blog.authors.index']) }}">{{ __('All') }}</a>
-        {{ ui\action_link('add', route('admin::blog.authors.create'))->size('sm') }}
+        {{ arcanesoft\ui\action_link('add', route('admin::blog.authors.create'))->size('sm') }}
     </div>
 @endpush
 
@@ -18,10 +16,11 @@
             <table id="authors-table" class="table table-hover table-md mb-0">
                 <thead>
                     <tr>
-                        <th>{{ __('Username') }}</th>
-                        <th class="text-center">{{ __('Posts') }}</th>
-                        <th class="text-center">{{ __('Created at') }}</th>
-                        <th class="text-right">{{ __('Actions') }}</th>
+                        <th class="font-weight-light text-uppercase text-muted">@lang('Full Name')</th>
+                        <th class="font-weight-light text-uppercase text-muted">@lang('Username')</th>
+                        <th class="font-weight-light text-uppercase text-muted text-center">@lang('Posts')</th>
+                        <th class="font-weight-light text-uppercase text-muted text-center">@lang('Created at')</th>
+                        <th class="font-weight-light text-uppercase text-muted text-right">@lang('Actions')</th>
                     </tr>
                 </thead>
             </table>
@@ -31,18 +30,5 @@
 
 @push('scripts')
     <script>
-        ready(() => {
-            window.plugins.datatable('table#authors-table', {
-                ajax: "{{ route('admin::blog.authors.datatables.index') }}",
-                serverSide: true,
-                processing: true,
-                columns: [
-                    { data: 'username' },
-                    { data: 'posts', class: 'text-center', orderable: false, searchable: false },
-                    { data: 'created_at', class: 'text-center'},
-                    { data: 'actions', class: 'text-right', orderable: false, searchable: false }
-                ],
-            })
-        })
     </script>
 @endpush

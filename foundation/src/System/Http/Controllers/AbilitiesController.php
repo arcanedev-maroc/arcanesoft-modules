@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Foundation\System\Http\Controllers;
 
 use Arcanedev\LaravelPolicies\Ability;
@@ -47,9 +49,7 @@ class AbilitiesController extends Controller
     {
         $this->authorize(AbilitiesPolicy::ability('index'));
 
-        $abilities = $this->getAbilities();
-
-        return $this->view('system.abilities.index', compact('abilities'));
+        return $this->view('system.abilities.index');
     }
 
     public function show(string $key)

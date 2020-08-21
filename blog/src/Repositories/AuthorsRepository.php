@@ -1,8 +1,13 @@
-<?php namespace Arcanesoft\Blog\Repositories;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Blog\Repositories;
 
 use Arcanesoft\Auth\Repositories\UsersRepository;
 use Arcanesoft\Blog\Blog;
 use Arcanesoft\Blog\Models\Author;
+use Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository;
 use Illuminate\Support\Str;
 
 /**
@@ -11,7 +16,7 @@ use Illuminate\Support\Str;
  * @package  Arcanesoft\Blog\Repositories
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class AuthorsRepository
+class AuthorsRepository extends AbstractRepository
 {
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -19,23 +24,13 @@ class AuthorsRepository
      */
 
     /**
-     * Get the model instance.
+     * Get the model FQN class.
      *
-     * @return \Arcanesoft\Blog\Models\Author|\Illuminate\Database\Eloquent\Builder|mixed
+     * @return string
      */
-    public function model()
+    public static function modelClass(): string
     {
-        return Blog::makeModel('author');
-    }
-
-    /**
-     * Get the query builder.
-     *
-     * @return \Arcanesoft\Blog\Models\Author|\Illuminate\Database\Eloquent\Builder
-     */
-    public function query()
-    {
-        return $this->model()->newQuery();
+        return Blog::model('author');
     }
 
     /**
@@ -45,14 +40,14 @@ class AuthorsRepository
      *
      * @return \Arcanesoft\Blog\Models\Author
      */
-    public function create(array $attributes)
+    public function createOne(array $attributes)
     {
-        $author = $this->model()
-            ->forceFill([
-                'uuid'    => Str::uuid(),
-                'user_id' => $this->createUser($attributes)->getKey()
-            ])
-            ->fill($attributes);
+        /** @var  \Arcanesoft\Blog\Models\Author  $author */
+        $author = $this->model()->fill($attributes)->forceFill([
+            'uuid' => Str::uuid(),
+        ]);
+
+        $this->addCreator($author, $attributes);
 
         $author->save();
 
@@ -63,13 +58,20 @@ class AuthorsRepository
      * Update the given author.
      *
      * @param  \Arcanesoft\Blog\Models\Author  $author
-     * @param  array                        $attributes
+     * @param  array                           $attributes
      *
      * @return bool
      */
-    public function update(Author $author, array $attributes): bool
+    public function updateOne(Author $author, array $attributes): bool
     {
-        return $author->update($attributes);
+        // Filter/Remove nullable attributes like password
+        $attributes = array_filter($attributes);
+
+        $updated = $author->update($attributes);
+
+        $this->updateCreator($author, $attributes);
+
+        return $updated;
     }
 
     /**
@@ -79,22 +81,54 @@ class AuthorsRepository
      *
      * @return bool|null
      */
-    public function delete(Author $author)
+    public function deleteOne(Author $author)
     {
         return $author->delete();
     }
 
-    /**
-     * Create a new user.
-     *
-     * @param  array  $attributes
-     *
-     * @return \App\Models\User|\Arcanesoft\Auth\Models\User|mixed
+    /* -----------------------------------------------------------------
+     |  Relationship's Methods
+     | -----------------------------------------------------------------
      */
-    private function createUser(array $attributes)
-    {
-        $attributes['roles'] = ['blog-author'];
 
-        return (new UsersRepository)->create($attributes);
+    /**
+     * Create a new `creator/authenticatable` user associated to the author.
+     *
+     * @param  \Arcanesoft\Blog\Models\Author  $author
+     * @param  array                           $attributes
+     *
+     * @return \Illuminate\Database\Eloquent\Model|mixed
+     */
+    protected function addCreator(Author $author, array $attributes)
+    {
+        $repo    = static::getAdminRepository();
+        $creator = $repo->createOne($attributes);
+        $repo->syncRolesByKeys($creator, ['blog-author']);
+
+        return $author->creator()->associate($creator);
+    }
+
+    /**
+     * Update the associated creator.
+     *
+     * @param  \Arcanesoft\Blog\Models\Author  $author
+     * @param  array                           $attributes
+     *
+     * @return bool
+     */
+    protected function updateCreator(Author $author, $attributes)
+    {
+        return static::getAdminRepository()
+                     ->updateOne($author->creator, $attributes);
+    }
+
+    /**
+     * Get the `administrator` repository.
+     *
+     * @return \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository|mixed
+     */
+    protected static function getAdminRepository(): AdministratorsRepository
+    {
+        return static::makeRepository(AdministratorsRepository::class);
     }
 }

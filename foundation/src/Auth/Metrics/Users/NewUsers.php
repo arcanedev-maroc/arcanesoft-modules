@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Metrics\Users;
 
 use Arcanedev\LaravelMetrics\Metrics\RangedValue;
+use Arcanesoft\Foundation\Auth\Auth;
+use Arcanesoft\Foundation\Auth\Policies\UsersPolicy;
 use Arcanesoft\Foundation\Auth\Repositories\UsersRepository;
 use Illuminate\Http\Request;
 
@@ -43,10 +45,22 @@ class NewUsers extends RangedValue
     {
         return [
             1   => __('Today'),
-            7   => __('7 Days'),
-            30  => __('30 Days'),
-            60  => __('60 Days'),
-            365 => __('365 Days'),
+            7   => __(':days Days', ['days' => 7]),
+            30  => __(':days Days', ['days' => 30]),
+            60  => __(':days Days', ['days' => 60]),
+            365 => __(':days Days', ['days' => 365]),
         ];
+    }
+
+    /**
+     * Check if the authenticated user is authorized.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return bool
+     */
+    public function authorize(Request $request): bool
+    {
+        return Auth::admin()->can(UsersPolicy::ability('metrics'));
     }
 }

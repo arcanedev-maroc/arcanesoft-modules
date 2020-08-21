@@ -1,7 +1,7 @@
 @extends(arcanesoft\foundation()->template())
 
 @section('page-title')
-    <i class="far fa-fw fa-user-edit"></i> {{ __('Authors') }}
+    <i class="fas fa-fw fa-user-edit"></i> {{ __('Authors') }}
 @endsection
 
 <?php
@@ -16,44 +16,48 @@
                 <table class="table table-md table-borderless mb-0">
                     <tbody>
                         <tr>
-                            <th>{{ __('Username') }} :</th>
+                            <th class="table-th">@lang('Username') :</th>
                             <td class="text-right">{{ $author->username }}</td>
                         </tr>
                         <tr>
-                            <th>{{ __('Slug') }} :</th>
+                            <th class="table-th">@lang('Slug') :</th>
                             <td class="text-right">{{ $author->slug }}</td>
                         </tr>
                         <tr>
-                            <th colspan="2">{{ __('Bio') }} :</th>
-                        </tr>
-                        <tr>
-                            <td>
-                                {{ $author->bio }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>{{ __('Created at') }} :</th>
+                            <th class="table-th">@lang('Created at') :</th>
                             <td class="text-right"><small class="text-muted">{{ $author->created_at }}</small></td>
                         </tr>
                         <tr>
-                            <th>{{ __('Updated at') }} :</th>
+                            <th class="table-th">@lang('Updated at') :</th>
                             <td class="text-right"><small class="text-muted">{{ $author->updated_at }}</small></td>
                         </tr>
                     </tbody>
                 </table>
                 <div class="card-footer p-2 text-right">
                     @can(Arcanesoft\Blog\Policies\AuthorsPolicy::ability('update'), $author)
-                        {{ ui\action_link('edit', route('admin::auth.users.edit', [$author]))->size('sm') }}
+                        {{ arcanesoft\ui\action_link('edit', route('admin::blog.authors.edit', [$author]))->size('sm') }}
                     @endcan
 
                     @can(Arcanesoft\Blog\Policies\AuthorsPolicy::ability('delete'), $author)
-                        {{ ui\action_button('delete')->attribute('onclick', "window.Foundation.\$emit('blog::authors.delete')")->size('sm')->setDisabled($author->isNotDeletable()) }}
+                        {{ arcanesoft\ui\action_button('delete')->attribute('onclick', "window.Foundation.\$emit('blog::authors.delete')")->size('sm')->setDisabled($author->isNotDeletable()) }}
                     @endcan
+                </div>
+            </div>
+            <div class="card card-borderless shadow-sm mb-3">
+                <div class="card-header">@lang('Bio')</div>
+                <div class="card-body">
+                    {{ $author->bio }}
                 </div>
             </div>
         </div>
         <div class="col-md-6">
-            @include('auth::_partials.users.card-details', ['user' => $author->user])
+            @include('foundation::authorization._partials.admin-card-details', ['admin' => $author->creator])
         </div>
     </div>
 @endsection
+
+@push('modals')
+@endpush
+
+@push('scripts')
+@endpush

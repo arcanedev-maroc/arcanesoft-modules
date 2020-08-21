@@ -86,7 +86,7 @@ abstract class Repository implements RepositoryContract
      *
      * @return \Arcanesoft\Foundation\Support\Repositories\Repository|mixed
      */
-    protected static function getRepository(string $repo): self
+    protected static function makeRepository(string $repo): self
     {
         return app()->make($repo);
     }

@@ -25,9 +25,9 @@ class PermissionTableSeeder extends PermissionsSeeder
     public function run(): void
     {
         $this->seed([
-            'name'        => 'Foundation',
-            'slug'        => 'foundation',
-            'description' => 'Foundation permissions group',
-        ], $this->getPermissionsFromPolicyManager('admin::foundation.'));
+            'name'        => 'System',
+            'slug'        => 'system',
+            'description' => 'System permissions group',
+        ], $this->getPermissionsFromPolicyManager('admin::system.'));
     }
 }

@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Policies;
 
-use Arcanesoft\Foundation\Auth\Models\{
-    Permission, Role, User, User as AuthenticatedUser
-};
+use Arcanesoft\Foundation\Auth\Models\{Administrator, Permission, Role};
 
 /**
  * Class     RolesPolicy
@@ -85,10 +83,10 @@ class RolesPolicy extends AbstractPolicy
                 'description' => 'Ability to delete a role',
             ]),
 
-            // admin::auth.roles.permissions.detach
-            $this->makeAbility('users.detach', 'detachUser')->setMetas([
-                'name'        => 'Detach a user',
-                'description' => 'Ability to detach the related user from role',
+            // admin::auth.roles.administrators.detach
+            $this->makeAbility('administrators.detach', 'detachAdministrator')->setMetas([
+                'name'        => 'Detach an administrator',
+                'description' => 'Ability to detach the related administrator from role',
             ]),
 
             // admin::auth.roles.permissions.detach
@@ -107,11 +105,11 @@ class RolesPolicy extends AbstractPolicy
     /**
      * Allow to list all the roles.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function index(AuthenticatedUser $user)
+    public function index(Administrator $administrator)
     {
         //
     }
@@ -119,25 +117,25 @@ class RolesPolicy extends AbstractPolicy
     /**
      * Allow to show a role details.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
-     * @param  \Arcanesoft\Foundation\Auth\Models\Role|null   $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Models\Role|null            $role
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function show(AuthenticatedUser $user, Role $model = null)
+    public function show(Administrator $administrator, Role $role = null)
     {
-        if ($model && $model->key === Role::ADMINISTRATOR && ! $user->isSuperAdmin())
+        if ($role && $role->isAdministrator() && ! $administrator->isSuperAdmin())
             return false;
     }
 
     /**
      * Allow to create a role.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function create(AuthenticatedUser $user)
+    public function create(Administrator $administrator)
     {
         //
     }
@@ -145,74 +143,72 @@ class RolesPolicy extends AbstractPolicy
     /**
      * Allow to update a role.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
-     * @param  \Arcanesoft\Foundation\Auth\Models\Role|null   $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Models\Role|null            $role
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function update(AuthenticatedUser $user, Role $model = null)
+    public function update(Administrator $administrator, Role $role = null)
     {
-        //
+        if (static::isRoleLocked($role))
+            return false;
     }
 
     /**
      * Activate to update a role.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
-     * @param  \Arcanesoft\Foundation\Auth\Models\Role|null   $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Models\Role|null            $role
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function activate(AuthenticatedUser $user, Role $model = null)
+    public function activate(Administrator $administrator, Role $role = null)
     {
-        if (static::isRoleLocked($model))
+        if (static::isRoleLocked($role))
             return false;
     }
 
     /**
      * Allow to delete a role.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
-     * @param  \Arcanesoft\Foundation\Auth\Models\Role|null   $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Models\Role|null            $role
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function delete(AuthenticatedUser $user, Role $model = null)
+    public function delete(Administrator $administrator, Role $role = null)
     {
-        if ( ! is_null($model))
-            return $model->isDeletable();
+        if ( ! is_null($role))
+            return $role->isDeletable();
     }
 
     /**
      * Allow to detach a user from a role.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
-     * @param \Arcanesoft\Foundation\Auth\Models\Role|null    $model
-     * @param \Arcanesoft\Foundation\Auth\Models\User|null    $related
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Models\Role|null            $role
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|null   $model
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function detachUser(AuthenticatedUser $user, Role $model = null, User $related = null)
+    public function detachAdministrator(Administrator $administrator, Role $role = null, Administrator $model = null)
     {
-        if (static::isRoleLocked($model))
-            return false;
-
-        if ( ! $user->isAdmin() && $related->isAdmin())
+        if ( ! $administrator->isSuperAdmin() && $model->isSuperAdmin())
             return false;
     }
 
     /**
      * Allow to detach a permission from a role.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed       $user
-     * @param  \Arcanesoft\Foundation\Auth\Models\Role|null        $model
-     * @param  \Arcanesoft\Foundation\Auth\Models\Permission|null  $related
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Models\Role|null            $role
+     * @param  \Arcanesoft\Foundation\Auth\Models\Permission|null      $model
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function detachPermission(AuthenticatedUser $user, Role $model = null, Permission $related = null)
+    public function detachPermission(Administrator $administrator, Role $role = null, Permission $model = null)
     {
-        if (static::isRoleLocked($model))
+        if (static::isRoleLocked($role))
             return false;
     }
 
@@ -224,12 +220,12 @@ class RolesPolicy extends AbstractPolicy
     /**
      * Check if the role is locked.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Role|null  $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\Role|null  $role
      *
      * @return bool
      */
-    protected static function isRoleLocked(Role $model = null): bool
+    protected static function isRoleLocked(Role $role = null): bool
     {
-        return ! is_null($model) && $model->isLocked();
+        return ! is_null($role) && $role->isLocked();
     }
 }

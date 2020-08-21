@@ -32,10 +32,10 @@ abstract class PermissionsSeeder extends Seeder
      */
     public function seed(array $group, iterable $permissions)
     {
-        /** @var  PermissionsGroupsRepository  $repo */
+        /** @var  \Arcanesoft\Foundation\Auth\Repositories\PermissionsGroupsRepository  $repo */
         $repo = $this->container->make(PermissionsGroupsRepository::class);
 
-        $repo->savePermissions($repo->create($group), $permissions);
+        $repo->createOneWithPermissions($group, $permissions);
     }
 
     /* -----------------------------------------------------------------

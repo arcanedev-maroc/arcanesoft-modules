@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Repositories;
 
 use Arcanesoft\Foundation\Auth\Auth;
-use Arcanesoft\Foundation\Auth\Models\{Role, Permission, User};
+use Arcanesoft\Foundation\Auth\Models\{Administrator, Role, Permission};
 use Arcanesoft\Foundation\Auth\Events\Roles\{
-    DetachedAllUsersFromRole, DetachedPermissionFromRole, DetachedUserFromRole, DetachingAllPermissionsFromRole,
-    DetachedAllPermissionsFromRole, DetachingAllUsersFromRole, DetachingPermissionFromRole, DetachingUserFromRole,
-    SyncedPermissionsToRole, SyncingPermissionsToRole
+    Administrators\DetachedAdministrator, Administrators\DetachedAllAdministrators, Administrators\DetachingAdministrator,
+    Administrators\DetachingAllAdministrators, Permissions\DetachedPermission, Permissions\DetachingAllPermissions,
+    Permissions\DetachedAllPermissions, Permissions\DetachingPermission, Permissions\SyncedPermissions,
+    Permissions\SyncingPermissions
 };
 
 /**
@@ -61,8 +62,7 @@ class RolesRepository extends AbstractRepository
      */
     public function firstWithKeyOrFail(string $key): Role
     {
-        return $this->where('key', '=', $key)
-                    ->firstOrFail();
+        return $this->where('key', '=', $key)->firstOrFail();
     }
 
     /**
@@ -74,8 +74,7 @@ class RolesRepository extends AbstractRepository
      */
     public function firstWithUuidOrFail(string $uuid): Role
     {
-        return $this->where('uuid', '=', $uuid)
-                    ->firstOrFail();
+        return $this->where('uuid', '=', $uuid)->firstOrFail();
     }
 
     /**
@@ -84,11 +83,11 @@ class RolesRepository extends AbstractRepository
      * @param  \Arcanesoft\Foundation\Auth\Models\Role  $role
      * @param  string                                   $uuid
      *
-     * @return \Arcanesoft\Foundation\Auth\Models\User|mixed
+     * @return \Arcanesoft\Foundation\Auth\Models\Administrator|mixed
      */
-    public function firstUserWithUuidOrFail(Role $role, string $uuid): User
+    public function firstAdministratorWithUuidOrFail(Role $role, string $uuid): Administrator
     {
-        return $role->users()
+        return $role->administrators()
                     ->where('uuid', '=', $uuid)
                     ->withTrashed() // Get also trashed records
                     ->firstOrFail();
@@ -134,6 +133,20 @@ class RolesRepository extends AbstractRepository
     }
 
     /**
+     * Create a new role.
+     *
+     * @param  array  $attributes
+     *
+     * @return \Arcanesoft\Foundation\Auth\Models\Role|mixed
+     */
+    public function createOne(array $attributes): Role
+    {
+        return tap($this->create($attributes), function (Role $role) use ($attributes) {
+            $this->syncPermissionsByUuids($role, $attributes['permissions'] ?: []);
+        });
+    }
+
+    /**
      * Update the given role.
      *
      * @param  \Arcanesoft\Foundation\Auth\Models\Role  $role
@@ -141,7 +154,7 @@ class RolesRepository extends AbstractRepository
      *
      * @return bool
      */
-    public function update(Role $role, array $attributes): bool
+    public function updateOne(Role $role, array $attributes): bool
     {
         return $role->update($attributes);
     }
@@ -156,7 +169,7 @@ class RolesRepository extends AbstractRepository
      */
     public function syncPermissionsByUuids(Role $role, array $uuids): array
     {
-        $ids = static::getRepository(PermissionsRepository::class)
+        $ids = static::makeRepository(PermissionsRepository::class)
             ->getIdsWhereInUuid($uuids)
             ->toArray();
 
@@ -176,9 +189,9 @@ class RolesRepository extends AbstractRepository
         if (empty($ids))
             return [];
 
-        event(new SyncingPermissionsToRole($role, $ids));
+        event(new SyncingPermissions($role, $ids));
         $synced = $role->permissions()->sync($ids);
-        event(new SyncedPermissionsToRole($role, $ids, $synced));
+        event(new SyncedPermissions($role, $ids, $synced));
 
         return $synced;
     }
@@ -193,9 +206,9 @@ class RolesRepository extends AbstractRepository
      */
     public function detachPermission(Role $role, Permission $permission): int
     {
-        event(new DetachingPermissionFromRole($role, $permission));
+        event(new DetachingPermission($role, $permission));
         $detached = $role->permissions()->detach($permission);
-        event(new DetachedPermissionFromRole($role, $permission, $detached));
+        event(new DetachedPermission($role, $permission, $detached));
 
         return $detached;
     }
@@ -209,9 +222,9 @@ class RolesRepository extends AbstractRepository
      */
     public function detachAllPermissions(Role $role): int
     {
-        event(new DetachingAllPermissionsFromRole($role));
+        event(new DetachingAllPermissions($role));
         $detached = $role->permissions()->detach();
-        event(new DetachedAllPermissionsFromRole($role, $detached));
+        event(new DetachedAllPermissions($role, $detached));
 
         return $detached;
     }
@@ -219,16 +232,16 @@ class RolesRepository extends AbstractRepository
     /**
      * Detach the given user from role.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Role  $role
-     * @param  \Arcanesoft\Foundation\Auth\Models\User  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Role           $role
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $administrator
      *
      * @return int
      */
-    public function detachUser(Role $role, User $user): int
+    public function detachAdministrator(Role $role, Administrator $administrator): int
     {
-        event(new DetachingUserFromRole($role, $user));
-        $detached = $role->users()->detach($user);
-        event(new DetachedUserFromRole($role, $user, $detached));
+        event(new DetachingAdministrator($role, $administrator));
+        $detached = $role->administrators()->detach($administrator);
+        event(new DetachedAdministrator($role, $administrator, $detached));
 
         return $detached;
     }
@@ -240,11 +253,11 @@ class RolesRepository extends AbstractRepository
      *
      * @return int
      */
-    public function detachAllUsers(Role $role): int
+    public function detachAllAdministrators(Role $role): int
     {
-        event(new DetachingAllUsersFromRole($role));
-        $detached = $role->users()->detach();
-        event(new DetachedAllUsersFromRole($role, $detached));
+        event(new DetachingAllAdministrators($role));
+        $detached = $role->administrators()->detach();
+        event(new DetachedAllAdministrators($role, $detached));
 
         return $detached;
     }
@@ -278,26 +291,27 @@ class RolesRepository extends AbstractRepository
      *
      * @return bool|null
      */
-    public function delete(Role $role)
+    public function deleteOne(Role $role)
     {
         return $role->delete();
     }
 
     /**
-     * Get the roles filtered by authenticated user.
-     * If the user is a super admin shows all the roles.
+     * Get the roles filtered by authenticated administrator.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $admin
      *
      * @return \Arcanesoft\Foundation\Auth\Models\Role[]|\Illuminate\Support\Collection|iterable
      */
-    public function getFilteredByAuthenticatedUser(User $user): iterable
+    public function getFilteredByAuthenticatedAdministrator(Administrator $admin): iterable
     {
-        return $this->get()->filter(function (Role $role) use ($user) {
-            if ($user->isSuperAdmin())
-                return false;
+        $roles = $this->get();
 
-            return $role->key !== Role::ADMINISTRATOR;
+        if ($admin->isSuperAdmin())
+            return $roles;
+
+        return $roles->reject(function (Role $role) {
+            return $role->isAdministrator();
         });
     }
 }

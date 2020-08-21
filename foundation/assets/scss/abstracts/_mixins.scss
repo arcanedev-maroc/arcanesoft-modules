@@ -1,3 +1,5 @@
+@import "~bootstrap/scss/mixins";
+
 /**
  * This file contains all application-wide Sass mixins.
  */
@@ -44,9 +46,9 @@
         color: $color;
     }
 
-    @include hover {
-        background-color: $color;
+    &:hover {
         border-color: $color;
+        @include gradient-bg($color);
         color: $color-hover;
     }
 

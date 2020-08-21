@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Backups\Policies;
 
-use Arcanesoft\Foundation\Auth\Models\User as AuthenticatedUser;
+use Arcanesoft\Foundation\Auth\Models\Administrator;
 use Arcanesoft\Foundation\Support\Auth\Policy;
 
 /**
@@ -81,11 +83,11 @@ class StatusesPolicy extends Policy
     /**
      * Allow to list all the backups.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function index(AuthenticatedUser $user)
+    public function index(Administrator $administrator)
     {
         //
     }
@@ -93,11 +95,11 @@ class StatusesPolicy extends Policy
     /**
      * Allow to display a backup.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function show(AuthenticatedUser $user)
+    public function show(Administrator $administrator)
     {
         //
     }
@@ -105,11 +107,11 @@ class StatusesPolicy extends Policy
     /**
      * Allow to create a backup.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function create(AuthenticatedUser $user)
+    public function create(Administrator $administrator)
     {
         //
     }
@@ -117,11 +119,11 @@ class StatusesPolicy extends Policy
     /**
      * Allow to clean backups.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function clean(AuthenticatedUser $user)
+    public function clean(Administrator $administrator)
     {
         //
     }

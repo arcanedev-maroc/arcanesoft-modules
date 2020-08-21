@@ -1,10 +1,14 @@
+type LoadingButtonOptions = {
+    loadingText?: string
+}
+
 class LoadingButton {
     elt
     initialInnerHTML
-    options
-    status
+    options: LoadingButtonOptions
+    status: string
 
-    constructor(elt, options = {}) {
+    constructor(elt, options: LoadingButtonOptions = {}) {
         this.elt = elt
         this.status = 'initial'
         this.options = {
@@ -15,13 +19,13 @@ class LoadingButton {
         }
     }
 
-    setLoadingText(text) {
-        this.options['loadingText'] = text
+    setLoadingText(text: string): this {
+        this.options.loadingText = text
 
         return this
     }
 
-    setDisabled(status: boolean) {
+    setDisabled(status: boolean): void {
         if (status === true) {
             if (this.elt.tagName === 'A' && ! this.elt.classList.contains('disabled'))
                 this.elt.classList.add('disabled')
@@ -36,29 +40,32 @@ class LoadingButton {
         }
     }
 
-    loading() {
-        if ( ! this.isLoading()) {
-            this.initialInnerHTML = this.elt.innerHTML
-            this.elt.innerHTML = `<i class="fas fa-fw fa-circle-notch fa-spin" role="status" aria-hidden="true"></i> ${this.options.loadingText}`
-            this.setDisabled(true)
-            this.status = 'loading'
-        }
+    loading(): this {
+        if (this.isLoading())
+            return this
+
+        this.initialInnerHTML = this.elt.innerHTML
+        this.elt.innerHTML = `<i class="fas fa-fw fa-circle-notch fa-spin" role="status" aria-hidden="true"></i> ${this.options.loadingText}`
+        this.setDisabled(true)
+        this.status = 'loading'
 
         return this
     }
 
-    reset() {
-        if (this.isLoading()) {
-            this.elt.innerHTML = this.initialInnerHTML
-            this.setDisabled(false)
-            this.status = 'initial'
+    reset(): this {
+        if ( ! this.isLoading()) {
+            return this
         }
 
-        return this;
+        this.elt.innerHTML = this.initialInnerHTML
+        this.setDisabled(false)
+        this.status = 'initial'
+
+        return this
     }
 
-    isLoading() {
-        return this.status === 'loading';
+    isLoading(): boolean {
+        return this.status === 'loading'
     }
 }
 

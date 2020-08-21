@@ -2,23 +2,53 @@
 
 return [
 
+    /* -----------------------------------------------------------------
+     |  Authentication
+     | -----------------------------------------------------------------
+     */
+
+    'authentication' => [
+        'login' => [
+            'enabled' => true,
+        ],
+
+        'register' => [
+            'enabled' => true,
+
+            'login-after-registered' => true,
+        ],
+
+        'socialite' => [
+            'enabled' => false,
+
+            'drivers' => [
+                'facebook',
+                'github',
+                'google',
+                'twitter',
+            ],
+        ],
+    ],
+
+    /* -----------------------------------------------------------------
+     |  Database
+     | -----------------------------------------------------------------
+     */
+
     'database' => [
 
-        /* -----------------------------------------------------------------
-         |  Connections
-         | -----------------------------------------------------------------
-         */
+        // Connections
+        // ----------------------------------
 
         'connection' => env('DB_CONNECTION', 'mysql'),
 
-        /* -----------------------------------------------------------------
-         |  Tables
-         | -----------------------------------------------------------------
-         */
+        // Tables
+        // ----------------------------------
 
         'prefix'     => 'auth_',
 
         'tables'     => [
+            'administrators'      => 'administrators',
             'users'               => 'users',
             'roles'               => 'roles',
             'permissions'         => 'permissions',
@@ -26,17 +56,16 @@ return [
             'password-resets'     => 'password_resets',
             'socialite-providers' => 'socialite_providers',
             'throttles'           => 'throttles',
-            'role-user'           => 'role_user',
+            'administrator-role'  => 'administrator_role',
             'permission-role'     => 'permission_role',
         ],
 
-        /* -----------------------------------------------------------------
-         |  Models
-         | -----------------------------------------------------------------
-         */
+         // Models
+         // ----------------------------------
 
         'models' => [
             'user'               => App\Models\User::class,
+            'administrator'      => Arcanesoft\Foundation\Auth\Models\Administrator::class,
             'role'               => Arcanesoft\Foundation\Auth\Models\Role::class,
             'permission'         => Arcanesoft\Foundation\Auth\Models\Permission::class,
             'permissions-group'  => Arcanesoft\Foundation\Auth\Models\PermissionsGroup::class,
@@ -46,24 +75,14 @@ return [
 
     ],
 
-    'authentication' => [
-        'login' => [
-            'enabled' => true,
-        ],
+    /* -----------------------------------------------------------------
+     |  Administrators
+     | -----------------------------------------------------------------
+     */
 
-        'register' => [
-            'enabled' => true,
-        ],
-    ],
-
-    'socialite' => [
-        'enabled' => true,
-
-        'drivers' => [
-            'facebook',
-            'github',
-            'google',
-            'twitter',
+    'administrators' => [
+        'emails' => [
+            'admin@example.com',
         ],
     ],
 

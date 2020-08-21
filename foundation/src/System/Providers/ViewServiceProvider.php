@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\System\Providers;
 
-use Arcanesoft\Foundation\System\ViewComposers;
+use Arcanesoft\Foundation\System\Views\{Composers, Components};
 use Arcanesoft\Foundation\Support\Providers\ViewServiceProvider as ServiceProvider;
 
 /**
@@ -26,8 +26,18 @@ class ViewServiceProvider extends ServiceProvider
      * @var array
      */
     protected $composers = [
-        ViewComposers\ApplicationInfoComposer::class,
-        ViewComposers\FoldersPermissionsComposer::class,
-        ViewComposers\RequiredPhpExtensionsComposer::class,
+        Composers\ApplicationInfoComposer::class,
+        Composers\FoldersPermissionsComposer::class,
+        Composers\RequiredPhpExtensionsComposer::class,
+    ];
+
+    /**
+     * The view components.
+     *
+     * @var array
+     */
+    protected $components = [
+        Components\AbilitiesDatatable::NAME => Components\AbilitiesDatatable::class,
+        Components\RoutesDatatable::NAME    => Components\RoutesDatatable::class,
     ];
 }

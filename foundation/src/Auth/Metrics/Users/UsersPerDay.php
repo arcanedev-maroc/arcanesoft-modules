@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Metrics\Users;
 
 use Arcanedev\LaravelMetrics\Metrics\Trend;
+use Arcanesoft\Foundation\Auth\Auth;
+use Arcanesoft\Foundation\Auth\Policies\UsersPolicy;
 use Arcanesoft\Foundation\Auth\Repositories\UsersRepository;
 use Illuminate\Http\Request;
 
@@ -42,9 +44,21 @@ class UsersPerDay extends Trend
     public function ranges(): array
     {
         return [
-            7  => '7 Days',
-            14 => '14 Days',
-            30 => '30 Days',
+            7  => __(':days Days', ['days' => 7]),
+            14 => __(':days Days', ['days' => 15]),
+            30 => __(':days Days', ['days' => 30]),
         ];
+    }
+
+    /**
+     * Check if the authenticated user is authorized.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return bool
+     */
+    public function authorize(Request $request): bool
+    {
+        return Auth::admin()->can(UsersPolicy::ability('metrics'));
     }
 }

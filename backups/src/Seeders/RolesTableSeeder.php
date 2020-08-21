@@ -32,7 +32,7 @@ class RolesTableSeeder extends RolesSeeder
             ],
         ]);
 
-        $this->syncRoles([
+        $this->syncRolesWithPermissions([
             'backups-manager' => [
                 'admin::backups.*',
             ],

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Metrics\Users;
 
 use Arcanedev\LaravelMetrics\Metrics\Trend;
+use Arcanesoft\Foundation\Auth\Auth;
+use Arcanesoft\Foundation\Auth\Policies\UsersPolicy;
 use Arcanesoft\Foundation\Auth\Repositories\UsersRepository;
 use Illuminate\Http\Request;
 
@@ -42,12 +44,23 @@ class UsersPerMinute extends Trend
     public function ranges(): array
     {
         return [
-            60   => '60 Minutes',
-            120  => '120 Minutes',
-            180  => '180 Minutes',
-            240  => '240 Minutes',
-            480  => '480 Minutes',
-            600  => '600 Minutes',
+            30   => __(':minutes Minutes', ['minutes' => 30]),
+            60   => __(':minutes Minutes', ['minutes' => 60]),
+            120  => __(':minutes Minutes', ['minutes' => 120]),
+            180  => __(':minutes Minutes', ['minutes' => 180]),
+            240  => __(':minutes Minutes', ['minutes' => 240]),
         ];
+    }
+
+    /**
+     * Check if the authenticated user is authorized.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return bool
+     */
+    public function authorize(Request $request): bool
+    {
+        return Auth::admin()->can(UsersPolicy::ability('metrics'));
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Support\Providers;
 
-use Arcanedev\LaravelPolicies\Contracts\PolicyManager;
+use Arcanesoft\Foundation\Support\Providers\Concerns\HasPolicyClasses;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 /**
@@ -16,31 +16,11 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 abstract class AuthServiceProvider extends ServiceProvider
 {
     /* -----------------------------------------------------------------
-     |  Properties
+     |  Traits
      | -----------------------------------------------------------------
      */
 
-    /**
-     * Policy's classes.
-     *
-     * @var array
-     */
-    protected $policyClasses = [];
-
-    /* -----------------------------------------------------------------
-     |  Getters
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Get policy's classes.
-     *
-     * @return iterable
-     */
-    public function policyClasses(): iterable
-    {
-        return $this->policyClasses;
-    }
+    use HasPolicyClasses;
 
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -54,22 +34,5 @@ abstract class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
         $this->registerPolicyClasses();
-    }
-
-    /* -----------------------------------------------------------------
-     |  Other Methods
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Register the policy's classes.
-     */
-    protected function registerPolicyClasses(): void
-    {
-        $manager = $this->app->make(PolicyManager::class);
-
-        foreach ($this->policyClasses() as $class) {
-            $manager->registerClass($class);
-        }
     }
 }

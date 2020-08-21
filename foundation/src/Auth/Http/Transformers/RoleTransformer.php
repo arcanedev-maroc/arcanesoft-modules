@@ -36,7 +36,7 @@ class RoleTransformer extends AbstractTransformer
         return [
             'name'        => $role->name,
             'description' => $role->description,
-            'users_count' => count_pill($role->users->count())->toHtml(),
+            'users_count' => count_pill($role->administrators->count())->toHtml(),
             'locked'      => '<span class="status '.($role->isLocked() ? 'status-danger' : 'status-secondary').'" data-toggle="tooltip" data-placement="top" title="'.($role->isLocked() ? __('Locked') : __('Unlocked')).'"></span>',
             'status'      => '<span class="status '.($role->isActive() ? 'status-success status-animated' : 'status-secondary').'" data-toggle="tooltip" data-placement="top" title="'.($role->isActive() ? __('Activated') : __('Deactivated')).'"></span>',
             'actions'     => static::renderActions($actions),

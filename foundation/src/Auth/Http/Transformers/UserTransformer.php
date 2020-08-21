@@ -70,8 +70,7 @@ class UserTransformer extends AbstractTransformer
         if (static::can(UsersPolicy::ability('activate'), [$user]))
             $actions[] = ButtonAction::action($user->isActive() ? 'deactivate' : 'activate', false)
                 ->attributeIf($user->isDeletable(), 'onclick', "Foundation.\$emit('auth::users.activate', ".json_encode(['id' => $user->uuid, 'status' => $user->isActive() ? 'activated' : 'deactivated']).")")
-                ->size('sm')
-                ->setDisabled($user->isSuperAdmin());
+                ->size('sm');
 
         if (static::can(UsersPolicy::ability('restore'), [$user]) && $user->trashed())
             $actions[] = ButtonAction::action('restore', false)
@@ -81,8 +80,7 @@ class UserTransformer extends AbstractTransformer
         if (static::can(UsersPolicy::ability('delete'), [$user]))
             $actions[] = ButtonAction::action('delete', false)
                 ->attributeIf($user->isDeletable(), 'onclick', "window.Foundation.\$emit('auth::users.delete', ".json_encode(['id' => $user->uuid]).")")
-                ->size('sm')
-                ->setDisabled($user->isNotDeletable());
+                ->size('sm');
 
         return $actions;
     }

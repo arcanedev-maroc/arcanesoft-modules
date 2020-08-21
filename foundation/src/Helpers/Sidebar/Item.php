@@ -1,7 +1,11 @@
-<?php namespace Arcanesoft\Foundation\Helpers\Sidebar;
+<?php
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\HtmlString;
+declare(strict_types=1);
+
+namespace Arcanesoft\Foundation\Helpers\Sidebar;
+
+use Arcanesoft\Foundation\Auth\Auth;
+use Illuminate\Support\{Arr, HtmlString};
 
 /**
  * Class     SidebarItem
@@ -37,8 +41,8 @@ class Item
     /** @var  array */
     protected $permissions;
 
-    /** @var boolean */
-    private $selected;
+    /** @var bool */
+    private $selected = false;
 
     /* -----------------------------------------------------------------
      |  Constructor
@@ -57,9 +61,7 @@ class Item
         $this->icon        = Arr::pull($attributes, 'icon');
         $this->roles       = Arr::pull($attributes, 'roles', []);
         $this->permissions = Arr::pull($attributes, 'permissions', []);
-        $this->children    = (new Collection)->pushSidebarItems(
-            Arr::pull($attributes, 'children', [])
-        );
+        $this->children    = Collection::make()->pushSidebarItems(Arr::pull($attributes, 'children', []));
         $this->selected    = false;
 
         $this->parseUrl($attributes);
@@ -77,11 +79,9 @@ class Item
      *
      * @return \Arcanesoft\Foundation\Helpers\Sidebar\Item
      */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
-        $this->title = trans()->has($title)
-            ? trans()->get($title)
-            : __($title);
+        $this->title = __($title);
 
         return $this;
     }
@@ -93,14 +93,21 @@ class Item
      *
      * @return \Arcanesoft\Foundation\Helpers\Sidebar\Item
      */
-    public function setUrl($url) : self
+    public function setUrl(string $url): self
     {
         $this->url = $url;
 
         return $this;
     }
 
-    public function setSelected(string $name) : self
+    /**
+     * Set the selected sidebar item.
+     *
+     * @param  string  $name
+     *
+     * @return $this
+     */
+    public function setSelected(string $name): self
     {
         $this->selected = ($this->name === $name);
         $this->children->setSelected($name);
@@ -121,11 +128,9 @@ class Item
      *
      * @return \Arcanesoft\Foundation\Helpers\Sidebar\Item
      */
-    public function route($name, array $params = []) : self
+    public function route($name, array $params = []): self
     {
-        return $this->setUrl(
-            route($name, $params)
-        );
+        return $this->setUrl(route($name, $params));
     }
 
     /**
@@ -138,15 +143,20 @@ class Item
      */
     public function action($name, array $params = []) : self
     {
-        return $this->setUrl(
-            action($name, $params)
-        );
+        return $this->setUrl(action($name, $params));
     }
 
+    /**
+     * Set the icon classes.
+     *
+     * @param  string  $classes
+     *
+     * @return \Illuminate\Support\HtmlString
+     */
     public function icon($classes = '') : HtmlString
     {
         $html = $this->icon
-            ? '<i class="' . $this->icon . ' ' . $classes . '"></i>'
+            ? "<i class=\"{$this->icon} {$classes}\"></i>"
             : '';
 
         return new HtmlString($html);
@@ -180,14 +190,41 @@ class Item
         return $this->children->isNotEmpty();
     }
 
-    public function isActive() : bool
+    /**
+     * Check if the item is active.
+     *
+     * @return bool
+     */
+    public function isActive(): bool
     {
         return $this->isSelected() || $this->children->hasAnySelected();
     }
 
-    public function isSelected() : bool
+    /**
+     * Check if the item is selected.
+     *
+     * @return bool
+     */
+    public function isSelected(): bool
     {
         return $this->selected;
+    }
+
+    /**
+     * Check if can see the item.
+     *
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed|null  $administrator
+     *
+     * @return bool
+     */
+    public function canSee($administrator = null): bool
+    {
+        $administrator = $administrator ?? Auth::admin();
+
+        return $administrator->isSuperAdmin()
+            || $this->checkHasRole($administrator)
+            || $this->checkHasPermission($administrator)
+            || $this->checkCanSeeChildren($administrator);
     }
 
     /* -----------------------------------------------------------------
@@ -199,8 +236,6 @@ class Item
      * Parse the url attribute.
      *
      * @param  array  $attributes
-     *
-     * @return void
      */
     protected function parseUrl(array $attributes) : void
     {
@@ -215,28 +250,46 @@ class Item
     }
 
     /**
-     * Check if can see the item.
+     * Check if the authenticated admin has the allowed role.
      *
-     * @param  \App\Models\User|mixed|null  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $administrator
      *
      * @return bool
      */
-    public function canSee($user = null): bool
+    protected function checkHasRole($administrator): bool
     {
-        $user = $user ?? auth()->user();
+        return $administrator->isOne($this->roles);
+    }
 
-        if ($user->isSuperAdmin())
-            return true;
-
-        if ($user->isOne($this->roles))
-            return true;
-
-        foreach ($this->permissions as $permission)
-            if ($user->can($permission))
+    /**
+     * Check if the authenticated admin has the allowed permission.
+     *
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $admin
+     *
+     * @return bool
+     */
+    protected function checkHasPermission($admin): bool
+    {
+        foreach ($this->permissions as $permission) {
+            if ($admin->can($permission)) {
                 return true;
+            }
+        }
 
-        return $this->children->filter(function (Item $item) use ($user) {
-            return $item->canSee($user);
+        return false;
+    }
+
+    /**
+     * Check if the authenticated admin can access the item's children.
+     *
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $administrator
+     *
+     * @return bool
+     */
+    protected function checkCanSeeChildren($administrator): bool
+    {
+        return $this->children->filter(function (Item $child) use ($administrator) {
+            return $child->canSee($administrator);
         })->isNotEmpty();
     }
 }

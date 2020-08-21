@@ -26,11 +26,19 @@ class RouteServiceProvider extends ServiceProvider
      * @var array
      */
     protected $routeClasses = [
+        // Authentication
+        Routes\Auth\LoginRoutes::class,
+        Routes\Auth\PasswordResetRoutes::class,
+        Routes\Auth\ConfirmPasswordRoutes::class,
+
+        // Admin
         Routes\DashboardRoutes::class,
         Routes\UsersRoutes::class,
+        Routes\AdministratorsRoutes::class,
         Routes\RolesRoutes::class,
         Routes\PermissionsRoutes::class,
         Routes\PasswordResetsRoutes::class,
+        Routes\SettingsRoutes::class,
         Routes\ProfileRoutes::class,
     ];
 }

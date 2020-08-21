@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Console;
 
-use Arcanesoft\Foundation\Auth\Models\Role;
 use Arcanesoft\Foundation\Auth\Repositories\UsersRepository;
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Date;
 use Closure;
+use Illuminate\Console\Command;
 
 /**
  * Class     MakeUser
@@ -28,7 +26,7 @@ class MakeUser extends Command
      *
      * @var string
      */
-    protected $signature = 'make:user {--admin}';
+    protected $signature = 'make:user';
 
     /**
      * The console command description.
@@ -54,8 +52,7 @@ class MakeUser extends Command
             $this->ask('First Name'),
             $this->ask('Last Name'),
             $this->ask('Email Address'),
-            $this->secret('Password'),
-            $this->option('admin')
+            $this->secret('Password')
         ]);
 
         $this->comment('User created successfully.');
@@ -73,21 +70,19 @@ class MakeUser extends Command
      */
     protected static function defaultCreateUserCallback(): Closure
     {
-        return function (string $firstName, string $lastName, string $email, string $password, bool $isAdmin) {
+        return function (string $firstName, string $lastName, string $email, string $password) {
             /** @var  \Arcanesoft\Foundation\Auth\Repositories\UsersRepository  $repo */
             $repo = app(UsersRepository::class);
-            $now  = Date::now();
-            $user = $repo->forceCreate([
+            $now  = now();
+
+            $repo->forceCreate([
                 'first_name'        => $firstName,
                 'last_name'         => $lastName,
                 'email'             => $email,
                 'email_verified_at' => $now,
                 'password'          => $password,
-                'is_admin'          => $isAdmin,
                 'activated_at'      => $now
             ]);
-
-            $repo->syncRolesByKeys($user, $isAdmin ? [Role::ADMINISTRATOR] : [Role::MEMBER]);
         };
     }
 }

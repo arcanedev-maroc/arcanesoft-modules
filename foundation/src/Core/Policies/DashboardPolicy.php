@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Core\Policies;
 
-use Arcanesoft\Foundation\Auth\Models\User as AuthenticatedUser;
+use Arcanesoft\Foundation\Auth\Models\Administrator;
 
 /**
  * Class     DashboardPolicy
@@ -47,7 +47,7 @@ class DashboardPolicy extends AbstractPolicy
 
         return [
 
-            // admin::foundation.dashboard.index
+            // admin::dashboard.index
             $this->makeAbility('index')->setMetas([
                 'name'        => 'Access the main dashboard',
                 'description' => 'Ability to access the main dashboard',
@@ -64,13 +64,12 @@ class DashboardPolicy extends AbstractPolicy
     /**
      * Allow to access all the system information.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $admin
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function index(AuthenticatedUser $user)
+    public function index(Administrator $admin)
     {
-        if ($user->isModerator())
-            return true;
+        //
     }
 }

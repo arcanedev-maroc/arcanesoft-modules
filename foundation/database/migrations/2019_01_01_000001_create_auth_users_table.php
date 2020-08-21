@@ -7,7 +7,7 @@ use Arcanesoft\Foundation\Auth\Database\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
 /**
- * Class     CreateUsersTable
+ * Class     CreateAuthUsersTable
  *
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  *
@@ -41,7 +41,7 @@ class CreateAuthUsersTable extends Migration
     public function up(): void
     {
         $this->createSchema(function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->uuid('uuid');
             $table->string('first_name', 30)->nullable();
             $table->string('last_name', 30)->nullable();
@@ -49,7 +49,6 @@ class CreateAuthUsersTable extends Migration
             $table->string('password')->nullable();
             $table->string('avatar')->nullable();
             $table->rememberToken();
-            $table->boolean('is_admin')->default(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('last_activity_at')->nullable();
             $table->timestamps();

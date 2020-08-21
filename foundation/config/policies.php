@@ -19,9 +19,11 @@ return [
 
     // Auth
     Arcanesoft\Foundation\Auth\Policies\DashboardPolicy::class,
+    Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy::class,
     Arcanesoft\Foundation\Auth\Policies\UsersPolicy::class,
     Arcanesoft\Foundation\Auth\Policies\RolesPolicy::class,
     Arcanesoft\Foundation\Auth\Policies\PermissionsPolicy::class,
     Arcanesoft\Foundation\Auth\Policies\PasswordResetsPolicy::class,
+    Arcanesoft\Foundation\Auth\Policies\SettingsPolicy::class,
 
 ];

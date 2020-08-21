@@ -25,7 +25,7 @@ class ProfileRoutes extends AbstractRouteRegistrar
     public function map(): void
     {
         $this->adminGroup(function () {
-            $this->prefix('profile')->name('profile.')->middleware(['password.confirm'])->group(function () {
+            $this->prefix('profile')->name('profile.')->middleware(['password.confirm:auth::admin.password.confirm'])->group(function () {
                 // admin::auth.profile.index
                 $this->get('/', [ProfileController::class, 'index'])
                      ->name('index');

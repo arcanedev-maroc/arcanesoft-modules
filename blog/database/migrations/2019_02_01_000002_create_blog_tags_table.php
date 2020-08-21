@@ -41,7 +41,7 @@ class CreateBlogTagsTable extends Migration
     public function up(): void
     {
         $this->createSchema(function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->uuid('uuid');
             $table->string('locale', 5)->default(app()->getLocale());
             $table->string('name');

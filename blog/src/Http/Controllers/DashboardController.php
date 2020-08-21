@@ -1,4 +1,8 @@
-<?php namespace Arcanesoft\Blog\Http\Controllers;
+<?php
+
+declare(strict_types=1);
+
+namespace Arcanesoft\Blog\Http\Controllers;
 
 /**
  * Class     DashboardController
@@ -13,6 +17,9 @@ class DashboardController extends Controller
      | -----------------------------------------------------------------
      */
 
+    /**
+     * @return \Illuminate\Contracts\View\View
+     */
     public function index()
     {
         $this->setCurrentSidebarItem('blog::main');

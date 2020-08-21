@@ -23,7 +23,7 @@ class RoleTableSeeder extends RolesSeeder
     /**
      * Run the database seeds.
      */
-    public function run(): void 
+    public function run(): void
     {
         $this->seedMany([
             [
@@ -34,14 +34,8 @@ class RoleTableSeeder extends RolesSeeder
             ],
             [
                 'name'        => 'Moderator',
-                'key'         => Role::MODERATOR,
-                'description' => 'The system moderator role',
-                'is_locked'   => true,
-            ],
-            [
-                'name'        => 'Member',
-                'key'         => Role::MEMBER,
-                'description' => 'The member role',
+                'key'         => 'moderator',
+                'description' => 'The moderator role',
                 'is_locked'   => true,
             ],
             [
@@ -52,8 +46,12 @@ class RoleTableSeeder extends RolesSeeder
             ],
         ]);
 
-        $this->syncRoles([
+        $this->syncRolesWithPermissions([
+            'moderator'      => [
+                'admin::dashboard.index',
+            ],
             'auth-moderator' => [
+                'admin::dashboard.index',
                 'admin::auth.*',
             ],
         ]);

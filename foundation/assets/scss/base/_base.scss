@@ -2,10 +2,6 @@
  * This file contains very basic styles.
  */
 
-body, html, .app-container {
-    height: 100%;
-}
-
 body {
     -webkit-font-smoothing: antialiased;
     @extend %scrollable;

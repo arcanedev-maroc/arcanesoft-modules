@@ -1,3 +1,5 @@
+@import "~bootstrap/scss/modal";
+
 .modal-xl {
     @include media-breakpoint-up(md) {
         max-width: $modal-xl;
@@ -21,7 +23,7 @@
 @each $color, $value in $theme-colors {
     .modal-#{$color} {
         .modal-content {
-            background-color: theme-color($color);
+            background-color: $value;
 
             & {
                 color: if($color == "light", $body-color, $white);
@@ -40,7 +42,7 @@
             .modal-content,
             .modal-header,
             .modal-footer {
-                border-color: darken(theme-color($color), 5%);
+                border-color: darken($value, 5%);
             }
         }
     }

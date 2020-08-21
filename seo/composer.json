@@ -1,0 +1,46 @@
+{
+    "name":        "arcanesoft/seo",
+    "description": "ARCANESOFT - SEO module.",
+    "keywords":    ["arcanedev", "arcanesoft", "seo", "laravel"],
+    "license":     "MIT",
+    "type":        "project",
+    "authors":     [
+        {
+            "name":     "ARCANEDEV",
+            "email":    "arcanedev.maroc@gmail.com",
+            "homepage": "https://github.com/arcanedev-maroc",
+            "role":     "Developer"
+        }
+    ],
+    "require": {
+        "php":                   "^7.2.5",
+        "arcanesoft/foundation": "@dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.5|^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Arcanesoft\\Seo\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Arcanesoft\\Seo\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Arcanesoft\\Seo\\SeoServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    }
+}
