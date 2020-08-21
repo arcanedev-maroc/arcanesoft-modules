@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Media\Policies;
 
-use Arcanesoft\Foundation\Auth\Models\Admin;
+use Arcanesoft\Foundation\Auth\Models\Administrator;
 use Arcanesoft\Foundation\Support\Auth\Policy;
 
 /**
@@ -65,11 +65,11 @@ class MediaPolicy extends Policy
     /**
      * Allow to access the main media manager.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function index(Admin $admin)
+    public function index(Administrator $administrator)
     {
         //
     }

@@ -21,12 +21,6 @@ $statuses-sizes: (
         }
     }
 
-    @each $color, $value in $theme-colors {
-        &.status-#{$color} {
-            background-color: $value;
-        }
-    }
-
     &.status-animated {
         animation: status-pulse 1.5s infinite ease;
     }

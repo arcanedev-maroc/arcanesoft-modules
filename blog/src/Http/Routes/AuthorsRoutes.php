@@ -4,7 +4,6 @@ namespace Arcanesoft\Blog\Http\Routes;
 
 use Arcanesoft\Blog\Blog;
 use Arcanesoft\Blog\Http\Controllers\AuthorsController;
-use Arcanesoft\Blog\Http\Controllers\Datatables\AuthorsController as AuthorsDataTablesController;
 
 /**
  * Class     AuthorsRoutes
@@ -36,8 +35,6 @@ class AuthorsRoutes extends AbstractRouteRegistrar
                 $this->get('/', [AuthorsController::class, 'index'])
                      ->name('index'); // admin::blog.authors.index
 
-                $this->mapDataTablesRoutes();
-
                 $this->get('metrics', [AuthorsController::class, 'metrics'])
                      ->name('metrics'); // admin::blog.authors.metrics
 
@@ -62,17 +59,6 @@ class AuthorsRoutes extends AbstractRouteRegistrar
                          ->name('delete'); // admin::blog.authors.delete
                 });
             });
-        });
-    }
-
-    /**
-     * Map the datatables routes.
-     */
-    private function mapDataTablesRoutes(): void
-    {
-        $this->dataTableGroup(function () {
-            $this->get('/', [AuthorsDataTablesController::class, 'index'])
-                 ->name('index'); // admin::auth.users.datatables.index
         });
     }
 

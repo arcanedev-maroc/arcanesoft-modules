@@ -1,192 +1,129 @@
 @extends(arcanesoft\foundation()->template())
 
+<?php
+/**
+ * @var  Arcanesoft\Foundation\Auth\Models\Role  $role
+ * @var  string                                  $tab
+ */
+?>
+
 @section('page-title')
-    <i class="fas fa-fw fa-user-tag"></i> @lang("Role's details")
+    <i class="fas fa-fw fa-user-tag"></i> @lang('Roles') <small>@lang("Role's details")</small>
 @endsection
 
-<?php /** @var  Arcanesoft\Foundation\Auth\Models\Role  $role */ ?>
-
 @section('content')
-    <div class="row">
-        <div class="col-md-5 col-lg-4">
+    <div class="row g-4">
+        <div class="col-lg-4">
             {{-- ROLE --}}
-            <div class="card card-borderless shadow-sm mb-3">
-                <div class="card-header p-2">@lang('Role')</div>
+            <div class="card card-borderless shadow-sm">
+                <div class="card-header d-flex align-items-center justify-content-between px-2">
+                    <span>@lang('Role')</span>
+                </div>
                 <table class="table table-borderless table-md mb-0">
                     <tbody>
                         <tr>
-                            <th class="text-muted">@lang('Name') :</th>
-                            <td class="text-right">{{ $role->name }}</td>
+                            <td class="font-weight-light text-uppercase text-muted">@lang('Name')</td>
+                            <td class="text-right small">{{ $role->name }}</td>
                         </tr>
                         <tr>
-                            <th class="text-muted">@lang('Description') :</th>
-                            <td class="text-right">{{ $role->description }}</td>
+                            <td class="font-weight-light text-uppercase text-muted">@lang('Description')</td>
+                            <td class="text-right small">{{ $role->description }}</td>
                         </tr>
                         <tr>
-                            <th class="text-muted">@lang('Users') :</th>
+                            <td class="font-weight-light text-uppercase text-muted">@lang('Users')</td>
                             <td class="text-right">
-                                {{ arcanesoft\ui\count_pill($role->users->count()) }}
+                                {{ arcanesoft\ui\count_pill($role->administrators->count()) }}
                             </td>
                         </tr>
                         <tr>
-                            <th class="text-muted">@lang('Permissions') :</th>
+                            <td class="font-weight-light text-uppercase text-muted">@lang('Permissions')</td>
                             <td class="text-right">
                                 {{ arcanesoft\ui\count_pill($role->permissions->count()) }}
                             </td>
                         </tr>
                         <tr>
-                            <th class="text-muted">@lang('Locked') :</th>
+                            <td class="font-weight-light text-uppercase text-muted">@lang('Locked')</td>
                             <td class="text-right">
                                 @if ($role->isLocked())
-                                    <span class="badge badge-outline-danger">
+                                    <span class="badge border border-danger text-muted">
                                         <i class="fa fa-lock text-danger mr-1"></i> @lang('Locked')
                                     </span>
                                 @else
-                                    <span class="badge badge-outline-secondary">
+                                    <span class="badge border border-secondary text-muted">
                                         <i class="fa fa-unlock text-secondary mr-1"></i> @lang('Unlocked')
                                     </span>
                                 @endif
                             </td>
                         </tr>
                         <tr>
-                            <th class="text-muted">@lang('Status') :</th>
+                            <td class="font-weight-light text-uppercase text-muted">@lang('Status')</td>
                             <td class="text-right">
                                 @if ($role->isActive())
-                                    <span class="badge badge-outline-success">
+                                    <span class="badge border border-success text-muted">
                                         <i class="fa fa-check text-success mr-1"></i> @lang('Activated')
                                     </span>
                                 @else
-                                    <span class="badge badge-outline-secondary">
+                                    <span class="badge border border-secondary text-muted">
                                         <i class="fa fa-ban text-secondary mr-1"></i> @lang('Deactivated')
                                     </span>
                                 @endif
                             </td>
                         </tr>
                         <tr>
-                            <th class="text-muted">@lang('Created at') :</th>
-                            <td class="text-right"><small class="text-muted">{{ $role->created_at }}</small></td>
+                            <td class="font-weight-light text-uppercase text-muted">@lang('Created at')</td>
+                            <td class="text-muted text-right small">{{ $role->created_at }}</td>
                         </tr>
                         <tr>
-                            <th class="text-muted">@lang('Updated at') :</th>
-                            <td class="text-right"><small class="text-muted">{{ $role->updated_at }}</small></td>
+                            <td class="font-weight-light text-uppercase text-muted">@lang('Updated at')</td>
+                            <td class="text-muted text-right small">{{ $role->updated_at }}</td>
                         </tr>
                     </tbody>
                 </table>
-                <div class="card-footer text-right p-2">
-                    @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('update'), [$role])
-                        {{ arcanesoft\ui\action_link('edit', route('admin::auth.roles.edit', [$role]))->size('sm')->setDisabled($role->isLocked()) }}
-                    @endcan
+                <div class="card-footer px-2">
+                    <div class="input-group justify-content-end">
+                        @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('update'), [$role])
+                            <a href="{{ route('admin::auth.roles.edit', [$role]) }}"
+                               class="btn btn-sm btn-light">@lang('Edit')</a>
+                        @endcan
 
-                    @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('activate'), [$role])
-                        {{ arcanesoft\ui\action_button($role->isActive() ? 'deactivate' : 'activate')->attribute('onclick', "window.Foundation.\$emit('auth::roles.activate')")->size('sm')->setDisabled($role->isLocked()) }}
-                    @endcan
-
-                    @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('delete'), [$role])
-                        {{ arcanesoft\ui\action_button('delete')->attributeIf($role->isDeletable(), 'onclick', "window.Foundation.\$emit('auth::roles.delete', ".json_encode(['id' => $role->getRouteKey()]).")")->size('sm')->setDisabled($role->isNotDeletable()) }}
-                    @endcan
-                </div>
-            </div>
-        </div>
-        <div class="col-md-7 col-lg-8">
-            {{-- PERMISSIONS --}}
-            <div class="card card-borderless shadow-sm mb-3">
-                <div class="card-header">@lang('Permissions')</div>
-                <div class="table-responsive">
-                    <table id="permissions-table" class="table table-hover table-md mb-0">
-                        <thead>
-                            <tr>
-                                <th>@lang('Group')</th>
-                                <th>@lang('Category')</th>
-                                <th>@lang('Name')</th>
-                                <th>@lang('Description')</th>
-                                <th class="text-right">@lang('Actions')</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($role->permissions as $permission)
-                                <?php /** @var  Arcanesoft\Foundation\Auth\Models\Permission  $permission */ ?>
-                                <tr>
-                                    <td>{{ $permission->group->name }}</td>
-                                    <td>{{ $permission->category }}</td>
-                                    <td>{{ $permission->name }}</td>
-                                    <td><small>{{ $permission->description }}</small></td>
-                                    <td class="text-right">
-                                        @can(Arcanesoft\Foundation\Auth\Policies\PermissionsPolicy::ability('show'))
-                                            {{ arcanesoft\ui\action_link_icon('show', route('admin::auth.permissions.show', [$permission]))->size('sm') }}
-                                        @endcan
-
-                                        @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('permissions.detach'), [$role, $permission])
-                                            <button class="btn btn-sm btn-danger"
-                                                    data-toggle="tooltip" data-placement="top" title="@lang('Detach')"
-                                                    onclick="window.Foundation.$emit('auth::roles.permissions.detach', {{ json_encode(['id' => $permission->getRouteKey()]) }})">
-                                                <i class="fas fa-fw fa-unlink"></i>
-                                            </button>
-                                        @endcan
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="text-center">@lang('The list is empty')</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- ADMINISTRATORS --}}
-    <div class="card card-borderless shadow-sm">
-        <div class="card-header">@lang('Administrators')</div>
-        <div class="table-responsive">
-            <table id="users-table" class="table table-hover table-md mb-0">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>@lang('First Name')</th>
-                        <th>@lang('Last Name')</th>
-                        <th>@lang('Email')</th>
-                        <th class="text-center">@lang('Created at')</th>
-                        <th class="text-center">@lang('Status')</th>
-                        <th class="text-right">@lang('Actions')</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($role->users as $admin)
-                        <?php /** @var Arcanesoft\Foundation\Auth\Models\Admin  $admin */ ?>
-                        <tr>
-                            <td>
-                                <span class="avatar" title="{{ $admin->full_name }}" style="background-image: url({{ $admin->avatar }});"></span>
-                            </td>
-                            <td>{{ $admin->first_name }}</td>
-                            <td>{{ $admin->last_name }}</td>
-                            <td>{{ $admin->email }}</td>
-                            <td class="text-center">{{ $admin->created_at }}</td>
-                            <td class="text-center">
-                                <span class="status {{ $admin->isActive() ? 'status-success status-animated' : 'status-secondary' }}" data-toggle="tooltip" data-placement="top" title="{{ $admin->isActive() ? __('Activated') : __('Deactivated') }}"></span>
-                            </td>
-                            <td class="text-right">
-                                @can(Arcanesoft\Foundation\Auth\Policies\AdministratorsPolicy::ability('show'))
-                                    {{ arcanesoft\ui\action_link_icon('show', route('admin::auth.administrators.show', [$admin]))->size('sm') }}
-                                @endcan
-
-                                @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('administrators.detach'), [$role, $admin])
-                                    <button class="btn btn-sm btn-danger"
-                                            data-toggle="tooltip" data-placement="top" title="@lang('Detach')"
-                                            onclick="window.Foundation.$emit('auth::roles.users.detach', {{ json_encode(['id' => $admin->getRouteKey(), 'name' => $admin->full_name]) }})">
-                                        <i class="fas fa-fw fa-unlink"></i>
+                        <button type="button" class="btn btn-sm btn-light" data-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-fw fa-ellipsis-v"></i> <span class="sr-only">@lang('Toggle Dropdown')</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('activate'), [$role])
+                                <li>
+                                    <button class="dropdown-item"
+                                            onclick="Foundation.$emit('auth::roles.activate')">
+                                        @lang($role->isActive() ? 'Deactivate' : 'Activate')
                                     </button>
-                                @endcan
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7" class="text-center">@lang('The list is empty')</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                                </li>
+                            @endcan
+
+                            @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('delete'), [$role])
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <button class="dropdown-item text-danger"
+                                            onclick="Foundation.$emit('auth::roles.delete')">
+                                        @lang('Delete')
+                                    </button>
+                                </li>
+                            @endcan
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="card card-borderless shadow-sm">
+                <div class="card-header d-flex justify-content-end p-2">
+                    <div class="btn-group" role="group" aria-label="Administrators and Permissions">
+                        <a href="{{ route('admin::auth.roles.show', [$role]) }}" class="btn btn-sm btn-light {{ $tab === 'administrators' ? 'active' : '' }}">@lang('Administrators')</a>
+                        <a href="{{ route('admin::auth.roles.show', [$role, 'tab' => 'permissions']) }}" class="btn btn-sm btn-light {{ $tab === 'permissions' ? 'active' : '' }}">@lang('Permissions')</a>
+                    </div>
+                </div>
+                @includeWhen($tab === 'administrators', 'foundation::authorization.roles._includes.role-administrators-table', ['role' => $role])
+                @includeWhen($tab === 'permissions', 'foundation::authorization.roles._includes.role-permissions-table', ['role' => $role])
+            </div>
         </div>
     </div>
 @endsection
@@ -194,7 +131,7 @@
 @push('modals')
     {{-- ACIVATE MODAL --}}
     @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('activate'), [$role])
-        <div class="modal modal-danger fade" id="activate-role-modal" data-backdrop="static"
+        <div class="modal fade" id="activate-role-modal" data-backdrop="static"
              tabindex="-1" role="dialog" aria-labelledby="activateRoleTitle" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 {{ form()->open(['route' => ['admin::auth.roles.activate', $role], 'method' => 'PUT', 'id' => 'activate-role-form']) }}
@@ -219,291 +156,107 @@
     @endcan
 
     {{-- DELETE MODAL --}}
-    @if ($role->isDeletable())
-        @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('delete'), [$role])
-            <div class="modal modal-danger fade" id="delete-role-modal" data-backdrop="static"
-                 tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    {{ form()->open(['route' => ['admin::auth.roles.delete', $role], 'method' => 'DELETE', 'id' => 'delete-role-form']) }}
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="modelTitleId">@lang('Delete Role')</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            @lang('Are you sure you want to delete this role ?')
-                        </div>
-                        <div class="modal-footer justify-content-between">
-                            {{ arcanesoft\ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
-                            {{ arcanesoft\ui\action_button('delete')->submit() }}
-                        </div>
+    @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('delete'), [$role])
+        <div class="modal fade" id="delete-role-modal" data-backdrop="static"
+             tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                {{ form()->open(['route' => ['admin::auth.roles.delete', $role], 'method' => 'DELETE', 'id' => 'delete-role-form']) }}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="modelTitleId">@lang('Delete Role')</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    {{ form()->close() }}
-                </div>
-            </div>
-        @endcan
-    @endif
-
-    {{-- PERMISSIONS --}}
-    @if ($role->permissions->isNotEmpty())
-        {{-- DETACH PERMISSION MODAL --}}
-        @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('permissions.detach'), [$role])
-            <div class="modal modal-danger fade" id="detach-permission-modal" data-backdrop="static"
-                 tabindex="-1" role="dialog" aria-labelledby="detach-permission-modal-title" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    {{ form()->open(['route' => ['admin::auth.roles.permissions.detach', $role, ':id'], 'method' => 'DELETE', 'id' => 'detach-permission-form']) }}
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="detach-permission-modal-title">@lang('Detach Permission')</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            @lang('Are you sure you want to detach permission ?')
-                        </div>
-                        <div class="modal-footer justify-content-between">
-                            {{ arcanesoft\ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
-                            <button type="submit" class="btn btn-danger">
-                                <i class="fas fa-fw fa-unlink"></i> @lang('Detach')
-                            </button>
-                        </div>
+                    <div class="modal-body">
+                        @lang('Are you sure you want to delete this role ?')
                     </div>
-                    {{ form()->close() }}
-                </div>
-            </div>
-        @endcan
-    @endif
-
-    {{-- USERS --}}
-    @if ($role->users->isNotEmpty())
-        {{-- DETACH USER MODAL --}}
-        @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('users.detach'), [$role])
-            <div class="modal modal-danger fade" id="detach-user-modal" data-backdrop="static"
-                 tabindex="-1" role="dialog" aria-labelledby="detach-user-modal-title" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    {{ form()->open(['route' => ['admin::auth.roles.users.detach', $role, ':id'], 'method' => 'DELETE', 'id' => 'detach-user-form']) }}
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="detach-user-modal-title">@lang('Detach User')</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                        </div>
-                        <div class="modal-footer justify-content-between">
-                            {{ arcanesoft\ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
-                            <button type="submit" class="btn btn-danger">
-                                <i class="fas fa-fw fa-unlink"></i> @lang('Detach')
-                            </button>
-                        </div>
+                    <div class="modal-footer justify-content-between">
+                        {{ arcanesoft\ui\action_button('cancel')->attribute('data-dismiss', 'modal') }}
+                        {{ arcanesoft\ui\action_button('delete')->submit() }}
                     </div>
-                    {{ form()->close() }}
                 </div>
+                {{ form()->close() }}
             </div>
-        @endcan
-    @endif
+        </div>
+    @endcan
 @endpush
 
 @push('scripts')
-    <script>
-        window.ready(() => {
-            {{-- ACTIVATE SCRIPT --}}
-            @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('activate'), [$role])
-                let $activateRoleModal = $('div#activate-role-modal'),
-                    $activateRoleForm  = $('form#activate-role-form');
+    {{-- ACTIVATE SCRIPT --}}
+    @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('activate'), [$role])
+        <script defer>
+        let activateRoleModal = twbs.Modal.make('div#activate-role-modal')
+        let activateRoleForm  = Form.make('form#activate-role-form')
 
-                window.Foundation.$on('auth::roles.activate', () => {
-                    $activateRoleModal.modal('show');
-                });
-
-                $activateRoleForm.on('submit', (event) => {
-                    event.preventDefault();
-
-                    let submitBtn = window.Foundation.ui.loadingButton(
-                        $activateRoleForm[0].querySelector('button[type="submit"]:not([style*="display: none"])')
-                    );
-                    submitBtn.loading();
-
-                    window.request().put($activateRoleForm.attr('action'))
-                          .then((response) => {
-                              if (response.data.code === 'success') {
-                                  $activateRoleModal.modal('hide');
-                                  location.reload();
-                              }
-                              else {
-                                  alert('ERROR ! Check the console !');
-                                  submitBtn.reset();
-                              }
-                          })
-                          .catch((error) => {
-                              alert('AJAX ERROR ! Check the console !');
-                              submitBtn.reset();
-                          });
-
-                    return false;
-                });
-            @endcan
-
-            {{-- DELETE SCRIPT --}}
-            @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('delete'), [$role])
-                let $deleteRoleModal = $('div#delete-role-modal'),
-                    $deleteRoleForm  = $('form#delete-role-form');
-
-                window.Foundation.$on('auth::roles.delete', () => {
-                    $deleteRoleModal.modal('show');
-                })
-
-                $deleteRoleForm.on('submit', (event) => {
-                    event.preventDefault();
-
-                    let submitBtn = window.Foundation.ui.loadingButton(
-                        $deleteRoleForm[0].querySelector('button[type="submit"]')
-                    );
-                    submitBtn.loading();
-
-                    window.request().delete($deleteRoleForm.attr('action'))
-                        .then((response) => {
-                            if (response.data.code === 'success') {
-                                $deleteRoleModal.modal('hide');
-                                location.replace("{{ route('admin::auth.roles.index') }}");
-                            }
-                            else {
-                                alert('ERROR ! Check the console !');
-                                submitBtn.button('reset');
-                            }
-                        })
-                        .catch((error) => {
-                            alert('AJAX ERROR ! Check the console !');
-                            console.log(error);
-                            submitBtn.button('reset');
-                        });
-
-                    return false;
-                });
-            @endcan
-
-            {{-- PERMISSIONS --}}
-            @if ($role->permissions->isNotEmpty())
-                window.plugins.datatable('table#permissions-table', {
-                    columns: [
-                        { data: 'group'},
-                        { data: 'category'},
-                        { data: 'name' },
-                        { data: 'description'},
-                        { data: 'actions', orderable: false, }
-                    ],
-                });
-
-                {{-- DETACH PERMISSION SCRIPT --}}
-                @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('permissions.detach'), [$role])
-                    let $detachPermissionModal = $('div#detach-permission-modal'),
-                        $detachPermissionForm  = $('form#detach-permission-form'),
-                        detachPermissionAction = $detachPermissionForm.attr('action');
-
-                    window.Foundation.$on('auth::roles.permissions.detach', ({id}) => {
-                        $detachPermissionForm.attr('action', detachPermissionAction.replace(':id', id));
-
-                        $detachPermissionModal.modal('show');
-                    });
-
-                    $detachPermissionForm.on('submit', (event) => {
-                        event.preventDefault();
-
-                        let submitBtn = window.Foundation.ui.loadingButton(
-                            $detachPermissionForm[0].querySelector('button[type="submit"]:not([style*="display: none"])')
-                        );
-                        submitBtn.loading();
-
-                        window.request().delete($detachPermissionForm.attr('action'))
-                            .then((response) => {
-                                if (response.data.code === 'success') {
-                                    $detachPermissionModal.modal('hide');
-                                    location.reload();
-                                }
-                                else {
-                                    alert('ERROR ! Check the console !');
-                                    submitBtn.reset();
-                                }
-                            })
-                            .catch((error) => {
-                                alert('AJAX ERROR ! Check the console !');
-                                submitBtn.reset();
-                            });
-
-                        return false;
-                    });
-
-                    $detachPermissionModal.on('hidden.bs.modal', () => {
-                        $detachPermissionForm.attr('action', detachPermissionAction);
-                    });
-                @endcan
-            @endif
-
-            {{-- USERS --}}
-            @if ($role->users->isNotEmpty())
-                window.plugins.datatable('table#users-table', {
-                    order: [[1, 'asc']],
-                    columns: [
-                        { data: 'avatar', orderable: false},
-                        { data: 'first_name' },
-                        { data: 'last_name' },
-                        { data: 'email' },
-                        { data: 'created_at'},
-                        { data: 'status', orderable: false, },
-                        { data: 'actions', orderable: false, }
-                    ],
-                });
-
-                {{-- DETACH USER SCRIPT --}}
-                @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('users.detach'), [$role])
-                    let $detachUserModal = $('div#detach-user-modal'),
-                        $detachUserForm  = $('form#detach-user-form'),
-                        detachUserAction = $detachUserForm.attr('action');
-
-                    window.Foundation.$on('auth::roles.users.detach', ({id, name}) => {
-                        $detachUserForm.attr('action', detachUserAction.replace(':id', id));
-
-                        $detachUserModal.find('.modal-body').html("@lang('Are you sure you want to detach user: :name ?')".replace(':name', name))
-
-                        $detachUserModal.modal('show');
-                    });
-
-                    $detachUserForm.on('submit', (event) => {
-                        event.preventDefault();
-
-                        let submitBtn = window.Foundation.ui.loadingButton(
-                            $detachUserForm[0].querySelector('button[type="submit"]:not([style*="display: none"])')
-                        );
-                        submitBtn.loading();
-
-                        window.request().delete($detachUserForm.attr('action'))
-                            .then((response) => {
-                                if (response.data.code === 'success') {
-                                    $detachUserModal.modal('hide');
-                                    location.reload();
-                                }
-                                else {
-                                    alert('ERROR ! Check the console !');
-                                    submitBtn.reset();
-                                }
-                            })
-                            .catch((error) => {
-                                alert('AJAX ERROR ! Check the console !');
-                                submitBtn.reset();
-                            });
-
-                        return false;
-                    });
-
-                    $detachUserModal.on('hidden.bs.modal', () => {
-                        $detachUserForm.attr('action', detachUserAction);
-                    });
-                @endcan
-            @endif
+        Foundation.$on('auth::roles.activate', () => {
+            activateRoleModal.show()
         });
-    </script>
+
+        activateRoleForm.on('submit', (event) => {
+            event.preventDefault()
+
+            let submitBtn = Foundation.ui.loadingButton(
+                activateRoleForm.elt().querySelector('button[type="submit"]:not([style*="display: none"])')
+            )
+            submitBtn.loading()
+
+            request()
+                .put(activateRoleForm.getAction())
+                .then((response) => {
+                    if (response.data.code === 'success') {
+                        activateRoleModal.hide()
+                        location.reload()
+                    }
+                    else {
+                        alert('ERROR ! Check the console !')
+                        submitBtn.reset()
+                    }
+                })
+                .catch((error) => {
+                    alert('AJAX ERROR ! Check the console !')
+                    submitBtn.reset()
+                })
+        })
+        </script>
+    @endcan
+
+    {{-- DELETE SCRIPT --}}
+    @can(Arcanesoft\Foundation\Auth\Policies\RolesPolicy::ability('delete'), [$role])
+        <script defer>
+            let deleteRoleModal = twbs.Modal.make('div#delete-role-modal')
+            let deleteRoleForm  = Form.make('form#delete-role-form')
+
+            Foundation.$on('auth::roles.delete', () => {
+                deleteRoleModal.show()
+            })
+
+            deleteRoleForm.on('submit', (event) => {
+                event.preventDefault()
+
+                let submitBtn = Foundation.ui.loadingButton(
+                    deleteRoleForm.elt().querySelector('button[type="submit"]')
+                )
+                submitBtn.loading()
+
+                request()
+                    .delete(deleteRoleForm.getAction())
+                    .then((response) => {
+                        if (response.data.code === 'success') {
+                            deleteRoleModal.hide()
+                            location.replace("{{ route('admin::auth.roles.index') }}")
+                        }
+                        else {
+                            alert('ERROR ! Check the console !')
+                            submitBtn.button('reset')
+                        }
+                    })
+                    .catch((error) => {
+                        alert('AJAX ERROR ! Check the console !')
+                        console.log(error)
+                        submitBtn.button('reset')
+                    })
+            })
+        </script>
+    @endcan
 @endpush

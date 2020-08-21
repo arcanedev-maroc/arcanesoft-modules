@@ -5,21 +5,11 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Models;
 
 use Arcanesoft\Foundation\Auth\Auth;
-use Arcanesoft\Foundation\Auth\Events\Roles\CreatedRole;
-use Arcanesoft\Foundation\Auth\Events\Roles\CreatingRole;
-use Arcanesoft\Foundation\Auth\Events\Roles\DeletedRole;
-use Arcanesoft\Foundation\Auth\Events\Roles\DeletingRole;
-use Arcanesoft\Foundation\Auth\Events\Roles\Permissions\AttachedPermission;
-use Arcanesoft\Foundation\Auth\Events\Roles\Permissions\AttachingPermission;
-use Arcanesoft\Foundation\Auth\Events\Roles\RetrievedRole;
-use Arcanesoft\Foundation\Auth\Events\Roles\SavedRole;
-use Arcanesoft\Foundation\Auth\Events\Roles\SavingRole;
-use Arcanesoft\Foundation\Auth\Events\Roles\UpdatedRole;
-use Arcanesoft\Foundation\Auth\Events\Roles\UpdatingRole;
-use Arcanesoft\Foundation\Auth\Events\Roles\Users\AttachedUser;
-use Arcanesoft\Foundation\Auth\Events\Roles\Users\AttachingUser;
-use Arcanesoft\Foundation\Auth\Events\Roles\Users\DetachedUser;
-use Arcanesoft\Foundation\Auth\Events\Roles\Users\DetachingUser;
+use Arcanesoft\Foundation\Auth\Events\Roles\{
+    Administrators\AttachedAdministrator, Administrators\AttachingAdministrator, Administrators\DetachedAdministrator,
+    Administrators\DetachingAdministrator, CreatedRole, CreatingRole, DeletedRole, DeletingRole, Permissions\AttachedPermission,
+    Permissions\AttachingPermission, RetrievedRole, SavedRole, SavingRole, UpdatedRole, UpdatingRole
+};
 use Arcanesoft\Foundation\Auth\Models\Concerns\Activatable;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -38,11 +28,11 @@ use Illuminate\Database\Eloquent\Builder;
  * @property  \Illuminate\Support\Carbon                created_at
  * @property  \Illuminate\Support\Carbon                updated_at
  *
- * @property  \Illuminate\Database\Eloquent\Collection  users
- * @property  \Illuminate\Database\Eloquent\Collection  permissions
+ * @property  \Arcanesoft\Foundation\Auth\Models\Administrator[]|\Illuminate\Database\Eloquent\Collection  administrators
+ * @property  \Arcanesoft\Foundation\Auth\Models\Permission[]|\Illuminate\Database\Eloquent\Collection     permissions
  *
  * @method  static  \Illuminate\Database\Eloquent\Builder|static  admin()
- * @method  static  \Illuminate\Database\Eloquent\Builder|static  filterByAuthenticatedUser(mixed $user)
+ * @method  static  \Illuminate\Database\Eloquent\Builder|static  filterByAuthenticatedAdministrator(Administrator|mixed $administrator)
  */
 class Role extends Model
 {
@@ -127,19 +117,19 @@ class Role extends Model
      */
 
     /**
-     * Role belongs to many users.
+     * Role belongs to many administrators.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function users()
+    public function administrators()
     {
         return $this
             ->belongsToMany(
-                Auth::model('admin', Admin::class),
-                Auth::table('admin-role', 'admin_role')
+                Auth::model('administrator', Administrator::class),
+                Auth::table('administrator-role', 'administrator_role')
             )
-            ->using(Pivots\AdminRole::class)
-            ->as('admin_role')
+            ->using(Pivots\AdministratorRole::class)
+            ->as('administrator_role')
             ->withPivot(['created_at']);
     }
 
@@ -168,14 +158,14 @@ class Role extends Model
     /**
      * Scope by the authenticated user.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder    $query
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin  $admin
+     * @param  \Illuminate\Database\Eloquent\Builder             $query
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $administrator
      *
      * @return \Illuminate\Database\Eloquent\Builder|mixed
      */
-    public function scopeFilterByAuthenticatedUser(Builder $query, Admin $admin)
+    public function scopeFilterByAuthenticatedAdministrator(Builder $query, Administrator $administrator): Builder
     {
-        return $query->unless($admin->isSuperAdmin(), function (Builder $q) {
+        return $query->unless($administrator->isSuperAdmin(), function (Builder $q) {
             $q->where('key', '!=', static::ADMINISTRATOR);
         });
     }
@@ -189,7 +179,7 @@ class Role extends Model
      */
     public function scopeAdmin(Builder $query): Builder
     {
-        return $query->where('key', Role::ADMINISTRATOR);
+        return $query->where('key', static::ADMINISTRATOR);
     }
 
     /* -----------------------------------------------------------------
@@ -215,6 +205,7 @@ class Role extends Model
     public function setNameAttribute(string $name)
     {
         $this->attributes['name'] = $name;
+
         $this->setKeyAttribute($name);
     }
 
@@ -240,7 +231,7 @@ class Role extends Model
      *
      * @return bool
      */
-    public function activate(bool $save = true)
+    public function activate(bool $save = true): bool
     {
         return $this->switchActive(true, $save);
     }
@@ -252,7 +243,7 @@ class Role extends Model
      *
      * @return bool
      */
-    public function deactivate(bool $save = true)
+    public function deactivate(bool $save = true): bool
     {
         return $this->switchActive(false, $save);
     }
@@ -265,7 +256,7 @@ class Role extends Model
      *
      * @return bool
      */
-    protected function switchActive($active, $save = true)
+    protected function switchActive($active, $save = true): bool
     {
         $this->forceFill([
             'activated_at' => $active === true ? $this->freshTimestamp() : null,
@@ -277,19 +268,19 @@ class Role extends Model
     /**
      * Attach a permission to a role.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|int  $user
-     * @param  bool                                         $reload
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|int  $administrator
+     * @param  bool                                                  $reload
      */
-    public function attachUser($user, bool $reload = true)
+    public function attachUser($administrator, bool $reload = true): void
     {
-        if ($this->hasUser($user))
+        if ($this->hasAdministrator($administrator))
             return;
 
-        event(new AttachingUser($this, $user));
-        $this->users()->attach($user);
-        event(new AttachedUser($this, $user));
+        event(new AttachingAdministrator($this, $administrator));
+        $this->administrators()->attach($administrator);
+        event(new AttachedAdministrator($this, $administrator));
 
-        $this->loadUsers($reload);
+        $this->loadAdministrators($reload);
     }
 
     // TODO: Adding attach multiple users to a role ?
@@ -297,23 +288,23 @@ class Role extends Model
     /**
      * Detach a user from a role.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|int  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|int  $administrator
      * @param  bool                                         $reload
      *
      * @return int
      */
-    public function detachUser($user, bool $reload = true)
+    public function detachAdministrator($administrator, bool $reload = true): int
     {
-        event(new DetachingUser($this, $user));
-        $results = $this->users()->detach($user);
-        event(new DetachedUser($this, $user, $results));
+        event(new DetachingAdministrator($this, $administrator));
+        $results = $this->administrators()->detach($administrator);
+        event(new DetachedAdministrator($this, $administrator, $results));
 
-        $this->loadUsers($reload);
+        $this->loadAdministrators($reload);
 
         return $results;
     }
 
-    // TODO: Adding detach multiple users to a role ?
+    // TODO: Adding detach multiple administrators to a role ?
 
     /**
      * Attach a permission to a role.
@@ -321,7 +312,7 @@ class Role extends Model
      * @param  \Arcanesoft\Foundation\Auth\Models\Permission|int  $permission
      * @param  bool                                               $reload
      */
-    public function attachPermission($permission, bool $reload = true)
+    public function attachPermission($permission, bool $reload = true): void
     {
         if ($this->hasPermission($permission))
             return;
@@ -341,15 +332,15 @@ class Role extends Model
     /**
      * Check if role has the given user (User Model or Id).
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|int  $id
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|int  $id
      *
      * @return bool
      */
-    public function hasUser($id): bool
+    public function hasAdministrator($id): bool
     {
         $id = $id instanceof Model ? $id->getKey() : $id;
 
-        return $this->users->contains('id', $id);
+        return $this->administrators->contains('id', $id);
     }
 
     /**
@@ -459,21 +450,31 @@ class Role extends Model
         return ! $this->isDeletable();
     }
 
+    /**
+     * Check if the current role is an administrator one.
+     *
+     * @return bool
+     */
+    public function isAdministrator(): bool
+    {
+        return $this->key === static::ADMINISTRATOR;
+    }
+
     /* -----------------------------------------------------------------
      |  Other Methods
      | -----------------------------------------------------------------
      */
 
     /**
-     * Load the users.
+     * Load the administrators.
      *
      * @param  bool  $load
      *
      * @return $this
      */
-    protected function loadUsers(bool $load = true)
+    protected function loadAdministrators(bool $load = true)
     {
-        return $load ? $this->load('users') : $this;
+        return $load ? $this->load('administrators') : $this;
     }
 
     /**

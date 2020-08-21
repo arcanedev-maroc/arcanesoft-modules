@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Policies;
 
-use Arcanesoft\Foundation\Auth\Models\{Admin, Permission, Role};
+use Arcanesoft\Foundation\Auth\Models\{Administrator, Permission, Role};
 
 /**
  * Class     PermissionsPolicy
@@ -76,11 +76,11 @@ class PermissionsPolicy extends AbstractPolicy
     /**
      * Allow to list all the roles.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function index(Admin $admin)
+    public function index(Administrator $administrator)
     {
         //
     }
@@ -88,12 +88,12 @@ class PermissionsPolicy extends AbstractPolicy
     /**
      * Allow to show a role details.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed       $admin
-     * @param  \Arcanesoft\Foundation\Auth\Models\Permission|mixed  $permission
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Models\Permission|mixed     $permission
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function show(Admin $admin, Permission $permission = null)
+    public function show(Administrator $administrator, Permission $permission = null)
     {
         //
     }
@@ -101,13 +101,13 @@ class PermissionsPolicy extends AbstractPolicy
     /**
      * Allow to show a role details.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed       $admin
-     * @param  \Arcanesoft\Foundation\Auth\Models\Permission|mixed  $permission
-     * @param  \Arcanesoft\Foundation\Auth\Models\Role|mixed        $role
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Foundation\Auth\Models\Permission|mixed     $permission
+     * @param  \Arcanesoft\Foundation\Auth\Models\Role|mixed           $role
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function detachRole(Admin $admin, Permission $permission = null, Role $role = null)
+    public function detachRole(Administrator $administrator, Permission $permission = null, Role $role = null)
     {
         if ( ! is_null($role))
             return ! $role->isLocked();

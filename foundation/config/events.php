@@ -3,14 +3,13 @@
 return [
 
     /* -----------------------------------------------------------------
-     |  Foundation - UI
+     |  Core - UI
      | -----------------------------------------------------------------
      */
 
-    Arcanesoft\Foundation\Core\Events\UI\SidebarToggled::class => [
+    Arcanesoft\Foundation\Core\Events\UI\SidebarToggled::class  => [
         Arcanesoft\Foundation\Core\Listeners\UI\PersistToggledSidebar::class,
     ],
-
     Arcanesoft\Foundation\Core\Events\UI\SkinModeToggled::class => [
         Arcanesoft\Foundation\Core\Listeners\UI\PersistToggledSkinMode::class,
     ],
@@ -20,112 +19,94 @@ return [
      | -----------------------------------------------------------------
      */
 
-    Arcanesoft\Foundation\Auth\Events\Users\RetrievedUser::class => [],
-
-    Arcanesoft\Foundation\Auth\Events\Users\CreatingUser::class => [],
-    Arcanesoft\Foundation\Auth\Events\Users\CreatedUser::class => [],
-
-    Arcanesoft\Foundation\Auth\Events\Users\UpdatingUser::class => [],
-    Arcanesoft\Foundation\Auth\Events\Users\UpdatedUser::class => [],
-
-    Arcanesoft\Foundation\Auth\Events\Users\SavingUser::class => [],
-    Arcanesoft\Foundation\Auth\Events\Users\SavedUser::class => [],
-
-    Arcanesoft\Foundation\Auth\Events\Users\DeletingUser::class => [],
-    Arcanesoft\Foundation\Auth\Events\Users\DeletedUser::class => [],
-    Arcanesoft\Foundation\Auth\Events\Users\ForceDeletedUser::class => [],
-
-    Arcanesoft\Foundation\Auth\Events\Users\RestoringUser::class => [],
-    Arcanesoft\Foundation\Auth\Events\Users\RestoredUser::class => [],
-
-    Arcanesoft\Foundation\Auth\Events\Users\ReplicatingUser::class => [],
-
-    Arcanesoft\Foundation\Auth\Events\Users\ActivatingUser::class => [],
-    Arcanesoft\Foundation\Auth\Events\Users\ActivatedUser::class => [],
-    Arcanesoft\Foundation\Auth\Events\Users\DeactivatingUser::class => [],
-    Arcanesoft\Foundation\Auth\Events\Users\DeactivatedUser::class => [],
+    Arcanesoft\Foundation\Auth\Events\Users\RetrievedUser::class     => [],
+    Arcanesoft\Foundation\Auth\Events\Users\CreatingUser::class      => [],
+    Arcanesoft\Foundation\Auth\Events\Users\CreatedUser::class       => [],
+    Arcanesoft\Foundation\Auth\Events\Users\UpdatingUser::class      => [],
+    Arcanesoft\Foundation\Auth\Events\Users\UpdatedUser::class       => [],
+    Arcanesoft\Foundation\Auth\Events\Users\SavingUser::class        => [],
+    Arcanesoft\Foundation\Auth\Events\Users\SavedUser::class         => [],
+    Arcanesoft\Foundation\Auth\Events\Users\DeletingUser::class      => [],
+    Arcanesoft\Foundation\Auth\Events\Users\DeletedUser::class       => [],
+    Arcanesoft\Foundation\Auth\Events\Users\ForceDeletedUser::class  => [],
+    Arcanesoft\Foundation\Auth\Events\Users\RestoringUser::class     => [],
+    Arcanesoft\Foundation\Auth\Events\Users\RestoredUser::class      => [],
+    Arcanesoft\Foundation\Auth\Events\Users\ReplicatingUser::class   => [],
+    Arcanesoft\Foundation\Auth\Events\Users\ActivatingUser::class    => [],
+    Arcanesoft\Foundation\Auth\Events\Users\ActivatedUser::class     => [],
+    Arcanesoft\Foundation\Auth\Events\Users\DeactivatingUser::class  => [],
+    Arcanesoft\Foundation\Auth\Events\Users\DeactivatedUser::class   => [],
 
     /* -----------------------------------------------------------------
-     |  Auth - Admins
+     |  Auth - Administrators
      | -----------------------------------------------------------------
      */
 
-    Arcanesoft\Foundation\Auth\Events\Admins\RetrievedAdmin::class => [],
-
-    Arcanesoft\Foundation\Auth\Events\Admins\CreatingAdmin::class => [
-        Arcanesoft\Foundation\Auth\Listeners\Admins\GeneratesUuid::class
+    Arcanesoft\Foundation\Auth\Events\Administrators\RetrievedAdministrator::class    => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\CreatingAdministrator::class     => [
+        Arcanesoft\Foundation\Auth\Listeners\Administrators\GeneratesUuid::class
     ],
-    Arcanesoft\Foundation\Auth\Events\Admins\CreatedAdmin::class => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\CreatedAdministrator::class      => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\UpdatingAdministrator::class     => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\UpdatedAdministrator::class      => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\SavingAdministrator::class       => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\SavedAdministrator::class        => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\DeletingAdministrator::class     => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\DeletedAdministrator::class      => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\ForceDeletedAdministrator::class => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\RestoringAdministrator::class    => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\RestoredAdministrator::class     => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\ReplicatingAdministrator::class  => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\ActivatingAdministrator::class   => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\ActivatedAdministrator::class    => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\DeactivatingAdministrator::class => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\DeactivatedAdministrator::class  => [],
 
-    Arcanesoft\Foundation\Auth\Events\Admins\UpdatingAdmin::class => [],
-    Arcanesoft\Foundation\Auth\Events\Admins\UpdatedAdmin::class => [],
-
-    Arcanesoft\Foundation\Auth\Events\Admins\SavingAdmin::class => [],
-    Arcanesoft\Foundation\Auth\Events\Admins\SavedAdmin::class => [],
-
-    Arcanesoft\Foundation\Auth\Events\Admins\DeletingAdmin::class => [],
-    Arcanesoft\Foundation\Auth\Events\Admins\DeletedAdmin::class => [],
-    Arcanesoft\Foundation\Auth\Events\Admins\ForceDeletedAdmin::class => [],
-
-    Arcanesoft\Foundation\Auth\Events\Admins\RestoringAdmin::class => [],
-    Arcanesoft\Foundation\Auth\Events\Admins\RestoredAdmin::class => [],
-
-    Arcanesoft\Foundation\Auth\Events\Admins\ReplicatingAdmin::class => [],
-
-    Arcanesoft\Foundation\Auth\Events\Admins\ActivatingAdmin::class => [],
-    Arcanesoft\Foundation\Auth\Events\Admins\ActivatedAdmin::class => [],
-    Arcanesoft\Foundation\Auth\Events\Admins\DeactivatingAdmin::class => [],
-    Arcanesoft\Foundation\Auth\Events\Admins\DeactivatedAdmin::class => [],
-
-    Arcanesoft\Foundation\Auth\Events\Admins\Roles\AttachingRole::class => [],
-    Arcanesoft\Foundation\Auth\Events\Admins\Roles\AttachedRole::class => [],
-    Arcanesoft\Foundation\Auth\Events\Admins\Roles\DetachingRole::class => [],
-    Arcanesoft\Foundation\Auth\Events\Admins\Roles\DetachedRole::class => [],
-
-    Arcanesoft\Foundation\Auth\Events\Admins\Roles\DetachingRoles::class => [],
-    Arcanesoft\Foundation\Auth\Events\Admins\Roles\DetachedRoles::class => [],
-    Arcanesoft\Foundation\Auth\Events\Admins\Roles\SyncingRoles::class => [],
-    Arcanesoft\Foundation\Auth\Events\Admins\Roles\SyncedRoles::class => [],
+    // Roles
+    Arcanesoft\Foundation\Auth\Events\Administrators\Roles\AttachingRole::class => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Roles\AttachedRole::class => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Roles\DetachingRole::class => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Roles\DetachedRole::class => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Roles\DetachingRoles::class => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Roles\DetachedRoles::class => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Roles\SyncingRoles::class => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Roles\SyncedRoles::class => [],
 
     /* -----------------------------------------------------------------
      |  Auth - Roles
      | -----------------------------------------------------------------
      */
 
-    Arcanesoft\Foundation\Auth\Events\Roles\RetrievedRole::class                   => [],
-
-    Arcanesoft\Foundation\Auth\Events\Roles\CreatingRole::class                    => [
+    Arcanesoft\Foundation\Auth\Events\Roles\RetrievedRole::class => [],
+    Arcanesoft\Foundation\Auth\Events\Roles\CreatingRole::class  => [
         Arcanesoft\Foundation\Auth\Listeners\Roles\GeneratesUuid::class,
     ],
-    Arcanesoft\Foundation\Auth\Events\Roles\CreatedRole::class                     => [],
-
-    Arcanesoft\Foundation\Auth\Events\Roles\UpdatingRole::class                    => [],
-    Arcanesoft\Foundation\Auth\Events\Roles\UpdatedRole::class                     => [],
-
-    Arcanesoft\Foundation\Auth\Events\Roles\SavingRole::class                      => [],
-    Arcanesoft\Foundation\Auth\Events\Roles\SavedRole::class                       => [],
-
-    Arcanesoft\Foundation\Auth\Events\Roles\DeletingRole::class                    => [
+    Arcanesoft\Foundation\Auth\Events\Roles\CreatedRole::class   => [],
+    Arcanesoft\Foundation\Auth\Events\Roles\UpdatingRole::class  => [],
+    Arcanesoft\Foundation\Auth\Events\Roles\UpdatedRole::class   => [],
+    Arcanesoft\Foundation\Auth\Events\Roles\SavingRole::class    => [],
+    Arcanesoft\Foundation\Auth\Events\Roles\SavedRole::class     => [],
+    Arcanesoft\Foundation\Auth\Events\Roles\DeletingRole::class  => [
         Arcanesoft\Foundation\Auth\Listeners\Roles\DetachPermissions::class,
         Arcanesoft\Foundation\Auth\Listeners\Roles\DetachAdmins::class,
     ],
-    Arcanesoft\Foundation\Auth\Events\Roles\DeletedRole::class                     => [],
+    Arcanesoft\Foundation\Auth\Events\Roles\DeletedRole::class   => [],
 
-    Arcanesoft\Foundation\Auth\Events\Roles\Users\AttachingUser::class             => [],
-    Arcanesoft\Foundation\Auth\Events\Roles\Users\AttachedUser::class              => [],
-    Arcanesoft\Foundation\Auth\Events\Roles\Users\DetachingUser::class           => [],
-    Arcanesoft\Foundation\Auth\Events\Roles\Users\DetachedUser::class            => [],
+    // Administrators
+    Arcanesoft\Foundation\Auth\Events\Roles\Administrators\AttachingAdministrator::class     => [],
+    Arcanesoft\Foundation\Auth\Events\Roles\Administrators\AttachedAdministrator::class      => [],
+    Arcanesoft\Foundation\Auth\Events\Roles\Administrators\DetachingAdministrator::class     => [],
+    Arcanesoft\Foundation\Auth\Events\Roles\Administrators\DetachedAdministrator::class      => [],
+    Arcanesoft\Foundation\Auth\Events\Roles\Administrators\DetachingAllAdministrators::class => [],
+    Arcanesoft\Foundation\Auth\Events\Roles\Administrators\DetachedAllAdministrators::class  => [],
 
-    Arcanesoft\Foundation\Auth\Events\Roles\Users\DetachingAllUsers::class       => [],
-    Arcanesoft\Foundation\Auth\Events\Roles\Users\DetachedAllUsers::class        => [],
-
-    Arcanesoft\Foundation\Auth\Events\Roles\Permissions\AttachingPermission::class       => [],
-    Arcanesoft\Foundation\Auth\Events\Roles\Permissions\AttachedPermission::class        => [],
+    // Permissions
+    Arcanesoft\Foundation\Auth\Events\Roles\Permissions\AttachingPermission::class     => [],
+    Arcanesoft\Foundation\Auth\Events\Roles\Permissions\AttachedPermission::class      => [],
     Arcanesoft\Foundation\Auth\Events\Roles\Permissions\DetachingPermission::class     => [],
     Arcanesoft\Foundation\Auth\Events\Roles\Permissions\DetachedPermission::class      => [],
-
-    Arcanesoft\Foundation\Auth\Events\Roles\Permissions\SyncingPermissions::class        => [],
-    Arcanesoft\Foundation\Auth\Events\Roles\Permissions\SyncedPermissions::class         => [],
+    Arcanesoft\Foundation\Auth\Events\Roles\Permissions\SyncingPermissions::class      => [],
+    Arcanesoft\Foundation\Auth\Events\Roles\Permissions\SyncedPermissions::class       => [],
     Arcanesoft\Foundation\Auth\Events\Roles\Permissions\DetachingAllPermissions::class => [],
     Arcanesoft\Foundation\Auth\Events\Roles\Permissions\DetachedAllPermissions::class  => [],
 
@@ -135,29 +116,25 @@ return [
      */
 
     Arcanesoft\Foundation\Auth\Events\Permissions\RetrievedPermission::class => [],
-
-    Arcanesoft\Foundation\Auth\Events\Permissions\CreatingPermission::class => [
+    Arcanesoft\Foundation\Auth\Events\Permissions\CreatingPermission::class  => [
         Arcanesoft\Foundation\Auth\Listeners\Permissions\GeneratesUuid::class,
     ],
-    Arcanesoft\Foundation\Auth\Events\Permissions\CreatedPermission::class => [],
+    Arcanesoft\Foundation\Auth\Events\Permissions\CreatedPermission::class   => [],
+    Arcanesoft\Foundation\Auth\Events\Permissions\UpdatingPermission::class  => [],
+    Arcanesoft\Foundation\Auth\Events\Permissions\UpdatedPermission::class   => [],
+    Arcanesoft\Foundation\Auth\Events\Permissions\SavingPermission::class    => [],
+    Arcanesoft\Foundation\Auth\Events\Permissions\SavedPermission::class     => [],
+    Arcanesoft\Foundation\Auth\Events\Permissions\DeletingPermission::class  => [],
+    Arcanesoft\Foundation\Auth\Events\Permissions\DeletedPermission::class   => [],
 
-    Arcanesoft\Foundation\Auth\Events\Permissions\UpdatingPermission::class => [],
-    Arcanesoft\Foundation\Auth\Events\Permissions\UpdatedPermission::class => [],
-
-    Arcanesoft\Foundation\Auth\Events\Permissions\SavingPermission::class => [],
-    Arcanesoft\Foundation\Auth\Events\Permissions\SavedPermission::class => [],
-
-    Arcanesoft\Foundation\Auth\Events\Permissions\DeletingPermission::class => [],
-    Arcanesoft\Foundation\Auth\Events\Permissions\DeletedPermission::class => [],
-
-    Arcanesoft\Foundation\Auth\Events\Permissions\Roles\AttachingRole::class => [],
-    Arcanesoft\Foundation\Auth\Events\Permissions\Roles\AttachedRole::class => [],
-    Arcanesoft\Foundation\Auth\Events\Permissions\Roles\DetachingRole::class => [],
-    Arcanesoft\Foundation\Auth\Events\Permissions\Roles\DetachedRole::class => [],
-
-    Arcanesoft\Foundation\Auth\Events\Permissions\Roles\SyncedRoles::class => [],
-    Arcanesoft\Foundation\Auth\Events\Permissions\Roles\SyncingRoles::class => [],
+    // Roles
+    Arcanesoft\Foundation\Auth\Events\Permissions\Roles\AttachingRole::class     => [],
+    Arcanesoft\Foundation\Auth\Events\Permissions\Roles\AttachedRole::class      => [],
+    Arcanesoft\Foundation\Auth\Events\Permissions\Roles\DetachingRole::class     => [],
+    Arcanesoft\Foundation\Auth\Events\Permissions\Roles\DetachedRole::class      => [],
+    Arcanesoft\Foundation\Auth\Events\Permissions\Roles\SyncedRoles::class       => [],
+    Arcanesoft\Foundation\Auth\Events\Permissions\Roles\SyncingRoles::class      => [],
     Arcanesoft\Foundation\Auth\Events\Permissions\Roles\DetachingAllRoles::class => [],
-    Arcanesoft\Foundation\Auth\Events\Permissions\Roles\DetachedAllRoles::class => [],
+    Arcanesoft\Foundation\Auth\Events\Permissions\Roles\DetachedAllRoles::class  => [],
 
 ];

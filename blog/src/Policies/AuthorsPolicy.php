@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Arcanesoft\Blog\Policies;
 
 use Arcanesoft\Blog\Models\Author;
-use Arcanesoft\Foundation\Auth\Models\Admin;
+use Arcanesoft\Foundation\Auth\Models\Administrator;
 
 /**
  * Class     AuthorsPolicy
@@ -95,11 +95,11 @@ class AuthorsPolicy extends Policy
     /**
      * Allow to list all the authors.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function index(Admin $user)
+    public function index(Administrator $administrator)
     {
         //
     }
@@ -107,11 +107,11 @@ class AuthorsPolicy extends Policy
     /**
      * Allow to list all the authors' metrics.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function metrics(Admin $user)
+    public function metrics(Administrator $administrator)
     {
         //
     }
@@ -119,11 +119,11 @@ class AuthorsPolicy extends Policy
     /**
      * Allow to create a author.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function create(Admin $user)
+    public function create(Administrator $administrator)
     {
         //
     }
@@ -131,12 +131,12 @@ class AuthorsPolicy extends Policy
     /**
      * Allow to show a author details.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
-     * @param  \Arcanesoft\Blog\Models\Author|mixed|null       $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Blog\Models\Author|mixed|null               $author
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function show(Admin $user, Author $model = null)
+    public function show(Administrator $administrator, Author $author = null)
     {
         //
     }
@@ -144,12 +144,12 @@ class AuthorsPolicy extends Policy
     /**
      * Allow to update a author.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
-     * @param  \Arcanesoft\Blog\Models\Author|mixed|null       $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Blog\Models\Author|mixed|null               $author
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function update(Admin $user, Author $model = null)
+    public function update(Administrator $administrator, Author $author = null)
     {
         //
     }
@@ -157,14 +157,14 @@ class AuthorsPolicy extends Policy
     /**
      * Allow to delete a author.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Admin|mixed  $admin
-     * @param  \Arcanesoft\Blog\Models\Author|mixed|null       $model
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
+     * @param  \Arcanesoft\Blog\Models\Author|mixed|null               $author
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function delete(Admin $user, Author $model = null)
+    public function delete(Administrator $administrator, Author $author = null)
     {
-        if ( ! is_null($model))
-            return $model->isDeletable();
+        if ( ! is_null($author))
+            return $author->isDeletable();
     }
 }

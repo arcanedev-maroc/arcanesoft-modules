@@ -50,7 +50,7 @@ class BlogServiceProvider extends PackageServiceProvider
             Providers\EventServiceProvider::class,
             Providers\MetricServiceProvider::class,
             Providers\RouteServiceProvider::class,
-//            Providers\ViewServiceProvider::class,
+            Providers\ViewServiceProvider::class,
         ]);
 
         $this->registerCommands([

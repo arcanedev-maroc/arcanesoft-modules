@@ -9,7 +9,7 @@ $skin-colors: (
     // Bootstrap
 
     table {
-        @extend .table-dark;
+        //@extend .table-dark;
     }
 
     @each $color, $value in $skin-colors {

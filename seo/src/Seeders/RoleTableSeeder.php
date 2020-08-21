@@ -33,7 +33,7 @@ class RoleTableSeeder extends RolesSeeder
             ],
         ]);
 
-        $this->syncRoles([
+        $this->syncRolesWithPermissions([
             'blog-moderator' => [
                 'admin::seo.*'
             ],

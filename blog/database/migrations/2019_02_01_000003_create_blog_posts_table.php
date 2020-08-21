@@ -43,7 +43,7 @@ class CreateBlogPostsTable extends Migration
         $this->createSchema(function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
-            $table->unsignedBigInteger('author_id');
+            $table->unsignedBigInteger('author_id')->nullable();
             $table->string('locale', 5)->default(app()->getLocale());
             $table->string('title', 255);
             $table->string('slug', 255)->unique();

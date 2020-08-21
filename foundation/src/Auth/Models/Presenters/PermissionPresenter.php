@@ -31,7 +31,7 @@ trait PermissionPresenter
     public function getUsersCountAttribute(): int
     {
         return $this->roles->sum(function (Role $role) {
-            return $role->users->count();
+            return $role->administrators->count();
         });
     }
 }

@@ -48,7 +48,7 @@ return [
         'prefix'     => 'auth_',
 
         'tables'     => [
-            'admins'              => 'admins',
+            'administrators'      => 'administrators',
             'users'               => 'users',
             'roles'               => 'roles',
             'permissions'         => 'permissions',
@@ -56,7 +56,7 @@ return [
             'password-resets'     => 'password_resets',
             'socialite-providers' => 'socialite_providers',
             'throttles'           => 'throttles',
-            'admin-role'          => 'admin_role',
+            'administrator-role'  => 'administrator_role',
             'permission-role'     => 'permission_role',
         ],
 
@@ -65,7 +65,7 @@ return [
 
         'models' => [
             'user'               => App\Models\User::class,
-            'admin'              => Arcanesoft\Foundation\Auth\Models\Admin::class,
+            'administrator'      => Arcanesoft\Foundation\Auth\Models\Administrator::class,
             'role'               => Arcanesoft\Foundation\Auth\Models\Role::class,
             'permission'         => Arcanesoft\Foundation\Auth\Models\Permission::class,
             'permissions-group'  => Arcanesoft\Foundation\Auth\Models\PermissionsGroup::class,
@@ -80,7 +80,7 @@ return [
      | -----------------------------------------------------------------
      */
 
-    'admins' => [
+    'administrators' => [
         'emails' => [
             'admin@example.com',
         ],

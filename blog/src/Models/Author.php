@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Blog\Models;
 
-use Arcanesoft\Auth\Auth;
-use Arcanesoft\Foundation\Auth\Models\Admin;
 use Arcanesoft\Blog\Blog;
 use Arcanesoft\Foundation\Support\Traits\Deletable;
 
@@ -25,7 +23,7 @@ use Arcanesoft\Foundation\Support\Traits\Deletable;
  * @property  \Illuminate\Support\Carbon  created_at
  * @property  \Illuminate\Support\Carbon  updated_at
  *
- * @property-read  \Arcanesoft\Foundation\Auth\Models\Admin|\App\Models\User|mixed  $creator
+ * @property-read  \Arcanesoft\Foundation\Auth\Models\Administrator|\App\Models\User|mixed  $creator
  */
 class Author extends Model
 {

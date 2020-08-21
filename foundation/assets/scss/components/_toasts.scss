@@ -1,3 +1,11 @@
+@import "~bootstrap/scss/toasts";
+
+.toasts-container {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+}
+
 .toast-footer {
     display: flex;
     align-items: center;

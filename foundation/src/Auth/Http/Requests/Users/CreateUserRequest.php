@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Http\Requests\Users;
 
-use Arcanesoft\Foundation\Auth\Rules\Users\UserEmailRule;
+use Arcanesoft\Foundation\Auth\Rules\Users\EmailRule;
 
 /**
  * Class     CreateUserRequest
@@ -29,9 +29,8 @@ class CreateUserRequest extends UserFormRequest
         return [
             'first_name' => ['required', 'string', 'max:50'],
             'last_name'  => ['required', 'string', 'max:50'],
-            'email'      => ['required', 'string', 'email', 'max:255', UserEmailRule::unique()],
+            'email'      => ['required', 'string', 'email', 'max:255', EmailRule::unique()],
             'password'   => ['nullable', 'string', 'min:8', 'confirmed'],
-            'roles'      => ['array'],
         ];
     }
 }

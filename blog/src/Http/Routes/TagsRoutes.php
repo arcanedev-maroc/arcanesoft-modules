@@ -3,7 +3,6 @@
 namespace Arcanesoft\Blog\Http\Routes;
 
 use Arcanesoft\Blog\Blog;
-use Arcanesoft\Blog\Http\Controllers\Datatables\TagsController as TagsDatatablesController;
 use Arcanesoft\Blog\Http\Controllers\TagsController;
 
 /**
@@ -36,8 +35,6 @@ class TagsRoutes extends AbstractRouteRegistrar
                 $this->get('/', [TagsController::class, 'index'])
                      ->name('index'); // admin::blog.tags.index
 
-                $this->mapDataTablesRoutes();
-
                 $this->get('metrics', [TagsController::class, 'metrics'])
                      ->name('metrics'); // admin::blog.tags.metrics
 
@@ -61,17 +58,6 @@ class TagsRoutes extends AbstractRouteRegistrar
                          ->name('delete'); // admin::blog.tags.delete
                 });
             });
-        });
-    }
-
-    /**
-     * Map datatables routes.
-     */
-    private function mapDataTablesRoutes(): void
-    {
-        $this->dataTableGroup(function () {
-            $this->get('/', [TagsDataTablesController::class, 'index'])
-                 ->name('index'); // admin::blog.tags.datatables.index
         });
     }
 

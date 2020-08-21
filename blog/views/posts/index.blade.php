@@ -13,39 +13,5 @@
 @endpush
 
 @section('content')
-    <div class="card card-borderless shadow-sm">
-        <div class="table-responsive">
-            <table id="posts-table" class="table table-hover table-md mb-0">
-                <thead>
-                    <tr>
-                        <th>@lang('Title')</th>
-                        <th class="text-center">@lang('Created at')</th>
-                        <th class="text-center">@lang('Published')</th>
-                        <th class="text-right">@lang('Actions')</th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
-    </div>
+    <v-datatable name="{{ Arcanesoft\Blog\Views\Components\PostsDatatable::NAME }}"></v-datatable>
 @endsection
-
-@push('modals')
-@endpush
-
-@push('scripts')
-    <script>
-        ready(() => {
-            window.plugins.datatable('table#posts-table', {
-                ajax: "{{ route('admin::blog.posts.datatables.index') }}",
-                serverSide: true,
-                processing: true,
-                columns: [
-                    { data: 'title' },
-                    { data: 'created_at', class: 'text-center'},
-                    { data: 'published', class: 'text-center', orderable: false, searchable: false },
-                    { data: 'actions', class: 'text-right', orderable: false, searchable: false }
-                ],
-            })
-        })
-    </script>
-@endpush

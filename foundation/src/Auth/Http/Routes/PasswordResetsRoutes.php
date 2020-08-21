@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Http\Routes;
 
-use Arcanesoft\Foundation\Auth\Http\Controllers\Datatables\PasswordResetsController as PasswordResetsDataTablesController;
 use Arcanesoft\Foundation\Auth\Http\Controllers\PasswordResetsController;
 
 /**
@@ -30,12 +29,6 @@ class PasswordResetsRoutes extends AbstractRouteRegistrar
                 // admin::authorization.password-resets.index
                 $this->get('/', [PasswordResetsController::class, 'index'])
                      ->name('index');
-
-                $this->dataTableGroup(function () {
-                    // admin::auth.password-resets.datatables.index
-                    $this->get('/', [PasswordResetsDataTablesController::class, 'index'])
-                        ->name('index');
-                });
 
                 // admin::authorization.password-resets.metrics
                 $this->get('metrics', [PasswordResetsController::class, 'metrics'])

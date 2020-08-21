@@ -1,9 +1,9 @@
 <?php namespace Arcanesoft\Blog\Http\Requests\Tags;
 
-use Arcanesoft\Blog\Blog;
 use Arcanesoft\Blog\Http\Requests\FormRequest;
+use Arcanesoft\Blog\Rules\Tags\NameRule;
+use Arcanesoft\Blog\Rules\Tags\SlugRule;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 
 /**
  * Class     CreateTagRequest
@@ -26,8 +26,16 @@ class CreateTagRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', Rule::unique(Blog::table('tags'), 'name')],
-            'slug' => ['required', 'string', Rule::unique(Blog::table('tags'), 'slug')],
+            'name' => [
+                'required',
+                'string',
+                NameRule::unique(),
+            ],
+            'slug' => [
+                'required',
+                'string',
+                SlugRule::unique(),
+            ],
         ];
     }
 
@@ -38,22 +46,10 @@ class CreateTagRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        if ( ! $this->get('slug'))
+        if (is_null($this->get('slug'))) {
             $this->merge([
                 'slug' => Str::slug($this->get('name')),
             ]);
-    }
-
-    /**
-     * Get the validated data.
-     *
-     * @return array
-     */
-    public function getValidatedData(): array
-    {
-        return $this->all([
-            'name',
-            'slug',
-        ]);
+        }
     }
 }
