@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Repositories;
 
 use Arcanesoft\Foundation\Auth\Auth;
-use Arcanesoft\Foundation\Auth\Events\Administrators\{
-    ActivatedAdministrator, ActivatingAdministrator, DeactivatedAdministrator, DeactivatingAdministrator,
-    Roles\SyncedRoles, Roles\SyncingRoles
-};
+use Arcanesoft\Foundation\Auth\Events\Administrators\{ActivatedAdministrator,
+    ActivatingAdministrator,
+    DeactivatedAdministrator,
+    DeactivatingAdministrator,
+    Password\UpdatedPassword,
+    Password\UpdatingPassword,
+    Roles\SyncedRoles,
+    Roles\SyncingRoles};
 use Arcanesoft\Foundation\Auth\Models\Administrator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\{Collection, Str};
@@ -153,6 +157,23 @@ class AdministratorsRepository extends AbstractRepository
         return tap($this->updateOne($administrator, $attributes), function () use ($administrator, $roles) {
             $this->syncRolesByUuids($administrator, $roles);
         });
+    }
+
+    /**
+     * Update the administrator's password.
+     *
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $administrator
+     * @param  string                                            $password
+     *
+     * @return bool
+     */
+    public function updatePassword(Administrator $administrator, string $password)
+    {
+        event(new UpdatingPassword($administrator));
+        $updated = $this->updateOne($administrator, compact('password'));
+        event(new UpdatedPassword($administrator));
+
+        return $updated;
     }
 
     /**

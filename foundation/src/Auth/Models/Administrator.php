@@ -13,7 +13,7 @@ use Arcanesoft\Foundation\Auth\Events\Administrators\{CreatedAdministrator,
     RestoredAdministrator, RestoringAdministrator, RetrievedAdministrator, SavedAdministrator, SavingAdministrator,
     UpdatedAdministrator, UpdatingAdministrator
 };
-use Arcanesoft\Foundation\Auth\Models\Concerns\{Activatable, CanResetPassword, HasRoles};
+use Arcanesoft\Foundation\Auth\Models\Concerns\{Activatable, CanResetPassword, HasPassword, HasRoles};
 use Arcanesoft\Foundation\Auth\Models\Presenters\UserPresenter;
 use Arcanesoft\Foundation\Support\Traits\Deletable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -29,8 +29,8 @@ use Illuminate\Support\Collection;
  *
  * @property  int                              id
  * @property  string                           uuid
- * @property  string                           first_name
- * @property  string                           last_name
+ * @property  string|null                      first_name
+ * @property  string|null                      last_name
  * @property  string                           email
  * @property  string                           password
  * @property  string|null                      avatar
@@ -38,12 +38,12 @@ use Illuminate\Support\Collection;
  * @property  \Illuminate\Support\Carbon|null  last_activity_at
  * @property  \Illuminate\Support\Carbon       created_at
  * @property  \Illuminate\Support\Carbon       updated_at
- * @property  \Illuminate\Support\Carbon       activated_at
- * @property  \Illuminate\Support\Carbon       deleted_at
+ * @property  \Illuminate\Support\Carbon|null  activated_at
+ * @property  \Illuminate\Support\Carbon|null  deleted_at
  *
- * @property  \Illuminate\Support\Collection   roles
- * @property  \Illuminate\Support\Collection   active_roles
- * @property  \Illuminate\Support\Collection   permissions
+ * @property  \Illuminate\Support\Collection|\Arcanesoft\Foundation\Auth\Models\Role[]        roles
+ * @property  \Illuminate\Support\Collection|\Arcanesoft\Foundation\Auth\Models\Role[]        active_roles
+ * @property  \Illuminate\Support\Collection|\Arcanesoft\Foundation\Auth\Models\Permission[]  permissions
  */
 class Administrator extends Authenticatable implements Impersonatable, CanBeActivated
 {
@@ -53,6 +53,7 @@ class Administrator extends Authenticatable implements Impersonatable, CanBeActi
      */
 
     use UserPresenter,
+        HasPassword,
         CanImpersonate,
         CanResetPassword,
         HasRoles,

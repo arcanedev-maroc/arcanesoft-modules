@@ -16,16 +16,19 @@ use Arcanesoft\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 class RouteServiceProvider extends ServiceProvider
 {
     /* -----------------------------------------------------------------
-     |  Properties
+     |  Main Methods
      | -----------------------------------------------------------------
      */
 
     /**
-     * The routes list.
+     * Get the registered routes.
      *
-     * @var array
+     * @return array
      */
-    protected $routeClasses = [
-        Routes\StatusesRoutes::class
-    ];
+    public function routeClasses(): array
+    {
+        return [
+            Routes\StatusesRoutes::class
+        ];
+    }
 }

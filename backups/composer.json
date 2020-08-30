@@ -14,12 +14,12 @@
     "type":    "library",
     "license": "MIT",
     "require": {
-        "php":                      "^7.2.5",
+        "php":                      "^7.3",
         "arcanedev/laravel-backup": "dev-develop",
-        "arcanesoft/foundation":    "@dev"
+        "arcanesoft/foundation":    "^2.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.5|^9.0"
+        "phpunit/phpunit": "^9.3"
     },
     "autoload": {
         "psr-4": {

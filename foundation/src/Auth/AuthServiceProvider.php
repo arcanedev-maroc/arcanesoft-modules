@@ -28,6 +28,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerProviders([
             Providers\EventServiceProvider::class,
             Providers\RouteServiceProvider::class,
+            Providers\SessionServiceProvider::class,
             Providers\ViewServiceProvider::class,
         ]);
 

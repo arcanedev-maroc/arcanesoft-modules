@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Repositories;
 
-use Arcanesoft\Foundation\Auth\{Auth, Socialite};
+use Arcanesoft\Foundation\Auth\Auth;
+use Arcanesoft\Foundation\Auth\Events\Socialite\UserRegistered;
+use Arcanesoft\Foundation\Auth\Models\User;
+use Arcanesoft\Foundation\Auth\Socialite;
 use Arcanesoft\Foundation\Auth\Models\SocialiteProvider;
 use Illuminate\Http\Response;
 
@@ -50,51 +53,20 @@ class SocialiteUsersRepository extends AbstractRepository
         // User email may not provided.
         $email = $userData->getEmail() ?: "{$userData->getId()}@{$provider}.com";
 
-        $usersRepo = $this->getUsersRepository();
-
         /** @var  \Arcanesoft\Foundation\Auth\Models\User|null  $user */
-        $user = $usersRepo->where('email', $email)->first();
+        $user = $this->getUsersRepository()
+            ->where('email', $email)
+            ->first();
 
-        if ($user === null) {
-            abort_unless(
-                Auth::isRegistrationEnabled(),
-                Response::HTTP_UNAUTHORIZED,
-                __('Registration is currently disabled.')
-            );
-
-            // Get users first name and last name from their full name
-            $nameParts = static::getNameParts($userData->getName());
-
-            //TODO: Add Activated + Confirmed
-
-            $user = $usersRepo->createOne([
-                'first_name'  => $nameParts['first_name'],
-                'last_name'   => $nameParts['last_name'],
-                'email'       => $email,
-                'avatar'      => $userData->getAvatar(),
-                'password'    => null,
-            ]);
-
-//            event(new UserProviderRegistered($user));
+        if (is_null($user)) {
+            $user = $this->registerNewUser($userData, $email);
         }
 
-        if ($user->hasProvider($provider)) {
-            $user->providers()->update([
-                'token' => $userData->token,
-            ]);
-            $usersRepo->updateOne($user, [
-                'avatar' => $userData->getAvatar(),
-            ]);
-        }
-        else {
-            $user->providers()->save(new SocialiteProvider([
-                'provider_type' => $provider,
-                'provider_id'   => $userData->id,
-                'token'         => $userData->token,
-            ]));
+        if ($user->hasLinkedAccount($provider)) {
+            return $this->updateLinkedAccount($provider, $user, $userData);
         }
 
-        return $user;
+        return $this->createLinkedAccount($provider, $user, $userData);
     }
 
     /* -----------------------------------------------------------------
@@ -113,6 +85,82 @@ class SocialiteUsersRepository extends AbstractRepository
     }
 
     /**
+     * Register a new user.
+     *
+     * @param  \Laravel\Socialite\Contracts\User|\Laravel\Socialite\One\User|\Laravel\Socialite\Two\User  $userData
+     * @param  string                                                                                     $email
+     *
+     * @return \Arcanesoft\Foundation\Auth\Models\User
+     */
+    protected function registerNewUser($userData, $email)
+    {
+        abort_unless(
+            Auth::isRegistrationEnabled(),
+            Response::HTTP_UNAUTHORIZED,
+            __('Registration is currently disabled.')
+        );
+
+        $nameParts = static::getNameParts($userData->getName());
+
+        $attributes = [
+            'username'    => $userData->getNickname(),
+            'first_name'  => $nameParts['first_name'],
+            'last_name'   => $nameParts['last_name'],
+            'email'       => $email,
+            'avatar'      => $userData->getAvatar(),
+            'password'    => null,
+        ];
+
+        return tap($this->getUsersRepository()->createOne($attributes), function ($user) {
+            event(new UserRegistered($user));
+        });
+    }
+
+    /**
+     * @param  string                                                                                     $provider
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed                                              $user
+     * @param  \Laravel\Socialite\Contracts\User|\Laravel\Socialite\One\User|\Laravel\Socialite\Two\User  $userData
+     *
+     * @return \Arcanesoft\Foundation\Auth\Models\User
+     */
+    private function createLinkedAccount(string $provider, User $user, $userData)
+    {
+        $account = static::model()->fill([
+            'provider_type' => $provider,
+            'provider_id'   => $userData->id,
+            'token'         => $userData->token,
+        ]);
+
+        $user->linkedAccounts()->save($account);
+
+        return $user;
+    }
+
+    /**
+     * Update the linked account.
+     *
+     * @param  string                                                                                     $provider
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed                                              $user
+     * @param  \Laravel\Socialite\Contracts\User|\Laravel\Socialite\One\User|\Laravel\Socialite\Two\User  $userData
+     *
+     * @return \Arcanesoft\Foundation\Auth\Models\User
+     */
+    protected function updateLinkedAccount(string $provider, User $user, $userData)
+    {
+        $user->linkedAccounts()->where('provider_type', $provider)->update([
+            'token' => $userData->token,
+        ]);
+
+        $this->getUsersRepository()->updateOne($user, [
+            'avatar' => $userData->getAvatar(),
+        ]);
+
+        return $user;
+    }
+
+    /**
+     * Get the user's name (first_name & last_name).
+     *
      * @param  string  $name
      *
      * @return array

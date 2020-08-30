@@ -47,6 +47,8 @@ class CreateAuthSocialiteProvidersTable extends Migration
             $table->text('provider_id');
             $table->text('token')->nullable();
             $table->timestamps();
+
+            $table->unique(['user_id', 'provider_type']);
         });
     }
 }

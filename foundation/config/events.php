@@ -37,6 +37,10 @@ return [
     Arcanesoft\Foundation\Auth\Events\Users\DeactivatingUser::class  => [],
     Arcanesoft\Foundation\Auth\Events\Users\DeactivatedUser::class   => [],
 
+    // Password
+    Arcanesoft\Foundation\Auth\Events\Users\Password\UpdatingPassword::class => [],
+    Arcanesoft\Foundation\Auth\Events\Users\Password\UpdatedPassword::class  => [],
+
     /* -----------------------------------------------------------------
      |  Auth - Administrators
      | -----------------------------------------------------------------
@@ -63,14 +67,18 @@ return [
     Arcanesoft\Foundation\Auth\Events\Administrators\DeactivatedAdministrator::class  => [],
 
     // Roles
-    Arcanesoft\Foundation\Auth\Events\Administrators\Roles\AttachingRole::class => [],
-    Arcanesoft\Foundation\Auth\Events\Administrators\Roles\AttachedRole::class => [],
-    Arcanesoft\Foundation\Auth\Events\Administrators\Roles\DetachingRole::class => [],
-    Arcanesoft\Foundation\Auth\Events\Administrators\Roles\DetachedRole::class => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Roles\AttachingRole::class  => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Roles\AttachedRole::class   => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Roles\DetachingRole::class  => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Roles\DetachedRole::class   => [],
     Arcanesoft\Foundation\Auth\Events\Administrators\Roles\DetachingRoles::class => [],
-    Arcanesoft\Foundation\Auth\Events\Administrators\Roles\DetachedRoles::class => [],
-    Arcanesoft\Foundation\Auth\Events\Administrators\Roles\SyncingRoles::class => [],
-    Arcanesoft\Foundation\Auth\Events\Administrators\Roles\SyncedRoles::class => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Roles\DetachedRoles::class  => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Roles\SyncingRoles::class   => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Roles\SyncedRoles::class    => [],
+
+    // Password
+    Arcanesoft\Foundation\Auth\Events\Administrators\Password\UpdatingPassword::class => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Password\UpdatedPassword::class  => [],
 
     /* -----------------------------------------------------------------
      |  Auth - Roles
@@ -136,5 +144,14 @@ return [
     Arcanesoft\Foundation\Auth\Events\Permissions\Roles\SyncingRoles::class      => [],
     Arcanesoft\Foundation\Auth\Events\Permissions\Roles\DetachingAllRoles::class => [],
     Arcanesoft\Foundation\Auth\Events\Permissions\Roles\DetachedAllRoles::class  => [],
+
+    /* -----------------------------------------------------------------
+     |  Auth - Socialite
+     | -----------------------------------------------------------------
+     */
+
+    Arcanesoft\Foundation\Auth\Events\Socialite\UserRegistered::class => [
+        Arcanesoft\Foundation\Auth\Listeners\Socialite\ActivateUser::class,
+    ],
 
 ];

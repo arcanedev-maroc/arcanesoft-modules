@@ -43,6 +43,7 @@ class CreateAuthUsersTable extends Migration
         $this->createSchema(function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
+            $table->string('username')->nullable();
             $table->string('first_name', 30)->nullable();
             $table->string('last_name', 30)->nullable();
             $table->string('email')->unique();

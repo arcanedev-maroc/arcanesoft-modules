@@ -11,9 +11,7 @@
         <div class="col-lg-5">
             <div class="card card-borderless shadow-sm">
                 <div class="card-body d-flex justify-content-center p-3">
-                    <div class="avatar avatar-xxl rounded-circle bg-light">
-                        {{ html()->image($user->avatar, $user->full_name, []) }}
-                    </div>
+                    <div class="avatar avatar-xxl bg-light">{{ $user->avatar_img }}</div>
                 </div>
                 <table class="table table-borderless mb-0">
                     <tbody>
@@ -122,6 +120,33 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="col-lg-7">
+            @if ($user->linkedAccounts->isNotEmpty())
+            <div class="card card-borderless shadow-sm">
+                <div class="card-header px-2">@lang('Linked Accounts')</div>
+                <table class="table table-borderless mb-0">
+                    <thead>
+                        <tr>
+                            <td class="font-weight-light text-uppercase text-muted">@lang('Provider')</td>
+                            <td class="font-weight-light text-uppercase text-muted text-center">@lang('Created at')</td>
+                            <td class="font-weight-light text-uppercase text-muted text-center">@lang('Updated at')</td>
+                            <td class="font-weight-light text-uppercase text-muted text-right">@lang('Actions')</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($user->linkedAccounts as $linkedAccount)
+                        <tr>
+                            <td>{{ $linkedAccount->name }}</td>
+                            <td class="small text-muted text-center">{{ $linkedAccount->created_at }}</td>
+                            <td class="small text-muted text-center">{{ $linkedAccount->updated_at }}</td>
+                            <td class="text-right"></td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            @endif
         </div>
     </div>
 @endsection

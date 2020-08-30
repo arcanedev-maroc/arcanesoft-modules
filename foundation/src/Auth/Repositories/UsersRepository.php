@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Repositories;
 
 use Arcanesoft\Foundation\Auth\Auth;
-use Arcanesoft\Foundation\Auth\Events\Users\{ActivatedUser, ActivatingUser, DeactivatedUser, DeactivatingUser};
+use Arcanesoft\Foundation\Auth\Events\Users\{
+    ActivatedUser, ActivatingUser, DeactivatedUser, DeactivatingUser
+};
+use Arcanesoft\Foundation\Auth\Events\Users\Password\{UpdatedPassword, UpdatingPassword};
 use Arcanesoft\Foundation\Auth\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
@@ -61,8 +64,8 @@ class UsersRepository extends AbstractRepository
      */
     public function onlyTrashed(bool $condition = true)
     {
-        return $this->when($condition, function (Builder $q) {
-            return $q->onlyTrashed();
+        return $this->when($condition, function (Builder $query) {
+            return $query->onlyTrashed();
         });
     }
 
@@ -94,7 +97,9 @@ class UsersRepository extends AbstractRepository
      */
     public function createOne(array $attributes): User
     {
-        $attributes['password'] = $attributes['password'] ?? Str::random(8);
+        if ( ! array_key_exists('password', $attributes)) {
+            $attributes['password'] = Str::random(8);
+        }
 
         return tap($this->model()->fill($attributes), function (User $user) use ($attributes) {
             $user->forceFill([
@@ -117,6 +122,23 @@ class UsersRepository extends AbstractRepository
     public function updateOne(User $user, array $attributes): bool
     {
         return $user->update($attributes);
+    }
+
+    /**
+     * Update the user's password.
+     *
+     * @param  \Arcanesoft\Foundation\Auth\Models\User  $user
+     * @param  string                                   $password
+     *
+     * @return bool
+     */
+    public function updatePassword(User $user, string $password): bool
+    {
+        event(new UpdatingPassword($user));
+        $updated = $this->updateOne($user, compact('password'));
+        event(new UpdatedPassword($user));
+
+        return $updated;
     }
 
     /**

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Models;
 
 use Arcanesoft\Foundation\Auth\Auth;
+use Arcanesoft\Foundation\Auth\Models\Presenters\SocialiteProviderPresenter;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -25,6 +26,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class SocialiteProvider extends Model
 {
+    /* -----------------------------------------------------------------
+     |  Traits
+     | -----------------------------------------------------------------
+     */
+
+    use SocialiteProviderPresenter;
+
     /* -----------------------------------------------------------------
      |  Properties
      | -----------------------------------------------------------------

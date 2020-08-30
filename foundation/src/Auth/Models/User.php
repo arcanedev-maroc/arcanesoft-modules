@@ -8,16 +8,16 @@ use Arcanedev\LaravelImpersonator\Contracts\Impersonatable;
 use Arcanedev\LaravelImpersonator\Traits\CanImpersonate;
 use Arcanesoft\Foundation\Auth\Auth;
 use Arcanesoft\Foundation\Auth\Contracts\CanBeActivated;
-use Arcanesoft\Foundation\Auth\Models\Concerns\CanResetPassword;
-use Arcanesoft\Foundation\Auth\Models\Concerns\CanVerifyEmail;
 use Arcanesoft\Foundation\Auth\Events\Users\{
-    CreatedUser, CreatingUser, DeletedUser, DeletingUser, ForceDeletedUser, ReplicatingUser, RestoredUser, RestoringUser,
-    RetrievedUser, SavedUser, SavingUser, UpdatedUser, UpdatingUser
+    CreatedUser, CreatingUser, DeletedUser, DeletingUser, ForceDeletedUser, ReplicatingUser, RestoredUser,
+    RestoringUser, RetrievedUser, SavedUser, SavingUser, UpdatedUser, UpdatingUser
 };
-use Arcanesoft\Foundation\Auth\Models\Concerns\Activatable;
+use Arcanesoft\Foundation\Auth\Models\Concerns\{
+    Activatable, CanResetPassword, CanVerifyEmail, HasLinkedAccounts, HasPassword
+};
 use Arcanesoft\Foundation\Auth\Models\Presenters\UserPresenter;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\{Builder, Relations\HasMany, SoftDeletes};
+use Illuminate\Database\Eloquent\{Builder, SoftDeletes};
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -27,21 +27,20 @@ use Illuminate\Notifications\Notifiable;
  * @package  Arcanesoft\Foundation\Auth\Models
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  *
- * @property  int                         id
- * @property  string                      uuid
- * @property  string                      first_name
- * @property  string                      last_name
- * @property  string                      email
- * @property  \Illuminate\Support\Carbon  email_verified_at
- * @property  string                      password
- * @property  string                      avatar
- * @property  string                      remember_token
- * @property  \Illuminate\Support\Carbon  last_activity_at
- * @property  \Illuminate\Support\Carbon  created_at
- * @property  \Illuminate\Support\Carbon  updated_at
- * @property  \Illuminate\Support\Carbon  deleted_at
- *
- * @property  \Illuminate\Database\Eloquent\Collection  permissions
+ * @property  int                              id
+ * @property  string                           uuid
+ * @property  string                           username
+ * @property  string                           first_name
+ * @property  string                           last_name
+ * @property  string                           email
+ * @property  \Illuminate\Support\Carbon|null  email_verified_at
+ * @property  string|null                      password
+ * @property  string                           remember_token
+ * @property  \Illuminate\Support\Carbon|null  last_activity_at
+ * @property  \Illuminate\Support\Carbon       created_at
+ * @property  \Illuminate\Support\Carbon       updated_at
+ * @property  \Illuminate\Support\Carbon|null  activated_at
+ * @property  \Illuminate\Support\Carbon|null  deleted_at
  *
  * @method  static|\Illuminate\Database\Eloquent\Builder  filterByAuthenticatedUser(User $user)
  * @method  static|\Illuminate\Database\Eloquent\Builder  verifiedEmail()
@@ -54,11 +53,13 @@ class User extends Authenticatable implements Impersonatable, MustVerifyEmail, C
      */
 
     use UserPresenter,
+        HasPassword,
         Notifiable,
         Activatable,
         CanImpersonate,
         CanResetPassword,
         CanVerifyEmail,
+        HasLinkedAccounts,
         SoftDeletes;
 
     /* -----------------------------------------------------------------
@@ -72,6 +73,7 @@ class User extends Authenticatable implements Impersonatable, MustVerifyEmail, C
      * @var array
      */
     protected $fillable = [
+        'username',
         'first_name',
         'last_name',
         'email',
@@ -137,21 +139,6 @@ class User extends Authenticatable implements Impersonatable, MustVerifyEmail, C
         $this->setTable(Auth::table('users'));
 
         parent::__construct($attributes);
-    }
-
-    /* -----------------------------------------------------------------
-     |  Relationships
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Get the socialite providers' relationship.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function providers(): HasMany
-    {
-        return $this->hasMany(SocialiteProvider::class);
     }
 
     /* -----------------------------------------------------------------
@@ -229,19 +216,5 @@ class User extends Authenticatable implements Impersonatable, MustVerifyEmail, C
     public function canBeImpersonated(): bool
     {
         return impersonator()->isEnabled();
-    }
-
-    /**
-     * Check if the user has a registered social provider.
-     *
-     * @param  string  $provider
-     *
-     * @return bool
-     */
-    public function hasProvider(string $provider): bool
-    {
-        return $this->providers()
-            ->where('provider_type', $provider)
-            ->exists();
     }
 }

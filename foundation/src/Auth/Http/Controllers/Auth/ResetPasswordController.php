@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Http\Controllers\Auth;
 
 use App\Http\Controllers\Auth\Concerns\RedirectsToHomePage;
-use Illuminate\Contracts\Auth\PasswordBroker;
-use Illuminate\Contracts\Auth\StatefulGuard;
+use Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Contracts\Auth\{PasswordBroker, StatefulGuard};
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\{Auth, Password};
+use Illuminate\Support\Str;
+use Arcanesoft\Foundation\Auth\Auth as ArcanesoftAuth;
 
 /**
  * Class     ResetPasswordController
@@ -27,6 +29,29 @@ class ResetPasswordController extends Controller
 
     use ResetsPasswords,
         RedirectsToHomePage;
+
+    /* -----------------------------------------------------------------
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    /** @var  \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository */
+    protected $repo;
+
+    /* -----------------------------------------------------------------
+     |  Constructor
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * ResetPasswordController constructor.
+     *
+     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository  $repo
+     */
+    public function __construct(AdministratorsRepository $repo)
+    {
+        $this->repo = $repo;
+    }
 
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -52,14 +77,20 @@ class ResetPasswordController extends Controller
     }
 
     /**
-     * Set the user's password.
+     * Reset the given user's password.
      *
-     * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
-     * @param  string                                       $password
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator  $administrator
+     * @param  string                                            $password
      */
-    protected function setUserPassword($user, $password): void
+    protected function resetPassword($administrator, $password): void
     {
-        $user->password = $password;
+        $administrator->setRememberToken(Str::random(60));
+
+        $this->repo->updatePassword($administrator, $password);
+
+        event(new PasswordReset($administrator));
+
+        $this->guard()->login($administrator);
     }
 
     /**
@@ -79,6 +110,6 @@ class ResetPasswordController extends Controller
      */
     protected function guard(): StatefulGuard
     {
-        return Auth::guard('administrator');
+        return Auth::guard(ArcanesoftAuth::GUARD_NAME);
     }
 }

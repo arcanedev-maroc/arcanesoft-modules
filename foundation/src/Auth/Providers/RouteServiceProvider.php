@@ -16,29 +16,32 @@ use Arcanesoft\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 class RouteServiceProvider extends ServiceProvider
 {
     /* -----------------------------------------------------------------
-     |  Properties
+     |  Main Methods
      | -----------------------------------------------------------------
      */
 
     /**
-     * The routes list.
+     * Get the registered routes.
      *
-     * @var array
+     * @return array
      */
-    protected $routeClasses = [
-        // Authentication
-        Routes\Auth\LoginRoutes::class,
-        Routes\Auth\PasswordResetRoutes::class,
-        Routes\Auth\ConfirmPasswordRoutes::class,
+    public function routeClasses(): array
+    {
+        return [
+            // Authentication
+            Routes\Auth\LoginRoutes::class,
+            Routes\Auth\PasswordResetRoutes::class,
+            Routes\Auth\ConfirmPasswordRoutes::class,
 
-        // Admin
-        Routes\DashboardRoutes::class,
-        Routes\UsersRoutes::class,
-        Routes\AdministratorsRoutes::class,
-        Routes\RolesRoutes::class,
-        Routes\PermissionsRoutes::class,
-        Routes\PasswordResetsRoutes::class,
-        Routes\SettingsRoutes::class,
-        Routes\ProfileRoutes::class,
-    ];
+            // Admin
+            Routes\DashboardRoutes::class,
+            Routes\UsersRoutes::class,
+            Routes\AdministratorsRoutes::class,
+            Routes\RolesRoutes::class,
+            Routes\PermissionsRoutes::class,
+            Routes\PasswordResetsRoutes::class,
+            Routes\SettingsRoutes::class,
+            Routes\ProfileRoutes::class,
+        ];
+    }
 }

@@ -14,9 +14,9 @@
                         <td class="font-weight-light text-uppercase text-muted">@lang('Login')</td>
                         <td class="text-right">
                             @if ($authentication['login']['enabled'])
-                                <span class="badge badge-outline-success">@lang('Enabled')</span>
+                                <span class="badge border border-success text-success">@lang('Enabled')</span>
                             @else
-                                <span class="badge badge-outline-danger">@lang('Disabled')</span>
+                                <span class="badge border border-secondary text-secondary">@lang('Disabled')</span>
                             @endif
                         </td>
                     </tr>
@@ -24,19 +24,19 @@
                         <td class="font-weight-light text-uppercase text-muted">@lang('Register')</td>
                         <td class="text-right">
                             @if ($authentication['register']['enabled'])
-                                <span class="badge badge-outline-success">@lang('Enabled')</span>
+                                <span class="badge border border-success text-success">@lang('Enabled')</span>
                             @else
-                                <span class="badge badge-outline-danger">@lang('Disabled')</span>
+                                <span class="badge border border-secondary text-secondary">@lang('Disabled')</span>
                             @endif
                         </td>
                     </tr>
                     <tr>
-                        <td class="font-weight-light text-uppercase text-muted">@lang('Socialite')</td>
+                        <td class="font-weight-light text-uppercase text-muted">Socialite</td>
                         <td class="text-right">
                             @if ($authentication['socialite']['enabled'])
-                                <span class="badge badge-outline-success">@lang('Enabled')</span>
+                                <span class="badge border border-success text-success">@lang('Enabled')</span>
                             @else
-                                <span class="badge badge-outline-danger">@lang('Disabled')</span>
+                                <span class="badge border border-secondary text-secondary">@lang('Disabled')</span>
                             @endif
                         </td>
                     </tr>
@@ -44,19 +44,24 @@
             </div>
 
             @if ($authentication['socialite']['enabled'])
-            <div class="card shadow-sm mb-4">
-                <div class="card-header">@lang('Socialite')</div>
-                <table class="table table-borderless mb-0">
-                    @foreach($authentication['socialite']['drivers'] as $driver)
-                    <tr>
-                        <td class="font-weight-light text-uppercase text-muted">{{ $driver }}</td>
-                        <td class="text-right">
-                            <span class="badge badge-outline-success">@lang('Enabled')</span>
-                        </td>
-                    </tr>
-                    @endforeach
-                </table>
-            </div>
+                <?php $providers = Arcanesoft\Foundation\Auth\Socialite::getProviders(); ?>
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header">Socialite</div>
+                    <table class="table table-borderless mb-0">
+                        @foreach($providers as $provider)
+                        <tr>
+                            <td class="font-weight-light text-uppercase text-muted">{{ $provider->name }}</td>
+                            <td class="text-right">
+                                @if ($provider->enabled)
+                                    <span class="badge border border-success text-success">@lang('Enabled')</span>
+                                @else
+                                    <span class="badge border border-secondary text-secondary">@lang('Disabled')</span>
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    </table>
+                </div>
             @endif
         </div>
     </div>

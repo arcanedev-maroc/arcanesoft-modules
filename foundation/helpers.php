@@ -4,7 +4,7 @@ namespace arcanesoft;
 
 use Arcanesoft\Foundation\Foundation;
 
-if ( ! function_exists(__NAMESPACE__.'\foundation')) {
+if ( ! function_exists('arcanesoft\foundation')) {
     /**
      * Get the foundation's class instance.
      *

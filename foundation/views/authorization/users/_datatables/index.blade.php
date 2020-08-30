@@ -26,9 +26,7 @@
                 @foreach($users as $user)
                     <tr>
                         <td>
-                            <div class="avatar avatar-sm rounded-circle bg-light">
-                                <img src="{{ $user->avatar }}" alt="{{ $user->first_name }}">
-                            </div>
+                            <div class="avatar avatar-sm bg-light">{{ $user->avatar_img }}</div>
                         </td>
                         <td class="small">{{ $user->first_name }}</td>
                         <td class="small">{{ $user->last_name }}</td>

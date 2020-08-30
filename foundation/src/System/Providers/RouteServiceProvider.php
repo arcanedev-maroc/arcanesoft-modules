@@ -16,20 +16,23 @@ use Arcanesoft\Foundation\System\Http\Routes;
 class RouteServiceProvider extends ServiceProvider
 {
     /* -----------------------------------------------------------------
-     |  Properties
+     |  Main Methods
      | -----------------------------------------------------------------
      */
 
     /**
-     * The routes list.
+     * Get the registered routes.
      *
-     * @var array
+     * @return array
      */
-    protected $routeClasses = [
-        Routes\SystemRoutes::class,
-        Routes\MaintenanceRoutes::class,
-        Routes\AbilitiesRoutes::class,
-        Routes\LogViewerRoutes::class,
-        Routes\RoutesViewer::class,
-    ];
+    public function routeClasses(): array
+    {
+        return [
+            Routes\SystemRoutes::class,
+            Routes\MaintenanceRoutes::class,
+            Routes\AbilitiesRoutes::class,
+            Routes\LogViewerRoutes::class,
+            Routes\RoutesViewer::class,
+        ];
+    }
 }

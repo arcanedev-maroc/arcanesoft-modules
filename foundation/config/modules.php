@@ -25,7 +25,7 @@ return [
                 Arcanesoft\Blog\Seeders\DatabaseSeeder::class,
                 Arcanesoft\Backups\Seeders\DatabaseSeeder::class,
                 Arcanesoft\Media\Seeders\DatabaseSeeder::class,
-                Arcanesoft\Passport\Seeders\DatabaseSeeder::class,
+//                Arcanesoft\Passport\Seeders\DatabaseSeeder::class,
             ],
 
         ],

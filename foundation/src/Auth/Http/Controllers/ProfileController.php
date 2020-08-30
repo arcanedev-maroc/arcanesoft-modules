@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Http\Controllers;
 
+use Arcanesoft\Foundation\Auth\Auth;
 use Arcanesoft\Foundation\Auth\Http\Requests\Profile\{UpdateAccountRequest, UpdatePasswordRequest};
 use Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository;
 use Arcanesoft\Foundation\Support\Traits\HasNotifications;
@@ -49,7 +50,7 @@ class ProfileController extends Controller
     public function index(Request $request)
     {
         return $this->view('authorization.profile.index', [
-            'user' => $request->user('admin'),
+            'user' => $request->user(Auth::GUARD_NAME),
         ]);
     }
 
@@ -62,12 +63,12 @@ class ProfileController extends Controller
     public function updateAccount(UpdateAccountRequest $request, AdministratorsRepository $repo)
     {
         $repo->updateOne(
-            $request->user('admin'),
-            $request->getValidatedData()
+            $request->user(Auth::GUARD_NAME),
+            $request->validated()
         );
 
         $this->notifySuccess(
-            __('Account Updated'),
+            __('Account updated'),
             __('Your account has been successfully updated !')
         );
 
@@ -75,18 +76,20 @@ class ProfileController extends Controller
     }
 
     /**
-     * @param \Arcanesoft\Foundation\Auth\Http\Requests\Profile\UpdatePasswordRequest $request
-     * @param \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository $repo
+     * @param  \Arcanesoft\Foundation\Auth\Http\Requests\Profile\UpdatePasswordRequest  $request
+     * @param  \Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository        $repo
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function updatePassword(UpdatePasswordRequest $request, AdministratorsRepository $repo)
     {
-        $repo->updateOne(
-            $request->user('admin'), $request->getValidatedData()
+        $repo->updatePassword(
+            $request->user(Auth::GUARD_NAME),
+            $request->get('password')
         );
 
         $this->notifySuccess(
-            __('Password Updated'),
+            __('Password updated'),
             __('Your password has been successfully updated !')
         );
 

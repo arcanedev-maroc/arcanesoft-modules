@@ -6,7 +6,7 @@ use Arcanedev\Html\Elements\Span;
 use Arcanesoft\Foundation\Helpers\UI\Actions\{ButtonAction, LinkAction};
 use Closure;
 
-if ( ! function_exists(__NAMESPACE__.'\action_link')) {
+if ( ! function_exists('arcanesoft\ui\action_link')) {
     /**
      * Generate action link.
      *
@@ -20,7 +20,7 @@ if ( ! function_exists(__NAMESPACE__.'\action_link')) {
     }
 }
 
-if ( ! function_exists(__NAMESPACE__.'\action_link_icon')) {
+if ( ! function_exists('arcanesoft\ui\action_link_icon')) {
     /**
      * Generate action link with icon only.
      *
@@ -34,7 +34,7 @@ if ( ! function_exists(__NAMESPACE__.'\action_link_icon')) {
     }
 }
 
-if ( ! function_exists(__NAMESPACE__.'\action_button')) {
+if ( ! function_exists('arcanesoft\ui\action_button')) {
     /**
      * Generate action button.
      *
@@ -47,7 +47,7 @@ if ( ! function_exists(__NAMESPACE__.'\action_button')) {
     }
 }
 
-if ( ! function_exists(__NAMESPACE__.'\action_button_icon')) {
+if ( ! function_exists('arcanesoft\ui\action_button_icon')) {
     /**
      * Generate action button with icon only.
      *
@@ -60,7 +60,7 @@ if ( ! function_exists(__NAMESPACE__.'\action_button_icon')) {
     }
 }
 
-if ( ! function_exists(__NAMESPACE__.'\count_pill')) {
+if ( ! function_exists('arcanesoft\ui\count_pill')) {
     /**
      * Generate count pill.
      *

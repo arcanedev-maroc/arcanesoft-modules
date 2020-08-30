@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth;
 
+use Arcanesoft\Foundation\Auth\Entities\SocialiteProvider;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Collection;
 use Laravel\Socialite\Contracts\Provider;
 use Laravel\Socialite\Facades\Socialite as LaravelSocialite;
 
@@ -22,13 +24,29 @@ class Socialite
      */
 
     /**
+     * Get the supported providers.
+     *
+     * @return \Illuminate\Support\Collection|\Arcanesoft\Foundation\Auth\Entities\SocialiteProvider[]
+     */
+    public static function getProviders(): Collection
+    {
+        $providers = Auth::config('authentication.socialite.providers', []);
+
+        return Collection::make($providers)->transform(function (array $provider, string $key) {
+            return new SocialiteProvider(array_merge($provider, ['type' => $key]));
+        });
+    }
+
+    /**
      * Get the accepted socialite providers.
      *
-     * @return array
+     * @return \Illuminate\Support\Collection|\Arcanesoft\Foundation\Auth\Entities\SocialiteProvider[]
      */
-    public static function getAcceptedProviders(): array
+    public static function getEnabledProviders(): Collection
     {
-        return Auth::config('authentication.socialite.drivers', []);
+        return static::getProviders()->filter(function (SocialiteProvider $provider) {
+            return $provider->enabled ?? false;
+        });
     }
 
     /**
@@ -104,8 +122,21 @@ class Socialite
      *
      * @return bool
      */
-    public static function isAcceptedProvider(string $provider): bool
+    public static function isProviderEnabled(string $provider): bool
     {
-        return in_array($provider, static::getAcceptedProviders(), true);
+        return static::getEnabledProviders()->has($provider);
+    }
+
+    /**
+     * Get a social provider.
+     *
+     * @param  string      $provider
+     * @param  mixed|null  $default
+     *
+     * @return \Arcanesoft\Foundation\Auth\Entities\SocialiteProvider|mixed|null
+     */
+    public static function getProvider(string $provider, $default = null)
+    {
+        return static::getProviders()->get($provider, $default);
     }
 }

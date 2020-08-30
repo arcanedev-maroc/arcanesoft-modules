@@ -19,13 +19,32 @@ return [
         ],
 
         'socialite' => [
-            'enabled' => false,
+            'enabled'   => true,
 
-            'drivers' => [
-                'facebook',
-                'github',
-                'google',
-                'twitter',
+            'providers' => [
+                'facebook' => [
+                    'name'    => 'Facebook',
+                    'icon'    => 'fab fa-fw fa-facebook',
+                    'enabled' => true,
+                ],
+
+                'google' => [
+                    'name'    => 'Google',
+                    'icon'    => 'fab fa-fw fa-google',
+                    'enabled' => true,
+                ],
+
+                'twitter' => [
+                    'name'    => 'Twitter',
+                    'icon'    => 'fab fa-fw fa-twitter',
+                    'enabled' => true,
+                ],
+
+                'github' => [
+                    'name'    => 'GitHub',
+                    'icon'    => 'fab fa-fw fa-github',
+                    'enabled' => true,
+                ],
             ],
         ],
     ],
@@ -54,10 +73,11 @@ return [
             'permissions'         => 'permissions',
             'permissions-groups'  => 'permissions_groups',
             'password-resets'     => 'password_resets',
-            'socialite-providers' => 'socialite_providers',
             'throttles'           => 'throttles',
             'administrator-role'  => 'administrator_role',
             'permission-role'     => 'permission_role',
+            'sessions'            => 'sessions',
+            'socialite-providers' => 'socialite_providers',
         ],
 
          // Models
@@ -70,6 +90,7 @@ return [
             'permission'         => Arcanesoft\Foundation\Auth\Models\Permission::class,
             'permissions-group'  => Arcanesoft\Foundation\Auth\Models\PermissionsGroup::class,
             'password-resets'    => Arcanesoft\Foundation\Auth\Models\PasswordReset::class,
+            'session'            => Arcanesoft\Foundation\Auth\Models\Session::class,
             'socialite-provider' => Arcanesoft\Foundation\Auth\Models\SocialiteProvider::class,
         ],
 

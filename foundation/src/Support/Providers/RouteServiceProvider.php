@@ -15,18 +15,6 @@ use Arcanedev\Support\Providers\RouteServiceProvider as ServiceProvider;
 abstract class RouteServiceProvider extends ServiceProvider
 {
     /* -----------------------------------------------------------------
-     |  Properties
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * The routes list.
-     *
-     * @var array
-     */
-    protected $routeClasses = [];
-
-    /* -----------------------------------------------------------------
      |  Getters
      | -----------------------------------------------------------------
      */
@@ -38,7 +26,9 @@ abstract class RouteServiceProvider extends ServiceProvider
      */
     public function routeClasses(): array
     {
-        return $this->routeClasses;
+        return [
+            //
+        ];
     }
 
     /* -----------------------------------------------------------------
@@ -51,18 +41,12 @@ abstract class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        parent::boot();
+        $routes = $this->routeClasses();
 
-        static::bindRouteClasses($this->routeClasses());
-    }
+        static::bindRouteClasses($routes);
 
-    /**
-     * Define the routes for the application.
-     */
-    public function map(): void
-    {
-        static::mapRouteClasses($this->routeClasses());
-
-        //
+        $this->routes(function () use ($routes) {
+            static::mapRouteClasses($routes);
+        });
     }
 }

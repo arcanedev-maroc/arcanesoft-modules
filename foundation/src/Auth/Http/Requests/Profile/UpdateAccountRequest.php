@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Http\Requests\Profile;
 
+use Arcanesoft\Foundation\Auth\Auth;
 use Arcanesoft\Foundation\Auth\Http\Requests\FormRequest;
 use Arcanesoft\Foundation\Auth\Rules\Users\EmailRule;
 
@@ -30,21 +31,7 @@ class UpdateAccountRequest extends FormRequest
         return [
             'first_name' => ['required', 'string', 'max:50'],
             'last_name'  => ['required', 'string', 'max:50'],
-            'email'      => ['required', 'string', 'email', 'max:255', EmailRule::unique()->ignore($this->user()->id)],
+            'email'      => ['required', 'string', 'email', 'max:255', EmailRule::unique()->ignore($this->user(Auth::GUARD_NAME)->id)],
         ];
-    }
-
-    /**
-     * Get the validated data.
-     *
-     * @return array
-     */
-    public function getValidatedData(): array
-    {
-        return $this->all([
-            'first_name',
-            'last_name',
-            'email',
-        ]);
     }
 }

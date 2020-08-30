@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Core\Providers;
 
-use Arcanesoft\Foundation\Auth\Auth;
 use Arcanesoft\Foundation\Core\Http\Routes;
 use Arcanesoft\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -17,20 +16,23 @@ use Arcanesoft\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 class RouteServiceProvider extends ServiceProvider
 {
     /* -----------------------------------------------------------------
-     |  Properties
+     |  Main Methods
      | -----------------------------------------------------------------
      */
 
     /**
-     * The routes list.
+     * Get the registered routes.
      *
-     * @var array
+     * @return array
      */
-    protected $routeClasses = [
-        Routes\DashboardRoutes::class,
-        Routes\MetricsRoutes::class,
-        Routes\ApiRoutes::class,
-    ];
+    public function routeClasses(): array
+    {
+        return [
+            Routes\DashboardRoutes::class,
+            Routes\MetricsRoutes::class,
+            Routes\ApiRoutes::class,
+        ];
+    }
 
     /**
      * @inheritDoc
@@ -49,7 +51,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     private function registerMiddleware($router)
     {
-        $config = (array) config('arcanesoft.foundation.http.middleware');
+        $config = (array) $this->app['config']['arcanesoft.foundation.http.middleware'];
 
         foreach ($config as $group => $middleware) {
             if (is_array($middleware))
