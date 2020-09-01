@@ -20,7 +20,8 @@ class Auth
      | -----------------------------------------------------------------
      */
 
-    const GUARD_NAME = 'administrator';
+    const GUARD_WEB_ADMINISTRATOR = 'administrator';
+    const GUARD_WEB_USER          = 'web';
 
     /* -----------------------------------------------------------------
      |  Properties
@@ -59,7 +60,7 @@ class Auth
      */
     public static function admin(): Administrator
     {
-        return auth(static::GUARD_NAME)->user();
+        return auth(static::GUARD_WEB_ADMINISTRATOR)->user();
     }
 
     /**

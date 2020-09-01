@@ -13,7 +13,7 @@ use Arcanesoft\Foundation\Auth\Events\Users\{
     RestoringUser, RetrievedUser, SavedUser, SavingUser, UpdatedUser, UpdatingUser
 };
 use Arcanesoft\Foundation\Auth\Models\Concerns\{
-    Activatable, CanResetPassword, CanVerifyEmail, HasLinkedAccounts, HasPassword
+    Activatable, CanResetPassword, CanVerifyEmail, HasLinkedAccounts, HasPassword, HasSessions
 };
 use Arcanesoft\Foundation\Auth\Models\Presenters\UserPresenter;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -54,6 +54,7 @@ class User extends Authenticatable implements Impersonatable, MustVerifyEmail, C
 
     use UserPresenter,
         HasPassword,
+        HasSessions,
         Notifiable,
         Activatable,
         CanImpersonate,
@@ -173,6 +174,16 @@ class User extends Authenticatable implements Impersonatable, MustVerifyEmail, C
         return 'uuid';
     }
 
+    /**
+     * Get the guard's name.
+     *
+     * @return string
+     */
+    public static function guardName(): string
+    {
+        return Auth::GUARD_WEB_USER;
+    }
+
     /* -----------------------------------------------------------------
      |  Check Methods
      | -----------------------------------------------------------------
@@ -183,7 +194,7 @@ class User extends Authenticatable implements Impersonatable, MustVerifyEmail, C
      *
      * @return bool
      */
-    public function isDeletable()
+    public function isDeletable(): bool
     {
         return true;
     }
@@ -193,7 +204,7 @@ class User extends Authenticatable implements Impersonatable, MustVerifyEmail, C
      *
      * @return bool
      */
-    public function isNotDeletable()
+    public function isNotDeletable(): bool
     {
         return ! $this->isDeletable();
     }

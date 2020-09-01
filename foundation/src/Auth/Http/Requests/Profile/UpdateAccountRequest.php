@@ -31,7 +31,7 @@ class UpdateAccountRequest extends FormRequest
         return [
             'first_name' => ['required', 'string', 'max:50'],
             'last_name'  => ['required', 'string', 'max:50'],
-            'email'      => ['required', 'string', 'email', 'max:255', EmailRule::unique()->ignore($this->user(Auth::GUARD_NAME)->id)],
+            'email'      => ['required', 'string', 'email', 'max:255', EmailRule::unique()->ignore($this->user(Auth::GUARD_WEB_ADMINISTRATOR)->id)],
         ];
     }
 }

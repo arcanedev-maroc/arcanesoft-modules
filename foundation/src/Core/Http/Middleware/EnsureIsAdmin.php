@@ -59,7 +59,7 @@ class EnsureIsAdmin
      */
     public function handle($request, Closure $next)
     {
-        $user = $this->auth->guard(Auth::GUARD_NAME)->user();
+        $user = $this->auth->guard(Auth::GUARD_WEB_ADMINISTRATOR)->user();
 
         abort_unless($this->isAdministrator($user), 403);
 

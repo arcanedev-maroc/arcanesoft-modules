@@ -12,11 +12,13 @@ use Illuminate\Support\{HtmlString, Str};
  * @package  Arcanesoft\Foundation\Auth\Models\Presenters
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  *
- * @property-read  string                          display_name
- * @property-read  string                          full_name
- * @property-read  string                          masked_email
- * @property-read  string                          avatar
- * @property-read  \Illuminate\Support\HtmlString  avatar_img
+ * @property-read  string                           display_name
+ * @property-read  string                           full_name
+ * @property-read  string                           masked_email
+ * @property-read  string                           avatar
+ * @property-read  \Illuminate\Support\HtmlString   avatar_img
+ * @property-read  \Illuminate\Support\Carbon|null  last_activity_at
+ * @property-read  string                           last_activity
  */
 trait AuthenticatablePresenter
 {
@@ -133,9 +135,10 @@ trait AuthenticatablePresenter
      */
     public function getLastActivityAttribute(): string
     {
-        return is_null($this->last_activity_at)
-            ? 'NULL'
-            : $this->last_activity_at->diffForHumans();
+        if (is_null($this->last_activity_at))
+            return __('No recent activity');
+
+        return $this->last_activity_at->diffForHumans();
     }
 
     /* -----------------------------------------------------------------

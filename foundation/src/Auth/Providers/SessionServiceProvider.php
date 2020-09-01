@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Providers;
 
 use Arcanesoft\Foundation\Auth\Auth;
-use Arcanesoft\Foundation\Auth\Session\ArcanesoftSessionHandler;
-use Illuminate\Session\DatabaseSessionHandler;
+use Arcanesoft\Foundation\Auth\Repositories\SessionsRepository;
+use Arcanesoft\Foundation\Auth\Session\DatabaseSessionHandler;
+use Illuminate\Contracts\Container\Container;
+use Illuminate\Session\SessionManager;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -27,15 +29,23 @@ class SessionServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        /** @var  \Illuminate\Session\SessionManager  $session */
-        $session = $this->app['session'];
+        $this->registerCustomSessionHandler($this->app['session']);
+    }
 
-        $session->extend('arcanesoft', function ($app) {
-            $model = Auth::makeModel('session');
+    /* -----------------------------------------------------------------
+     |  Other Methods
+     | -----------------------------------------------------------------
+     */
 
-            $lifetime = $app['config']['session.lifetime'];
-
-            return new ArcanesoftSessionHandler($model->getConnection(), $model->getTable(), $lifetime, $app);
+    /**
+     * Register a custom session handler.
+     *
+     * @param  \Illuminate\Session\SessionManager  $session
+     */
+    protected function registerCustomSessionHandler(SessionManager $session): void
+    {
+        $session->extend('arcanesoft', function (Container $app) {
+            return new DatabaseSessionHandler($app, $app->make(SessionsRepository::class));
         });
     }
 }

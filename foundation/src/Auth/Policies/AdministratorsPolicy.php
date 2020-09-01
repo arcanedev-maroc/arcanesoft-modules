@@ -42,63 +42,63 @@ class AdministratorsPolicy extends AbstractPolicy
     public function abilities(): iterable
     {
         $this->setMetas([
-            'category' => 'Admins',
+            'category' => 'Administrators',
         ]);
 
         return [
 
             // admin::auth.administrators.index
             $this->makeAbility('index')->setMetas([
-                'name'        => 'List all the admins',
-                'description' => 'Ability to list all the admins'
+                'name'        => 'List all the administrators',
+                'description' => 'Ability to list all the administrators',
             ]),
 
             // admin::auth.administrators.metrics
             $this->makeAbility('metrics')->setMetas([
                 'name'        => 'Show the metrics',
-                'description' => 'Ability to show the administrator\'s metrics',
+                'description' => "Ability to show the administrator's metrics",
             ]),
 
             // admin::auth.administrators.show
             $this->makeAbility('show')->setMetas([
-                'name'        => 'Show an admin',
-                'description' => 'Ability to show the admin\'s details',
+                'name'        => 'Show an administrator',
+                'description' => "Ability to show the administrator's details",
             ]),
 
             // admin::auth.administrators.create
             $this->makeAbility('create')->setMetas([
-                'name'        => 'Create a new admin',
-                'description' => 'Ability to create a new admin',
+                'name'        => 'Create a new administrator',
+                'description' => 'Ability to create a new administrator',
             ]),
 
             // admin::auth.administrators.update
             $this->makeAbility('update')->setMetas([
-                'name'        => 'Update a admin',
-                'description' => 'Ability to update a admin',
+                'name'        => 'Update a administrator',
+                'description' => 'Ability to update a administrator',
             ]),
 
             // admin::auth.administrators.activate
             $this->makeAbility('activate')->setMetas([
-                'name'        => 'Activate/Deactivate a admin',
-                'description' => 'Ability to activate/deactivate a admin',
+                'name'        => 'Activate/Deactivate a administrator',
+                'description' => 'Ability to activate/deactivate a administrator',
             ]),
 
             // admin::auth.administrators.delete
             $this->makeAbility('delete')->setMetas([
-                'name'        => 'Delete a admin',
-                'description' => 'Ability to delete a admin',
+                'name'        => 'Delete a administrator',
+                'description' => 'Ability to delete a administrator',
             ]),
 
             // admin::auth.administrators.force-delete
             $this->makeAbility('force-delete')->setMetas([
-                'name'        => 'Force Delete a admin',
-                'description' => 'Ability to force delete a admin',
+                'name'        => 'Force Delete a administrator',
+                'description' => 'Ability to force delete a administrator',
             ]),
 
             // admin::auth.administrators.restore
             $this->makeAbility('restore')->setMetas([
-                'name'        => 'Restore a admin',
-                'description' => 'Ability to restore a admin',
+                'name'        => 'Restore a administrator',
+                'description' => 'Ability to restore a administrator',
             ]),
         ];
     }
@@ -109,7 +109,7 @@ class AdministratorsPolicy extends AbstractPolicy
      */
 
     /**
-     * Allow to list all the admins.
+     * Allow to list all the administrators.
      *
      * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
@@ -121,7 +121,7 @@ class AdministratorsPolicy extends AbstractPolicy
     }
 
     /**
-     * Allow to list all the admins' metrics.
+     * Allow to list all the administrators' metrics.
      *
      * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
@@ -133,7 +133,7 @@ class AdministratorsPolicy extends AbstractPolicy
     }
 
     /**
-     * Allow to show a admin details.
+     * Allow to show a administrator details.
      *
      * @param \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      * @param \Arcanesoft\Foundation\Auth\Models\Administrator|null   $model
@@ -147,7 +147,7 @@ class AdministratorsPolicy extends AbstractPolicy
     }
 
     /**
-     * Allow to create a admin.
+     * Allow to create a administrator.
      *
      * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
@@ -159,7 +159,7 @@ class AdministratorsPolicy extends AbstractPolicy
     }
 
     /**
-     * Allow to update a admin.
+     * Allow to update a administrator.
      *
      * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|null   $model
@@ -172,7 +172,7 @@ class AdministratorsPolicy extends AbstractPolicy
     }
 
     /**
-     * Allow to update a admin.
+     * Allow to update a administrator.
      *
      * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|null   $model
@@ -189,7 +189,7 @@ class AdministratorsPolicy extends AbstractPolicy
     }
 
     /**
-     * Allow to delete a admin.
+     * Allow to delete a administrator.
      *
      * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|null   $model
@@ -206,7 +206,7 @@ class AdministratorsPolicy extends AbstractPolicy
     }
 
     /**
-     * Allow to force delete a admin.
+     * Allow to force delete a administrator.
      *
      * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|null   $model
@@ -220,7 +220,7 @@ class AdministratorsPolicy extends AbstractPolicy
     }
 
     /**
-     * Allow to restore a admin.
+     * Allow to restore a administrator.
      *
      * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|null   $model

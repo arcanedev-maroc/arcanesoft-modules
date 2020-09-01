@@ -17,15 +17,15 @@ return [
 
             'seeders' => [
                 // Foundation
-                Arcanesoft\Foundation\Core\Seeders\DatabaseSeeder::class,
-                Arcanesoft\Foundation\Auth\Seeders\DatabaseSeeder::class,
-                Arcanesoft\Foundation\System\Seeders\DatabaseSeeder::class,
+                Arcanesoft\Foundation\Core\Database\DatabaseSeeder::class,
+                Arcanesoft\Foundation\Auth\Database\DatabaseSeeder::class,
+                Arcanesoft\Foundation\System\Database\DatabaseSeeder::class,
 
                 // External
-                Arcanesoft\Blog\Seeders\DatabaseSeeder::class,
-                Arcanesoft\Backups\Seeders\DatabaseSeeder::class,
-                Arcanesoft\Media\Seeders\DatabaseSeeder::class,
-//                Arcanesoft\Passport\Seeders\DatabaseSeeder::class,
+                Arcanesoft\Blog\Database\DatabaseSeeder::class,
+                Arcanesoft\Backups\Database\DatabaseSeeder::class,
+                Arcanesoft\Media\Database\DatabaseSeeder::class,
+                Arcanesoft\Passport\Database\DatabaseSeeder::class,
             ],
 
         ],

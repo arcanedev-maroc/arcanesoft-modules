@@ -20,7 +20,7 @@ class AdministratorsRoutes extends AbstractRouteRegistrar
      | -----------------------------------------------------------------
      */
 
-    const ADMIN_WILDCARD = 'admin_auth_administrator';
+    const WILDCARD_ADMIN = 'admin_auth_administrator';
 
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -54,7 +54,7 @@ class AdministratorsRoutes extends AbstractRouteRegistrar
                 $this->post('store', [AdministratorsController::class, 'store'])
                      ->name('store');
 
-                $this->prefix('{'.static::ADMIN_WILDCARD.'}')->group(function () {
+                $this->prefix('{'.static::WILDCARD_ADMIN.'}')->group(function () {
                     // admin::auth.administrators.show
                     $this->get('/', [AdministratorsController::class, 'show'])
                          ->name('show');
@@ -81,6 +81,10 @@ class AdministratorsRoutes extends AbstractRouteRegistrar
                     $this->put('restore', [AdministratorsController::class, 'restore'])
                          ->middleware(['ajax'])
                          ->name('restore');
+
+                    static::mapRouteClasses([
+                        Administrators\SessionsRoutes::class
+                    ]);
                 });
             });
         });
@@ -93,8 +97,12 @@ class AdministratorsRoutes extends AbstractRouteRegistrar
      */
     public function bindings(AdministratorsRepository $repo): void
     {
-        $this->bind(static::ADMIN_WILDCARD, function (string $uuid) use ($repo) {
+        $this->bind(static::WILDCARD_ADMIN, function (string $uuid) use ($repo) {
             return $repo->firstWhereUuidOrFail($uuid);
         });
+
+        static::bindRouteClasses([
+            Administrators\SessionsRoutes::class
+        ]);
     }
 }

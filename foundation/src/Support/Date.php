@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Foundation\Support;
 
 /**
@@ -10,17 +12,23 @@ namespace Arcanesoft\Foundation\Support;
  */
 class Date
 {
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
+     */
+
     /**
      * @param  string|int  $year
+     * @param  string      $separator
      *
      * @return string
      */
-    public static function since($year): string
+    public static function since($year, string $separator = ' - '): string
     {
         $current = now();
 
         return $current->year > (int) $year
-            ? $year.' - '.$current->year
+            ? $year.$separator.$current->year
             : $year;
     }
 }

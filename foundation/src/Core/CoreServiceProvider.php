@@ -38,7 +38,7 @@ class CoreServiceProvider extends ServiceProvider
 
         $this->registerCommands([
             Console\PublishCommand::class,
-            Console\SetupCommand::class,
+            Console\InstallCommand::class,
         ]);
 
         $this->extendMetricsAuthorization();

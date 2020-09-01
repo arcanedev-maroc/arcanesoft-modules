@@ -8,12 +8,12 @@
             <td class="text-monospace text-muted small">{{ $extension }}</td>
             <td class="text-right">
                 @if ($loaded)
-                    <span class="badge badge-outline-success">
-                        <i class="fas fa-fw fa-check text-success"></i>
+                    <span class="badge border border-success text-success">
+                        <i class="fas fa-fw fa-check"></i>
                     </span>
                 @else
-                    <span class="badge badge-outline-danger">
-                        <i class="fas fa-fw fa-times text-danger"></i>
+                    <span class="badge border border-danger text-danger">
+                        <i class="fas fa-fw fa-times"></i>
                     </span>
                 @endif
             </td>

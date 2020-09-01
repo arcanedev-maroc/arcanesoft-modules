@@ -23,39 +23,33 @@
                         <tr>
                             <td class="font-weight-light text-uppercase text-muted">@lang('Status')</td>
                             <td class="text-right">
-                                <span class="badge badge-outline-danger">
+                                <span class="badge border border-danger text-muted">
                                     <i class="fas fa-fw fa-exclamation-triangle text-danger"></i> @lang('Enabled')
                                 </span>
                             </td>
                         </tr>
                         <tr>
                             <td class="font-weight-light text-uppercase text-muted">@lang('Time')</td>
-                            <td class="text-right">
-                                <small>{{ $maintenanceData['time'] }}</small>
-                            </td>
+                            <td class="text-right small">{{ $maintenanceData['time'] ?? 'null' }}</td>
                         </tr>
                         <tr>
                             <td class="font-weight-light text-uppercase text-muted">@lang('Message')</td>
-                            <td class="text-right">
-                                <small>{{ $maintenanceData['message'] ?? 'null' }}</small>
-                            </td>
+                            <td class="text-right small">{{ $maintenanceData['message'] ?? 'null' }}</td>
                         </tr>
                         <tr>
                             <td class="font-weight-light text-uppercase text-muted">@lang('Allowed')</td>
                             <td class="text-right">
-                                @forelse($maintenanceData['allowed'] as $allowed)
-                                    <span class="badge badge-outline-secondary">{{ $allowed }}</span>
-                                @empty
-                                    <span class="badge badge-outline-warning">@lang('No one is allowed')</span>
-                                @endforelse
+{{--                                @forelse($maintenanceData['allowed'] as $allowed)--}}
+{{--                                    <span class="badge border border-secondary">{{ $allowed }}</span>--}}
+{{--                                @empty--}}
+{{--                                    <span class="badge border border-warning">@lang('No one is allowed')</span>--}}
+{{--                                @endforelse--}}
                             </td>
                         </tr>
                         @if ($maintenanceData['retry'])
                         <tr>
                             <td class="font-weight-light text-uppercase text-muted">@lang('Retry')</td>
-                            <td class="text-right">
-                                {{ $maintenanceData['retry'] }}
-                            </td>
+                            <td class="text-right">{{ $maintenanceData['retry'] }}</td>
                         </tr>
                         @endif
                     </table>
@@ -75,7 +69,7 @@
                         <tr>
                             <td class="font-weight-light text-uppercase text-muted">@lang('Status')</td>
                             <td class="text-right">
-                                <span class="badge badge-outline-success">@lang('Disabled')</span>
+                                <span class="badge border border-success text-muted">@lang('Disabled')</span>
                             </td>
                         </tr>
                     </table>

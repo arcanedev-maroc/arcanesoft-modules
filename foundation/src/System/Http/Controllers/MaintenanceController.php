@@ -58,9 +58,9 @@ class MaintenanceController extends Controller
         $this->authorize(MaintenancePolicy::ability('toggle'));
 
         $this->maintenance->down(
-            $request->get('ips'),
-            $request->get('message'),
-            $request->get('retry')
+            $request->get('redirect'),
+            $request->get('retry'),
+            $request->get('secret')
         );
 
         // TODO: Add notification

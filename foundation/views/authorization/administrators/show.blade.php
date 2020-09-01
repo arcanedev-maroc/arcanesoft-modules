@@ -141,36 +141,76 @@
             </div>
         </div>
         <div class="col-lg-7">
-            <div class="card card-borderless shadow-sm">
-                <div class="card-header px-2">@lang('Roles')</div>
-                <table class="table table-borderless table-hover table-md mb-0">
-                    <thead>
-                        <tr>
-                            <th class="font-weight-light text-uppercase text-muted">@lang('Name')</th>
-                            <th class="font-weight-light text-uppercase text-muted">@lang('Description')</th>
-                            <th class="font-weight-light text-uppercase text-muted text-right">@lang('Actions')</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($administrator->roles as $role)
-                            <?php /** @var  Arcanesoft\Foundation\Auth\Models\Role  $role */ ?>
+            <div class="row g-4">
+                {{-- ROLES --}}
+                <div class="col-12">
+                    <div class="card card-borderless shadow-sm">
+                        <div class="card-header px-2">@lang('Roles')</div>
+                        <table class="table table-borderless table-hover table-md mb-0">
+                            <thead>
                             <tr>
-                                <td class="small">{{ $role->name }}</td>
-                                <td class="small">{{ $role->description }}</td>
-                                <td class="text-right">
-                                    <a href="{{ route('admin::auth.roles.show', [$role]) }}" class="btn btn-sm btn-light"
-                                       data-toggle="tooltip" title="@lang('Show')">
-                                        <i class="far fa-fw fa-eye"></i>
-                                    </a>
-                                </td>
+                                <th class="font-weight-light text-uppercase text-muted">@lang('Name')</th>
+                                <th class="font-weight-light text-uppercase text-muted">@lang('Description')</th>
+                                <th class="font-weight-light text-uppercase text-muted text-right">@lang('Actions')</th>
                             </tr>
-                        @empty
+                            </thead>
+                            <tbody>
+                            @forelse($administrator->roles as $role)
+                                <?php /** @var  Arcanesoft\Foundation\Auth\Models\Role  $role */ ?>
+                                <tr>
+                                    <td class="small">{{ $role->name }}</td>
+                                    <td class="small">{{ $role->description }}</td>
+                                    <td class="text-right">
+                                        <a href="{{ route('admin::auth.roles.show', [$role]) }}" class="btn btn-sm btn-light"
+                                           data-toggle="tooltip" title="@lang('Show')">
+                                            <i class="far fa-fw fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="3" class="text-center">@lang('The list is empty !')</td>
+                                </tr>
+                            @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {{-- SESSION --}}
+                <div class="col-12">
+                    <div class="card card-borderless shadow-sm">
+                        <div class="card-header px-2">@lang('Sessions')</div>
+                        <table class="table table-borderless table-hover table-md mb-0">
+                            <thead>
                             <tr>
-                                <td colspan="3" class="text-center">@lang('The list is empty !')</td>
+                                <th></th>
+                                <th class="font-weight-light text-uppercase text-muted">@lang('IP')</th>
+                                <th class="font-weight-light text-uppercase text-muted">@lang('Device')</th>
+                                <th class="font-weight-light text-uppercase text-muted">@lang('Last activity')</th>
+                                <th class="font-weight-light text-uppercase text-muted text-right">@lang('Actions')</th>
                             </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                            </thead>
+                            <tbody>
+                            @foreach($administrator->sessions as $session)
+                                <tr>
+                                    <td>
+                                        {{ $session->device_icon }}
+                                        @if ($session->isCurrent())
+                                            <span class="status bg-success status-animated"
+                                                  title="@lang('Your current session')" data-toggle="tooltip"></span>
+                                        @endif
+                                    </td>
+                                    <td class="small">{{ $session->ip_address }}</td>
+                                    <td class="small">@lang(':client on :os', ['client' => $session->client_name, 'os' => $session->os_name])</td>
+                                    <td class="small">{{ $session->last_activity_at->diffForHumans() }}</td>
+                                    <td></td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

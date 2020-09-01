@@ -55,7 +55,7 @@ class EnsureIsAuthenticated implements AuthenticatesRequests
      */
     protected function isAuthenticated()
     {
-        $guard = \Arcanesoft\Foundation\Auth\Auth::GUARD_NAME;
+        $guard = \Arcanesoft\Foundation\Auth\Auth::GUARD_WEB_ADMINISTRATOR;
 
         abort_unless($this->auth->guard($guard)->check(), 404);
 

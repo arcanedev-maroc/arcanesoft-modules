@@ -13,7 +13,7 @@ use Arcanesoft\Foundation\Auth\Events\Administrators\{CreatedAdministrator,
     RestoredAdministrator, RestoringAdministrator, RetrievedAdministrator, SavedAdministrator, SavingAdministrator,
     UpdatedAdministrator, UpdatingAdministrator
 };
-use Arcanesoft\Foundation\Auth\Models\Concerns\{Activatable, CanResetPassword, HasPassword, HasRoles};
+use Arcanesoft\Foundation\Auth\Models\Concerns\{Activatable, CanResetPassword, HasPassword, HasRoles, HasSessions};
 use Arcanesoft\Foundation\Auth\Models\Presenters\UserPresenter;
 use Arcanesoft\Foundation\Support\Traits\Deletable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -57,6 +57,7 @@ class Administrator extends Authenticatable implements Impersonatable, CanBeActi
         CanImpersonate,
         CanResetPassword,
         HasRoles,
+        HasSessions,
         Notifiable,
         Activatable,
         SoftDeletes,
@@ -187,6 +188,16 @@ class Administrator extends Authenticatable implements Impersonatable, CanBeActi
     public function getRouteKeyName(): string
     {
         return 'uuid';
+    }
+
+    /**
+     * Get the guard's name.
+     *
+     * @return string
+     */
+    public static function guardName(): string
+    {
+        return Auth::GUARD_WEB_ADMINISTRATOR;
     }
 
     /* -----------------------------------------------------------------

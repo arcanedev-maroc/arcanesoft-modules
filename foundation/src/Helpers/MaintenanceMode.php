@@ -1,7 +1,8 @@
-<?php namespace Arcanesoft\Foundation\Helpers;
+<?php
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Support\Facades\Date;
+declare(strict_types=1);
+
+namespace Arcanesoft\Foundation\Helpers;
 
 /**
  * Class     MaintenanceMode
@@ -12,41 +13,28 @@ use Illuminate\Support\Facades\Date;
 class MaintenanceMode
 {
     /* -----------------------------------------------------------------
-     |  Properties
-     | -----------------------------------------------------------------
-     */
-
-    /** @var  \Illuminate\Contracts\Foundation\Application */
-    protected $app;
-
-    /* -----------------------------------------------------------------
-     |  Constructor
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * MaintenanceMode constructor.
-     *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
-     */
-    public function __construct(Application $app)
-    {
-        $this->app = $app;
-    }
-
-    /* -----------------------------------------------------------------
      |  Getters
      | -----------------------------------------------------------------
      */
 
     /**
-     * Get the file path.
+     * Get the down file path.
      *
      * @return string
      */
-    public function path(): string
+    public function getDownPath(): string
     {
         return storage_path('framework/down');
+    }
+
+    /**
+     * Get the maintenance file path.
+     *
+     * @return string
+     */
+    private function getMaintenancePath(): string
+    {
+        return storage_path('framework/maintenance.php');
     }
 
     /* -----------------------------------------------------------------
@@ -61,37 +49,41 @@ class MaintenanceMode
      */
     public function data(): array
     {
-        $data = [];
-
-        if ($this->isEnabled()) {
-            $data = json_decode(file_get_contents($this->path()), true);
-
-            if ($data['time'])
-                $data['time'] = Date::createFromTimestamp($data['time']);
+        if ($this->isDisabled()) {
+            return [];
         }
 
-        return $data;
+        return json_decode(file_get_contents($this->getDownPath()), true);
     }
 
     /**
      * Enabled the maintenance mode.
      *
-     * @param  array        $allowed
-     * @param  string|null  $message
+     * @param  string|null  $redirect
      * @param  int|null     $retry
+     * @param  string|null  $secret
+     * @param  string|null  $template
      */
-    public function down(array $allowed, string $message = null, $retry = null)
+    public function down(string $redirect = null, $retry = null, string $secret = null, $template = null)
     {
         $payload = [
-            'time'    => Date::now()->getTimestamp(),
-            'message' => $message,
-            'retry'   => is_numeric($retry) && $retry > 0 ? (int) $retry : null,
-            'allowed' => $allowed,
+            'redirect' => $this->redirectPath($redirect),
+            'retry'    => $this->getRetryTime($retry),
+            'secret'   => $secret,
+            'status'   => 503,
+            'template' => $template,
         ];
 
         file_put_contents(
-            storage_path('framework/down'),
+            $this->getDownPath(),
             json_encode($payload, JSON_PRETTY_PRINT)
+        );
+
+        file_put_contents(
+            $this->getMaintenancePath(),
+            file_get_contents(
+                base_path('vendor/laravel/framework/src/Illuminate/Foundation/Console/stubs/maintenance-mode.stub')
+            )
         );
     }
 
@@ -100,7 +92,8 @@ class MaintenanceMode
      */
     public function up()
     {
-        @unlink($this->path());
+        @unlink($this->getDownPath());
+        @unlink($this->getMaintenancePath());
     }
 
     /**
@@ -110,7 +103,7 @@ class MaintenanceMode
      */
     public function isEnabled(): bool
     {
-        return $this->app->isDownForMaintenance();
+        return is_file($this->getDownPath());
     }
 
     /**
@@ -121,5 +114,36 @@ class MaintenanceMode
     public function isDisabled()
     {
         return ! $this->isEnabled();
+    }
+
+    /**
+     * Get the number of seconds the client should wait before retrying their request.
+     *
+     * @param  int|string  $retry
+     *
+     * @return int|null
+     */
+    protected function getRetryTime($retry)
+    {
+        if (is_numeric($retry) && $retry > 0)
+            return (int) $retry;
+
+        return null;
+    }
+
+    /**
+     * Get the path that users should be redirected to.
+     *
+     * @param  string|null  $redirect
+     *
+     * @return string|null
+     */
+    protected function redirectPath($redirect)
+    {
+        if ($redirect && $redirect !== '/') {
+            return '/'.trim($redirect, '/');
+        }
+
+        return $redirect;
     }
 }

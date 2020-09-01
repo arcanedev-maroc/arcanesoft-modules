@@ -5,23 +5,96 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Models;
 
 use Arcanesoft\Foundation\Auth\Auth;
+use Arcanesoft\Foundation\Auth\Events\Sessions\{CreatedSession,
+    CreatingSession, DeletedSession, DeletingSession, RetrievedSession, SavedSession, SavingSession,
+    UpdatedSession, UpdatingSession
+};
+use Arcanesoft\Foundation\Auth\Models\Presenters\SessionPresenter;
 
 /**
  * Class     Session
  *
  * @package  Arcanesoft\Foundation\Auth\Models
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
+ *
+ * @property  string                      id
+ * @property  int                         user_id
+ * @property  string                      guard
+ * @property  string                      ip_address
+ * @property  string                      user_agent
+ * @property  string                      payload
+ * @property  \Illuminate\Support\Carbon  created_at
+ * @property  int                         last_activity
  */
 class Session extends Model
 {
-    protected $guarded = [];
+    /* -----------------------------------------------------------------
+     |  Traits
+     | -----------------------------------------------------------------
+     */
 
-    protected $casts = [
-        'id'            => 'string',
-        'last_activity' => 'datetime',
+    use SessionPresenter;
+
+    /* -----------------------------------------------------------------
+     |  Constants
+     | -----------------------------------------------------------------
+     */
+
+    const UPDATED_AT = null;
+
+    /* -----------------------------------------------------------------
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'id',
+        'user_id',
+        'guard',
+        'ip_address',
+        'user_agent',
+        'payload',
+        'last_activity',
     ];
 
-    public $timestamps = false;
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id'            => 'string',
+        'last_activity' => 'int',
+    ];
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
+     * The event map for the model.
+     *
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'retrieved' => RetrievedSession::class,
+        'creating'  => CreatingSession::class,
+        'created'   => CreatedSession::class,
+        'updating'  => UpdatingSession::class,
+        'updated'   => UpdatedSession::class,
+        'saving'    => SavingSession::class,
+        'saved'     => SavedSession::class,
+        'deleting'  => DeletingSession::class,
+        'deleted'   => DeletedSession::class,
+    ];
 
     /* -----------------------------------------------------------------
      |  Constructor
@@ -39,5 +112,53 @@ class Session extends Model
         $this->setTable(Auth::table('sessions'));
 
         parent::__construct($attributes);
+    }
+
+    /* -----------------------------------------------------------------
+     |  Check Methods
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Check if it has an authenticated user.
+     *
+     * @return bool
+     */
+    public function isAuthenticated(): bool
+    {
+        return ! $this->isVisitor();
+    }
+
+    /**
+     * Check if this is a visitor session.
+     *
+     * @return bool
+     */
+    public function isVisitor(): bool
+    {
+        return is_null($this->user_id);
+    }
+
+    /**
+     * Check if this is the current used session.
+     *
+     * @return bool
+     */
+    public function isCurrent(): bool
+    {
+        return $this->id === session()->getId();
+    }
+
+    /**
+     * Check if the given user is the same in the session.
+     *
+     * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|\Arcanesoft\Foundation\Auth\Models\User|mixed  $user
+     *
+     * @return bool
+     */
+    public function isSameUser($user): bool
+    {
+        return $this->user_id === $user->getAuthIdentifier()
+            && $this->guard === $user->guardName();
     }
 }

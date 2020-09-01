@@ -8,11 +8,11 @@
             <td class="font-weight-light text-monospace text-muted small">{{ $folder }}</td>
             <td class="text-right">
                 @if ($permission['writable'])
-                    <span class="badge badge-outline-success">{{ $permission['chmod'] }}</span>
-                    <span class="badge badge-outline-success"><i class="fa fa-fw fa-check text-success"></i></span>
+                    <span class="badge border border-success text-muted">{{ $permission['chmod'] }}</span>
+                    <span class="badge border border-success text-success"><i class="fa fa-fw fa-check"></i></span>
                 @else
-                    <span class="badge badge-outline-danger">{{ $permission['chmod'] }}</span>
-                    <span class="badge badge-outline-danger"><i class="fa fa-fw fa-times text-danger"></i></span>
+                    <span class="badge border border-danger text-muted">{{ $permission['chmod'] }}</span>
+                    <span class="badge border border-danger text-danger"><i class="fa fa-fw fa-times"></i></span>
                 @endif
             </td>
         </tr>

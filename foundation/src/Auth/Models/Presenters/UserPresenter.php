@@ -9,8 +9,6 @@ namespace Arcanesoft\Foundation\Auth\Models\Presenters;
  *
  * @package  Arcanesoft\Foundation\Auth\Models\Presenters
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
- *
- * @property-read  string  last_activity
  */
 trait UserPresenter
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Arcanesoft\Blog\Base\Migration;
+use Arcanesoft\Blog\Database\Migration;
 use Arcanesoft\Blog\Blog;
 use Illuminate\Database\Schema\Blueprint;
 

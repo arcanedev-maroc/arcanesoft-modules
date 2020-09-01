@@ -64,6 +64,6 @@ class UpdateAdministratorRequest extends FormRequest
      */
     protected function getCurrentAdministrator()
     {
-        return $this->route()->parameter(AdministratorsRoutes::ADMIN_WILDCARD);
+        return $this->route()->parameter(AdministratorsRoutes::WILDCARD_ADMIN);
     }
 }

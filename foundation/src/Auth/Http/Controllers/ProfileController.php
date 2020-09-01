@@ -50,7 +50,7 @@ class ProfileController extends Controller
     public function index(Request $request)
     {
         return $this->view('authorization.profile.index', [
-            'user' => $request->user(Auth::GUARD_NAME),
+            'user' => $request->user(Auth::GUARD_WEB_ADMINISTRATOR),
         ]);
     }
 
@@ -63,7 +63,7 @@ class ProfileController extends Controller
     public function updateAccount(UpdateAccountRequest $request, AdministratorsRepository $repo)
     {
         $repo->updateOne(
-            $request->user(Auth::GUARD_NAME),
+            $request->user(Auth::GUARD_WEB_ADMINISTRATOR),
             $request->validated()
         );
 
@@ -84,7 +84,7 @@ class ProfileController extends Controller
     public function updatePassword(UpdatePasswordRequest $request, AdministratorsRepository $repo)
     {
         $repo->updatePassword(
-            $request->user(Auth::GUARD_NAME),
+            $request->user(Auth::GUARD_WEB_ADMINISTRATOR),
             $request->get('password')
         );
 

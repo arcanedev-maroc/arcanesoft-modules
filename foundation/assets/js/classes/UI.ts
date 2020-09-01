@@ -27,6 +27,8 @@ export default class {
 
     initPageScrolled(): void {
         const className = 'page-scrolled'
+        const scrolledPosition = 150;
+
         let previousScrollPosition = window.pageYOffset;
 
         window.addEventListener('scroll', (e) => {
@@ -34,9 +36,12 @@ export default class {
 
             const body = document.querySelector('body');
 
-            previousScrollPosition > currentScrollPosition
-                ? body.classList.remove(className)
-                : body.classList.add(className)
+            if (previousScrollPosition > currentScrollPosition) {
+                body.classList.remove(className)
+            }
+            else if (currentScrollPosition >= scrolledPosition) {
+                body.classList.add(className)
+            }
 
             previousScrollPosition = currentScrollPosition;
         })

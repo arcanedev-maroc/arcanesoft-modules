@@ -3,8 +3,8 @@
 .table thead th {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
-    border-bottom-width: 1px;
-    border-top: 0;
+    //border-bottom-width: 1px;
+    //border-top: 0;
 
     .btn-sorting {
         text-decoration: none;
@@ -28,75 +28,10 @@
     }
 }
 
-.table-striped tbody tr {
-    &:nth-of-type(odd) {
-        background: transparent;
-    }
-
-    &:nth-of-type(even) {
-        background-color: var(--bs-table-accent-bg);
-    }
-}
-
-.table-calendar {
-    margin: 0 0 0.75rem;
-
-    td, th {
-        border: 0;
-        text-align: center;
-        padding: 0 !important;
-        width: (100% / 7);
-        line-height: 2.5rem;
-    }
-
-    td {
-        border-top: 0;
-    }
-}
-
-.table-header {
-    cursor: pointer;
-    transition-property: color;
-    @extend %global-smooth-transition;
-
-    &:hover {
-        color: $body-color !important;
-    }
-
-    &:after {
-        content: '\f0dc';
-        font-family: FontAwesome;
-        display: inline-block;
-        margin-left: 0.5rem;
-        font-size: 0.75rem;
-    }
-}
-
-.table-header-asc {
-    color: $body-color !important;
-
-    &:after {
-        content: '\f0de';
-    }
-}
-
-.table-header-desc {
-    color: $body-color !important;
-
-    &:after {
-        content: '\f0dd';
-    }
-}
-
 .table {
     th, td {
         vertical-align: middle;
     }
-}
-
-.table-hover tbody tr {
-    transition-property: background-color, color;
-    @extend %global-smooth-transition;
 }
 
 .table-responsive {

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import UI from './UI'
+import EventEmitter, {EventType} from "./Utilities/EventEmitter";
 
 Vue.config.ignoredElements = [
     // Use a `RegExp` to ignore all elements that start with "x-" (2.5+ only)
@@ -11,7 +12,7 @@ export default class Arcanesoft {
     //----------------------------------
 
     public app: Vue
-    public bus: Vue
+    public emitter: EventEmitter
     public ui: UI
     protected _config: Object
     public launched: Boolean = false
@@ -21,7 +22,7 @@ export default class Arcanesoft {
 
     public constructor(config: {}) {
         this._config = config
-        this.bus = new Vue
+        this.emitter = new EventEmitter
         this.ui = new UI
     }
 
@@ -32,7 +33,7 @@ export default class Arcanesoft {
         if (this.launched === true)
             return
 
-        this.$emit('arcanesoft::starting', {arcanesoft: this})
+        this.$emit('arcanesoft::starting', this)
 
         let _this = this
 
@@ -46,7 +47,7 @@ export default class Arcanesoft {
             }
         })
 
-        this.$emit('arcanesoft::started', {arcanesoft: this})
+        this.$emit('arcanesoft::started', this)
 
         this.launched = true
     }
@@ -59,8 +60,8 @@ export default class Arcanesoft {
     /**
      * Register a listener on built-in event bus
      */
-    public $on(event: string|string[], callback: Function): this {
-        this.bus.$on(event, callback)
+    public $on(event: EventType, callback: Function): this {
+        this.emitter.on(event, callback)
 
         return this
     }
@@ -68,22 +69,22 @@ export default class Arcanesoft {
     /**
      * Register a one-time listener on the event bus
      */
-    public $once(event: string | string[], callback: Function): void {
-        this.bus.$once(event, callback)
+    public $once(event: EventType, handler: Function): void {
+        this.emitter.once(event, handler)
     }
 
     /**
      * Unregister an listener on the event bus
      */
-    public $off(...args): void {
-        this.bus.$off(...args)
+    public $off(type: EventType | '*', handler): void {
+        this.emitter.off(type, handler)
     }
 
     /**
      * Emit an event on the event bus
      */
-    public $emit(event: string, ...args: any[]): void {
-        this.bus.$emit(event, ...args)
+    public $emit(event: EventType, ...args: any[]): void {
+        this.emitter.emit(event, ...args)
     }
 
     // Utilities

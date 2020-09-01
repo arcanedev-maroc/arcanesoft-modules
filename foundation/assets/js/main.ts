@@ -13,8 +13,6 @@ import components from './_vue-components'
 
 window['Foundation'] = new Arcanesoft({
     el: '#arcanesoft',
-
     store,
-
     components,
 })

@@ -146,6 +146,23 @@ return [
     Arcanesoft\Foundation\Auth\Events\Permissions\Roles\DetachedAllRoles::class  => [],
 
     /* -----------------------------------------------------------------
+     |  Sessions
+     | -----------------------------------------------------------------
+     */
+
+    Arcanesoft\Foundation\Auth\Events\Sessions\RetrievedSession::class => [],
+    Arcanesoft\Foundation\Auth\Events\Sessions\CreatingSession::class  => [],
+    Arcanesoft\Foundation\Auth\Events\Sessions\CreatedSession::class   => [],
+    Arcanesoft\Foundation\Auth\Events\Sessions\UpdatingSession::class  => [],
+    Arcanesoft\Foundation\Auth\Events\Sessions\UpdatedSession::class   => [],
+    Arcanesoft\Foundation\Auth\Events\Sessions\SavingSession::class    => [],
+    Arcanesoft\Foundation\Auth\Events\Sessions\SavedSession::class     => [
+        Arcanesoft\Foundation\Auth\Listeners\Sessions\UpdateUserLastActivity::class,
+    ],
+    Arcanesoft\Foundation\Auth\Events\Sessions\DeletingSession::class  => [],
+    Arcanesoft\Foundation\Auth\Events\Sessions\DeletedSession::class   => [],
+
+    /* -----------------------------------------------------------------
      |  Auth - Socialite
      | -----------------------------------------------------------------
      */

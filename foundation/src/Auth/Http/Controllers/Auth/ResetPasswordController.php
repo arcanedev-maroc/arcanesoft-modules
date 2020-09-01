@@ -110,6 +110,6 @@ class ResetPasswordController extends Controller
      */
     protected function guard(): StatefulGuard
     {
-        return Auth::guard(ArcanesoftAuth::GUARD_NAME);
+        return Auth::guard(ArcanesoftAuth::GUARD_WEB_ADMINISTRATOR);
     }
 }

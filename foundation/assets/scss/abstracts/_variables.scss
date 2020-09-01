@@ -223,7 +223,7 @@ $card-bg: var(--skin-surface-1-bg-color);
 // TABLE
 
 $table-dark-color:            var(--skin-body-font-color);
-$table-group-separator-color: $gray-300;
+$table-group-separator-color: var(--skin-border-color);
 
 // PAGINATION
 

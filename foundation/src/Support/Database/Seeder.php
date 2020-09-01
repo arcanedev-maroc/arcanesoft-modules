@@ -16,19 +16,7 @@ use Illuminate\Database\Seeder as IlluminateSeeder;
 abstract class Seeder extends IlluminateSeeder
 {
     /* -----------------------------------------------------------------
-     |  Properties
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * The seeders list.
-     *
-     * @var array
-     */
-    protected $seeders = [];
-
-    /* -----------------------------------------------------------------
-     |  Getters
+     |  Main Methods
      | -----------------------------------------------------------------
      */
 
@@ -39,13 +27,8 @@ abstract class Seeder extends IlluminateSeeder
      */
     public function seeders(): array
     {
-        return $this->seeders;
+        return [];
     }
-
-    /* -----------------------------------------------------------------
-     |  Main Methods
-     | -----------------------------------------------------------------
-     */
 
     /**
      * Run the database seeds.

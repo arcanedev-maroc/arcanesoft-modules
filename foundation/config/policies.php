@@ -24,6 +24,7 @@ return [
     Arcanesoft\Foundation\Auth\Policies\RolesPolicy::class,
     Arcanesoft\Foundation\Auth\Policies\PermissionsPolicy::class,
     Arcanesoft\Foundation\Auth\Policies\PasswordResetsPolicy::class,
+    Arcanesoft\Foundation\Auth\Policies\SessionsPolicy::class,
     Arcanesoft\Foundation\Auth\Policies\SettingsPolicy::class,
 
 ];

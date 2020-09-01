@@ -1,13 +1,22 @@
 body {
-    padding-top: $navbar-height;
     background-color: var(--skin-body-bg-color);
 }
 
+.app-container,
 .main-navbar,
 .main-container,
-.sidebar-container{
+.sidebar-container {
     transition-duration: 0.25s;
     transition-timing-function: ease-in-out;
+}
+
+.app-container {
+    padding-top: $navbar-height;
+    transition-property: padding-top;
+
+    .page-scrolled & {
+        padding-top: 0;
+    }
 }
 
 .main-container {

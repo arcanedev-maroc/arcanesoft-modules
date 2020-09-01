@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Blog\Console;
 
-use Arcanesoft\Blog\Seeders\DatabaseSeeder;
+use Arcanesoft\Blog\Database\DatabaseSeeder;
 use Illuminate\Console\Command;
 
 /**
@@ -20,8 +20,18 @@ class InstallCommand extends Command
      | -----------------------------------------------------------------
      */
 
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
     protected $signature = 'blog:install';
 
+    /**
+     * The console command description.
+     *
+     * @var string|null
+     */
     protected $description = 'Install Blog module';
 
     /* -----------------------------------------------------------------
@@ -29,7 +39,10 @@ class InstallCommand extends Command
      | -----------------------------------------------------------------
      */
 
-    public function handle()
+    /**
+     * Handle the command.
+     */
+    public function handle(): void
     {
         $this->comment('Installing Blog Module');
 
