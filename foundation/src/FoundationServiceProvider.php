@@ -50,11 +50,15 @@ class FoundationServiceProvider extends PackageServiceProvider
         $this->registerConfig();
 
         $this->registerProviders([
-            // Foundation's Modules
             CoreServiceProvider::class,
             AuthServiceProvider::class,
             SystemServiceProvider::class,
             ViewsServiceProvider::class,
+        ]);
+
+        $this->commands([
+            Console\InstallCommand::class,
+            Console\PublishCommand::class,
         ]);
     }
 

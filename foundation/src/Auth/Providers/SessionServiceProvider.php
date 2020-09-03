@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Providers;
 
-use Arcanesoft\Foundation\Auth\Auth;
 use Arcanesoft\Foundation\Auth\Repositories\SessionsRepository;
 use Arcanesoft\Foundation\Auth\Session\DatabaseSessionHandler;
 use Illuminate\Contracts\Container\Container;
@@ -45,7 +44,7 @@ class SessionServiceProvider extends ServiceProvider
     protected function registerCustomSessionHandler(SessionManager $session): void
     {
         $session->extend('arcanesoft', function (Container $app) {
-            return new DatabaseSessionHandler($app, $app->make(SessionsRepository::class));
+            return new DatabaseSessionHandler($app->make(SessionsRepository::class), $app);
         });
     }
 }

@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Repositories;
 
 use Arcanesoft\Foundation\Auth\Auth;
-use Arcanesoft\Foundation\Auth\Events\Users\{
-    ActivatedUser, ActivatingUser, DeactivatedUser, DeactivatingUser
-};
-use Arcanesoft\Foundation\Auth\Events\Users\Password\{UpdatedPassword, UpdatingPassword};
+use Arcanesoft\Foundation\Auth\Events\Users\{ActivatedUser,
+    ActivatingUser,
+    Attributes\UpdatedPassword,
+    DeactivatedUser,
+    DeactivatingUser};
+use Arcanesoft\Foundation\Auth\Events\Users\Attributes\{UpdatingPassword};
 use Arcanesoft\Foundation\Auth\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
@@ -114,6 +116,8 @@ class UsersRepository extends AbstractRepository
     /**
      * Update the given user (+ synced roles).
      *
+     * @todo: Clean this method.
+     *
      * @param  \Arcanesoft\Foundation\Auth\Models\User  $user
      * @param  array                                    $attributes
      *
@@ -121,7 +125,42 @@ class UsersRepository extends AbstractRepository
      */
     public function updateOne(User $user, array $attributes): bool
     {
-        return $user->update($attributes);
+        $user->fill($attributes);
+
+        $this->dispatchAttributeEvent('updating', $user);
+        $updated = (clone $user)->save();
+        $this->dispatchAttributeEvent('updated', $user);
+
+        return $updated;
+    }
+
+    /**
+     * @todo: Move this into a model or repository.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param  string                               $type
+     *
+     * @return array|null
+     */
+    protected function dispatchAttributeEvent(string $type, $model)
+    {
+        $attributesEvents = [
+            'email.updating' => \Arcanesoft\Foundation\Auth\Events\Users\Attributes\UpdatingEmail::class,
+            'email.updated'  => \Arcanesoft\Foundation\Auth\Events\Users\Attributes\UpdatedEmail::class,
+        ];
+
+        foreach ($model->getDirty() as $name => $value) {
+            $event = $name.'.'.$type;
+
+            if ( ! array_key_exists($event, $attributesEvents))
+                continue;
+
+            return in_array($name, $model->getHidden())
+                ? event(new $attributesEvents[$event]($model))
+                : event(new $attributesEvents[$event]($model, $model->getOriginal($name)));
+        }
+
+        return null;
     }
 
     /**

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Backups;
 
-use Arcanesoft\Backups\Console\{InstallCommand, PublishCommand};
+use Arcanesoft\Backups\Console\PublishCommand;
 use Arcanesoft\Foundation\Support\Providers\PackageServiceProvider;
 
 /**
@@ -52,7 +52,6 @@ class BackupsServiceProvider extends PackageServiceProvider
         ]);
 
         $this->registerCommands([
-            InstallCommand::class,
             PublishCommand::class,
         ]);
     }

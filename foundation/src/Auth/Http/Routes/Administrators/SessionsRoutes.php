@@ -6,7 +6,6 @@ namespace Arcanesoft\Foundation\Auth\Http\Routes\Administrators;
 
 use Arcanesoft\Foundation\Auth\Http\Controllers\Administrators\SessionsController;
 use Arcanesoft\Foundation\Auth\Http\Routes\AbstractRouteRegistrar;
-use Arcanesoft\Foundation\Auth\Models\Administrator;
 use Arcanesoft\Foundation\Auth\Repositories\SessionsRepository;
 
 /**

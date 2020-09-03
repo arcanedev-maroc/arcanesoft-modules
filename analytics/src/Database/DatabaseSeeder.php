@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Arcanesoft\Passport\Database;
+namespace Arcanesoft\Analytics\Database;
 
 use Arcanesoft\Foundation\Support\Database\Seeder;
 
 /**
  * Class     DatabaseSeeder
  *
- * @package  Arcanesoft\Passport\Database
+ * @package  Arcanesoft\Analytics\Database
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class DatabaseSeeder extends Seeder

@@ -6,10 +6,10 @@ namespace Arcanesoft\Foundation\Auth\Session;
 
 use Arcanesoft\Foundation\Auth\Repositories\SessionsRepository;
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\QueryException;
 use Illuminate\Session\ExistenceAwareInterface;
-use Illuminate\Support\{Arr, Carbon, InteractsWithTime};
+use Illuminate\Support\{Arr, InteractsWithTime};
 use SessionHandlerInterface;
 
 /**
@@ -61,10 +61,10 @@ class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerI
     /**
      * Create a new database session handler instance.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application|null            $container
      * @param  \Arcanesoft\Foundation\Auth\Repositories\SessionsRepository  $repo
+     * @param  \Illuminate\Contracts\Container\Container|null               $container
      */
-    public function __construct(Application $container, SessionsRepository $repo)
+    public function __construct(SessionsRepository $repo, Container $container = null)
     {
         $this->container = $container;
         $this->repo = $repo;
@@ -98,36 +98,22 @@ class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerI
     {
         $session = $this->findSession($sessionId);
 
-        if ($this->expired($session)) {
+        if (is_null($session))
+            return '';
+
+        if ($session->hasExpired()) {
             $this->exists = true;
 
             return '';
         }
 
-        if (isset($session->payload)) {
+        if ($session->payload) {
             $this->exists = true;
 
             return base64_decode($session->payload);
         }
 
         return '';
-    }
-
-    /**
-     * Determine if the session is expired.
-     *
-     * @param  \Arcanesoft\Foundation\Auth\Models\Session  $session
-     *
-     * @return bool
-     */
-    protected function expired($session): bool
-    {
-        $expiredAt = Carbon::now()->subMinutes(
-            (int) $this->container['config']['session.lifetime']
-        );
-
-        return isset($session->last_activity)
-            && $session->last_activity_at->lessThan($expiredAt);
     }
 
     /**

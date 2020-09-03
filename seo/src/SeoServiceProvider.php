@@ -49,10 +49,6 @@ class SeoServiceProvider extends PackageServiceProvider
             Providers\AuthServiceProvider::class,
             Providers\RouteServiceProvider::class,
         ]);
-
-        $this->registerCommands([
-            Console\InstallCommand::class,
-        ]);
     }
 
     /**

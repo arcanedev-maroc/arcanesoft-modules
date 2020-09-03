@@ -7,27 +7,12 @@ return [
      | -----------------------------------------------------------------
      */
 
-    'providers' => [
-        Arcanesoft\Media\MediaServiceProvider::class,
-        Arcanesoft\Blog\BlogServiceProvider::class,
-    ],
-
     'commands' => [
-        'setup'   => [
-
-            'seeders' => [
-                // Foundation
-                Arcanesoft\Foundation\Core\Database\DatabaseSeeder::class,
-                Arcanesoft\Foundation\Auth\Database\DatabaseSeeder::class,
-                Arcanesoft\Foundation\System\Database\DatabaseSeeder::class,
-
-                // External
-                Arcanesoft\Blog\Database\DatabaseSeeder::class,
-                Arcanesoft\Backups\Database\DatabaseSeeder::class,
-                Arcanesoft\Media\Database\DatabaseSeeder::class,
-                Arcanesoft\Passport\Database\DatabaseSeeder::class,
-            ],
-
+        'install'   => [
+            Arcanesoft\Blog\Console\InstallCommand::class,
+            Arcanesoft\Backups\Console\InstallCommand::class,
+            Arcanesoft\Media\Console\InstallCommand::class,
+            Arcanesoft\Passport\Console\InstallCommand::class,
         ],
 
         'publish' => [

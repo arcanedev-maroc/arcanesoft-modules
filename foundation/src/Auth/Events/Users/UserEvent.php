@@ -30,7 +30,7 @@ abstract class UserEvent
     /**
      * UserEvent constructor.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|mixed  $user
      */
     public function __construct(User $user)
     {

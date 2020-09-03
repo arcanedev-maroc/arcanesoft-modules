@@ -37,9 +37,16 @@ return [
     Arcanesoft\Foundation\Auth\Events\Users\DeactivatingUser::class  => [],
     Arcanesoft\Foundation\Auth\Events\Users\DeactivatedUser::class   => [],
 
-    // Password
-    Arcanesoft\Foundation\Auth\Events\Users\Password\UpdatingPassword::class => [],
-    Arcanesoft\Foundation\Auth\Events\Users\Password\UpdatedPassword::class  => [],
+    // Attributes
+
+    Arcanesoft\Foundation\Auth\Events\Users\Attributes\UpdatingEmail::class    => [
+        Arcanesoft\Foundation\Auth\Listeners\Users\ResetEmailVerification::class,
+    ],
+    Arcanesoft\Foundation\Auth\Events\Users\Attributes\UpdatedEmail::class     => [
+        Arcanesoft\Foundation\Auth\Listeners\Users\NotifyEmailUpdated::class,
+    ],
+    Arcanesoft\Foundation\Auth\Events\Users\Attributes\UpdatingPassword::class => [],
+    Arcanesoft\Foundation\Auth\Events\Users\Attributes\UpdatedPassword::class  => [],
 
     /* -----------------------------------------------------------------
      |  Auth - Administrators
@@ -76,9 +83,11 @@ return [
     Arcanesoft\Foundation\Auth\Events\Administrators\Roles\SyncingRoles::class   => [],
     Arcanesoft\Foundation\Auth\Events\Administrators\Roles\SyncedRoles::class    => [],
 
-    // Password
-    Arcanesoft\Foundation\Auth\Events\Administrators\Password\UpdatingPassword::class => [],
-    Arcanesoft\Foundation\Auth\Events\Administrators\Password\UpdatedPassword::class  => [],
+    // Attributes
+    Arcanesoft\Foundation\Auth\Events\Administrators\Attributes\UpdatingEmail::class => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Attributes\UpdatedEmail::class  => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Attributes\UpdatingPassword::class => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Attributes\UpdatedPassword::class  => [],
 
     /* -----------------------------------------------------------------
      |  Auth - Roles

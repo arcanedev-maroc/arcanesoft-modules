@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Models;
 
 use Arcanesoft\Foundation\Auth\Auth;
+use Carbon\Carbon;
 use Arcanesoft\Foundation\Auth\Events\Sessions\{CreatedSession,
     CreatingSession, DeletedSession, DeletingSession, RetrievedSession, SavedSession, SavingSession,
     UpdatedSession, UpdatingSession
@@ -118,6 +119,20 @@ class Session extends Model
      |  Check Methods
      | -----------------------------------------------------------------
      */
+
+    /**
+     * Check if the session is expired.
+     *
+     * @return bool
+     */
+    public function hasExpired(): bool
+    {
+        $expiredAt = Carbon::now()->subMinutes(
+            (int) config('session.lifetime')
+        );
+
+        return $this->last_activity_at->lessThan($expiredAt);
+    }
 
     /**
      * Check if it has an authenticated user.

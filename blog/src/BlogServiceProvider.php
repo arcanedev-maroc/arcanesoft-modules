@@ -52,10 +52,6 @@ class BlogServiceProvider extends PackageServiceProvider
             Providers\RouteServiceProvider::class,
             Providers\ViewServiceProvider::class,
         ]);
-
-        $this->registerCommands([
-            Console\InstallCommand::class,
-        ]);
     }
 
     /**

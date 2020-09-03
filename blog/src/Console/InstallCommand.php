@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Arcanesoft\Blog\Console;
 
 use Arcanesoft\Blog\Database\DatabaseSeeder;
-use Illuminate\Console\Command;
+use Arcanesoft\Foundation\Support\Console\InstallCommand as Command;
 
 /**
  * Class     InstallCommand
@@ -44,11 +44,6 @@ class InstallCommand extends Command
      */
     public function handle(): void
     {
-        $this->comment('Installing Blog Module');
-
-        $this->call('db:seed', ['--class' => DatabaseSeeder::class]);
-
-        $this->comment('Blog Module installed !');
-        $this->line('');
+        $this->seed(DatabaseSeeder::class);
     }
 }

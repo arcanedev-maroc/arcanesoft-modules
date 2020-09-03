@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Arcanesoft\Foundation\Core\Console;
+namespace Arcanesoft\Foundation\Auth\Console;
 
-use Arcanesoft\Foundation\Core\Database\DatabaseSeeder;
+use Arcanesoft\Foundation\Auth\Database\DatabaseSeeder;
 use Arcanesoft\Foundation\Support\Console\InstallCommand as Command;
 
 /**
- * Class     SetupCommand
+ * Class     InstallCommand
  *
- * @package  Arcanesoft\Foundation\Core\Console
+ * @package  Arcanesoft\Foundation\Auth\Console
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class InstallCommand extends Command

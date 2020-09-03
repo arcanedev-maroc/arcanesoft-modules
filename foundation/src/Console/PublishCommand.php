@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Arcanesoft\Foundation\Core\Console;
+namespace Arcanesoft\Foundation\Console;
 
-use Illuminate\Console\Command;
+use Arcanesoft\Foundation\Support\Console\PublishCommand as Command;
 
 /**
  * Class     PublishCommand
  *
- * @package  Arcanesoft\Foundation\Core\Console
+ * @package  Arcanesoft\Foundation\Console
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class PublishCommand extends Command
@@ -64,6 +64,8 @@ class PublishCommand extends Command
      */
     protected function getTags(): array
     {
-        return $this->laravel->get('config')->get('arcanesoft.foundation.modules.commands.publish.tags', []);
+        return $this->laravel
+            ->get('config')
+            ->get('arcanesoft.foundation.modules.commands.publish.tags', []);
     }
 }

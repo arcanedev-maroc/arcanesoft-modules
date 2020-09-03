@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Repositories;
 
 use Arcanesoft\Foundation\Auth\Auth;
-use Arcanesoft\Foundation\Auth\Events\Administrators\{ActivatedAdministrator,
-    ActivatingAdministrator,
-    DeactivatedAdministrator,
-    DeactivatingAdministrator,
-    Password\UpdatedPassword,
-    Password\UpdatingPassword,
-    Roles\SyncedRoles,
-    Roles\SyncingRoles};
+use Arcanesoft\Foundation\Auth\Events\Administrators\{
+    ActivatedAdministrator, ActivatingAdministrator, DeactivatedAdministrator, DeactivatingAdministrator
+};
+use Arcanesoft\Foundation\Auth\Events\Administrators\Attributes\{UpdatedPassword, UpdatingPassword};
+use Arcanesoft\Foundation\Auth\Events\Administrators\Roles\{SyncedRoles, SyncingRoles};
 use Arcanesoft\Foundation\Auth\Models\Administrator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\{Collection, Str};
@@ -139,7 +136,10 @@ class AdministratorsRepository extends AbstractRepository
      */
     public function updateOne(Administrator $administrator, array $attributes): bool
     {
-        return $administrator->update($attributes);
+        if ( ! $administrator->exists)
+            return false;
+
+        return $administrator->fill($attributes)->save();
     }
 
     /**

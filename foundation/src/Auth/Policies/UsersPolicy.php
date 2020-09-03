@@ -106,6 +106,12 @@ class UsersPolicy extends AbstractPolicy
                 'name'        => 'Impersonate a user',
                 'description' => 'Ability to impersonate a user',
             ]),
+
+            $this->makeAbility('verify')->setMetas([
+                'name'        => 'Verify a user',
+                'description' => "Ability to verify a user's email address",
+            ]),
+
         ];
     }
 
@@ -241,6 +247,11 @@ class UsersPolicy extends AbstractPolicy
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
     public function impersonate(Administrator $administrator, User $user)
+    {
+        //
+    }
+
+    public function verify(Administrator $administrator, User $user)
     {
         //
     }

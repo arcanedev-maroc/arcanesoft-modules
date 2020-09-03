@@ -50,10 +50,6 @@ class MediaServiceProvider extends PackageServiceProvider
             Providers\RouteServiceProvider::class,
         ]);
 
-        $this->registerCommands([
-            Console\InstallCommand::class,
-        ]);
-
         $this->app->booting(function ($app) {
             /** @var  \Illuminate\Contracts\Config\Repository  $config */
             $config = $app['config'];
