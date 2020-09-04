@@ -21,12 +21,15 @@ class ViewServiceProvider extends ServiceProvider
      */
 
     /**
-     * The view components.
+     * Get the view composers.
      *
-     * @var array
+     * @return array
      */
-    protected $components = [
-        PostsDatatable::NAME => PostsDatatable::class,
-        TagsDatatable::NAME  => TagsDatatable::class,
-    ];
+    public function components(): array
+    {
+        return [
+            PostsDatatable::NAME => PostsDatatable::class,
+            TagsDatatable::NAME  => TagsDatatable::class,
+        ];
+    }
 }

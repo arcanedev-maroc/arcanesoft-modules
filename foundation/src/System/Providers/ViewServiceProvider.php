@@ -21,23 +21,30 @@ class ViewServiceProvider extends ServiceProvider
      */
 
     /**
-     * The view composers.
+     * Get the view composers.
      *
-     * @var array
+     * @return string[]|array
      */
-    protected $composers = [
-        Composers\ApplicationInfoComposer::class,
-        Composers\FoldersPermissionsComposer::class,
-        Composers\RequiredPhpExtensionsComposer::class,
-    ];
+    public function composers(): array
+    {
+        return [
+            Composers\ApplicationInfoComposer::class,
+            Composers\FoldersPermissionsComposer::class,
+            Composers\RequiredPhpExtensionsComposer::class,
+        ];
+    }
 
     /**
-     * The view components.
+     * Get the view composers.
      *
-     * @var array
+     * @return array
      */
-    protected $components = [
-        Components\AbilitiesDatatable::NAME => Components\AbilitiesDatatable::class,
-        Components\RoutesDatatable::NAME    => Components\RoutesDatatable::class,
-    ];
+    public function components(): array
+    {
+        return [
+            Components\AbilitiesDatatable::NAME    => Components\AbilitiesDatatable::class,
+            Components\RoutesDatatable::NAME       => Components\RoutesDatatable::class,
+            Components\DependenciesDatatable::NAME => Components\DependenciesDatatable::class,
+        ];
+    }
 }

@@ -16,25 +16,6 @@ use Illuminate\Support\ServiceProvider;
 abstract class ViewServiceProvider extends ServiceProvider
 {
     /* -----------------------------------------------------------------
-     |  Properties
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * The view composers.
-     *
-     * @var string[]|array
-     */
-    protected $composers = [];
-
-    /**
-     * The view components
-     *
-     * @var array
-     */
-    protected $components = [];
-
-    /* -----------------------------------------------------------------
      |  Getters
      | -----------------------------------------------------------------
      */
@@ -46,7 +27,7 @@ abstract class ViewServiceProvider extends ServiceProvider
      */
     public function composers(): array
     {
-        return $this->composers;
+        return [];
     }
 
     /**
@@ -56,7 +37,7 @@ abstract class ViewServiceProvider extends ServiceProvider
      */
     public function components(): array
     {
-        return $this->components;
+        return [];
     }
 
     /* -----------------------------------------------------------------

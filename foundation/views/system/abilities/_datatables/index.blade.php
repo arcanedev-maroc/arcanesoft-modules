@@ -23,7 +23,7 @@
             @foreach($abilities as $key => $ability)
                 <tr>
                     <td>
-                        <span class="badge badge-outline-dark">{{ $ability->key() }}</span>
+                        <span class="badge border border-muted text-muted">{{ $ability->key() }}</span>
                     </td>
                     <td class="small">{{ $ability->meta('name', '') }}</td>
                     <td class="small">
@@ -31,10 +31,10 @@
                     </td>
                     <td class="text-center">
                         @if ($ability->meta('is_registered', false))
-                            <span class="status status-success status-animated"
+                            <span class="status status-animated bg-success"
                                   data-toggle="tooltip" title="@lang('Yes')"></span>
                         @else
-                            <span class="status status-secondary"
+                            <span class="status bg-secondary"
                                   data-toggle="tooltip" title="@lang('No')"></span>
                         @endif
                     </td>

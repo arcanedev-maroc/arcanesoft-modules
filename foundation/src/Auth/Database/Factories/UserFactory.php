@@ -66,12 +66,27 @@ class UserFactory extends Factory
     /**
      * Indicate that the user is verified.
      *
+     * @param  \Illuminate\Support\Carbon|null  $date
+     *
      * @return \Arcanesoft\Foundation\Auth\Database\Factories\UserFactory
      */
-    public function verified(): self
+    public function verified($date = null): self
     {
+        if (is_null($date))
+            $date = now();
+
         return $this->state([
-            'email_verified_at' => now(),
+            'email_verified_at' => $date === false ? null : $date,
         ]);
+    }
+
+    /**
+     * Indicate that the user is unverified.
+     *
+     * @return \Arcanesoft\Foundation\Auth\Database\Factories\UserFactory
+     */
+    public function unverified(): self
+    {
+        return $this->verified(false);
     }
 }

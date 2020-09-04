@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\System\Views\Composers;
 
-use Arcanesoft\Foundation\Foundation;
+use Arcanesoft\Foundation\Arcanesoft;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\View;
 
@@ -66,7 +66,7 @@ class ApplicationInfoComposer
             'maintenance_mode'    => $this->app->isDownForMaintenance(),
             'php_version'         => phpversion(),
             'laravel_version'     => $this->app->version(),
-            'foundation_version'  => $this->app->get(Foundation::class)->version(),
+            'foundation_version'  => $this->app->get(Arcanesoft::class)->version(),
             'database_connection' => $this->getConfig('database.default'),
             'cache_driver'        => $this->getConfig('cache.default'),
             'session_driver'      => $this->getConfig('session.driver')

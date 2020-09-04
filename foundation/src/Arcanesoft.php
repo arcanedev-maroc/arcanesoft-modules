@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation;
 
 /**
- * Class     Foundation
+ * Class     Arcanesoft
  *
  * @package  Arcanesoft\Foundation
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class Foundation
+class Arcanesoft
 {
     /* -----------------------------------------------------------------
      |  Constants
@@ -18,6 +18,8 @@ class Foundation
      */
 
     const VERSION = '4.0.0';
+
+    const ARCANESOFT_MODULES_CACHE = 'cache/modules.php';
 
     /* -----------------------------------------------------------------
      |  Properties

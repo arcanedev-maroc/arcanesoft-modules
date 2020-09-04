@@ -29,10 +29,6 @@ class RouteServiceProvider extends ServiceProvider
     {
         return [
             Routes\SystemRoutes::class,
-            Routes\MaintenanceRoutes::class,
-            Routes\AbilitiesRoutes::class,
-            Routes\LogViewerRoutes::class,
-            Routes\RoutesViewer::class,
         ];
     }
 }

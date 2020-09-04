@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\System\Http\Routes;
 
-use Arcanesoft\Foundation\System\Http\Controllers\AbilitiesController;
+use Arcanesoft\Foundation\System\Http\Controllers\DependenciesController;
 
 /**
- * Class     AbilitiesRoutes
+ * Class     DependenciesRoutes
  *
  * @package  Arcanesoft\Foundation\System\Http\Routes
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class AbilitiesRoutes extends AbstractRouteRegistrar
+class DependenciesRoutes extends AbstractRouteRegistrar
 {
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -24,13 +24,13 @@ class AbilitiesRoutes extends AbstractRouteRegistrar
      */
     public function map(): void
     {
-        $this->prefix('abilities')->name('abilities.')->group(function () {
-            // admin::system.abilities.index
-            $this->get('/', [AbilitiesController::class, 'index'])
+        $this->prefix('dependencies')->name('dependencies.')->group(function () {
+            // admin::system.dependencies.index
+            $this->get('/', [DependenciesController::class, 'index'])
                 ->name('index');
 
-            // admin::system.abilities.show
-            $this->get('{admin_ability_key}', [AbilitiesController::class, 'show'])
+            // admin::system.dependencies.show
+            $this->get('{admin_package_key}', [DependenciesController::class, 'show'])
                 ->name('show');
         });
     }

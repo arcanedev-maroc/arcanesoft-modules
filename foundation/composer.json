@@ -26,8 +26,8 @@
         "arcanedev/notify":               "^7.0",
         "arcanedev/route-viewer":         "^4.0",
         "arcanedev/support":              "^8.0",
-        "arcanesoft/socialite":           "@dev",
-        "composer/composer":              "^1.10"
+        "composer/composer":              "^1.10",
+        "laravel/socialite":              "^5.0"
     },
     "require-dev": {
         "orchestra/testbench": "^6.0",

@@ -23,15 +23,18 @@ class ViewServiceProvider extends ServiceProvider
      */
 
     /**
-     * The view components.
+     * Get the view composers.
      *
-     * @var array
+     * @return array
      */
-    protected $components = [
-        AdministratorsDatatable::NAME => AdministratorsDatatable::class,
-        UsersDatatable::NAME          => UsersDatatable::class,
-        RolesDatatable::NAME          => RolesDatatable::class,
-        PermissionsDatatable::NAME    => PermissionsDatatable::class,
-        PasswordResetsDatatable::NAME => PasswordResetsDatatable::class,
-    ];
+    public function components(): array
+    {
+        return [
+            AdministratorsDatatable::NAME => AdministratorsDatatable::class,
+            UsersDatatable::NAME          => UsersDatatable::class,
+            RolesDatatable::NAME          => RolesDatatable::class,
+            PermissionsDatatable::NAME    => PermissionsDatatable::class,
+            PasswordResetsDatatable::NAME => PasswordResetsDatatable::class,
+        ];
+    }
 }

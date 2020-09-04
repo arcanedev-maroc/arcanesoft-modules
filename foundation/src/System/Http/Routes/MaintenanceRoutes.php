@@ -24,20 +24,18 @@ class MaintenanceRoutes extends AbstractRouteRegistrar
      */
     public function map(): void
     {
-        $this->adminGroup(function () {
-            $this->prefix('maintenance')->name('maintenance.')->group(function () {
-                // admin::system.maintenance.index
-                $this->get('/', [MaintenanceController::class, 'index'])
-                     ->name('index');
+        $this->prefix('maintenance')->name('maintenance.')->group(function () {
+            // admin::system.maintenance.index
+            $this->get('/', [MaintenanceController::class, 'index'])
+                 ->name('index');
 
-                // admin::system.maintenance.start
-                $this->post('start', [MaintenanceController::class, 'start'])
-                     ->name('start');
+            // admin::system.maintenance.start
+            $this->post('start', [MaintenanceController::class, 'start'])
+                 ->name('start');
 
-                // admin::system.maintenance.stop
-                $this->post('stop', [MaintenanceController::class, 'stop'])
-                     ->name('stop');
-            });
+            // admin::system.maintenance.stop
+            $this->post('stop', [MaintenanceController::class, 'stop'])
+                 ->name('stop');
         });
     }
 }

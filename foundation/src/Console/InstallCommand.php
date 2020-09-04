@@ -6,6 +6,7 @@ namespace Arcanesoft\Foundation\Console;
 
 use Arcanesoft\Foundation\Auth\Console\InstallCommand as AuthInstallCommand;
 use Arcanesoft\Foundation\Core\Console\InstallCommand as CoreInstallCommand;
+use Arcanesoft\Foundation\ModuleManifest;
 use Arcanesoft\Foundation\Support\Console\InstallCommand as Command;
 use Arcanesoft\Foundation\System\Console\InstallCommand as SystemInstallCommand;
 
@@ -43,29 +44,29 @@ class InstallCommand extends Command
 
     /**
      * Handle the command.
+     *
+     * @param  \Arcanesoft\Foundation\ModuleManifest  $manifest
      */
-    public function handle(): void
+    public function handle(ModuleManifest $manifest): void
     {
         $this->line('');
 
-        $this->install();
-        $this->installModules();
+        $this->installFoundation();
+        $this->installModules($manifest);
 
         $this->line('');
-        $this->info('The ARCANESOFT installation was completed !');
-    }
 
-    /* -----------------------------------------------------------------
-     |  Other Methods
-     | -----------------------------------------------------------------
-     */
+        $this->info("ARCANESOFT has been installed successfully.");
+    }
 
     /**
      * Install ARCANESOFT's Foundation.
      */
-    protected function install()
+    protected function installFoundation(): void
     {
-        return $this->callMany([
+        $this->comment('Installing Foundation...');
+
+        $this->callMany([
             CoreInstallCommand::class,
             AuthInstallCommand::class,
             SystemInstallCommand::class,
@@ -74,17 +75,13 @@ class InstallCommand extends Command
 
     /**
      * Install ARCANESOFT's modules.
+     *
+     * @param  \Arcanesoft\Foundation\ModuleManifest  $manifest
      */
-    protected function installModules(): void
+    protected function installModules(ModuleManifest $manifest): void
     {
-        $this->comment('Seeding all modules...');
+        $this->comment('Installing Modules...');
 
-        $commands = $this->laravel
-            ->get('config')
-            ->get('arcanesoft.foundation.modules.commands.install', []);
-
-        $this->callMany($commands);
-
-        $this->info('Database seeding completed successfully.');
+        $this->callMany($manifest->config('install'));
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Core\Providers;
 
+use Arcanesoft\Foundation\Core\Views\Composers\{MetricsComposer, NotificationsComposer, SidebarComposer};
 use Arcanesoft\Foundation\Support\Providers\ViewServiceProvider as ServiceProvider;
 
 /**
@@ -20,13 +21,16 @@ class ViewServiceProvider extends ServiceProvider
      */
 
     /**
-     * The view composers.
+     * Get the view composers.
      *
-     * @var array
+     * @return string[]|array
      */
-    protected $composers = [
-        \Arcanesoft\Foundation\Core\Views\Composers\SidebarComposer::class,
-        \Arcanesoft\Foundation\Core\Views\Composers\MetricsComposer::class,
-        \Arcanesoft\Foundation\Core\Views\Composers\NotificationsComposer::class,
-    ];
+    public function composers(): array
+    {
+        return [
+            SidebarComposer::class,
+            MetricsComposer::class,
+            NotificationsComposer::class,
+        ];
+    }
 }

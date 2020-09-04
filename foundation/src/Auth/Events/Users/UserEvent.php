@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Events\Users;
 
 use Arcanesoft\Foundation\Auth\Models\User;
+use Illuminate\Foundation\Events\Dispatchable;
 
 /**
  * Class     UserEvent
@@ -14,6 +15,13 @@ use Arcanesoft\Foundation\Auth\Models\User;
  */
 abstract class UserEvent
 {
+    /* -----------------------------------------------------------------
+     |  Traits
+     | -----------------------------------------------------------------
+     */
+
+    use Dispatchable;
+
     /* -----------------------------------------------------------------
      |  Properties
      | -----------------------------------------------------------------

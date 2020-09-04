@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Console;
 
+use Arcanesoft\Foundation\ModuleManifest;
 use Arcanesoft\Foundation\Support\Console\PublishCommand as Command;
 
 /**
@@ -40,32 +41,47 @@ class PublishCommand extends Command
 
     /**
      * Handle the command.
+     *
+     * @param  \Arcanesoft\Foundation\ModuleManifest  $manifest
      */
-    public function handle()
+    public function handle(ModuleManifest $manifest)
     {
         $this->line('');
         $this->info('Publishing the modules...');
 
-        foreach ($this->getTags() as $tag) {
-            $this->comment("Publishing [{$tag}]");
-            $this->callSilent('vendor:publish', ['--tag' => $tag]);
-        }
+        $tags = [
+            'arcanesoft-assets',
+            'arcanesoft-config',
+            'arcanesoft-translations',
+            'arcanesoft-views',
+        ];
+
+        $this->publishFoundation();
+        $this->publishModules($manifest);
+
+//        foreach ($tags as $tag) {
+//            $this->comment("Publishing [{$tag}]");
+//            $this->callSilent('vendor:publish', ['--tag' => $tag]);
+//        }
     }
 
-    /* -----------------------------------------------------------------
-     |  Other Methods
-     | -----------------------------------------------------------------
+    /**
+     * Publish Foundation.
      */
+    public function publishFoundation(): void
+    {
+
+    }
 
     /**
-     * Get tags to publish.
+     * Publish modules.
      *
-     * @return array
+     * @param  \Arcanesoft\Foundation\ModuleManifest  $manifest
      */
-    protected function getTags(): array
+    public function publishModules(ModuleManifest $manifest): void
     {
-        return $this->laravel
-            ->get('config')
-            ->get('arcanesoft.foundation.modules.commands.publish.tags', []);
+        foreach ($manifest->config('publish') as $command) {
+            $this->call($command);
+        }
     }
 }

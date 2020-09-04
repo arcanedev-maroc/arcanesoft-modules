@@ -7,12 +7,12 @@ namespace Arcanesoft\Foundation\System\Http\Routes;
 use Arcanesoft\Foundation\System\Http\Controllers\RoutesViewerController;
 
 /**
- * Class     RoutesViewer
+ * Class     RoutesViewerRoutes
  *
  * @package  Arcanesoft\Foundation\System\Http\Routes
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class RoutesViewer extends AbstractRouteRegistrar
+class RoutesViewerRoutes extends AbstractRouteRegistrar
 {
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -24,12 +24,10 @@ class RoutesViewer extends AbstractRouteRegistrar
      */
     public function map(): void
     {
-        $this->adminGroup(function () {
-            $this->prefix('routes-viewer')->name('routes-viewer.')->group(function () {
-                // admin::system.routes-viewer.index
-                $this->get('/', [RoutesViewerController::class, 'index'])
-                     ->name('index');
-            });
+        $this->prefix('routes-viewer')->name('routes-viewer.')->group(function () {
+            // admin::system.routes-viewer.index
+            $this->get('/', [RoutesViewerController::class, 'index'])
+                 ->name('index');
         });
     }
 }

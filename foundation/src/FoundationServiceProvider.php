@@ -9,6 +9,8 @@ use Arcanesoft\Foundation\Core\CoreServiceProvider;
 use Arcanesoft\Foundation\Support\Providers\PackageServiceProvider;
 use Arcanesoft\Foundation\System\SystemServiceProvider;
 use Arcanesoft\Foundation\Views\ViewsServiceProvider;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Foundation\Application;
 
 /**
  * Class     FoundationServiceProvider
@@ -57,9 +59,12 @@ class FoundationServiceProvider extends PackageServiceProvider
         ]);
 
         $this->commands([
+            Console\DiscoverCommand::class,
             Console\InstallCommand::class,
             Console\PublishCommand::class,
         ]);
+
+        $this->registerModuleManifest();
     }
 
     /**
@@ -81,9 +86,30 @@ class FoundationServiceProvider extends PackageServiceProvider
             $this->publishTranslations();
             $this->publishViews();
 
-            Foundation::$runsMigrations
+            Arcanesoft::$runsMigrations
                 ? $this->loadMigrations()
                 : $this->publishMigrations();
         }
+    }
+
+    /* -----------------------------------------------------------------
+     |  Other Methods
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Register the module manifest.
+     */
+    protected function registerModuleManifest(): void
+    {
+        $this->singleton(PackageManifest::class, function (Application $app) {
+            return new PackageManifest(new Filesystem, $app->basePath());
+        });
+
+        $this->singleton(ModuleManifest::class, function (Application $app) {
+            return new ModuleManifest(
+                new Filesystem, $app->basePath(), $app->bootstrapPath(Arcanesoft::ARCANESOFT_MODULES_CACHE)
+            );
+        });
     }
 }

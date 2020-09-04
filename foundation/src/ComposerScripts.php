@@ -27,7 +27,9 @@ class ComposerScripts
      */
     public static function postAutoloadDump(Event $event): void
     {
-        require_once $event->getComposer()->getConfig()->get('vendor-dir').'/autoload.php';
+        $vendorPath = $event->getComposer()->getConfig()->get('vendor-dir');
+
+        require_once "{$vendorPath}/autoload.php";
 
         static::clearCompiled($event);
     }
@@ -41,7 +43,7 @@ class ComposerScripts
     {
         $laravel = new Application(getcwd());
 
-        if (is_file($arcanesoft = $laravel->bootstrapPath('cache/arcanesoft.php'))) {
+        if (is_file($arcanesoft = $laravel->bootstrapPath(Arcanesoft::ARCANESOFT_MODULES_CACHE))) {
             @unlink($arcanesoft);
         }
     }

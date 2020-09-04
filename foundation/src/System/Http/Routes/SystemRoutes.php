@@ -28,6 +28,14 @@ class SystemRoutes extends AbstractRouteRegistrar
             // admin::system.index
             $this->get('/', [SystemController::class, 'index'])
                  ->name('index');
+
+            static::mapRouteClasses([
+                AbilitiesRoutes::class,
+                DependenciesRoutes::class,
+                LogViewerRoutes::class,
+                MaintenanceRoutes::class,
+                RoutesViewerRoutes::class,
+            ]);
         });
     }
 }

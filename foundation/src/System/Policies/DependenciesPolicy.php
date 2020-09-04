@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\System\Policies;
 
-use Arcanesoft\Foundation\Auth\Models\Administrator;
 use Arcanedev\LaravelPolicies\Ability;
+use Arcanesoft\Foundation\Auth\Models\Administrator;
 
 /**
- * Class     AbilitiesPolicy
+ * Class     DependenciesPolicy
  *
  * @package  Arcanesoft\Foundation\System\Policies
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class AbilitiesPolicy extends AbstractPolicy
+class DependenciesPolicy extends AbstractPolicy
 {
     /* -----------------------------------------------------------------
      |  Getters
@@ -27,13 +27,8 @@ class AbilitiesPolicy extends AbstractPolicy
      */
     protected static function prefix(): string
     {
-        return 'admin::system.abilities.';
+        return 'admin::system.dependencies.';
     }
-
-    /* -----------------------------------------------------------------
-     |  Main Methods
-     | -----------------------------------------------------------------
-     */
 
     /**
      * Get the abilities.
@@ -43,21 +38,21 @@ class AbilitiesPolicy extends AbstractPolicy
     public function abilities(): iterable
     {
         $this->setMetas([
-            'category' => 'System - Abilities',
+            'category' => 'System - Dependencies',
         ]);
 
         return [
 
             // admin::system.abilities.index
             $this->makeAbility('index')->setMetas([
-                'name'        => 'List all the abilities',
-                'description' => 'Allows to list all the abilities',
+                'name'        => 'List all the dependencies',
+                'description' => 'Allows to list all the dependencies',
             ]),
 
             // admin::system.abilities.show
             $this->makeAbility('show')->setMetas([
-                'name'        => 'Show the ability\'s details',
-                'description' => 'Allows to show the ability\'s details',
+                'name'        => 'Show a dependency\'s details',
+                'description' => 'Allows to show the dependency\'s details',
             ]),
 
         ];
@@ -69,7 +64,7 @@ class AbilitiesPolicy extends AbstractPolicy
      */
 
     /**
-     * Allow to access all the abilities.
+     * Allow to access all the dependencies.
      *
      * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
      *
@@ -81,14 +76,13 @@ class AbilitiesPolicy extends AbstractPolicy
     }
 
     /**
-     * Allow to access all the abilities.
+     * Allow to access all the dependency.
      *
      * @param  \Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $administrator
-     * @param  \Arcanedev\LaravelPolicies\Ability|null                 $ability
      *
      * @return \Illuminate\Auth\Access\Response|bool|void
      */
-    public function show(Administrator $administrator, Ability $ability = null)
+    public function show(Administrator $administrator)
     {
         //
     }
