@@ -7,7 +7,7 @@ namespace Arcanesoft\Foundation\Fortify\Http\Controllers;
 use Arcanesoft\Foundation\Auth\Auth;
 use Arcanesoft\Foundation\Fortify\Concerns\HasGuard;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\Response;
+use Illuminate\Http\{Request, Response};
 
 /**
  * Class     RegisterController
@@ -37,7 +37,7 @@ abstract class RegisterController
      *
      * @return mixed
      */
-    protected function register($request, array $data)
+    protected function register(Request $request, array $data)
     {
         $user = $this->createUser($data);
 
@@ -62,12 +62,12 @@ abstract class RegisterController
     /**
      * Determine if the registered user should be logged in.
      *
-     * @param  \Illuminate\Http\Request                 $request
-     * @param  \Arcanesoft\Foundation\Auth\Models\User  $user
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed                     $user
      *
      * @return bool
      */
-    protected function shouldLoginUser($request, $user): bool
+    protected function shouldLoginUser(Request $request, $user): bool
     {
         return Auth::isLoginEnabled();
     }
@@ -76,10 +76,11 @@ abstract class RegisterController
      * Get the registered response.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  mixed                     $user
      *
      * @return mixed
      */
-    protected function getRegisteredResponse($request, $user)
+    protected function getRegisteredResponse(Request $request, $user)
     {
         if ($request->wantsJson())
             new Response('', Response::HTTP_CREATED);
@@ -91,8 +92,9 @@ abstract class RegisterController
      * Get the redirect url after user was registered.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  mixed                     $user
      *
      * @return string
      */
-    abstract protected function redirectUrlAfterRegister($request, $user): string;
+    abstract protected function redirectUrlAfterRegister(Request $request, $user): string;
 }

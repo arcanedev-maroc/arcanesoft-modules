@@ -9,7 +9,7 @@ use Arcanesoft\Foundation\Auth\Models\Concerns\HasTwoFactorAuthentication;
 use Arcanesoft\Foundation\Fortify\Concerns\HasGuard;
 use Arcanesoft\Foundation\Fortify\LoginRateLimiter;
 use Closure;
-use Illuminate\Http\Request;
+use Illuminate\Http\{JsonResponse, Request};
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -138,12 +138,22 @@ abstract class RedirectIfTwoFactorWasEnabled
      *
      * @param  \Illuminate\Http\Request  $request
      *
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\Response|mixed
      */
     protected function twoFactorChallengeResponse(Request $request)
     {
-        return $request->wantsJson()
-            ? response()->json(['two_factor' => true])
-            : redirect()->route('two-factor.login');
+        if ($request->wantsJson())
+            return new JsonResponse(['two_factor' => true]);
+
+        return redirect()->to($this->getTwoFactorUrl($request));
     }
+
+    /**
+     * Get the two factor redirect url.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return string
+     */
+    abstract protected function getTwoFactorUrl(Request $request);
 }

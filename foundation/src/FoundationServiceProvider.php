@@ -6,6 +6,7 @@ namespace Arcanesoft\Foundation;
 
 use Arcanesoft\Foundation\Auth\AuthServiceProvider;
 use Arcanesoft\Foundation\Core\CoreServiceProvider;
+use Arcanesoft\Foundation\Fortify\FortifyServiceProvider;
 use Arcanesoft\Foundation\Support\Providers\PackageServiceProvider;
 use Arcanesoft\Foundation\System\SystemServiceProvider;
 use Arcanesoft\Foundation\Views\ViewsServiceProvider;
@@ -53,6 +54,7 @@ class FoundationServiceProvider extends PackageServiceProvider
 
         $this->registerProviders([
             CoreServiceProvider::class,
+            FortifyServiceProvider::class,
             AuthServiceProvider::class,
             SystemServiceProvider::class,
             ViewsServiceProvider::class,

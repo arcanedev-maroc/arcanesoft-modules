@@ -26,14 +26,16 @@ class ConfirmPasswordRoutes extends AdminRouteRegistrar
     {
         $this->adminGroup(function () {
             $this->prefix('auth/password/confirm')
-                 ->name('auth.password.confirm')
+                 ->name('auth.password.confirm.')
                  ->middleware(['auth:admin'])
                  ->group(function () {
-                     // auth::admin.password.confirm
-                     $this->get('/', [ConfirmPasswordController::class, 'showConfirmForm']);
+                     // auth::admin.password.confirm.create
+                     $this->get('/', [ConfirmPasswordController::class, 'showConfirmForm'])
+                          ->name('create');
 
-                     // auth::admin.password.confirm
-                     $this->post('/', [ConfirmPasswordController::class, 'confirm']);
+                     // auth::admin.password.confirm.store
+                     $this->post('/', [ConfirmPasswordController::class, 'confirm'])
+                          ->name('store');
                  });
         });
     }

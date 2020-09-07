@@ -4,14 +4,8 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Models\Concerns;
 
-use BaconQrCode\Renderer\Color\Rgb;
-use BaconQrCode\Renderer\Image\SvgImageBackEnd;
-use BaconQrCode\Renderer\ImageRenderer;
-use BaconQrCode\Renderer\RendererStyle\Fill;
-use BaconQrCode\Renderer\RendererStyle\RendererStyle;
-use BaconQrCode\Writer;
-use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
-use Laravel\Fortify\RecoveryCode;
+use Arcanesoft\Foundation\Fortify\Contracts\TwoFactorAuthenticationProvider;
+use Arcanesoft\Foundation\Fortify\Services\TwoFactorAuthentication\{QrCode, RecoveryCode};
 
 /**
  * Trait     HasTwoFactorAuthentication
@@ -21,6 +15,11 @@ use Laravel\Fortify\RecoveryCode;
  */
 trait HasTwoFactorAuthentication
 {
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
+     */
+
     /**
      * Get the user's two factor authentication recovery codes.
      *
@@ -54,12 +53,7 @@ trait HasTwoFactorAuthentication
      */
     public function twoFactorQrCodeSvg(): string
     {
-        $svg = (new Writer(
-            new ImageRenderer(
-                new RendererStyle(192, 0, null, null, Fill::uniformColor(new Rgb(255, 255, 255), new Rgb(45, 55, 72))),
-                new SvgImageBackEnd
-            )
-        ))->writeString($this->twoFactorQrCodeUrl());
+        $svg = (new QrCode)->svg($this->twoFactorQrCodeUrl());
 
         return trim(substr($svg, strpos($svg, "\n") + 1));
     }
@@ -76,5 +70,20 @@ trait HasTwoFactorAuthentication
             $this->email,
             decrypt($this->two_factor_secret)
         );
+    }
+
+    /* -----------------------------------------------------------------
+     |  Check Methods
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Determine if the user has two factor enabled.
+     *
+     * @return bool
+     */
+    public function hasTwoFactorAuthentication(): bool
+    {
+        return false;
     }
 }

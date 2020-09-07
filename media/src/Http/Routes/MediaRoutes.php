@@ -40,10 +40,10 @@ class MediaRoutes extends AdminRouteRegistrar
     {
         $this->prefix('api')->name('api.')->middleware(['ajax'])->group(function () {
             $this->get('items', [MediaApiController::class, 'all'])
-                 ->name('index'); // admin::media.api.index
+                 ->name('items.index'); // admin::media.api.items.index
 
             $this->get('directories', [MediaApiController::class, 'directories'])
-                 ->name('index'); // admin::media.api.index
+                 ->name('directories.index'); // admin::media.api.directories.index
 
             $this->post('upload', [MediaApiController::class, 'upload'])
                  ->name('upload'); // admin::media.api.upload
