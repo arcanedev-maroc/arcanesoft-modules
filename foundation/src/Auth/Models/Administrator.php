@@ -13,7 +13,9 @@ use Arcanesoft\Foundation\Auth\Events\Administrators\{CreatedAdministrator,
     RestoredAdministrator, RestoringAdministrator, RetrievedAdministrator, SavedAdministrator, SavingAdministrator,
     UpdatedAdministrator, UpdatingAdministrator
 };
-use Arcanesoft\Foundation\Auth\Models\Concerns\{Activatable, CanResetPassword, HasPassword, HasRoles, HasSessions};
+use Arcanesoft\Foundation\Auth\Models\Concerns\{
+    Activatable, CanResetPassword, HasPassword, HasRoles, HasSessions, HasTwoFactorAuthentication
+};
 use Arcanesoft\Foundation\Auth\Models\Presenters\UserPresenter;
 use Arcanesoft\Foundation\Support\Traits\Deletable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -33,8 +35,10 @@ use Illuminate\Support\Collection;
  * @property  string|null                      last_name
  * @property  string                           email
  * @property  string                           password
- * @property  string|null                      avatar
+ * @property  string|null                      two_factor_secret
+ * @property  string|null                      two_factor_recovery_codes
  * @property  string|null                      remember_token
+ * @property  string|null                      avatar
  * @property  \Illuminate\Support\Carbon|null  last_activity_at
  * @property  \Illuminate\Support\Carbon       created_at
  * @property  \Illuminate\Support\Carbon       updated_at
@@ -60,6 +64,7 @@ class Administrator extends Authenticatable implements Impersonatable, CanBeActi
         HasSessions,
         Notifiable,
         Activatable,
+        HasTwoFactorAuthentication,
         SoftDeletes,
         Deletable;
 
@@ -223,7 +228,7 @@ class Administrator extends Authenticatable implements Impersonatable, CanBeActi
      * Check if the user has at least one permission.
      *
      * @param  \Illuminate\Support\Collection|array  $permissions
-     * @param  \Illuminate\Support\Collection        &$failed
+     * @param  \Illuminate\Support\Collection|null   &$failed
      *
      * @return bool
      */
@@ -244,7 +249,7 @@ class Administrator extends Authenticatable implements Impersonatable, CanBeActi
      * Check if the user has all permissions.
      *
      * @param  \Illuminate\Support\Collection|array  $permissions
-     * @param  \Illuminate\Support\Collection        &$failed
+     * @param  \Illuminate\Support\Collection|null   &$failed
      *
      * @return bool
      */

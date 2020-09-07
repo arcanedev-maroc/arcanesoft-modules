@@ -61,16 +61,31 @@ abstract class AdminRouteRegistrar extends RouteRegistrar
      */
 
     /**
-     * Group the routes under the admin stack.
+     * Group the routes under the admin [web] stack.
      *
      * @param  \Closure  $callback
      */
-    protected function adminGroup(Closure $callback)
+    protected function adminGroup(Closure $callback): void
     {
         $this->prefix($this->getAdminPrefix())
              ->middleware($this->getAdminMiddleware())
              ->name($this->getAdminName())
              ->group($this->prepareModuleCallback($callback));
+    }
+
+    /**
+     * Group the routes under the admin [api] stack.
+     *
+     * @param  \Closure  $callback
+     */
+    protected function adminApiGroup(Closure $callback): void
+    {
+        $this->adminGroup(function () use ($callback) {
+            $this->prefix('api')
+                 ->name('api.')
+                 ->middleware(['ajax'])
+                 ->group($callback);
+        });
     }
 
     /**

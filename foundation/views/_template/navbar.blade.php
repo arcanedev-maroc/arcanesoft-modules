@@ -33,11 +33,14 @@
                     </div>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right mt-0" aria-labelledby="profile-dropdown-menu">
+                    {{-- PROFILE --}}
                     <a href="{{ route('admin::auth.profile.index') }}" class="dropdown-item">
-                        <i class="fa fa-fw fa-user mr-2"></i> @lang('Profile')
-                    </a>
+                        <i class="fa fa-fw fa-user mr-2"></i> @lang('Profile')</a>
+
                     <div class="dropdown-divider"></div>
-                    <logout-nav-btn-component url="{{ route('auth::logout') }}" text="@lang('Logout')"></logout-nav-btn-component>
+                    {{-- LOGOUT --}}
+                    <a href="#" @click.prevent="logout('{{ route('admin::auth.logout') }}', $event)"
+                       class="dropdown-item">@lang('Logout')</a>
                 </div>
             </li>
         </ul>

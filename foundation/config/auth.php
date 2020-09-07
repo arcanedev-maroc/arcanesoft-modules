@@ -8,17 +8,22 @@ return [
      */
 
     'authentication' => [
-        'login' => [
+
+        'login'      => [
             'enabled' => true,
         ],
 
-        'register' => [
+        'register'   => [
             'enabled' => true,
 
             'login-after-registered' => true,
         ],
 
-        'socialite' => [
+        'two-factor' => [
+            'enabled' => true,
+        ],
+
+        'socialite'  => [
             'enabled'   => true,
 
             'providers' => [
@@ -47,6 +52,16 @@ return [
                 ],
             ],
         ],
+
+    ],
+
+    'limiters' => [
+
+        'login' => [
+            'enabled'  => true,
+            'throttle' => '5',
+        ],
+
     ],
 
     /* -----------------------------------------------------------------

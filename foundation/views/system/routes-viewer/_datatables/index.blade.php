@@ -32,7 +32,7 @@
                 <tr>
                     <td>
                         @foreach ($route->methods as $method)
-                            <span class="badge badge-outline-{{ $method['color'] }}">{{ $method['name'] }}</span>
+                            <span class="badge border border-{{ $method['color'] }} text-{{ $method['color'] }}">{{ $method['name'] }}</span>
                         @endforeach
                     </td>
                     <td>
@@ -55,7 +55,7 @@
                     </td>
                     <td>
                         @foreach($route->middleware as $middleware)
-                            <span class="badge badge-outline-secondary">{{ $middleware }}</span>
+                            <span class="badge border border-secondary text-secondary">{{ $middleware }}</span>
                         @endforeach
                     </td>
                 </tr>

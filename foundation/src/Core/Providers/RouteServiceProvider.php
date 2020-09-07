@@ -28,8 +28,7 @@ class RouteServiceProvider extends ServiceProvider
     public function routeClasses(): array
     {
         return [
-            Routes\DashboardRoutes::class,
-            Routes\MetricsRoutes::class,
+            Routes\WebRoutes::class,
             Routes\ApiRoutes::class,
         ];
     }
@@ -44,6 +43,11 @@ class RouteServiceProvider extends ServiceProvider
         $this->registerMiddleware($this->app['router']);
     }
 
+    /* -----------------------------------------------------------------
+     |  Other Methods
+     | -----------------------------------------------------------------
+     */
+
     /**
      * Register middleware classes.
      *
@@ -51,13 +55,25 @@ class RouteServiceProvider extends ServiceProvider
      */
     private function registerMiddleware($router)
     {
-        $config = (array) $this->app['config']['arcanesoft.foundation.http.middleware'];
-
-        foreach ($config as $group => $middleware) {
-            if (is_array($middleware))
-                $router->middlewareGroup($group, $middleware);
-            else
-                $router->pushMiddlewareToGroup($group, $middleware);
+        foreach ((array) $this->config('http.middleware') as $group => $middleware) {
+            $router->pushMiddlewareToGroup($group, $middleware);
         }
+
+        foreach ((array) $this->config('http.middleware-group') as $group => $middleware) {
+            $router->middlewareGroup($group, $middleware);
+        }
+    }
+
+    /**
+     * Get the config.
+     *
+     * @param  string      $key
+     * @param  mixed|null  $default
+     *
+     * @return mixed
+     */
+    private function config(string $key, $default = null)
+    {
+        return $this->app['config']->get("arcanesoft.foundation.{$key}", $default);
     }
 }

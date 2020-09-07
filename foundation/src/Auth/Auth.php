@@ -150,6 +150,16 @@ class Auth
         return config()->get($key, $default);
     }
 
+    /**
+     * Get the username used for authentication.
+     *
+     * @return string
+     */
+    public static function username(): string
+    {
+        return 'email';
+    }
+
     /* -----------------------------------------------------------------
      |  Check Methods
      | -----------------------------------------------------------------
@@ -173,12 +183,32 @@ class Auth
     }
 
     /**
+     * Check if the login feature is enabled.
+     *
+     * @return bool
+     */
+    public static function isLoginEnabled(): bool
+    {
+        return Auth::config('authentication.login.enabled', false);
+    }
+
+    /**
+     * Check if the two factor feature is enabled.
+     *
+     * @return bool
+     */
+    public static function isTwoFactorEnabled(): bool
+    {
+        return (bool) static::config('authentication.two-factor.enabled', false);
+    }
+
+    /**
      * Check if the registration feature is enabled.
      *
      * @return bool
      */
     public static function isRegistrationEnabled(): bool
     {
-        return static::config('authentication.register.enabled', true);
+        return (bool) static::config('authentication.register.enabled', false);
     }
 }

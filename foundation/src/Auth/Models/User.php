@@ -13,7 +13,8 @@ use Arcanesoft\Foundation\Auth\Events\Users\{
     RestoringUser, RetrievedUser, SavedUser, SavingUser, UpdatedUser, UpdatingUser
 };
 use Arcanesoft\Foundation\Auth\Models\Concerns\{
-    Activatable, CanResetPassword, CanVerifyEmail, HasLinkedAccounts, HasPassword, HasSessions
+    Activatable, CanResetPassword, CanVerifyEmail, HasLinkedAccounts, HasPassword, HasSessions,
+    HasTwoFactorAuthentication
 };
 use Arcanesoft\Foundation\Auth\Models\Presenters\UserPresenter;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -35,7 +36,10 @@ use Illuminate\Notifications\Notifiable;
  * @property  string                           email
  * @property  \Illuminate\Support\Carbon|null  email_verified_at
  * @property  string|null                      password
- * @property  string                           remember_token
+ * @property  string|null                      two_factor_secret
+ * @property  string|null                      two_factor_recovery_codes
+ * @property  string|null                      remember_token
+ * @property  string|null                      avatar
  * @property  \Illuminate\Support\Carbon|null  last_activity_at
  * @property  \Illuminate\Support\Carbon       created_at
  * @property  \Illuminate\Support\Carbon       updated_at
@@ -60,6 +64,7 @@ class User extends Authenticatable implements Impersonatable, MustVerifyEmail, C
         CanImpersonate,
         CanResetPassword,
         CanVerifyEmail,
+        HasTwoFactorAuthentication,
         HasLinkedAccounts,
         SoftDeletes;
 

@@ -25,7 +25,7 @@ class EmailRule
      *
      * @return \Illuminate\Validation\Rules\Unique
      */
-    public static function unique()
+    public static function unique(): Unique
     {
         return new Unique(Auth::table('users'), 'email');
     }

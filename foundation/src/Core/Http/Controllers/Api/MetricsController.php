@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Arcanesoft\Foundation\Core\Http\Controllers;
+namespace Arcanesoft\Foundation\Core\Http\Controllers\Api;
 
 use Arcanedev\LaravelMetrics\Contracts\Manager;
 use Illuminate\Http\Request;
@@ -21,13 +21,20 @@ class MetricsController
      | -----------------------------------------------------------------
      */
 
-    public function process(Request $request, Manager $manager)
+    /**
+     * Handle the request.
+     *
+     * @param  \Illuminate\Http\Request                     $request
+     * @param  \Arcanedev\LaravelMetrics\Contracts\Manager  $manager
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function handle(Request $request, Manager $manager)
     {
-        $class = $request->get('metric');
-
-        abort_unless($manager->has($class), Response::HTTP_NOT_FOUND, __('Metric not found'));
-
+        $class  = $request->get('metric');
         $metric = $manager->get($class);
+
+        abort_if(is_null($metric), Response::HTTP_NOT_FOUND, __('Metric not found'));
 
         if ($metric->authorizedToSee($request))
             return response()->json($metric->resolve($request)->toArray());

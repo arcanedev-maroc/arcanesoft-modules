@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Core\Http\Routes;
 
-use Arcanesoft\Foundation\Core\Http\Controllers\DashboardController;
-
 /**
- * Class     DashboardRoutes
+ * Class     WebRoutes
  *
- * @package  Arcanesoft\Foundation\Http\Routes
+ * @package  Arcanesoft\Foundation\Core\Http\Routes
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class DashboardRoutes extends AbstractRouteRegistrar
+class WebRoutes extends AbstractRouteRegistrar
 {
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -25,9 +23,9 @@ class DashboardRoutes extends AbstractRouteRegistrar
     public function map(): void
     {
         $this->adminGroup(function () {
-            // admin::index
-            $this->get('/', [DashboardController::class, 'index'])
-                 ->name('index');
+            static::mapRouteClasses([
+                Web\DashboardRoutes::class,
+            ]);
         });
     }
 }

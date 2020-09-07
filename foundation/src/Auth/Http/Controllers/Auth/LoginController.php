@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Http\Controllers\Auth;
 
-use App\Http\Controllers\Auth\Concerns\RedirectsToHomePage;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Arcanesoft\Foundation\Auth\Http\Requests\Authentication\LoginRequest;
+use Arcanesoft\Foundation\Auth\Actions\Authentication\Login\{
+    AttemptToAuthenticate, EnsureLoginIsNotThrottled, PrepareAuthenticatedSession, RedirectIfTwoFactorWasEnabled
+};
+use Arcanesoft\Foundation\Auth\Concerns\Authentication\UseAdministratorGuard;
+use Arcanesoft\Foundation\Fortify\Http\Controllers\LoginController as Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * Class     LoginController
  *
- * @package  Arcanesoft\Foundation\Auth\Http\Controllers\Auth
+ * @package  App\Http\Controllers\Auth
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class LoginController extends Controller
@@ -22,8 +25,7 @@ class LoginController extends Controller
      | -----------------------------------------------------------------
      */
 
-    use AuthenticatesUsers,
-        RedirectsToHomePage;
+    use UseAdministratorGuard;
 
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -31,46 +33,70 @@ class LoginController extends Controller
      */
 
     /**
-     * Show the application's login form.
+     * Show the login view.
      *
-     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
-    public function showLoginForm()
+    public function create()
     {
         return view('foundation::auth.login');
     }
 
     /**
-     * Where to redirect users after verification.
+     * Attempt to authenticate a new session.
+     *
+     * @param  \Arcanesoft\Foundation\Auth\Http\Requests\Authentication\LoginRequest  $request
+     *
+     * @return mixed
+     */
+    public function store(LoginRequest $request)
+    {
+        return $this->login($request, [
+            EnsureLoginIsNotThrottled::class,
+            RedirectIfTwoFactorWasEnabled::class,
+            AttemptToAuthenticate::class,
+            PrepareAuthenticatedSession::class,
+        ]);
+    }
+
+    /**
+     * Destroy an authenticated session.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request)
+    {
+        return $this->logout($request);
+    }
+
+    /* -----------------------------------------------------------------
+     |  Other Methods
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Get the redirect url after user was authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
      *
      * @return string
      */
-    public function redirectTo(): string
+    protected function redirectUrlAfterLogin($request): string
     {
         return route('admin::index');
     }
 
     /**
-     * The user has logged out of the application.
+     * Get the redirect url after user was logout.
      *
      * @param  \Illuminate\Http\Request  $request
      *
-     * @return \Illuminate\Http\JsonResponse|mixed
+     * @return string
      */
-    protected function loggedOut(Request $request)
+    protected function redirectUrlAfterLogout($request): string
     {
-        return response()->json([
-            'redirect' => route('public::index'),
-        ]);
-    }
-
-    /**
-     * Get the guard to be used during authentication.
-     *
-     * @return \Illuminate\Contracts\Auth\StatefulGuard
-     */
-    protected function guard()
-    {
-        return Auth::guard('administrator');
+        return route('public::index');
     }
 }
