@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Repositories;
 
 use Arcanesoft\Foundation\Auth\Auth;
-use Arcanesoft\Foundation\Auth\Events\Users\{ActivatedUser,
-    ActivatingUser,
-    Attributes\UpdatedPassword,
-    DeactivatedUser,
-    DeactivatingUser};
-use Arcanesoft\Foundation\Auth\Events\Users\Attributes\{UpdatingPassword};
+use Arcanesoft\Foundation\Auth\Events\Users\ActivatedUser;
+use Arcanesoft\Foundation\Auth\Events\Users\ActivatingUser;
+use Arcanesoft\Foundation\Auth\Events\Users\Attributes\UpdatingPassword;
+use Arcanesoft\Foundation\Auth\Events\Users\Attributes\UpdatedPassword;
+use Arcanesoft\Foundation\Auth\Events\Users\DeactivatedUser;
+use Arcanesoft\Foundation\Auth\Events\Users\DeactivatingUser;
 use Arcanesoft\Foundation\Auth\Models\User;
+use Arcanesoft\Foundation\Auth\Repositories\Concerns\Authentication\HasTwoFactorAuthentication;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
@@ -25,6 +26,13 @@ use Illuminate\Support\Str;
  */
 class UsersRepository extends AbstractRepository
 {
+    /* -----------------------------------------------------------------
+     |  Traits
+     | -----------------------------------------------------------------
+     */
+
+    use HasTwoFactorAuthentication;
+
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------

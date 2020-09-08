@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Fortify\Http\Requests;
 
+use Arcanesoft\Foundation\Auth\Models\Entities\TwoFactor;
 use Arcanesoft\Foundation\Fortify\Concerns\HasGuard;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Collection;
 use Arcanesoft\Foundation\Fortify\Contracts\TwoFactorAuthenticationProvider;
+use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * Class     TwoFactorLoginRequest
@@ -58,7 +58,7 @@ abstract class TwoFactorLoginRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return ! is_null($this->challengedUser());
     }
 
     /**
@@ -84,10 +84,9 @@ abstract class TwoFactorLoginRequest extends FormRequest
         if (is_null($this->code))
             return false;
 
-        return $this->getTwoFactorProvider()->verify(
-            decrypt($this->challengedUser()->two_factor_secret),
-            $this->code
-        );
+        $secret = $this->twoFactorEntity()->getDecryptedSecret();
+
+        return $this->getTwoFactorProvider()->verify($secret, $this->code);
     }
 
     /**
@@ -101,15 +100,13 @@ abstract class TwoFactorLoginRequest extends FormRequest
             return null;
         }
 
-        return Collection::make($this->challengedUser()->recoveryCodes())->first(function ($code) {
-            return hash_equals($this->recovery_code, $code) ? $code : null;
-        });
+        return $this->twoFactorEntity()->getValidRecoveryCode($this->recovery_code);
     }
 
     /**
      * Get the user that is attempting the two factor challenge.
      *
-     * @return \Arcanesoft\Foundation\Auth\Models\User|\Arcanesoft\Foundation\Auth\Models\Administrator|mixed|null
+     * @return \Arcanesoft\Foundation\Auth\Models\Administrator|\Arcanesoft\Foundation\Auth\Models\User|mixed|null
      */
     public function challengedUser()
     {
@@ -147,6 +144,16 @@ abstract class TwoFactorLoginRequest extends FormRequest
      |  Other Methods
      | -----------------------------------------------------------------
      */
+
+    /**
+     * Get the user's two factory instance.
+     *
+     * @return \Arcanesoft\Foundation\Auth\Models\Entities\TwoFactor
+     */
+    protected function twoFactorEntity(): TwoFactor
+    {
+        return $this->challengedUser()->two_factor;
+    }
 
     /**
      * Get the two factor authentication provider.

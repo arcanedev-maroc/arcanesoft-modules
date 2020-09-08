@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth\Repositories;
 
 use Arcanesoft\Foundation\Auth\Auth;
-use Arcanesoft\Foundation\Auth\Events\Administrators\{
-    ActivatedAdministrator, ActivatingAdministrator, DeactivatedAdministrator, DeactivatingAdministrator
-};
-use Arcanesoft\Foundation\Auth\Events\Administrators\Attributes\{UpdatedPassword, UpdatingPassword};
-use Arcanesoft\Foundation\Auth\Events\Administrators\Roles\{SyncedRoles, SyncingRoles};
+use Arcanesoft\Foundation\Auth\Events\Administrators\ActivatedAdministrator;
+use Arcanesoft\Foundation\Auth\Events\Administrators\ActivatingAdministrator;
+use Arcanesoft\Foundation\Auth\Events\Administrators\Attributes\UpdatedPassword;
+use Arcanesoft\Foundation\Auth\Events\Administrators\Attributes\UpdatingPassword;
+use Arcanesoft\Foundation\Auth\Events\Administrators\DeactivatedAdministrator;
+use Arcanesoft\Foundation\Auth\Events\Administrators\DeactivatingAdministrator;
+use Arcanesoft\Foundation\Auth\Events\Administrators\Roles\SyncedRoles;
+use Arcanesoft\Foundation\Auth\Events\Administrators\Roles\SyncingRoles;
 use Arcanesoft\Foundation\Auth\Models\Administrator;
+use Arcanesoft\Foundation\Auth\Repositories\Concerns\Authentication\HasTwoFactorAuthentication;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\{Collection, Str};
 
@@ -24,6 +28,13 @@ use Illuminate\Support\{Collection, Str};
  */
 class AdministratorsRepository extends AbstractRepository
 {
+    /* -----------------------------------------------------------------
+     |  Traits
+     | -----------------------------------------------------------------
+     */
+
+    use HasTwoFactorAuthentication;
+
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------

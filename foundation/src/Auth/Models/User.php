@@ -106,6 +106,7 @@ class User extends Authenticatable implements Impersonatable, MustVerifyEmail, C
         'email_verified_at' => 'datetime',
         'last_activity_at'  => 'datetime',
         'activated_at'      => 'datetime',
+        'two_factor'        => Casts\TwoFactorCast::class,
     ];
 
     /**

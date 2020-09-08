@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Fortify\Http\Controllers;
 
+use Arcanesoft\Foundation\Auth\Repositories\Authentication\TwoFactorAuthenticationRepository;
 use Arcanesoft\Foundation\Fortify\Concerns\HasGuard;
 use Arcanesoft\Foundation\Fortify\Http\Requests\TwoFactorLoginRequest;
 use Illuminate\Http\{Request, Response};
@@ -29,6 +30,29 @@ abstract class TwoFactorLoginController
      | -----------------------------------------------------------------
      */
 
+    /**
+     * Show the two factor form.
+     *
+     * @param  string                         $view
+     * @param  \Illuminate\Http\Request|null  $request
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    protected function form(string $view, Request $request = null)
+    {
+        if (is_null($request))
+            $request = request();
+
+        if (is_null($request->session()->get('login.id')))
+            return redirect()->to(
+                $this->getFailedTwoFactorRedirectUrl($request)
+            );
+
+        $request->session()->reflash();
+
+        return view($view);
+    }
+
     /*
      * Attempt to authenticate a new session using the two factor authentication code.
      *
@@ -45,7 +69,8 @@ abstract class TwoFactorLoginController
         }
 
         if ($code = $request->validRecoveryCode()) {
-            $user->replaceRecoveryCode($code);
+            $this->getTwoFactorAuthenticationRepository()
+                 ->replaceRecoveryCode($user, $code);
         }
         elseif ( ! $request->hasValidCode()) {
             return $this->getFailedTwoFactorLoginResponse($request);
@@ -114,4 +139,14 @@ abstract class TwoFactorLoginController
      * @return string
      */
     abstract protected function getFailedTwoFactorRedirectUrl(Request $request): string;
+
+    /**
+     * Get the two factor authentication repository.
+     *
+     * @return \Arcanesoft\Foundation\Auth\Repositories\Authentication\TwoFactorAuthenticationRepository
+     */
+    protected function getTwoFactorAuthenticationRepository()
+    {
+        return app(TwoFactorAuthenticationRepository::class);
+    }
 }

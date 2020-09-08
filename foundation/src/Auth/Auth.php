@@ -193,13 +193,23 @@ class Auth
     }
 
     /**
-     * Check if the two factor feature is enabled.
+     * Determine if the two factor authentication is enabled.
      *
      * @return bool
      */
     public static function isTwoFactorEnabled(): bool
     {
         return (bool) static::config('authentication.two-factor.enabled', false);
+    }
+
+    /**
+     * Determine if the socialite authentication is enabled.
+     *
+     * @return bool
+     */
+    public static function isSocialiteEnabled(): bool
+    {
+        return Socialite::isEnabled();
     }
 
     /**

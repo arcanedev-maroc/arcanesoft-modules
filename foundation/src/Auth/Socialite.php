@@ -106,7 +106,7 @@ class Socialite
      */
 
     /**
-     * Check if socialite is enabled.
+     * Determine if the socialite authentication is enabled.
      *
      * @return bool
      */

@@ -48,6 +48,17 @@ return [
     Arcanesoft\Foundation\Auth\Events\Users\Attributes\UpdatingPassword::class => [],
     Arcanesoft\Foundation\Auth\Events\Users\Attributes\UpdatedPassword::class  => [],
 
+    // Two Factor Authentication
+
+    Arcanesoft\Foundation\Auth\Events\Users\Authentication\TwoFactor\EnablingAuthentication::class  => [],
+    Arcanesoft\Foundation\Auth\Events\Users\Authentication\TwoFactor\EnabledAuthentication::class   => [],
+    Arcanesoft\Foundation\Auth\Events\Users\Authentication\TwoFactor\DisablingAuthentication::class => [],
+    Arcanesoft\Foundation\Auth\Events\Users\Authentication\TwoFactor\DisabledAuthentication::class  => [],
+    Arcanesoft\Foundation\Auth\Events\Users\Authentication\TwoFactor\GeneratingRecoveryCode::class  => [],
+    Arcanesoft\Foundation\Auth\Events\Users\Authentication\TwoFactor\GeneratedRecoveryCode::class   => [],
+    Arcanesoft\Foundation\Auth\Events\Users\Authentication\TwoFactor\ReplacingRecoveryCode::class   => [],
+    Arcanesoft\Foundation\Auth\Events\Users\Authentication\TwoFactor\ReplacedRecoveryCode::class    => [],
+
     /* -----------------------------------------------------------------
      |  Auth - Administrators
      | -----------------------------------------------------------------
@@ -88,6 +99,17 @@ return [
     Arcanesoft\Foundation\Auth\Events\Administrators\Attributes\UpdatedEmail::class  => [],
     Arcanesoft\Foundation\Auth\Events\Administrators\Attributes\UpdatingPassword::class => [],
     Arcanesoft\Foundation\Auth\Events\Administrators\Attributes\UpdatedPassword::class  => [],
+
+    // Two Factor Authentication
+
+    Arcanesoft\Foundation\Auth\Events\Administrators\Authentication\TwoFactor\EnablingAuthentication::class  => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Authentication\TwoFactor\EnabledAuthentication::class   => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Authentication\TwoFactor\DisablingAuthentication::class => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Authentication\TwoFactor\DisabledAuthentication::class  => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Authentication\TwoFactor\GeneratingRecoveryCode::class  => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Authentication\TwoFactor\GeneratedRecoveryCode::class   => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Authentication\TwoFactor\ReplacingRecoveryCode::class   => [],
+    Arcanesoft\Foundation\Auth\Events\Administrators\Authentication\TwoFactor\ReplacedRecoveryCode::class    => [],
 
     /* -----------------------------------------------------------------
      |  Auth - Roles

@@ -75,12 +75,10 @@ abstract class RedirectIfTwoFactorWasEnabled
         );
 
         if ($this->shouldUseTwoFactor($user)) {
-            $request->session()->put([
-                'login.id'       => $user->getKey(),
-                'login.remember' => $request->filled('remember'),
-            ]);
+            $request->session()->flash('login.id', $user->getKey());
+            $request->session()->flash('login.remember', $request->filled('remember'));
 
-            return $this->twoFactorChallengeResponse($request);
+            return $this->twoFactorChallengeResponse($request, $user);
         }
 
         return $next($request);
@@ -137,10 +135,11 @@ abstract class RedirectIfTwoFactorWasEnabled
      * Get the two factor authentication enabled response.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  mixed                     $user
      *
      * @return \Symfony\Component\HttpFoundation\Response|mixed
      */
-    protected function twoFactorChallengeResponse(Request $request)
+    protected function twoFactorChallengeResponse(Request $request, $user)
     {
         if ($request->wantsJson())
             return new JsonResponse(['two_factor' => true]);
