@@ -8,17 +8,16 @@ use Arcanedev\LaravelImpersonator\Contracts\Impersonatable;
 use Arcanedev\LaravelImpersonator\Traits\CanImpersonate;
 use Arcanesoft\Foundation\Auth\Auth;
 use Arcanesoft\Foundation\Auth\Contracts\CanBeActivated;
-use Arcanesoft\Foundation\Auth\Events\Users\{
-    CreatedUser, CreatingUser, DeletedUser, DeletingUser, ForceDeletedUser, ReplicatingUser, RestoredUser,
-    RestoringUser, RetrievedUser, SavedUser, SavingUser, UpdatedUser, UpdatingUser
-};
-use Arcanesoft\Foundation\Auth\Models\Concerns\{
-    Activatable, CanResetPassword, CanVerifyEmail, HasLinkedAccounts, HasPassword, HasSessions,
-    HasTwoFactorAuthentication
-};
+use Arcanesoft\Foundation\Auth\Events\Users\UserEvent;
+use Arcanesoft\Foundation\Auth\Models\Concerns\Activatable;
+use Arcanesoft\Foundation\Auth\Models\Concerns\CanResetPassword;
+use Arcanesoft\Foundation\Auth\Models\Concerns\HasLinkedAccounts;
+use Arcanesoft\Foundation\Auth\Models\Concerns\HasPassword;
+use Arcanesoft\Foundation\Auth\Models\Concerns\HasSessions;
+use Arcanesoft\Foundation\Auth\Models\Concerns\HasTwoFactorAuthentication;
 use Arcanesoft\Foundation\Auth\Models\Presenters\UserPresenter;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\{Builder, SoftDeletes};
+use Arcanesoft\Foundation\Fortify\Notifications\VerifyEmailNotification;
+use Illuminate\Database\Eloquent\{Builder, Factories\HasFactory, SoftDeletes};
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -49,24 +48,24 @@ use Illuminate\Notifications\Notifiable;
  * @method  static|\Illuminate\Database\Eloquent\Builder  filterByAuthenticatedUser(User $user)
  * @method  static|\Illuminate\Database\Eloquent\Builder  verifiedEmail()
  */
-class User extends Authenticatable implements Impersonatable, MustVerifyEmail, CanBeActivated
+class User extends Authenticatable implements Impersonatable, CanBeActivated
 {
     /* -----------------------------------------------------------------
      |  Traits
      | -----------------------------------------------------------------
      */
 
-    use UserPresenter,
-        HasPassword,
-        HasSessions,
-        Notifiable,
-        Activatable,
-        CanImpersonate,
-        CanResetPassword,
-        CanVerifyEmail,
-        HasTwoFactorAuthentication,
-        HasLinkedAccounts,
-        SoftDeletes;
+    use Activatable;
+    use CanImpersonate;
+    use CanResetPassword;
+    use HasPassword;
+    use HasFactory;
+    use HasLinkedAccounts;
+    use HasSessions;
+    use HasTwoFactorAuthentication;
+    use Notifiable;
+    use SoftDeletes;
+    use UserPresenter;
 
     /* -----------------------------------------------------------------
      |  Properties
@@ -114,21 +113,7 @@ class User extends Authenticatable implements Impersonatable, MustVerifyEmail, C
      *
      * @var array
      */
-    protected $dispatchesEvents = [
-        'retrieved'    => RetrievedUser::class,
-        'creating'     => CreatingUser::class,
-        'created'      => CreatedUser::class,
-        'updating'     => UpdatingUser::class,
-        'updated'      => UpdatedUser::class,
-        'saving'       => SavingUser::class,
-        'saved'        => SavedUser::class,
-        'deleting'     => DeletingUser::class,
-        'deleted'      => DeletedUser::class,
-        'forceDeleted' => ForceDeletedUser::class,
-        'restoring'    => RestoringUser::class,
-        'restored'     => RestoredUser::class,
-        'replicating'  => ReplicatingUser::class,
-    ];
+    protected $dispatchesEvents = UserEvent::MODEL_EVENTS;
 
     /* -----------------------------------------------------------------
      |  Constructor
@@ -233,5 +218,22 @@ class User extends Authenticatable implements Impersonatable, MustVerifyEmail, C
     public function canBeImpersonated(): bool
     {
         return impersonator()->isEnabled();
+    }
+
+    /* -----------------------------------------------------------------
+     |  Notifications
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Send the email verification notification.
+     */
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new class extends VerifyEmailNotification {
+            protected function getVerificationRoute(): string {
+                return 'auth::email.verification.verify';
+            }
+        });
     }
 }

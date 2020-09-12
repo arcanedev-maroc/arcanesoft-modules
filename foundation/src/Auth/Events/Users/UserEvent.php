@@ -16,6 +16,27 @@ use Illuminate\Foundation\Events\Dispatchable;
 abstract class UserEvent
 {
     /* -----------------------------------------------------------------
+     |  Constants
+     | -----------------------------------------------------------------
+     */
+
+    public const MODEL_EVENTS = [
+        'retrieved'    => RetrievedUser::class,
+        'creating'     => CreatingUser::class,
+        'created'      => CreatedUser::class,
+        'updating'     => UpdatingUser::class,
+        'updated'      => UpdatedUser::class,
+        'saving'       => SavingUser::class,
+        'saved'        => SavedUser::class,
+        'deleting'     => DeletingUser::class,
+        'deleted'      => DeletedUser::class,
+        'forceDeleted' => ForceDeletedUser::class,
+        'restoring'    => RestoringUser::class,
+        'restored'     => RestoredUser::class,
+        'replicating'  => ReplicatingUser::class,
+    ];
+
+    /* -----------------------------------------------------------------
      |  Traits
      | -----------------------------------------------------------------
      */

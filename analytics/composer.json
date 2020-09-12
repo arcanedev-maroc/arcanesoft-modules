@@ -13,9 +13,9 @@
         }
     ],
     "require": {
-        "php":                   "^7.3",
+        "php": "^7.3",
         "arcanesoft/foundation": "@dev",
-        "arcanedev/agent":       "^9.0"
+        "arcanedev/agent": "^9.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.3"

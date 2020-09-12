@@ -8,16 +8,17 @@ use Arcanedev\LaravelImpersonator\Contracts\Impersonatable;
 use Arcanedev\LaravelImpersonator\Traits\CanImpersonate;
 use Arcanesoft\Foundation\Auth\Auth;
 use Arcanesoft\Foundation\Auth\Contracts\CanBeActivated;
-use Arcanesoft\Foundation\Auth\Events\Administrators\{CreatedAdministrator,
-    CreatingAdministrator, DeletedAdministrator, DeletingAdministrator, ForceDeletedAdministrator, ReplicatingAdministrator,
-    RestoredAdministrator, RestoringAdministrator, RetrievedAdministrator, SavedAdministrator, SavingAdministrator,
-    UpdatedAdministrator, UpdatingAdministrator
-};
-use Arcanesoft\Foundation\Auth\Models\Concerns\{
-    Activatable, CanResetPassword, HasPassword, HasRoles, HasSessions, HasTwoFactorAuthentication
-};
+use Arcanesoft\Foundation\Auth\Events\Administrators\{AdministratorEvent};
+use Arcanesoft\Foundation\Auth\Models\Concerns\Activatable;
+use Arcanesoft\Foundation\Auth\Models\Concerns\CanResetPassword;
+use Arcanesoft\Foundation\Auth\Models\Concerns\HasPassword;
+use Arcanesoft\Foundation\Auth\Models\Concerns\HasRoles;
+use Arcanesoft\Foundation\Auth\Models\Concerns\HasSessions;
+use Arcanesoft\Foundation\Auth\Models\Concerns\HasTwoFactorAuthentication;
 use Arcanesoft\Foundation\Auth\Models\Presenters\UserPresenter;
+use Arcanesoft\Foundation\Fortify\Notifications\VerifyEmailNotification;
 use Arcanesoft\Foundation\Support\Traits\Deletable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -56,17 +57,18 @@ class Administrator extends Authenticatable implements Impersonatable, CanBeActi
      | -----------------------------------------------------------------
      */
 
-    use UserPresenter,
-        HasPassword,
-        CanImpersonate,
-        CanResetPassword,
-        HasRoles,
-        HasSessions,
-        Notifiable,
-        Activatable,
-        HasTwoFactorAuthentication,
-        SoftDeletes,
-        Deletable;
+    use Activatable;
+    use CanImpersonate;
+    use CanResetPassword;
+    use Deletable;
+    use HasPassword;
+    use HasSessions;
+    use HasRoles;
+    use HasFactory;
+    use HasTwoFactorAuthentication;
+    use Notifiable;
+    use SoftDeletes;
+    use UserPresenter;
 
     /* -----------------------------------------------------------------
      |  Properties
@@ -111,21 +113,7 @@ class Administrator extends Authenticatable implements Impersonatable, CanBeActi
      *
      * @var array
      */
-    protected $dispatchesEvents = [
-        'retrieved'    => RetrievedAdministrator::class,
-        'creating'     => CreatingAdministrator::class,
-        'created'      => CreatedAdministrator::class,
-        'updating'     => UpdatingAdministrator::class,
-        'updated'      => UpdatedAdministrator::class,
-        'saving'       => SavingAdministrator::class,
-        'saved'        => SavedAdministrator::class,
-        'deleting'     => DeletingAdministrator::class,
-        'deleted'      => DeletedAdministrator::class,
-        'forceDeleted' => ForceDeletedAdministrator::class,
-        'restoring'    => RestoringAdministrator::class,
-        'restored'     => RestoredAdministrator::class,
-        'replicating'  => ReplicatingAdministrator::class,
-    ];
+    protected $dispatchesEvents = AdministratorEvent::MODEL_EVENTS;
 
     /* -----------------------------------------------------------------
      |  Constructor
@@ -325,5 +313,22 @@ class Administrator extends Authenticatable implements Impersonatable, CanBeActi
     public function isSuperAdmin(): bool
     {
         return Auth::isSuperAdmin($this);
+    }
+
+    /* -----------------------------------------------------------------
+     |  Notifications
+     | -----------------------------------------------------------------
+     */
+
+    /**
+     * Send the email verification notification.
+     */
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new class extends VerifyEmailNotification {
+            protected function getVerificationRoute(): string {
+                return 'auth::admin.email.verification.verify';
+            }
+        });
     }
 }

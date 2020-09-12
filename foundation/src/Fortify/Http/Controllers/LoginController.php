@@ -31,12 +31,12 @@ abstract class LoginController
     /**
      * Authenticate the user.
      *
-     * @param  mixed  $request
-     * @param  array  $actions
+     * @param  \Illuminate\Http\Request  $request
+     * @param  array                     $actions
      *
      * @return mixed
      */
-    protected function login($request, array $actions)
+    protected function login(Request $request, array $actions)
     {
         return (new Pipeline(app()))
             ->send($request)
@@ -75,7 +75,7 @@ abstract class LoginController
      *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    protected function getLoginResponse($request)
+    protected function getLoginResponse(Request $request)
     {
         if ($request->wantsJson())
             return new JsonResponse(['two_factor' => false]);
@@ -90,7 +90,7 @@ abstract class LoginController
      *
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    protected function getLogoutResponse($request)
+    protected function getLogoutResponse(Request $request)
     {
         $url = $this->redirectUrlAfterLogout($request);
 
@@ -107,7 +107,7 @@ abstract class LoginController
      *
      * @return string
      */
-    abstract protected function redirectUrlAfterLogin($request): string;
+    abstract protected function redirectUrlAfterLogin(Request $request): string;
 
     /**
      * Get the redirect url after user was logout.
@@ -116,5 +116,5 @@ abstract class LoginController
      *
      * @return string
      */
-    abstract protected function redirectUrlAfterLogout($request): string;
+    abstract protected function redirectUrlAfterLogout(Request $request): string;
 }

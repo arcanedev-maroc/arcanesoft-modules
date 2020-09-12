@@ -110,7 +110,7 @@ trait SessionPresenter
      *
      * @return \Arcanedev\Agent\Detectors\DeviceDetector
      */
-    protected function device(): DeviceDetector
+    public function device(): DeviceDetector
     {
         $request = Request::create('session', 'GET', [], [], [], [
             'HTTP_USER_AGENT' => $this->user_agent,

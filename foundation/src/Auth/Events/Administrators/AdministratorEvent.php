@@ -15,6 +15,27 @@ use Arcanesoft\Foundation\Auth\Models\Administrator;
 abstract class AdministratorEvent
 {
     /* -----------------------------------------------------------------
+     |  Constants
+     | -----------------------------------------------------------------
+     */
+
+    public const MODEL_EVENTS = [
+        'retrieved'    => RetrievedAdministrator::class,
+        'creating'     => CreatingAdministrator::class,
+        'created'      => CreatedAdministrator::class,
+        'updating'     => UpdatingAdministrator::class,
+        'updated'      => UpdatedAdministrator::class,
+        'saving'       => SavingAdministrator::class,
+        'saved'        => SavedAdministrator::class,
+        'deleting'     => DeletingAdministrator::class,
+        'deleted'      => DeletedAdministrator::class,
+        'forceDeleted' => ForceDeletedAdministrator::class,
+        'restoring'    => RestoringAdministrator::class,
+        'restored'     => RestoredAdministrator::class,
+        'replicating'  => ReplicatingAdministrator::class,
+    ];
+
+    /* -----------------------------------------------------------------
      |  Properties
      | -----------------------------------------------------------------
      */

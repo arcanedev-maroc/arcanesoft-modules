@@ -2,25 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Arcanesoft\Foundation\Auth\Notifications\Authentication;
+namespace Arcanesoft\Foundation\Fortify\Notifications;
 
-use Illuminate\Auth\Notifications\VerifyEmail as IlluminateVerifyEmail;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\{Config, URL};
 
 /**
- * Class     VerifyEmail
+ * Class     VerifyEmailNotification
  *
- * @package  Arcanesoft\Foundation\Auth\Notifications\Authentication
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class VerifyEmail extends IlluminateVerifyEmail
+abstract class VerifyEmailNotification extends VerifyEmail
 {
-    /* -----------------------------------------------------------------
-     |  Main Methods
-     | -----------------------------------------------------------------
-     */
-
     /**
      * Get the verification URL for the given notifiable.
      *
@@ -32,9 +26,16 @@ class VerifyEmail extends IlluminateVerifyEmail
     {
         $expiration = Carbon::now()->addMinutes((int) Config::get('auth.verification.expire', 60));
 
-        return URL::temporarySignedRoute('auth::verification.verify', $expiration, [
+        return URL::temporarySignedRoute($this->getVerificationRoute(), $expiration, [
             'id'   => $notifiable->getKey(),
             'hash' => sha1($notifiable->getEmailForVerification()),
         ]);
     }
+
+    /**
+     * Get the verification route.
+     *
+     * @return string
+     */
+    abstract protected function getVerificationRoute(): string;
 }
