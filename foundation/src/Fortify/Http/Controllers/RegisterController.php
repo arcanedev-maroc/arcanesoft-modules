@@ -44,7 +44,7 @@ abstract class RegisterController
         event(new Registered($user));
 
         if ($this->shouldLoginUser($request, $user)) {
-            $this->auth()->login($user);
+            $this->guard()->login($user);
         }
 
         return $this->getRegisteredResponse($request, $user);

@@ -71,7 +71,7 @@ abstract class RedirectIfTwoFactorWasEnabled
     public function handle(Request $request, Closure $next)
     {
         $user = $this->validateCredentials(
-            $request, $this->auth()->getProvider()->getModel()
+            $request, $this->guard()->getProvider()->getModel()
         );
 
         if ($this->shouldUseTwoFactor($user)) {

@@ -14,6 +14,10 @@
                     <h3 class="h5 font-weight-light text-uppercase text-muted text-center m-0">@lang('Login')</h3>
                 </div>
                 <div class="card-body">
+                    @if (session('status'))
+                        <p class="font-weight-bold small text-success">{{ session('status') }}</p>
+                    @endif
+
                     <form action="{{ route('admin::auth.login.post') }}" method="POST" class="form">
                         @csrf
 

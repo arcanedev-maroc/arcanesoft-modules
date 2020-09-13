@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Arcanesoft\Foundation\Auth\Rules;
+namespace Arcanesoft\Foundation\Fortify\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Str;
@@ -10,7 +10,6 @@ use Illuminate\Support\Str;
 /**
  * Class     Password
  *
- * @package  Arcanesoft\Foundation\Auth\Rules
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class Password implements Rule
@@ -74,7 +73,7 @@ class Password implements Rule
      *
      * @return $this
      */
-    public function length(int $length): self
+    public function length(int $length)
     {
         $this->length = $length;
 
@@ -86,7 +85,7 @@ class Password implements Rule
      *
      * @return $this
      */
-    public function requireUppercase(): self
+    public function requireUppercase()
     {
         $this->requireUppercase = true;
 
@@ -98,7 +97,7 @@ class Password implements Rule
      *
      * @return $this
      */
-    public function requireNumeric(): self
+    public function requireNumeric()
     {
         $this->requireNumeric = true;
 
@@ -110,7 +109,7 @@ class Password implements Rule
      *
      * @return $this
      */
-    public function nullable(): self
+    public function nullable()
     {
         $this->nullable = true;
 
@@ -122,7 +121,7 @@ class Password implements Rule
      *
      * @return $this
      */
-    public function confirmed(): self
+    public function confirmed()
     {
         $this->confirmed = true;
 
@@ -136,7 +135,7 @@ class Password implements Rule
      *
      * @return $this
      */
-    public function withMessage(string $message): self
+    public function withMessage(string $message)
     {
         $this->message = $message;
 
@@ -151,11 +150,11 @@ class Password implements Rule
     /**
      * Make a password instance.
      *
-     * @return \Arcanesoft\Foundation\Auth\Rules\Password
+     * @return $this
      */
-    public static function make(): self
+    public static function make()
     {
-        return new self();
+        return new static();
     }
 
     /**
@@ -182,7 +181,7 @@ class Password implements Rule
      * Determine if the validation rule passes.
      *
      * @param  string  $attribute
-     * @param  mixed  $value
+     * @param  mixed   $value
      *
      * @return bool
      */

@@ -24,7 +24,7 @@ trait UseAdministratorGuard
      *
      * @return string
      */
-    protected function guard(): string
+    protected function getGuardName(): string
     {
         return Auth::GUARD_WEB_ADMINISTRATOR;
     }

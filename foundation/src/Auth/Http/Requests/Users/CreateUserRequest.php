@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Http\Requests\Users;
 
-use Arcanesoft\Foundation\Auth\Rules\Password;
 use Arcanesoft\Foundation\Auth\Rules\Users\EmailRule;
+use Arcanesoft\Foundation\Fortify\Rules\Password;
 
 /**
  * Class     CreateUserRequest

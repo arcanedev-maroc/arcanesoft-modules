@@ -182,7 +182,10 @@ class UsersRepository extends AbstractRepository
     public function updatePassword(User $user, string $password): bool
     {
         event(new UpdatingPassword($user));
-        $updated = $this->updateOne($user, compact('password'));
+
+        $user->setRememberToken(Str::random(60));
+        $updated = $this->updateOne($user, ['password' => $password]);
+
         event(new UpdatedPassword($user));
 
         return $updated;

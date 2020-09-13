@@ -23,11 +23,13 @@ trait HasGuard
     /**
      * Get the auth factory instance.
      *
+     * @param  string|null  $name
+     *
      * @return \Illuminate\Auth\SessionGuard|mixed
      */
-    protected function auth(): StatefulGuard
+    protected function guard(string $name = null): StatefulGuard
     {
-        return app(AuthContract::class)->guard($this->guard());
+        return app(AuthContract::class)->guard($name ?: $this->getGuardName());
     }
 
     /**
@@ -35,5 +37,5 @@ trait HasGuard
      *
      * @return string
      */
-    abstract protected function guard(): string;
+    abstract protected function getGuardName(): string;
 }

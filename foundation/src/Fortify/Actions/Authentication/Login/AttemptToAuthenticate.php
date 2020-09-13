@@ -70,7 +70,7 @@ abstract class AttemptToAuthenticate
      */
     public function handle(Request $request, Closure $next)
     {
-        $authenticated = $this->auth()->attempt(
+        $authenticated = $this->guard()->attempt(
             $request->only(Auth::username(), 'password'),
             $request->filled('remember')
         );

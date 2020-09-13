@@ -76,7 +76,7 @@ abstract class TwoFactorLoginController
             return $this->getFailedTwoFactorLoginResponse($request);
         }
 
-        $this->auth()->login($user, $request->remember());
+        $this->guard()->login($user, $request->remember());
 
         return $this->getTwoFactorLoginResponse($request, $user);
     }

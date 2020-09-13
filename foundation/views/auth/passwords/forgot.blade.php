@@ -14,14 +14,14 @@
                     <h3 class="h5 font-weight-light text-uppercase text-muted text-center m-0">@lang('Reset Password')</h3>
                 </div>
                 <div class="card-body">
+                    <p class="small">@lang('No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.')</p>
+
+                    @if (session('status'))
+                        <p class="font-weight-bold small text-success">{{ session('status') }}</p>
+                    @endif
+
                     <form action="{{ route('admin::auth.password.email') }}" method="POST" class="form form-reset-password">
                         @csrf
-
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
 
                         <div class="row g-3">
                             <div class="col-lg-12">

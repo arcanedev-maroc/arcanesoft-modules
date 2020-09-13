@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Http\Controllers\Auth;
 
-use Arcanesoft\Foundation\Auth\Http\Requests\Authentication\LoginRequest;
 use Arcanesoft\Foundation\Auth\Actions\Authentication\Login\{
     AttemptToAuthenticate, EnsureLoginIsNotThrottled, PrepareAuthenticatedSession, RedirectIfTwoFactorWasEnabled
 };
 use Arcanesoft\Foundation\Auth\Concerns\Authentication\UseAdministratorGuard;
+use Arcanesoft\Foundation\Auth\Http\Requests\Authentication\LoginRequest;
 use Arcanesoft\Foundation\Fortify\Http\Controllers\LoginController as Controller;
 use Illuminate\Http\Request;
 
@@ -35,9 +35,11 @@ class LoginController extends Controller
     /**
      * Show the login view.
      *
+     * @param  \Illuminate\Http\Request  $request
+     *
      * @return \Illuminate\Contracts\View\View
      */
-    public function create()
+    public function create(Request $request)
     {
         return view('foundation::auth.login');
     }
@@ -83,7 +85,7 @@ class LoginController extends Controller
      *
      * @return string
      */
-    protected function redirectUrlAfterLogin($request): string
+    protected function redirectUrlAfterLogin(Request $request): string
     {
         return route('admin::index');
     }
@@ -95,7 +97,7 @@ class LoginController extends Controller
      *
      * @return string
      */
-    protected function redirectUrlAfterLogout($request): string
+    protected function redirectUrlAfterLogout(Request $request): string
     {
         return route('public::index');
     }

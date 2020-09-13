@@ -55,7 +55,7 @@ abstract class LoginController
      */
     protected function logout(Request $request)
     {
-        $this->auth()->logout();
+        $this->guard()->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -77,8 +77,11 @@ abstract class LoginController
      */
     protected function getLoginResponse(Request $request)
     {
-        if ($request->wantsJson())
-            return new JsonResponse(['two_factor' => false]);
+        if ($request->wantsJson()) {
+            return new JsonResponse(
+                ['two_factor' => false], JsonResponse::HTTP_OK
+            );
+        }
 
         return redirect()->intended($this->redirectUrlAfterLogin($request));
     }

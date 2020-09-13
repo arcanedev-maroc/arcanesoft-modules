@@ -114,7 +114,7 @@ abstract class TwoFactorLoginRequest extends FormRequest
             return $this->challengedUser;
         }
 
-        $model = $this->auth()->getProvider()->getModel();
+        $model = $this->guard()->getProvider()->getModel();
 
         if (
             ! $this->session()->has('login.id') ||

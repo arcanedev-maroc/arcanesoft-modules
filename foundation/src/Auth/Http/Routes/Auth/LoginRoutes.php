@@ -16,6 +16,15 @@ use Arcanesoft\Foundation\Fortify\LoginRateLimiter;
 class LoginRoutes extends AdminRouteRegistrar
 {
     /* -----------------------------------------------------------------
+     |  Constants
+     | -----------------------------------------------------------------
+     */
+
+    const LOGIN_CREATE = 'admin::auth.login.create';
+    const LOGIN_STORE  = 'admin::auth.login.store';
+    const LOGOUT       = 'admin::auth.logout';
+
+    /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
      */
@@ -44,9 +53,9 @@ class LoginRoutes extends AdminRouteRegistrar
     protected function mapLoginRoutes(): void
     {
         $this->prefix('login')->name('login.')->middleware(['guest'])->group(function () {
-            // admin::auth.login.show
+            // admin::auth.login.create
             $this->get('/', [LoginController::class, 'create'])
-                 ->name('show');
+                 ->name('create');
 
             // admin::auth.login.post
             $this->post('/', [LoginController::class, 'store'])
