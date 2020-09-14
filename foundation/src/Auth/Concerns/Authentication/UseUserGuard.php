@@ -9,7 +9,6 @@ use Arcanesoft\Foundation\Auth\Auth;
 /**
  * Trait     UseUserGuard
  *
- * @package  Arcanesoft\Foundation\Auth\Concerns\Authentication
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 trait UseUserGuard
@@ -24,7 +23,7 @@ trait UseUserGuard
      *
      * @return string
      */
-    protected function guard(): string
+    protected function getGuardName(): string
     {
         return Auth::GUARD_WEB_USER;
     }

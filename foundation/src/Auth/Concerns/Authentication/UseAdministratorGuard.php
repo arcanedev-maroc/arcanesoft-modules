@@ -7,9 +7,8 @@ namespace Arcanesoft\Foundation\Auth\Concerns\Authentication;
 use Arcanesoft\Foundation\Auth\Auth;
 
 /**
- * Class     UseAdministratorGuard
+ * Trait     UseAdministratorGuard
  *
- * @package  Arcanesoft\Foundation\Auth\Concerns\Authentication
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 trait UseAdministratorGuard

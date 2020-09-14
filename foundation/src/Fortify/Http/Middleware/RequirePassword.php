@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Arcanesoft\Foundation\Core\Http\Middleware;
+namespace Arcanesoft\Foundation\Fortify\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Illuminate\Http\{JsonResponse, Request};
 
 /**
  * Class     RequirePassword
@@ -56,9 +55,36 @@ class RequirePassword
      */
     protected function shouldConfirmPassword(Request $request): bool
     {
+        if ( ! $this->hasPassword($request))
+            return false;
+
         $confirmedAt = time() - $request->session()->get('auth.password_confirmed_at', 0);
 
         return $confirmedAt > $this->getPasswordTimeout();
+    }
+
+    /**
+     * Check if the authenticated user has password.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return bool
+     */
+    protected function hasPassword(Request $request): bool
+    {
+        return $this->getUserFromRequest($request)->hasPassword();
+    }
+
+    /**
+     * Get the authenticated user from request.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \App\Models\User|mixed
+     */
+    protected function getUserFromRequest(Request $request)
+    {
+        return $request->user();
     }
 
     /**
