@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Http\Controllers;
 
-use Arcanesoft\Foundation\Auth\Auth;
 use Arcanesoft\Foundation\Auth\Http\Requests\Profile\{UpdateAccountRequest, UpdatePasswordRequest};
 use Arcanesoft\Foundation\Auth\Repositories\AdministratorsRepository;
+use Arcanesoft\Foundation\Authentication\Concerns\UseAdministratorGuard;
 use Arcanesoft\Foundation\Support\Traits\HasNotifications;
 use Illuminate\Http\Request;
 
@@ -23,6 +23,7 @@ class ProfileController extends Controller
      | -----------------------------------------------------------------
      */
 
+    use UseAdministratorGuard;
     use HasNotifications;
 
     /* -----------------------------------------------------------------
@@ -50,7 +51,7 @@ class ProfileController extends Controller
     public function index(Request $request)
     {
         return $this->view('authorization.profile.index', [
-            'user' => $request->user(Auth::GUARD_WEB_ADMINISTRATOR),
+            'user' => $request->user($this->getGuardName()),
         ]);
     }
 
@@ -63,7 +64,7 @@ class ProfileController extends Controller
     public function updateAccount(UpdateAccountRequest $request, AdministratorsRepository $repo)
     {
         $repo->updateOne(
-            $request->user(Auth::GUARD_WEB_ADMINISTRATOR),
+            $request->user($this->getGuardName()),
             $request->validated()
         );
 
@@ -84,7 +85,7 @@ class ProfileController extends Controller
     public function updatePassword(UpdatePasswordRequest $request, AdministratorsRepository $repo)
     {
         $repo->updatePassword(
-            $request->user(Auth::GUARD_WEB_ADMINISTRATOR),
+            $request->user($this->getGuardName()),
             $request->get('password')
         );
 

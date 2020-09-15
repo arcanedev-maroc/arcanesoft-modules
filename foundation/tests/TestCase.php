@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Arcanesoft\Foundation\Tests;
 
+use Arcanesoft\Foundation\Authentication\Guard;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 /**
  * Class     TestCase
  *
- * @package  Arcanesoft\Foundation\Tests
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 abstract class TestCase extends OrchestraTestCase
@@ -27,14 +29,14 @@ abstract class TestCase extends OrchestraTestCase
     protected function getPackageProviders($app)
     {
         return [
-            // Main Provider
-            \Arcanesoft\Foundation\FoundationServiceProvider::class,
-
             // Dependencies
             \Arcanedev\LaravelImpersonator\ImpersonatorServiceProvider::class,
             \Arcanedev\LaravelPolicies\PoliciesServiceProvider::class,
             \Arcanedev\LaravelMetrics\MetricServiceProvider::class,
             \Arcanedev\Notify\NotifyServiceProvider::class,
+
+            // Main Provider
+            \Arcanesoft\Foundation\FoundationServiceProvider::class,
         ];
     }
 
@@ -48,8 +50,59 @@ abstract class TestCase extends OrchestraTestCase
         // Configuration
         $app['config']->set(
             'arcanesoft.foundation.auth.database.models.user',
-            Stubs\Models\User::class
+            \Arcanesoft\Foundation\Auth\Models\User::class
         );
+
+        static::setupAuthConfig($app['config']);
+        static::setupPublicRoutes($app['router']);
+    }
+
+    /**
+     * Setup the auth guards.
+     *
+     * @param  \Illuminate\Contracts\Config\Repository  $config
+     */
+    private static function setupAuthConfig($config): void
+    {
+        $config->set('auth.guards', [
+            Guard::WEB_USER => [
+                'driver'   => 'session',
+                'provider' => 'users',
+            ],
+
+            Guard::WEB_ADMINISTRATOR => [
+                'driver'   => 'session',
+                'provider' => 'administrators',
+            ],
+        ]);
+
+        $config->set('auth.providers', [
+            'users' => [
+                'driver' => 'eloquent',
+                'model'  => \Arcanesoft\Foundation\Auth\Models\User::class,
+            ],
+
+            'administrators' => [
+                'driver' => 'eloquent',
+                'model'  => \Arcanesoft\Foundation\Auth\Models\Administrator::class,
+            ],
+        ]);
+    }
+
+    /**
+     * Register public routes.
+     *
+     * @param  \Illuminate\Contracts\Routing\Registrar  $router
+     */
+    private static function setupPublicRoutes($router): void
+    {
+        $router->get('/', function () {
+            return 'index page';
+        })->name('public::index');
+
+        $router->get('/home', function () {
+            return 'home page';
+        })->name('public::home');
     }
 
     /**
@@ -58,13 +111,5 @@ abstract class TestCase extends OrchestraTestCase
     protected function loadMigrations(): void
     {
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-    }
-
-    /**
-     * Load the factories.
-     */
-    protected function loadFactories(): void
-    {
-        $this->withFactories(__DIR__.'/../database/factories');
     }
 }

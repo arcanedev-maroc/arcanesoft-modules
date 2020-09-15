@@ -1,3 +1,3 @@
 export default {
-    endpoint: '/admin/metrics/process'
+    endpoint: '/admin/api/metrics'
 }

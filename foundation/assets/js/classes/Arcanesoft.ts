@@ -44,6 +44,20 @@ export default class Arcanesoft {
 
             mounted: () => {
                 _this.initComponents(document)
+            },
+
+            methods: {
+                logout(url: string) {
+                    _this.request()
+                        .delete(url)
+                        .then((response) => response.data.redirect)
+                        .then((redirectUrl) => {
+                            location.replace(redirectUrl)
+                        })
+                        .catch(() => {
+                            location.reload()
+                        })
+                },
             }
         })
 

@@ -10,7 +10,6 @@ use Arcanesoft\Foundation\Support\Providers\ServiceProvider;
 /**
  * Class     AuthServiceProvider
  *
- * @package  Arcanesoft\Auth
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class AuthServiceProvider extends ServiceProvider

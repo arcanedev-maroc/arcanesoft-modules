@@ -46,6 +46,10 @@
             "Arcanesoft\\Foundation\\Tests\\": "tests/"
         }
     },
+    "scripts": {
+        "test": "phpunit",
+        "coverage": "phpunit --coverage-html build/coverage/html"
+    },
     "extra": {
         "laravel": {
             "providers": [

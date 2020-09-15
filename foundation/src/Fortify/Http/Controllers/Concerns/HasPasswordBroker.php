@@ -23,10 +23,10 @@ trait HasPasswordBroker
      *
      * @return \Illuminate\Contracts\Auth\PasswordBroker
      */
-    protected function broker(): PasswordBroker
+    protected static function broker(): PasswordBroker
     {
         return with(app('auth.password'), function (PasswordBrokerFactory $manager) {
-            return $manager->broker($this->getBrokerDriver());
+            return $manager->broker(static::getBrokerDriver());
         });
     }
 
@@ -35,7 +35,7 @@ trait HasPasswordBroker
      *
      * @return string|null
      */
-    protected function getBrokerDriver(): ?string
+    protected static function getBrokerDriver(): ?string
     {
         return null;
     }

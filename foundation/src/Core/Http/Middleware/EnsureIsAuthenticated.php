@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Core\Http\Middleware;
 
+use Arcanesoft\Foundation\Authentication\Concerns\UseAdministratorGuard;
 use Closure;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests;
 use Illuminate\Contracts\Auth\Factory as Auth;
+use Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests;
+use Illuminate\Http\Request;
 
 
 /**
@@ -18,12 +19,29 @@ use Illuminate\Contracts\Auth\Factory as Auth;
  */
 class EnsureIsAuthenticated implements AuthenticatesRequests
 {
+    /* -----------------------------------------------------------------
+     |  Traits
+     | -----------------------------------------------------------------
+     */
+
+    use UseAdministratorGuard;
+
+    /* -----------------------------------------------------------------
+     |  Properties
+     | -----------------------------------------------------------------
+     */
+
     /**
      * The authentication factory instance.
      *
      * @var \Illuminate\Contracts\Auth\Factory
      */
     protected $auth;
+
+    /* -----------------------------------------------------------------
+     |  Constructor
+     | -----------------------------------------------------------------
+     */
 
     /**
      * Create a new middleware instance.
@@ -35,6 +53,11 @@ class EnsureIsAuthenticated implements AuthenticatesRequests
         $this->auth = $auth;
     }
 
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
+     */
+
     /**
      * Handle an incoming request.
      *
@@ -43,19 +66,24 @@ class EnsureIsAuthenticated implements AuthenticatesRequests
      *
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         $this->isAuthenticated();
 
         return $next($request);
     }
 
+    /* -----------------------------------------------------------------
+     |  Other Methods
+     | -----------------------------------------------------------------
+     */
+
     /**
      * Determine if the user is logged in.
      */
     protected function isAuthenticated()
     {
-        $guard = \Arcanesoft\Foundation\Auth\Auth::GUARD_WEB_ADMINISTRATOR;
+        $guard = $this->getGuardName();
 
         abort_unless($this->auth->guard($guard)->check(), 404);
 

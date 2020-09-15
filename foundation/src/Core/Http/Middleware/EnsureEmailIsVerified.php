@@ -6,9 +6,8 @@ namespace Arcanesoft\Foundation\Core\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Http\Request;
+use Illuminate\Http\{Request, Response};
 use Illuminate\Support\Facades\Redirect;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class     EnsureEmailIsVerified

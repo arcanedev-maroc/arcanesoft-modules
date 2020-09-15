@@ -10,7 +10,6 @@ use Illuminate\Foundation\Application;
 /**
  * Class     ComposerScripts
  *
- * @package  Arcanesoft\Foundation
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class ComposerScripts

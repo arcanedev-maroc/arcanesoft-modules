@@ -16,6 +16,13 @@ use Arcanesoft\Foundation\Core\Http\Routes\AbstractRouteRegistrar;
 class DashboardRoutes extends AbstractRouteRegistrar
 {
     /* -----------------------------------------------------------------
+     |  Constants
+     | -----------------------------------------------------------------
+     */
+
+    public const INDEX = 'admin::index';
+
+    /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
      */

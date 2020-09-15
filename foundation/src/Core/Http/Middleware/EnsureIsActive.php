@@ -6,6 +6,7 @@ namespace Arcanesoft\Foundation\Core\Http\Middleware;
 
 use Arcanesoft\Foundation\Auth\Contracts\CanBeActivated;
 use Closure;
+use Illuminate\Http\{Request, Response};
 
 /**
  * Class     EnsureIsActive
@@ -28,12 +29,11 @@ class EnsureIsActive
      *
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         $user = $request->user();
 
-        if ( ! $this->isActivated($user))
-            abort(403);
+        abort_unless($this->isActivated($user), Response::HTTP_FORBIDDEN);
 
         return $next($request);
     }

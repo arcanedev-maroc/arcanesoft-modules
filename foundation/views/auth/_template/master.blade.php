@@ -10,13 +10,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- Styles --}}
-    <link rel="stylesheet" href="{{ mix('css/app.css', 'assets') }}">
+    <link rel="stylesheet" href="{{ mix('css/arcanesoft.css', 'assets') }}">
 
     @stack('head')
 </head>
-<body class="page auth-page">
+<body class="page auth-page" data-skin-mode="light">
     <div id="app">
-        <main role="main" class="container">
+        <main role="main" class="container pt-4">
             <div class="text-center mb-4">
                 <a href="{{ route('public::index') }}" class="d-block">
                     <img src="{{ asset('assets/svg/logo.svg') }}" alt="{{ config('app.name') }}" role="presentation"

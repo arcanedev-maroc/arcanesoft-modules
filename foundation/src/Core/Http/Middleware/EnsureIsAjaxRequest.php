@@ -5,15 +5,20 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Core\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\{Request, Response};
 
 /**
  * Class     EnsureIsAjaxRequest
  *
- * @package  Arcanesoft\Foundation\Core\Http\Middleware
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class EnsureIsAjaxRequest
 {
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
+     */
+
     /**
      * Handle an incoming request.
      *
@@ -22,23 +27,10 @@ class EnsureIsAjaxRequest
      *
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
-        if ( ! $this->isAjaxRequest($request))
-            abort(400, 'Bad Request');
+        abort_unless($request->ajax(), Response::HTTP_BAD_REQUEST, 'Bad Request');
 
         return $next($request);
-    }
-
-    /**
-     * Ensure it's an ajax request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     *
-     * @return mixed
-     */
-    protected function isAjaxRequest($request)
-    {
-        return $request->ajax();
     }
 }

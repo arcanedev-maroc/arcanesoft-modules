@@ -16,7 +16,7 @@ use Arcanesoft\Foundation\Auth\Models\Concerns\HasPassword;
 use Arcanesoft\Foundation\Auth\Models\Concerns\HasSessions;
 use Arcanesoft\Foundation\Auth\Models\Concerns\HasTwoFactorAuthentication;
 use Arcanesoft\Foundation\Auth\Models\Presenters\UserPresenter;
-use Arcanesoft\Foundation\Fortify\Notifications\VerifyEmailNotification;
+use Arcanesoft\Foundation\Authentication\Guard;
 use Illuminate\Database\Eloquent\{Builder, Factories\HasFactory, SoftDeletes};
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -172,7 +172,7 @@ class User extends Authenticatable implements Impersonatable, CanBeActivated
      */
     public static function guardName(): string
     {
-        return Auth::GUARD_WEB_USER;
+        return Guard::WEB_USER;
     }
 
     /* -----------------------------------------------------------------
@@ -218,22 +218,5 @@ class User extends Authenticatable implements Impersonatable, CanBeActivated
     public function canBeImpersonated(): bool
     {
         return impersonator()->isEnabled();
-    }
-
-    /* -----------------------------------------------------------------
-     |  Notifications
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Send the email verification notification.
-     */
-    public function sendEmailVerificationNotification(): void
-    {
-        $this->notify(new class extends VerifyEmailNotification {
-            protected function getVerificationRoute(): string {
-                return 'auth::email.verification.verify';
-            }
-        });
     }
 }

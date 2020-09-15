@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation\Auth;
 
 use Arcanesoft\Foundation\Auth\Models\Administrator;
+use Arcanesoft\Foundation\Authentication\Guard;
 use Illuminate\Support\Str;
 
 /**
@@ -15,14 +16,6 @@ use Illuminate\Support\Str;
  */
 class Auth
 {
-    /* -----------------------------------------------------------------
-     |  Constants
-     | -----------------------------------------------------------------
-     */
-
-    const GUARD_WEB_ADMINISTRATOR = 'administrator';
-    const GUARD_WEB_USER          = 'web';
-
     /* -----------------------------------------------------------------
      |  Properties
      | -----------------------------------------------------------------
@@ -60,7 +53,7 @@ class Auth
      */
     public static function admin(): Administrator
     {
-        return auth(static::GUARD_WEB_ADMINISTRATOR)->user();
+        return auth(Guard::WEB_ADMINISTRATOR)->user();
     }
 
     /**

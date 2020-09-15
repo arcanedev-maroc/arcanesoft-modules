@@ -10,7 +10,6 @@ use Illuminate\Support\Collection;
 /**
  * Class     PackageManifest
  *
- * @package  Arcanesoft\Foundation
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class PackageManifest

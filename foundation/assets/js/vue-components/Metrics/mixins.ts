@@ -23,12 +23,11 @@ export default {
         fetch(metric, options = {}): Promise<any> {
             this.loading = true;
 
-            options = window['_'].merge(options, {
-                params: {metric}
-            })
-
             return this.request()
-                .get(config.endpoint, options)
+                .post(config.endpoint, {
+                    ...options,
+                    metric: metric
+                })
                 .then((response) => {
                     this.result  = response.data
                     this.loading = false

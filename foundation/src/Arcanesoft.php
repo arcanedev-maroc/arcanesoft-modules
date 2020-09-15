@@ -7,7 +7,6 @@ namespace Arcanesoft\Foundation;
 /**
  * Class     Arcanesoft
  *
- * @package  Arcanesoft\Foundation
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class Arcanesoft

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Arcanesoft\Foundation;
 
 use Arcanesoft\Foundation\Auth\AuthServiceProvider;
+use Arcanesoft\Foundation\Authentication\AuthenticationServiceProvider;
 use Arcanesoft\Foundation\Core\CoreServiceProvider;
 use Arcanesoft\Foundation\Fortify\FortifyServiceProvider;
 use Arcanesoft\Foundation\Support\Providers\PackageServiceProvider;
@@ -16,7 +17,6 @@ use Illuminate\Foundation\Application;
 /**
  * Class     FoundationServiceProvider
  *
- * @package  Arcanesoft\Foundation
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class FoundationServiceProvider extends PackageServiceProvider
@@ -55,6 +55,7 @@ class FoundationServiceProvider extends PackageServiceProvider
         $this->registerProviders([
             CoreServiceProvider::class,
             FortifyServiceProvider::class,
+            AuthenticationServiceProvider::class,
             AuthServiceProvider::class,
             SystemServiceProvider::class,
             ViewsServiceProvider::class,

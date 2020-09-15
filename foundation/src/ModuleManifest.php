@@ -10,7 +10,6 @@ use Illuminate\Support\Collection;
 /**
  * Class     ModuleManifest
  *
- * @package  Arcanesoft\Foundation
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class ModuleManifest extends PackageManifest

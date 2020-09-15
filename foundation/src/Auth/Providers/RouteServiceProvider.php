@@ -29,9 +29,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         return [
             // Authentication
-            Routes\Auth\LoginRoutes::class,
-            Routes\Auth\PasswordResetRoutes::class,
-            Routes\Auth\ConfirmPasswordRoutes::class,
+            Routes\AuthenticationRoutes::class,
 
             // Admin
             Routes\DashboardRoutes::class,

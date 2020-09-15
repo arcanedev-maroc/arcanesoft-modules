@@ -16,6 +16,7 @@ use Arcanesoft\Foundation\Auth\Models\Concerns\HasRoles;
 use Arcanesoft\Foundation\Auth\Models\Concerns\HasSessions;
 use Arcanesoft\Foundation\Auth\Models\Concerns\HasTwoFactorAuthentication;
 use Arcanesoft\Foundation\Auth\Models\Presenters\UserPresenter;
+use Arcanesoft\Foundation\Authentication\Guard;
 use Arcanesoft\Foundation\Fortify\Notifications\VerifyEmailNotification;
 use Arcanesoft\Foundation\Support\Traits\Deletable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -191,7 +192,7 @@ class Administrator extends Authenticatable implements Impersonatable, CanBeActi
      */
     public static function guardName(): string
     {
-        return Auth::GUARD_WEB_ADMINISTRATOR;
+        return Guard::WEB_ADMINISTRATOR;
     }
 
     /* -----------------------------------------------------------------

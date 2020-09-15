@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Http\Requests\Profile;
 
-use Arcanesoft\Foundation\Auth\Auth;
 use Arcanesoft\Foundation\Auth\Http\Requests\FormRequest;
 use Arcanesoft\Foundation\Auth\Rules\Users\EmailRule;
+use Arcanesoft\Foundation\Authentication\Concerns\UseAdministratorGuard;
 
 /**
  * Class     UpdateUserAccountRequest
@@ -16,6 +16,13 @@ use Arcanesoft\Foundation\Auth\Rules\Users\EmailRule;
  */
 class UpdateAccountRequest extends FormRequest
 {
+    /* -----------------------------------------------------------------
+     |  Traits
+     | -----------------------------------------------------------------
+     */
+
+    use UseAdministratorGuard;
+
     /* -----------------------------------------------------------------
      |  Main Methods
      | -----------------------------------------------------------------
@@ -28,10 +35,13 @@ class UpdateAccountRequest extends FormRequest
      */
     public function rules(): array
     {
+        /** @var  \Arcanesoft\Foundation\Auth\Models\Administrator  $user */
+        $user = $this->user($this->getGuardName());
+
         return [
             'first_name' => ['required', 'string', 'max:50'],
             'last_name'  => ['required', 'string', 'max:50'],
-            'email'      => ['required', 'string', 'email', 'max:255', EmailRule::unique()->ignore($this->user(Auth::GUARD_WEB_ADMINISTRATOR)->id)],
+            'email'      => ['required', 'string', 'email', 'max:255', EmailRule::unique()->ignore($user->getKey())],
         ];
     }
 }

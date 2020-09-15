@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Core\Http\Middleware;
 
-use Arcanesoft\Foundation\Auth\Auth;
+use Arcanesoft\Foundation\Authentication\Concerns\UseAdministratorGuard;
 use Arcanesoft\Foundation\Auth\Models\Administrator;
 use Closure;
-use Illuminate\Contracts\Auth\Factory;
+use Illuminate\Http\{Request, Response};
 
 /**
  * Class     EnsureIsAdmin
@@ -18,31 +18,11 @@ use Illuminate\Contracts\Auth\Factory;
 class EnsureIsAdmin
 {
     /* -----------------------------------------------------------------
-     |  Properties
+     |  Traits
      | -----------------------------------------------------------------
      */
 
-    /**
-     * The authentication factory instance.
-     *
-     * @var \Illuminate\Contracts\Auth\Factory
-     */
-    protected $auth;
-
-    /* -----------------------------------------------------------------
-     |  Constructor
-     | -----------------------------------------------------------------
-     */
-
-    /**
-     * Create a new middleware instance.
-     *
-     * @param  \Illuminate\Contracts\Auth\Factory  $auth
-     */
-    public function __construct(Factory $auth)
-    {
-        $this->auth = $auth;
-    }
+    use UseAdministratorGuard;
 
     /* -----------------------------------------------------------------
      |  Main Methods
@@ -57,11 +37,11 @@ class EnsureIsAdmin
      *
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
-        $user = $this->auth->guard(Auth::GUARD_WEB_ADMINISTRATOR)->user();
+        $user = $request->user($this->getGuardName());
 
-        abort_unless($this->isAdministrator($user), 403);
+        abort_unless($this->isAdministrator($user), Response::HTTP_FORBIDDEN);
 
         return $next($request);
     }

@@ -8,7 +8,7 @@
 
 @section('content')
     <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
+        <div class="col-md-6 col-xxl-4">
             <div class="card shadow-sm">
                 <div class="card-header p-3">
                     <h3 class="h5 font-weight-light text-uppercase text-muted text-center m-0">@lang('Login')</h3>
@@ -18,7 +18,7 @@
                         <p class="font-weight-bold small text-success">{{ session('status') }}</p>
                     @endif
 
-                    <form action="{{ route('admin::auth.login.post') }}" method="POST" class="form">
+                    <form action="{{ route(Arcanesoft\Foundation\Authentication\Http\Routes\LoginRoutes::LOGIN_STORE) }}" method="POST" class="form">
                         @csrf
 
                         <div class="row g-3">
@@ -63,9 +63,9 @@
                     </form>
                 </div>
 
-                @if (app('router')->has('admin::auth.password.request'))
+                @if (app('router')->has($route = Arcanesoft\Foundation\Authentication\Http\Routes\PasswordResetRoutes::REQUEST))
                 <div class="card-footer text-center">
-                    <a class="btn btn-link" href="{{ route('admin::auth.password.request') }}">@lang('Forgot Your Password?')</a>
+                    <a class="btn btn-link" href="{{ route($route) }}">@lang('Forgot your password?')</a>
                 </div>
                 @endif
             </div>

@@ -9,7 +9,6 @@ use Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode as Middleware;
 /**
  * Class     CheckForMaintenanceMode
  *
- * @package  Arcanesoft\Foundation\Core\Http\Middleware
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class CheckForMaintenanceMode extends Middleware
