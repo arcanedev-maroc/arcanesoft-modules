@@ -27,6 +27,8 @@ use Illuminate\Support\Arr;
  * Class     TwoFactorAuthenticationRepository
  *
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
+ *
+ * @todo Complete the events
  */
 class TwoFactorAuthenticationRepository
 {
@@ -103,23 +105,20 @@ class TwoFactorAuthenticationRepository
     /**
      * Enable the two factor authentication.
      *
-     * @param  \Arcanesoft\Foundation\Auth\Models\User|\Arcanesoft\Foundation\Auth\Models\Administrator  $user
+     * @param  \Arcanesoft\Foundation\Auth\Models\User|\Arcanesoft\Foundation\Auth\Models\Administrator|mixed  $user
      *
      * @return bool
      */
     public function enable($user): bool
     {
-        $secret        = $this->provider->generateSecretKey();
-        $recoveryCodes = static::freshRecoveryCode();
-
-        $user->forceFill([
-            'two_factor_secret'         => encrypt($secret),
-            'two_factor_recovery_codes' => encrypt(json_encode($recoveryCodes)),
+        $twoFactor = $user->two_factor()->make()->fill([
+            'secret'         => $this->provider->generateSecretKey(),
+            'recovery_codes' => static::freshRecoveryCode(),
         ]);
 
-        $this->dispatchTwoFactorEvent(static::EVENT_ENABLING, $user);
-        $saved = $user->save();
-        $this->dispatchTwoFactorEvent(static::EVENT_ENABLED, $user);
+//        $this->dispatchTwoFactorEvent(static::EVENT_ENABLING, $user);
+        $saved = $twoFactor->save();
+//        $this->dispatchTwoFactorEvent(static::EVENT_ENABLED, $user);
 
         return $saved;
     }
@@ -133,14 +132,11 @@ class TwoFactorAuthenticationRepository
      */
     public function disable($user): bool
     {
-        $user->forceFill([
-            'two_factor_secret'         => null,
-            'two_factor_recovery_codes' => null,
-        ]);
+        $twoFactor = $user->two_factor;
 
-        $this->dispatchTwoFactorEvent(static::EVENT_DISABLING, $user);
-        $saved = $user->save();
-        $this->dispatchTwoFactorEvent(static::EVENT_DISABLED, $user);
+//        $this->dispatchTwoFactorEvent(static::EVENT_DISABLING, $user);
+        $saved = $twoFactor->delete();
+//        $this->dispatchTwoFactorEvent(static::EVENT_DISABLED, $user);
 
         return $saved;
     }
@@ -154,15 +150,13 @@ class TwoFactorAuthenticationRepository
      */
     public function generateNewRecoveryCodes($user): bool
     {
-        $recoveryCodes = static::freshRecoveryCode();
-
-        $user->forceFill([
-            'two_factor_recovery_codes' => encrypt(json_encode($recoveryCodes)),
+        $twoFactor = $user->two_factor->fill([
+            'recovery_codes' => static::freshRecoveryCode(),
         ]);
 
-        $this->dispatchTwoFactorEvent(static::EVENT_RECOVERY_CODE_GENERATING, $user);
-        $saved = $user->save();
-        $this->dispatchTwoFactorEvent(static::EVENT_RECOVERY_CODE_GENERATED, $user);
+//        $this->dispatchTwoFactorEvent(static::EVENT_RECOVERY_CODE_GENERATING, $user);
+        $saved = $twoFactor->save();
+//        $this->dispatchTwoFactorEvent(static::EVENT_RECOVERY_CODE_GENERATED, $user);
 
         return $saved;
     }
@@ -180,16 +174,16 @@ class TwoFactorAuthenticationRepository
         $recoveryCodes = str_replace(
             $code,
             RecoveryCode::generate(),
-            decrypt($user->two_factor_recovery_codes)
+            decrypt($user->two_factor->recovery_codes)
         );
 
-        $user->forceFill([
-            'two_factor_recovery_codes' => encrypt($recoveryCodes),
+        $user->two_factor->fill([
+            'recovery_codes' => json_decode($recoveryCodes),
         ]);
 
-        $this->dispatchTwoFactorEvent(static::EVENT_RECOVERY_CODE_REPLACING, $user);
+//        $this->dispatchTwoFactorEvent(static::EVENT_RECOVERY_CODE_REPLACING, $user);
         $saved = $user->save();
-        $this->dispatchTwoFactorEvent(static::EVENT_RECOVERY_CODE_REPLACED, $user);
+//        $this->dispatchTwoFactorEvent(static::EVENT_RECOVERY_CODE_REPLACED, $user);
 
         return $saved;
     }
