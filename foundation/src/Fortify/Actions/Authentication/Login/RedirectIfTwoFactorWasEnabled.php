@@ -16,7 +16,6 @@ use Illuminate\Validation\ValidationException;
 /**
  * Class     RedirectIfTwoFactorWasEnabled
  *
- * @package  Arcanesoft\Foundation\Fortify\Actions\Authentication\Login
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 abstract class RedirectIfTwoFactorWasEnabled

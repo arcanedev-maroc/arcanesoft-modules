@@ -4,33 +4,28 @@ declare(strict_types=1);
 
 namespace Arcanesoft\Foundation\Auth\Repositories\Authentication;
 
-use Arcanesoft\Foundation\Auth\Events\Administrators\Authentication\TwoFactor\{
-    DisabledAuthentication as DisabledAuthenticationForAdministrator,
-    DisablingAuthentication as DisablingAuthenticationForAdministrator,
-    EnabledAuthentication as EnabledAuthenticationForAdministrator,
-    EnablingAuthentication as EnablingAuthenticationForAdministrator,
-    GeneratedRecoveryCode as GeneratedRecoveryCodeForAdministrator,
-    GeneratingRecoveryCode as GeneratingRecoveryCodeForAdministrator,
-    ReplacedRecoveryCode as ReplacedRecoveryCodeForAdministrator,
-    ReplacingRecoveryCode as ReplacingRecoveryCodeForAdministrator,
-};
-use Arcanesoft\Foundation\Auth\Events\Users\Authentication\TwoFactor\{
-    DisabledAuthentication as DisabledAuthenticationForUser,
-    DisablingAuthentication as DisablingAuthenticationForUser,
-    EnabledAuthentication as EnabledAuthenticationForUser,
-    EnablingAuthentication as EnablingAuthenticationForUser,
-    GeneratedRecoveryCode as GeneratedRecoveryCodeForUser,
-    GeneratingRecoveryCode as GeneratingRecoveryCodeForUser,
-    ReplacedRecoveryCode as ReplacedRecoveryCodeForUser,
-    ReplacingRecoveryCode as ReplacingRecoveryCodeForUser,
-};
+use Arcanesoft\Foundation\Auth\Events\Administrators\Authentication\TwoFactor\DisabledAuthentication as DisabledAuthenticationForAdministrator;
+use Arcanesoft\Foundation\Auth\Events\Administrators\Authentication\TwoFactor\DisablingAuthentication as DisablingAuthenticationForAdministrator;
+use Arcanesoft\Foundation\Auth\Events\Administrators\Authentication\TwoFactor\EnabledAuthentication as EnabledAuthenticationForAdministrator;
+use Arcanesoft\Foundation\Auth\Events\Administrators\Authentication\TwoFactor\EnablingAuthentication as EnablingAuthenticationForAdministrator;
+use Arcanesoft\Foundation\Auth\Events\Administrators\Authentication\TwoFactor\GeneratedRecoveryCode as GeneratedRecoveryCodeForAdministrator;
+use Arcanesoft\Foundation\Auth\Events\Administrators\Authentication\TwoFactor\GeneratingRecoveryCode as GeneratingRecoveryCodeForAdministrator;
+use Arcanesoft\Foundation\Auth\Events\Administrators\Authentication\TwoFactor\ReplacedRecoveryCode as ReplacedRecoveryCodeForAdministrator;
+use Arcanesoft\Foundation\Auth\Events\Administrators\Authentication\TwoFactor\ReplacingRecoveryCode as ReplacingRecoveryCodeForAdministrator;
+use Arcanesoft\Foundation\Auth\Events\Users\Authentication\TwoFactor\DisabledAuthentication as DisabledAuthenticationForUser;
+use Arcanesoft\Foundation\Auth\Events\Users\Authentication\TwoFactor\DisablingAuthentication as DisablingAuthenticationForUser;
+use Arcanesoft\Foundation\Auth\Events\Users\Authentication\TwoFactor\EnabledAuthentication as EnabledAuthenticationForUser;
+use Arcanesoft\Foundation\Auth\Events\Users\Authentication\TwoFactor\EnablingAuthentication as EnablingAuthenticationForUser;
+use Arcanesoft\Foundation\Auth\Events\Users\Authentication\TwoFactor\GeneratedRecoveryCode as GeneratedRecoveryCodeForUser;
+use Arcanesoft\Foundation\Auth\Events\Users\Authentication\TwoFactor\GeneratingRecoveryCode as GeneratingRecoveryCodeForUser;
+use Arcanesoft\Foundation\Auth\Events\Users\Authentication\TwoFactor\ReplacedRecoveryCode as ReplacedRecoveryCodeForUser;
+use Arcanesoft\Foundation\Auth\Events\Users\Authentication\TwoFactor\ReplacingRecoveryCode as ReplacingRecoveryCodeForUser;
 use Arcanesoft\Foundation\Fortify\Services\TwoFactorAuthentication\{RecoveryCode, TwoFactorAuthenticationProvider};
 use Illuminate\Support\Arr;
 
 /**
  * Class     TwoFactorAuthenticationRepository
  *
- * @package  Arcanesoft\Foundation\Auth\Repositories\Authentication
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class TwoFactorAuthenticationRepository

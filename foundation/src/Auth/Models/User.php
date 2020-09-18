@@ -24,7 +24,6 @@ use Illuminate\Notifications\Notifiable;
 /**
  * Class     User
  *
- * @package  Arcanesoft\Foundation\Auth\Models
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  *
  * @property  int                              id

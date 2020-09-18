@@ -11,7 +11,6 @@ use Illuminate\Support\{Collection, HtmlString};
 /**
  * Class     TwoFactor
  *
- * @package  Arcanesoft\Foundation\Auth\Models\Entities
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class TwoFactor

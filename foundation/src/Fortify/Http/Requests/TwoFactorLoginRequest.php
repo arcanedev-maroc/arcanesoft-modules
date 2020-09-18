@@ -12,7 +12,6 @@ use Illuminate\Foundation\Http\FormRequest;
 /**
  * Class     TwoFactorLoginRequest
  *
- * @package  Arcanesoft\Foundation\Fortify\Http\Requests
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  *
  * @property  string|null  code

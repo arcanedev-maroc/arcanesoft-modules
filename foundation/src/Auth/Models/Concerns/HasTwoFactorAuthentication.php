@@ -7,7 +7,6 @@ namespace Arcanesoft\Foundation\Auth\Models\Concerns;
 /**
  * Trait     HasTwoFactorAuthentication
  *
- * @package  Arcanesoft\Foundation\Auth\Models\Concerns
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  *
  * @property  string|null  two_factor_secret
